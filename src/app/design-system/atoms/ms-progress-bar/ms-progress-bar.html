@@ -1,0 +1,25 @@
+<div [class]="'ms-progress-bar ms-progress-bar--' + size + ' ms-progress-bar--' + color + 
+           (striped ? ' ms-progress-bar--striped' : '') + 
+           (animated ? ' ms-progress-bar--animated' : '') +
+           (isComplete ? ' ms-progress-bar--complete' : '') +
+           (disabled ? ' ms-progress-bar--disabled' : '')">
+  
+  <!-- Progress bar header (label and value) -->
+  <div *ngIf="label || showValue" class="ms-progress-bar__header">
+    <span *ngIf="label" class="ms-progress-bar__label">{{ label }}</span>
+    <span *ngIf="showValue" class="ms-progress-bar__value">{{ displayValue }}</span>
+  </div>
+  
+  <!-- Material progress bar -->
+  <mat-progress-bar
+    [mode]="mode"
+    [value]="progressPercentage"
+    [bufferValue]="bufferPercentage"
+    [color]="color"
+    [attr.aria-label]="ariaLabel || label"
+    [attr.aria-valuenow]="normalizedValue"
+    [attr.aria-valuemin]="minValue"
+    [attr.aria-valuemax]="maxValue">
+  </mat-progress-bar>
+  
+</div>

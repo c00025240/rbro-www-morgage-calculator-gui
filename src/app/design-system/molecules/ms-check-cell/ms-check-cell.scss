@@ -1,0 +1,54 @@
+.ms-check-cell {
+  display: flex;
+  width: 100%;
+  min-height: 56px;
+  background-color: var(--bg-form-cell-opacity);
+  border-radius: var(--border-radius-medium, 8px);
+  padding: var(--space-2, 8px) var(--space-3, 16px);
+  border: 1px solid var(--border-form-cell);
+  transition: border-color 0.2s ease-in-out;
+  font-family: var(--radio-font-family, "Amalia") !important;
+  align-items: center;
+
+  // Hover effect - same as RadioCell
+  &--hovered { border-color: var(--switch-cell-border-hover); }
+
+  // Disabled state
+  &--disabled { opacity: 0.6; pointer-events: none; cursor: not-allowed; }
+
+  // Content layout
+  &__content { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: var(--space-3, 16px); }
+
+  // Left area: Checkbox
+  &__left-area { display: flex; align-items: center; flex: 1; min-width: 0; // Allow shrinking
+    ms-checkbox-custom { width: 100%; }
+  }
+
+  // Right area: Chips
+  &__right-area { 
+    display: flex; 
+    align-items: center; 
+    flex-shrink: 0; // Don't shrink chips
+    min-width: 0; // Allow content to determine width
+    
+    ms-chips { 
+      display: flex; 
+      align-items: center; 
+    }
+    
+    ms-savings-chip { 
+      display: flex; 
+      align-items: center;
+      min-width: 140px; // Minimum width for savings chip
+      width: 100%;
+    }
+  }
+}
+
+:host-context([data-theme='dark']) .ms-check-cell { background-color: var(--bg-form-cell-opacity) !important; }
+
+// Ensure proper checkbox styling within the cell
+.ms-check-cell ms-checkbox-custom {
+  .ms-checkbox { gap: var(--space-2, 8px); margin: 0; }
+  .checkbox__label { min-height: auto; padding: var(--space-1, 4px) 0; }
+} 

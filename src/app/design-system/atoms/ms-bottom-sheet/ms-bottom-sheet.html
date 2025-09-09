@@ -1,0 +1,117 @@
+<div [class]="sheetClasses" [attr.aria-label]="data.ariaLabel" [attr.aria-describedby]="data.ariaDescribedBy">
+  
+  <!-- Handle Bar (for swipe gesture indication) -->
+  <div *ngIf="data.showHandle" class="ms-bottom-sheet__handle">
+    <div class="ms-bottom-sheet__handle-bar"></div>
+  </div>
+
+  <!-- Header -->
+  <div *ngIf="hasHeader" class="ms-bottom-sheet__header">
+    <div class="ms-bottom-sheet__header-content">
+      <h2 *ngIf="data.title" class="ms-bottom-sheet__title">{{ data.title }}</h2>
+      <p *ngIf="data.subtitle" class="ms-bottom-sheet__subtitle">{{ data.subtitle }}</p>
+    </div>
+    <button 
+      *ngIf="data.dismissible !== false"
+      mat-icon-button 
+      class="ms-bottom-sheet__close"
+      (click)="onDismiss()"
+      aria-label="Close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="hasContent" class="ms-bottom-sheet__content">
+    
+    <!-- Text Content -->
+    <div *ngIf="data.content" class="ms-bottom-sheet__text">
+      <p>{{ data.content }}</p>
+    </div>
+
+    <!-- List Variant -->
+    <mat-nav-list *ngIf="data.variant === 'list' && data.listItems" class="ms-bottom-sheet__list">
+      <ng-container *ngFor="let item of data.listItems">
+        <!-- Divider -->
+        <mat-divider *ngIf="item.divider"></mat-divider>
+        
+        <!-- List Item -->
+        <mat-list-item 
+          *ngIf="!item.divider"
+          [class.ms-bottom-sheet__list-item--disabled]="item.disabled"
+          [class.ms-bottom-sheet__list-item--selected]="item.selected"
+          (click)="onListItemClick(item)"
+          [attr.tabindex]="item.disabled ? -1 : 0">
+          
+          <mat-icon *ngIf="item.icon" matListItemIcon class="ms-bottom-sheet__list-icon">{{ item.icon }}</mat-icon>
+          
+          <div matListItemTitle class="ms-bottom-sheet__list-title">{{ item.label }}</div>
+          <div *ngIf="item.subtitle" matListItemLine class="ms-bottom-sheet__list-subtitle">{{ item.subtitle }}</div>
+          
+          <mat-icon *ngIf="item.selected" matListItemMeta class="ms-bottom-sheet__list-check">check</mat-icon>
+        </mat-list-item>
+      </ng-container>
+    </mat-nav-list>
+
+    <!-- Custom Content Projection -->
+    <div *ngIf="data.variant === 'custom'" class="ms-bottom-sheet__custom">
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <div *ngIf="hasFooter" class="ms-bottom-sheet__footer">
+    <div class="ms-bottom-sheet__actions">
+      <ng-container *ngFor="let action of data.actions">
+        <button 
+          mat-button
+          *ngIf="!action.primary && !action.destructive"
+          class="ms-bottom-sheet__action ms-bottom-sheet__action--secondary"
+          [disabled]="action.disabled"
+          (click)="onAction(action)">
+          <mat-icon *ngIf="action.icon">{{ action.icon }}</mat-icon>
+          {{ action.label }}
+        </button>
+        
+        <button 
+          mat-raised-button
+          color="primary"
+          *ngIf="action.primary"
+          class="ms-bottom-sheet__action ms-bottom-sheet__action--primary"
+          [disabled]="action.disabled"
+          (click)="onAction(action)">
+          <mat-icon *ngIf="action.icon">{{ action.icon }}</mat-icon>
+          {{ action.label }}
+        </button>
+        
+        <button 
+          mat-stroked-button
+          color="warn"
+          *ngIf="action.destructive"
+          class="ms-bottom-sheet__action ms-bottom-sheet__action--destructive"
+          [disabled]="action.disabled"
+          (click)="onAction(action)">
+          <mat-icon *ngIf="action.icon">{{ action.icon }}</mat-icon>
+          {{ action.label }}
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Actions Variant (as buttons in content area) -->
+  <div *ngIf="data.variant === 'actions' && data.actions" class="ms-bottom-sheet__action-buttons">
+    <ng-container *ngFor="let action of data.actions">
+      <button 
+        mat-button
+        class="ms-bottom-sheet__action-button"
+        [class.ms-bottom-sheet__action-button--primary]="action.primary"
+        [class.ms-bottom-sheet__action-button--destructive]="action.destructive"
+        [disabled]="action.disabled"
+        (click)="onAction(action)">
+        <mat-icon *ngIf="action.icon" class="ms-bottom-sheet__action-icon">{{ action.icon }}</mat-icon>
+        <span class="ms-bottom-sheet__action-label">{{ action.label }}</span>
+      </button>
+    </ng-container>
+  </div>
+
+</div>

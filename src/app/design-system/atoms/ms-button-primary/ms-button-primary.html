@@ -1,0 +1,11 @@
+<button
+	type="{{ type }}"
+	class="ms-button-primary__btn"
+	[attr.aria-label]="ariaLabel || label"
+	[disabled]="disabled"
+	[title]="title || null"
+>
+	<span class="ms-button-primary__icon ms-button-primary__icon--left" *ngIf="iconLeft" [innerHTML]="getLeftIcon()"></span>
+	<span class="ms-button-primary__label">{{ label }}</span>
+	<span class="ms-button-primary__icon ms-button-primary__icon--right" *ngIf="iconRight" [innerHTML]="getRightIcon()"></span>
+</button> 

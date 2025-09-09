@@ -1,0 +1,36 @@
+<div 
+  [class]="getSwitchCellClasses().join(' ')"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
+  
+  <div class="ms-switch-cell__content">
+    <!-- Left Area: Label + Optional Info Icon (grouped together) -->
+    <div class="ms-switch-cell__left-area">
+      <div class="ms-switch-cell__label-group">
+        <span class="ms-switch-cell__label">{{ label }}</span>
+        
+        <button 
+          *ngIf="showInfoIcon"
+          type="button"
+          class="ms-switch-cell__info-icon"
+          [title]="infoTooltip"
+          [disabled]="disabled"
+          (click)="onInfoIconClick()">
+          <span 
+            class="ms-switch-cell__info-icon-svg"
+            [innerHTML]="getInfoIcon()">
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Area: Toggle Switch -->
+    <div class="ms-switch-cell__right-area">
+      <ms-toggle
+        [checked]="checked"
+        [disabled]="disabled"
+        (change)="onToggleChange($event)">
+      </ms-toggle>
+    </div>
+  </div>
+</div> 

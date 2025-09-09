@@ -1,0 +1,70 @@
+// Card Outside Title Component
+.ms-card-outside-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  width: 100%;
+
+  // Title styling - responsive typography
+  &__title-mobile,
+  &__title-desktop {
+    margin: 0;
+    padding: 0;
+    font-family: "Amalia", sans-serif;
+    font-weight: 500;
+    color: var(--color-text);
+    line-height: 1.33; // 24px line height for 18px font size
+  }
+
+  // Mobile title (H5) - 18px, Medium weight
+  &__title-mobile {
+    display: block;
+    font-size: 18px;
+    line-height: 24px;
+
+    // Hide on desktop/large screens
+    @media (min-width: 1024px) {
+      display: none;
+    }
+  }
+
+  // Desktop title (H4) - 24px, Medium weight  
+  &__title-desktop {
+    display: none;
+    font-size: 24px;
+    line-height: 32px;
+
+    // Show on desktop/large screens
+    @media (min-width: 1024px) {
+      display: block;
+    }
+  }
+
+  // Helper component spacing
+  &__helper {
+    margin-top: 0px; // No gap between title and helper per design
+  }
+
+  // 8px spacer at the bottom
+  &__spacer {
+    height: 8px;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  // Surface variations
+  &--surface-default,
+  &--surface-light {
+    .ms-card-outside-title__title-mobile,
+    .ms-card-outside-title__title-desktop {
+      color: var(--color-text);
+    }
+  }
+
+  &--surface-dark {
+    .ms-card-outside-title__title-mobile,
+    .ms-card-outside-title__title-desktop {
+      color: var(--color-text);
+    }
+  }
+} 

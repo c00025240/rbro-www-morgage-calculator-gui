@@ -1,0 +1,178 @@
+<div class="spacing-showcase">
+  <!-- Header -->
+  <div class="showcase-header">
+    <h1 class="display-3">Spacing Tokens</h1>
+    <p class="body-large text-secondary">
+      Consistent spacing scale for layouts, components, and user interfaces. 
+      Based on a 4px grid system with rem units for accessibility.
+    </p>
+  </div>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stat-item">
+      <div class="stat-number">{{spacingTokens.length}}</div>
+      <div class="stat-label">Spacing Tokens</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">4px</div>
+      <div class="stat-label">Base Unit</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">0-96px</div>
+      <div class="stat-label">Range</div>
+    </div>
+  </section>
+
+  <!-- Spacing Scale -->
+  <section class="spacing-scale-section">
+    <h2 class="h3 section-title">Spacing Scale</h2>
+    
+    <div class="spacing-grid">
+      <div 
+        *ngFor="let token of spacingTokens; trackBy: trackByToken" 
+        class="spacing-item"
+        (click)="copyToken(token.token)"
+        [attr.data-spacing]="token.name"
+      >
+        <!-- Token Info -->
+        <div class="token-info">
+          <div class="token-name">{{token.name}}</div>
+          <div class="token-value">{{getPixelDisplay(token.pixels)}}</div>
+        </div>
+        
+        <!-- Visual Representation -->
+        <div class="spacing-visual">
+          <div 
+            class="spacing-block"
+            [style.width.px]="Math.max(token.pixels, 8)"
+            [style.height.px]="Math.max(token.pixels, 8)"
+          ></div>
+        </div>
+        
+        <!-- Token Details -->
+        <div class="token-details">
+          <div class="token-css">{{token.token}}</div>
+          <div class="token-rem">{{token.value}}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usage Guidelines -->
+  <section class="usage-guidelines-section">
+    <h2 class="h3 section-title">Usage Guidelines</h2>
+    
+    <div class="guidelines-grid">
+      <div class="guideline-card small-spacing">
+        <div class="guideline-header">
+          <div class="guideline-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="h5">Small Spacing (0-16px)</h3>
+          <p class="body-small">Micro adjustments and tight layouts</p>
+        </div>
+        
+        <div class="usage-examples">
+          <div class="usage-item">
+            <span class="usage-token">--spacing-0</span>
+            <span class="usage-text">Resets, zero margins</span>
+          </div>
+          <div class="usage-item">
+            <span class="usage-token">--spacing-1</span>
+            <span class="usage-text">Icon gaps, fine adjustments</span>
+          </div>
+          <div class="usage-item">
+            <span class="usage-token">--spacing-4</span>
+            <span class="usage-text">Base unit, standard gaps</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="guideline-card medium-spacing">
+        <div class="guideline-header">
+          <div class="guideline-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H19V1h-2v1H7V1H5v1H3.5C2.67 2 2 2.67 2 3.5V5h20V3.5C22 2.67 21.33 2 20.5 2z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="h5">Medium Spacing (24-48px)</h3>
+          <p class="body-small">Component and section spacing</p>
+        </div>
+        
+        <div class="usage-examples">
+          <div class="usage-item">
+            <span class="usage-token">--spacing-5</span>
+            <span class="usage-text">Card padding, section gaps</span>
+          </div>
+          <div class="usage-item">
+            <span class="usage-token">--spacing-6</span>
+            <span class="usage-text">Layout sections, major spacing</span>
+          </div>
+          <div class="usage-item">
+            <span class="usage-token">--spacing-8</span>
+            <span class="usage-text">Page sections, hero spacing</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="guideline-card large-spacing">
+        <div class="guideline-header">
+          <div class="guideline-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2l3.09 6.26L22 9l-5 4.87L18.18 22 12 18.77 5.82 22 7 13.87 2 9l6.91-.74L12 2z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="h5">Large Spacing (64-96px)</h3>
+          <p class="body-small">Page layout and major sections</p>
+        </div>
+        
+        <div class="usage-examples">
+          <div class="usage-item">
+            <span class="usage-token">--spacing-10</span>
+            <span class="usage-text">Page headers, major breaks</span>
+          </div>
+          <div class="usage-item">
+            <span class="usage-token">--spacing-12</span>
+            <span class="usage-text">Page sections, large breaks</span>
+          </div>
+          <div class="usage-item">
+            <span class="usage-token">--spacing-16</span>
+            <span class="usage-text">Page layout, enormous spacing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Implementation Guide -->
+  <section class="implementation-section">
+    <h2 class="h3 section-title">Implementation</h2>
+    
+    <div class="implementation-grid">
+      <div class="implementation-card">
+        <h3 class="h6">CSS Custom Properties</h3>
+        <div class="code-example">
+          <pre><code>.component {{ '{' }}
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+  gap: var(--spacing-2);
+{{ '}' }}</code></pre>
+        </div>
+      </div>
+      
+      <div class="implementation-card">
+        <h3 class="h6">SCSS Variables</h3>
+        <div class="code-example">
+          <pre><code>.component {{ '{' }}
+  padding: $spacing-4;
+  margin-bottom: $spacing-6;
+  gap: $spacing-2;
+{{ '}' }}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

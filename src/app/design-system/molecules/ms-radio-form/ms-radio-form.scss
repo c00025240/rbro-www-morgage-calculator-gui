@@ -1,0 +1,36 @@
+.ms-radio-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; // 2px gap between CellLabel and RadioCell
+  width: 100%;
+  font-family: var(--radio-font-family, "Amalia") !important;
+
+  // Surface variations
+  &--surface-default {
+    // Default styling
+  }
+
+  &--surface-light {
+    // Light surface styling (if needed in future)
+  }
+
+  &--surface-dark {
+    // Dark surface styling (if needed in future)
+  }
+
+  // Disabled state
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  // Ensure proper spacing and alignment
+  ms-cell-label {
+    width: 100%;
+  }
+
+  ms-radio-cell {
+    width: 100%;
+  }
+} 

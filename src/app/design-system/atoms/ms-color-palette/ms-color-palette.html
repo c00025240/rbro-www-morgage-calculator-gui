@@ -1,0 +1,98 @@
+<div class="color-palette">
+  <div class="color-palette__header">
+    <h2 class="color-palette__title">Official Raiffeisen Design System</h2>
+    <p class="color-palette__description">
+      Official color system for Raiffeisen Bank Romania Mortgage Simulator.
+      These tokens ensure consistent brand experience and follow corporate design guidelines.
+    </p>
+  </div>
+
+  <div class="color-palette__categories" *ngFor="let category of getCategories()">
+    <h3 class="color-palette__category-title">{{ getCategoryTitle(category) }}</h3>
+    
+    <div class="color-palette__grid">
+      <div 
+        class="color-token" 
+        *ngFor="let token of getCategoryColors(category)"
+      >
+        <div class="color-token__swatch" [style.background-color]="getDisplayColor(token)"></div>
+        <div class="color-token__info">
+          <h4 class="color-token__name">{{ token.name }}</h4>
+          <div class="color-token__details">
+            <code class="color-token__variable">{{ token.variable }}</code>
+            <span class="color-token__value" [class.color-token__value--fallback]="token.value === 'Not available'">
+              {{ token.value !== 'Not available' ? token.value : token.fallbackValue }}
+            </span>
+          </div>
+          <p class="color-token__description">{{ token.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Official Brand Gradients -->
+  <div class="color-palette__categories">
+    <h3 class="color-palette__category-title">Official Brand Gradients</h3>
+    
+    <div class="gradient-showcase">
+      <div class="gradient-token">
+        <div class="gradient-token__swatch gradient-token__swatch--primary"></div>
+        <div class="gradient-token__info">
+          <h4 class="gradient-token__name">Primary Brand Gradient</h4>
+          <code class="gradient-token__variable">--gradient-primary</code>
+          <p class="gradient-token__description">Main brand gradient for CTAs and primary actions</p>
+        </div>
+      </div>
+
+      <div class="gradient-token">
+        <div class="gradient-token__swatch gradient-token__swatch--brand"></div>
+        <div class="gradient-token__info">
+          <h4 class="gradient-token__name">Brand Combination</h4>
+          <code class="gradient-token__variable">--gradient-brand</code>
+          <p class="gradient-token__description">Yellow to teal brand combination</p>
+        </div>
+      </div>
+
+      <div class="gradient-token">
+        <div class="gradient-token__swatch gradient-token__swatch--accent"></div>
+        <div class="gradient-token__info">
+          <h4 class="gradient-token__name">Accent Gradient</h4>
+          <code class="gradient-token__variable">--gradient-accent</code>
+          <p class="gradient-token__description">Teal accent gradient for secondary elements</p>
+        </div>
+      </div>
+
+      <div class="gradient-token">
+        <div class="gradient-token__swatch gradient-token__swatch--success"></div>
+        <div class="gradient-token__info">
+          <h4 class="gradient-token__name">Success Gradient</h4>
+          <code class="gradient-token__variable">--gradient-success</code>
+          <p class="gradient-token__description">Green gradient for positive outcomes</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Guidelines -->
+  <div class="color-palette__guidelines">
+    <h3 class="color-palette__category-title">Official Usage Guidelines</h3>
+    <div class="guidelines-grid">
+      <div class="guideline">
+        <h4>Brand Colors (#fee600)</h4>
+        <p>Use the official Raiffeisen yellow as the primary brand color for CTAs, highlights, and key UI elements. This is the core brand identifier.</p>
+      </div>
+      <div class="guideline">
+        <h4>Accent Colors (Teal)</h4>
+        <p>Use the teal accent family for secondary actions, links, and complementary elements. These provide visual hierarchy while maintaining brand consistency.</p>
+      </div>
+      <div class="guideline">
+        <h4>Utilitarian Colors</h4>
+        <p>Use semantic colors consistently: green for success (loan approval), red for errors (rejection), orange for warnings, and blue for information.</p>
+      </div>
+      <div class="guideline">
+        <h4>Accessibility & Contrast</h4>
+        <p>All color combinations meet WCAG AA standards. Use the provided text colors with their corresponding background colors for optimal readability.</p>
+      </div>
+    </div>
+  </div>
+</div>

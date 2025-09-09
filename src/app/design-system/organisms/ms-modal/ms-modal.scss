@@ -1,0 +1,244 @@
+// Modal Component Styles
+.ms-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--backdrop-bg); // 60% opacity black backdrop
+  z-index: var(--z-modal, 50);
+  
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  
+  // Mobile and tablet positioning (< 1024px)
+  align-items: flex-end; // Align to bottom
+  justify-content: center;
+  padding: 0;
+  
+  // Large web positioning (>= 1024px)
+  @media (min-width: 1024px) {
+    align-items: center; // Center vertically
+    justify-content: center; // Center horizontally
+    padding: var(--space-3, 1.5rem); // 24px padding
+  }
+  
+  // Visible state
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  // Modal container
+  &__container {
+    background: var(--color-bg);
+    border-radius: 16px 16px 0 0; // Rounded top corners for mobile
+    width: 100%;
+    max-height: 90vh; // 90% of vertical screen on mobile
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-2xl);
+    
+    // Large web styling
+    @media (min-width: 1024px) {
+      border-radius: 16px; // All corners rounded on desktop
+      width: auto;
+      min-width: 400px;
+      max-width: 800px;
+      max-height: 90vh;
+    }
+    
+    // With footer modifier
+    &--with-footer {
+      padding-bottom: 0; // Footer handles its own padding
+    }
+    
+    // Dark surface container
+    &--surface-dark {
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
+  }
+  
+  // Header
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: var(--space-2, 1rem) var(--space-2, 1rem) 0; // 16px sides, 16px top, 0 bottom on mobile
+    border-bottom: none;
+    flex-shrink: 0;
+    
+    @media (min-width: 1024px) {
+      padding: var(--space-3, 1.5rem) var(--space-3, 1.5rem) 0; // 24px sides, 24px top, 0 bottom on desktop
+    }
+    
+    // Surface variations
+    &--surface-light {
+      background: transparent;
+    }
+    
+    &--surface-dark {
+      background: transparent;
+    }
+  }
+  
+  // Title section
+  &__title-section {
+    flex: 1;
+    margin-right: var(--space-2, 1rem); // Space between title and close button
+  }
+  
+  // Close button
+  &__close-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+    
+    &:hover {
+      background-color: var(--overlay-hover-bg);
+    }
+    
+    &:focus {
+      outline: 2px solid var(--focus-border);
+      outline-offset: 2px;
+    }
+    
+    // Surface variations
+    &--surface-light {
+      color: var(--color-text); // text-default on light
+      
+      &:hover {
+        background-color: var(--overlay-hover-bg);
+      }
+    }
+    
+    &--surface-dark {
+      color: var(--color-text); // text-default on dark
+      
+      &:hover {
+        background-color: var(--overlay-hover-bg);
+      }
+    }
+  }
+  
+  // Close icon
+  &__close-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    
+    ::ng-deep svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  // Body
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-2, 1rem); // 16px on mobile
+    
+    @media (min-width: 1024px) {
+      padding: var(--space-3, 1.5rem); // 24px on desktop
+    }
+  }
+  
+  // Placeholder content (matching Figma design)
+  &__placeholder-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 1rem);
+  }
+  
+  &__placeholder-pattern {
+    width: 100%;
+    height: 200px;
+    background-image: 
+      linear-gradient(45deg, var(--color-bg-secondary) 25%, transparent 25%), 
+      linear-gradient(-45deg, var(--color-bg-secondary) 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, var(--color-bg-secondary) 75%), 
+      linear-gradient(-45deg, transparent 75%, var(--color-bg-secondary) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    border: 2px dashed var(--color-secondary); // Pink dashed border to match Figma
+    border-radius: var(--radius-lg, 8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    
+    &::after {
+      content: 'Content Area';
+      position: absolute;
+      background: var(--color-bg);
+      padding: var(--space-1, 0.5rem) var(--space-2, 1rem);
+      border-radius: var(--radius-base, 4px);
+      font-size: 14px;
+      color: var(--color-secondary);
+      font-weight: 500;
+    }
+  }
+  
+  &__placeholder-text {
+    p {
+      margin: 0 0 var(--space-2, 1rem) 0;
+      color: var(--color-text-secondary);
+      font-size: 14px;
+      line-height: 1.5;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  
+  // Footer
+  &__footer {
+    padding: var(--space-3, 1.5rem) var(--space-2, 1rem); // 12px as specified in requirements
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    border-radius: 0 0 16px 16px;
+    flex-shrink: 0;
+    
+    @media (min-width: 1024px) {
+      padding: var(--space-3, 1.5rem); // 12px padding on desktop
+      border-radius: 0 0 16px 16px;
+    }
+    
+    // Dark surface footer
+    &--surface-dark {
+      background: var(--color-bg-secondary);
+      border-top-color: var(--overlay-border, var(--color-border));
+    }
+    
+    // Mobile: full width button
+    .ms-modal__footer-button {
+      width: 100%;
+      
+      // Desktop: centered button
+      @media (min-width: 1024px) {
+        width: auto;
+        min-width: 120px;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+  }
+}
+
+

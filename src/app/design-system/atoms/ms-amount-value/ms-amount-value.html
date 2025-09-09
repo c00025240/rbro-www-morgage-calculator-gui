@@ -1,0 +1,7 @@
+<div class="ms-amount-value" [ngClass]="cssClass">
+	<div class="ms-amount-value__label">{{ label }}</div>
+	<div class="ms-amount-value__amount-container">
+		<span class="ms-amount-value__amount">{{ amount }}</span>
+		<span class="ms-amount-value__currency" *ngIf="currency">{{ currency }}</span>
+	</div>
+</div> 

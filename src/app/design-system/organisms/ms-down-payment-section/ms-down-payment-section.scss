@@ -1,0 +1,62 @@
+.ms-down-payment-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  overflow: hidden; // Prevent any child overflow
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    overflow: hidden; // Ensure content stays within bounds
+    
+    // Ensure all child elements are contained
+    * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    // Specific handling for radio forms with chips
+    ms-radio-form {
+      width: 100%;
+      overflow: hidden;
+      
+      // Ensure any chips stay within bounds
+      ::ng-deep .ms-radio-form {
+        width: 100%;
+        overflow: hidden;
+        
+        .ms-chips {
+          max-width: 150px; // Limit chip width
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+
+  // Surface variants can be added here when needed
+
+  // States
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // Mobile responsive adjustments
+  @media (max-width: 767px) {
+    &__content {
+      gap: 16px;
+      
+      ms-radio-form {
+        ::ng-deep .ms-chips {
+          max-width: 120px; // Smaller on mobile
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

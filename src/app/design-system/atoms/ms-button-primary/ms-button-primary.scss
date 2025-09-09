@@ -1,0 +1,114 @@
+@use '../../_tokens.scss';
+
+:host {
+	display: inline-flex;
+}
+
+.ms-button-primary {
+	&__btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0 var(--space-3, 24px);
+		min-width: 80px;
+		max-width: 420px;
+		border-radius: var(--radius-base);
+		border: 2px solid transparent;
+		cursor: pointer;
+		user-select: none;
+		text-decoration: none;
+		white-space: nowrap;
+
+		/* Typography: H6 tokens with Amalia - same pattern as radio */
+		font-family: var(--radio-font-family, "Amalia") !important;
+		font-size: var(--text-h6-size) !important;
+		font-weight: 400 !important;
+		line-height: var(--text-h6-line-height) !important;
+		letter-spacing: var(--text-h6-spacing) !important;
+
+		/* Heights by device (default responsive) */
+		height: 48px; /* desktop default */
+		
+		background: var(--btn-primary-bg);
+		color: var(--btn-primary-text);
+		border-color: var(--btn-primary-bg);
+		transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+		
+		@media (max-width: 1023px) {
+			height: 40px;
+		}
+
+		&:hover:not(:disabled) {
+			background: var(--btn-primary-hover-bg);
+			border-color: var(--btn-primary-hover-bg);
+		}
+
+		&:active:not(:disabled),
+		&.is-pressed:not(:disabled) {
+			background: color-mix(in oklab, var(--btn-primary-bg) 90%, black);
+			border-color: currentColor;
+		}
+
+		&:focus-visible,
+		:host(.is-focused) & {
+			outline: 2px solid var(--focus-border, var(--btn-primary-text));
+			outline-offset: 4px;
+		}
+
+		&:disabled,
+		:host(.is-disabled) & {
+			background: var(--btn-disabled-bg);
+			border-color: var(--btn-disabled-bg);
+			color: var(--btn-disabled-text);
+			cursor: not-allowed;
+		}
+	}
+
+	&__label { 
+		pointer-events: none;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		min-width: 0; /* Allow flexbox shrinking for truncation */
+		
+		/* 8px spacing from adjacent icons when they exist */
+		&:not(:first-child) { margin-left: var(--space-2, 8px); }
+		&:not(:last-child) { margin-right: var(--space-2, 8px); }
+	}
+
+	&__icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		color: currentColor;
+		flex-shrink: 0; /* Icons never shrink */
+
+		svg {
+			width: 1em;
+			height: 1em;
+			* { fill: currentColor !important; }
+			path, rect, circle, ellipse, polygon, use { fill: currentColor !important; stroke: none !important; }
+		}
+	}
+
+	/* Surface adaptations */
+	&--surface-light .ms-button-primary__btn {
+		background: var(--btn-invert-bg);
+		color: var(--btn-invert-text);
+		border-color: var(--btn-invert-bg);
+		&:hover:not(:disabled) { background: color-mix(in oklab, var(--btn-invert-bg) 90%, white); }
+	}
+
+	&--surface-dark .ms-button-primary__btn {
+		background: var(--btn-primary-bg);
+		color: var(--btn-primary-text);
+		border-color: var(--btn-primary-bg);
+	}
+
+	/* Explicit device overrides if provided */
+	&--device-mobile .ms-button-primary__btn,
+	&--device-tablet .ms-button-primary__btn { height: 40px; }
+	&--device-desktop .ms-button-primary__btn { height: 48px; }
+} 

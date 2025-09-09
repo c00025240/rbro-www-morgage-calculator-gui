@@ -1,0 +1,45 @@
+// Simulator Option Modal Styles
+
+// Hide the placeholder content from the base ms-modal component
+:host ::ng-deep .ms-modal__placeholder-content {
+  display: none !important;
+}
+
+.simulator-option-modal {
+  
+  // Content container for the option cells
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2, 1rem); // 16px gap between option cells
+    width: 100%;
+    
+    // Ensure consistent width for all option cells
+    .simulator-option-modal__option {
+      width: 100%;
+      flex-shrink: 0;
+    }
+  }
+  
+  // Responsive adjustments
+  @media (min-width: 1024px) {
+    &__content {
+      gap: var(--space-3, 1.5rem); // Slightly larger gap on desktop
+      min-width: 400px; // Ensure minimum width on desktop
+      max-width: 600px; // Maximum width for readability
+    }
+  }
+  
+  // Surface-specific adjustments if needed
+  &--surface-light {
+    .simulator-option-modal__content {
+      // Light surface specific styles if needed
+    }
+  }
+  
+  &--surface-dark {
+    .simulator-option-modal__content {
+      // Dark surface specific styles if needed
+    }
+  }
+} 

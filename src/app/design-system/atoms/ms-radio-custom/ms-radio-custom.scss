@@ -1,0 +1,332 @@
+@use '../../_tokens.scss';
+
+:host {
+  --radio-size-small: 16px; /* icon diameter */
+  --radio-size-medium: 20px;
+  --radio-size-large: 24px;
+
+  /* Component-scoped color variables */
+  --ms-radio-label-color: var(--rad-primary-text-default, #55575C);
+  --ms-radio-disabled-label-color: var(--rad-primary-text-disabled, #AAABAD);
+  --ms-radio-icon-border-color: var(--rad-primary-icon-default, #55575C);
+  --ms-radio-icon-selected-color: var(--rad-primary-icon-selected, #2B2D33);
+  --ms-radio-icon-disabled-color: var(--rad-primary-icon-disabled, #AAABAD);
+  
+  display: block;
+}
+
+/* Dark surface and global dark theme overrides */
+:host(.ms-radio-custom--surface-dark),
+:host-context([data-theme='dark']) {
+  --ms-radio-label-color: var(--text-dark-default, #FFFFFF);
+  --ms-radio-icon-border-color: var(--text-dark-default, #FFFFFF);
+  --ms-radio-icon-selected-color: var(--accent-60, #68a9b3);
+}
+
+/* Error overrides (light) */
+:host(.ms-radio-custom--error) {
+  --ms-radio-label-color: var(--error-default, #e61e33);
+  --ms-radio-icon-border-color: var(--error-default, #e61e33);
+  --ms-radio-icon-selected-color: var(--error-default, #e61e33);
+}
+
+/* Error overrides (dark) */
+:host(.ms-radio-custom--error).ms-radio-custom--surface-dark,
+:host(.ms-radio-custom--error):host-context([data-theme='dark']) {
+  --ms-radio-label-color: var(--text-dark-default, #FFFFFF);
+  --ms-radio-icon-border-color: var(--text-dark-default, #FFFFFF);
+  --ms-radio-icon-selected-color: var(--text-dark-default, #FFFFFF);
+}
+
+.ms-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 16px);
+  
+  &--disabled {
+    pointer-events: none;
+  }
+  
+  // When helper text is present, ensure zero gap to helper
+  &--has-helper {
+    // Override the gap for the helper text specifically
+    .ms-radio-group__helper {
+      margin-top: calc(-1 * var(--space-2, 16px));
+    }
+    
+    // Remove min-height from touch target to eliminate extra space
+    .ms-radio input[type='radio']::after {
+      min-height: unset;
+      height: auto;
+    }
+    
+    // Also remove min-height from the radio container itself
+    .ms-radio {
+      min-height: unset;
+    }
+  }
+  
+  // Helper text styling - zero gap from radio group
+  &__helper {
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.ms-radio {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--checkbox-label-spacing, 8px);
+  cursor: pointer;
+  font-family: var(--radio-font-family, "Amalia");
+  font-size: var(--radio-font-size, 16px);
+  line-height: var(--radio-line-height, 24px);
+  font-weight: 500;
+  color: var(--ms-radio-label-color);
+  user-select: none;
+  min-height: var(--checkbox-touch-target, 44px);
+  align-items: center;
+
+  &--disabled {
+    cursor: default;
+    color: var(--ms-radio-disabled-label-color);
+  }
+
+  /* Hidden native radio */
+  input[type='radio'] {
+    appearance: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+    z-index: 1;
+    
+    /* Touch target enhancement */
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      min-width: var(--checkbox-touch-target, 44px);
+      min-height: var(--checkbox-touch-target, 44px);
+    }
+  }
+
+  /* Custom icon */
+  .radio__icon {
+    position: relative;
+    width: var(--radio-size-medium, 20px);
+    height: var(--radio-size-medium, 20px);
+    min-width: var(--radio-size-medium, 20px);
+    border: 2px solid var(--ms-radio-icon-border-color);
+    border-radius: 50%;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    flex-shrink: 0;
+
+    &::after {
+      /* inner dot */
+      content: '';
+      position: absolute;
+      inset: 25%;
+      border-radius: 50%;
+      background-color: transparent;
+      transition: background-color 0.15s ease-in-out;
+    }
+  }
+
+  .radio__label {
+    flex: 1;
+    line-height: inherit;
+  }
+
+  /* States driven by :checked / :hover / :focus-visible on the hidden input */
+  input:checked ~ .radio__icon {
+    border-color: var(--ms-radio-icon-selected-color);
+    
+    &::after {
+      background-color: var(--ms-radio-icon-selected-color);
+    }
+  }
+
+  input:disabled ~ .radio__icon {
+    border-color: var(--ms-radio-icon-disabled-color);
+  }
+
+  input:disabled:checked ~ .radio__icon {
+    background-color: transparent;
+    
+    &::after {
+      background-color: var(--ms-radio-icon-disabled-color);
+    }
+  }
+
+    input:not(:disabled):hover ~ .radio__icon {
+    border-color: var(--ms-radio-icon-selected-color);
+  }
+  
+  input:not(:disabled):hover:checked ~ .radio__icon {
+    border-color: var(--ms-radio-icon-selected-color);
+  }
+
+  input:focus-visible ~ .radio__icon {
+    outline: 2px solid var(--focus-border);
+    outline-offset: 2px;
+  }
+}
+
+/* Size modifiers */
+:host(.ms-radio-custom--small) .ms-radio .radio__icon {
+  width: var(--radio-size-small, 16px);
+  height: var(--radio-size-small, 16px);
+  min-width: var(--radio-size-small, 16px);
+}
+
+:host(.ms-radio-custom--large) .ms-radio .radio__icon {
+  width: var(--radio-size-large, 24px);
+  height: var(--radio-size-large, 24px);
+  min-width: var(--radio-size-large, 24px);
+}
+
+/* Surface context overrides */
+:host(.ms-radio-custom--surface-light) {
+  .ms-radio {
+    color: var(--rad-primary-text-default);
+    
+    &--disabled {
+      color: var(--rad-primary-text-disabled);
+    }
+    
+    .radio__icon {
+      border-color: var(--rad-primary-icon-default);
+    }
+    
+    input:checked ~ .radio__icon {
+      border-color: var(--rad-primary-icon-selected);
+      
+      &::after {
+        background-color: var(--rad-primary-icon-selected);
+      }
+    }
+    
+    input:not(:disabled):hover ~ .radio__icon {
+      border-color: var(--rad-primary-icon-selected);
+    }
+    
+    input:focus-visible ~ .radio__icon {
+      outline-color: var(--focus-border);
+    }
+  }
+}
+
+:host(.ms-radio-custom--surface-dark) {
+  .ms-radio {
+    color: var(--ms-radio-label-color);
+    
+    &--disabled {
+      color: var(--ms-radio-disabled-label-color);
+    }
+    
+    .radio__icon {
+      border-color: var(--ms-radio-icon-border-color);
+    }
+    
+    input:checked ~ .radio__icon {
+      border-color: var(--ms-radio-icon-selected-color);
+      
+      &::after {
+        background-color: var(--ms-radio-icon-selected-color);
+      }
+    }
+    
+    input:not(:disabled):hover ~ .radio__icon {
+      border-color: var(--ms-radio-icon-selected-color);
+    }
+    
+    input:focus-visible ~ .radio__icon {
+      outline-color: var(--focus-border);
+    }
+  }
+}
+
+/* Error state */
+:host(.ms-radio-custom--error) {
+  .ms-radio {
+    color: var(--chk-primary-text-error);
+    
+    .radio__icon {
+      border-color: var(--chk-primary-text-error);
+    }
+    
+    input:checked ~ .radio__icon {
+      border-color: var(--chk-primary-text-error);
+      
+      &::after {
+        background-color: var(--chk-primary-text-error);
+      }
+    }
+    
+    input:not(:disabled):hover ~ .radio__icon {
+      border-color: var(--chk-primary-text-error);
+    }
+    
+    input:focus-visible ~ .radio__icon {
+      outline-color: var(--chk-primary-text-error);
+    }
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  .ms-radio .radio__icon {
+    border-width: 3px;
+  }
+  
+  .ms-radio input:focus-visible ~ .radio__icon {
+    outline-width: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .ms-radio .radio__icon,
+  .ms-radio .radio__icon::after {
+    transition: none;
+  }
+} 
+
+// Dark theme fallback using data-theme
+:host-context([data-theme='dark']) {
+  .ms-radio {
+    color: var(--ms-radio-label-color);
+
+    &--disabled {
+      color: var(--ms-radio-disabled-label-color);
+    }
+
+    .radio__icon {
+      border-color: var(--ms-radio-icon-border-color);
+    }
+
+    input:checked ~ .radio__icon {
+      border-color: var(--ms-radio-icon-selected-color);
+
+      &::after {
+        background-color: var(--ms-radio-icon-selected-color);
+      }
+    }
+
+    input:not(:disabled):hover ~ .radio__icon {
+      border-color: var(--ms-radio-icon-selected-color);
+    }
+
+    input:focus-visible ~ .radio__icon {
+      outline-color: var(--focus-border);
+    }
+  }
+} 

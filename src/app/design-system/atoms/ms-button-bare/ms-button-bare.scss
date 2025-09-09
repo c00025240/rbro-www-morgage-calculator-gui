@@ -1,0 +1,588 @@
+// =============================================================================
+// RBRO Button Component - Angular Material Foundation with Exact Design Tokens
+// =============================================================================
+
+@use '../../_tokens.scss';
+
+// -----------------------------------------------------------------------------
+// Angular Material Button Customization - Exact Specifications
+// -----------------------------------------------------------------------------
+
+.rbro-material-button {
+  // EXACT Layout Specifications
+  display: inline-flex !important;
+  padding: 8px 24px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  
+  // EXACT Border Radius
+  border-radius: 4px !important;
+  
+  // EXACT Typography - Desktop/Paragraph/Medium
+  font-family: Amalia !important;
+  font-size: 16px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: 24px !important; /* 150% */
+  
+  // Override Angular Material defaults
+  min-width: unset !important;
+  min-height: unset !important;
+  
+  // Transitions
+  transition: all 0.2s ease-in-out !important;
+  
+  // RBRO Primary Button Styling (mat-raised-button) - EXACT TOKENS
+  &.mat-raised-button {
+    background: var(--btn-primary-bg) !important;
+    color: var(--btn-primary-text) !important;
+    border: 2px solid var(--btn-primary-bg) !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-primary-hover-bg) !important;
+      border: 2px solid var(--btn-primary-hover-bg) !important;
+    }
+    
+    &:focus {
+      background: var(--btn-primary-bg) !important;
+      border: 2px solid var(--btn-primary-bg) !important;
+      color: var(--btn-primary-text) !important;
+    }
+    
+    &:disabled {
+      background-color: var(--btn-disabled-bg) !important;
+      border: 2px solid var(--btn-disabled-bg) !important;
+      color: var(--btn-disabled-text) !important;
+    }
+  }
+  
+  // RBRO Outlined Button Styling (mat-stroked-button) - EXACT FIGMA SPECS
+  &.mat-stroked-button {
+    border: 2px solid var(--btn-secondary-border) !important;
+    color: var(--btn-secondary-text) !important;
+    background-color: transparent !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-secondary-hover-bg) !important;
+      border: 2px solid var(--btn-secondary-hover-bg) !important;
+      color: var(--btn-secondary-text) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+      border: 2px solid var(--btn-secondary-border) !important;
+      background-color: transparent !important;
+      color: var(--btn-secondary-text) !important;
+    }
+    
+    &:disabled {
+      border: 2px solid var(--btn-disabled-bg) !important;
+      color: var(--btn-disabled-text) !important;
+      background-color: transparent !important;
+    }
+  }
+  
+  // Link Button Styling (mat-button) - EXACT FIGMA SPECS
+  &.mat-button {
+    color: var(--btn-link-text) !important;
+    background-color: transparent !important;
+    border: 2px solid transparent !important;
+    
+    &:hover:not(:disabled) {
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+      color: var(--btn-link-hover-text) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+      color: var(--btn-link-text) !important;
+    }
+    
+    &:disabled {
+      color: var(--btn-disabled-text) !important;
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+    }
+  }
+  
+  // Tertiary Button Styling (mat-flat-button) - EXACT DESIGN TOKENS
+  &.mat-flat-button {
+    background-color: var(--btn-tertiary-bg) !important;
+    color: var(--btn-tertiary-text) !important;
+    border: 2px solid var(--btn-tertiary-bg) !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-tertiary-hover-bg) !important;
+      border: 2px solid var(--btn-tertiary-hover-bg) !important;
+      color: var(--btn-tertiary-hover-text) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+      background-color: var(--btn-tertiary-bg) !important;
+      border: 2px solid var(--btn-tertiary-bg) !important;
+      color: var(--btn-tertiary-text) !important;
+    }
+    
+    &:disabled {
+      background-color: var(--btn-disabled-bg) !important;
+      border: 2px solid var(--btn-disabled-bg) !important;
+      color: var(--btn-disabled-text) !important;
+    }
+  }
+  
+  // Icon Button Styling
+  &.mat-icon-button {
+    color: var(--btn-primary-text) !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 8px !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-icon-hover-bg) !important;
+    }
+    
+    &:disabled {
+      color: var(--btn-disabled-text) !important;
+    }
+  }
+  
+  // FAB Button Styling
+  &.mat-fab,
+  &.mat-mini-fab {
+    background: var(--btn-primary-bg) !important;
+    color: var(--btn-primary-text) !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-primary-hover-bg) !important;
+    }
+    
+    &:disabled {
+      background-color: var(--btn-disabled-bg) !important;
+      color: var(--btn-disabled-text) !important;
+    }
+  }
+}
+
+// Specific button variant icon color inheritance - High specificity overrides
+.rbro-material-button {
+  
+  // Secondary Button (Stroked) Icon Colors
+  &.mat-stroked-button .rbro-button__icon {
+    color: var(--btn-secondary-text) !important;
+    
+    svg * {
+      fill: var(--btn-secondary-text) !important;
+    }
+  }
+  
+  // Tertiary Button (Flat) Icon Colors  
+  &.mat-flat-button .rbro-button__icon {
+    color: var(--btn-tertiary-text) !important;
+    
+    svg * {
+      fill: var(--btn-tertiary-text) !important;
+    }
+  }
+  
+  // Primary Button (Raised) Icon Colors
+  &.mat-raised-button .rbro-button__icon {
+    color: var(--btn-primary-text) !important;
+    
+    svg * {
+      fill: var(--btn-primary-text) !important;
+    }
+  }
+  
+  // Link Button (Basic) Icon Colors
+  &.mat-button .rbro-button__icon {
+    color: var(--btn-link-text) !important;
+    
+    svg * {
+      fill: var(--btn-link-text) !important;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Host Element Custom Classes
+// -----------------------------------------------------------------------------
+
+:host {
+  display: inline-block;
+}
+
+// Surface Context Adaptations
+:host(.rbro-button--surface-light) .rbro-material-button {
+  &.mat-raised-button {
+    background-color: var(--btn-invert-bg) !important;
+    border: 2px solid var(--btn-invert-bg) !important;
+    color: var(--btn-invert-text) !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--color-text-secondary) !important;
+      border: 2px solid var(--color-text-secondary) !important;
+      color: var(--btn-invert-text) !important;
+    }
+    
+    &:disabled {
+      background-color: var(--btn-disabled-bg) !important;
+      border: 2px solid var(--btn-disabled-bg) !important;
+      color: var(--btn-invert-text) !important;
+    }
+  }
+  
+  &.mat-stroked-button {
+    border: 2px solid var(--color-text) !important;
+    color: var(--color-text) !important;
+    background-color: transparent !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--color-bg-secondary) !important;
+      border: 2px solid var(--color-bg-secondary) !important;
+      color: var(--color-text) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+      border: 2px solid var(--color-text) !important;
+      background-color: transparent !important;
+    }
+    
+    &:disabled {
+      border: 2px solid var(--btn-disabled-bg) !important;
+      color: var(--btn-disabled-text) !important;
+      background-color: transparent !important;
+    }
+  }
+  
+  // Link Button on Light Surface
+  &.mat-button {
+    color: var(--color-text) !important;
+    background-color: transparent !important;
+    border: 2px solid transparent !important;
+    
+    &:hover:not(:disabled) {
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+      color: var(--color-text-secondary) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+      color: var(--color-text) !important;
+    }
+    
+    &:disabled {
+      color: var(--btn-disabled-text) !important;
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+    }
+  }
+
+  // Tertiary Button on Light Surface
+  &.mat-flat-button {
+    background-color: var(--btn-tertiary-bg) !important;
+    border: 2px solid var(--btn-tertiary-bg) !important;
+    color: var(--btn-tertiary-text) !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-tertiary-hover-bg) !important;
+      border: 2px solid var(--btn-tertiary-hover-bg) !important;
+      color: var(--btn-tertiary-hover-text) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+    }
+    
+    &:disabled {
+      background-color: var(--btn-disabled-bg) !important;
+      border: 2px solid var(--btn-disabled-bg) !important;
+      color: var(--btn-disabled-text) !important;
+    }
+  }
+}
+
+:host(.rbro-button--surface-dark) .rbro-material-button {
+  &.mat-raised-button {
+    background: var(--btn-primary-bg) !important;
+    border: 2px solid var(--btn-primary-bg) !important;
+    color: var(--btn-primary-text) !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-primary-hover-bg) !important;
+      border: 2px solid var(--btn-primary-hover-bg) !important;
+    }
+    
+    &:disabled {
+      background-color: transparent !important;
+      color: var(--btn-disabled-text) !important;
+      border: 2px solid var(--btn-disabled-text) !important;
+    }
+  }
+  
+  &.mat-stroked-button {
+    border: 2px solid var(--btn-secondary-border) !important;
+    color: var(--btn-secondary-text) !important;
+    background-color: transparent !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-secondary-hover-bg) !important;
+      border: 1px solid var(--btn-secondary-text) !important;
+      color: var(--btn-secondary-text) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+      border: 2px solid var(--btn-secondary-border) !important;
+    }
+    
+    &:disabled {
+      border: 1px solid var(--btn-disabled-text) !important;
+      color: var(--btn-disabled-text) !important;
+      background-color: transparent !important;
+    }
+  }
+  
+  // Link Button on Dark Surface
+  &.mat-button {
+    color: var(--btn-link-text) !important;
+    background-color: transparent !important;
+    border: 2px solid transparent !important;
+    
+    &:hover:not(:disabled) {
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+      color: var(--btn-link-hover-text) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+      color: var(--btn-link-text) !important;
+    }
+    
+    &:disabled {
+      color: var(--btn-disabled-text) !important;
+      background-color: transparent !important;
+      border: 2px solid transparent !important;
+    }
+  }
+
+  // Tertiary Button on Dark Surface
+  &.mat-flat-button {
+    background-color: var(--btn-tertiary-bg) !important;
+    border: 2px solid var(--btn-tertiary-bg) !important;
+    color: var(--btn-tertiary-text) !important;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--btn-tertiary-hover-bg) !important;
+      border: 2px solid var(--btn-tertiary-hover-bg) !important;
+      color: var(--btn-tertiary-hover-text) !important;
+    }
+    
+    &:focus-visible {
+      outline: 2px solid var(--focus-border) !important;
+      outline-offset: 4px !important;
+    }
+    
+    &:disabled {
+      background-color: transparent !important;
+      border: 2px solid var(--btn-disabled-text) !important;
+      color: var(--btn-disabled-text) !important;
+    }
+  }
+}
+
+// Compact Mode - Maintains exact specifications but smaller
+:host(.rbro-button--compact) .rbro-material-button {
+  padding: 6px 16px !important; // Slightly smaller but maintains proportion
+  gap: 6px !important;
+}
+
+// Device-specific Sizing - Maintains exact specifications
+:host(.rbro-button--device-mobile) .rbro-material-button {
+  padding: 8px 20px !important; // Slightly smaller for mobile
+}
+
+:host(.rbro-button--device-tablet) .rbro-material-button {
+  padding: 8px 22px !important; // Between mobile and desktop
+}
+
+:host(.rbro-button--device-desktop) .rbro-material-button {
+  padding: 8px 24px !important; // Exact specification
+}
+
+// -----------------------------------------------------------------------------
+// Icon Styling - Updated for FILLED SVG icons (not stroke-based)
+// -----------------------------------------------------------------------------
+
+.rbro-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px !important;
+  height: 24px !important;
+  color: inherit !important; // Make sure the icon container inherits button text color
+  
+  // Make SVG elements inherit the button's text color via FILL only
+  svg {
+    width: 24px !important;
+    height: 24px !important;
+    color: inherit !important;
+    fill: currentColor !important; // Set default fill on SVG root
+    
+    // Override ALL hardcoded fill colors - these are filled icons, not stroked
+    // Note: SVG content is now preprocessed to remove hardcoded fills
+    * {
+      fill: currentColor !important;
+    }
+    
+    // Specific overrides for all SVG elements (fill only)
+    path, rect, circle, ellipse, polygon, use, g {
+      fill: currentColor !important;
+    }
+    
+    // Ensure no strokes are applied (these are filled icons)
+    path, rect, circle, ellipse, polygon, use, g {
+      stroke: none !important;
+    }
+  }
+  
+  // Icons spacing is handled by parent gap: 8px, no need for margins
+  &--left,
+  &--right {
+    margin: 0 !important; // Gap handles spacing
+  }
+  
+  &--only {
+    width: 24px !important;
+    height: 24px !important;
+    
+    svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Angular Material Overrides - Maintain exact specifications
+// -----------------------------------------------------------------------------
+
+// Remove Angular Material's default focus outline - we use our own
+.rbro-material-button.mat-mdc-button-base {
+  &:focus-visible {
+    outline: 2px solid var(--focus-border) !important;
+    outline-offset: 4px !important;
+  }
+}
+
+// Override Angular Material's ripple color to match RBRO theme
+.rbro-material-button .mat-ripple-element {
+  background-color: var(--ripple-bg) !important;
+}
+
+// -----------------------------------------------------------------------------
+// Surface Context Icon Color Overrides - High specificity for all contexts
+// -----------------------------------------------------------------------------
+
+:host(.rbro-button--surface-light) .rbro-material-button {
+  &.mat-raised-button .rbro-button__icon {
+    color: var(--btn-invert-text) !important;
+    svg * { fill: var(--btn-invert-text) !important; }
+  }
+  
+  &.mat-stroked-button .rbro-button__icon {
+    color: var(--color-text) !important;
+    svg * { fill: var(--color-text) !important; }
+  }
+  
+  &.mat-button .rbro-button__icon {
+    color: var(--color-text) !important;
+    svg * { fill: var(--color-text) !important; }
+  }
+  
+  &.mat-flat-button .rbro-button__icon {
+    color: var(--btn-tertiary-text) !important;
+    svg * { fill: var(--btn-tertiary-text) !important; }
+  }
+}
+
+:host(.rbro-button--surface-dark) .rbro-material-button {
+  &.mat-raised-button .rbro-button__icon {
+    color: var(--btn-primary-text) !important;
+    svg * { fill: var(--btn-primary-text) !important; }
+  }
+  
+  &.mat-stroked-button .rbro-button__icon {
+    color: var(--btn-secondary-text) !important;
+    svg * { fill: var(--btn-secondary-text) !important; }
+  }
+  
+  &.mat-button .rbro-button__icon {
+    color: var(--btn-link-text) !important;
+    svg * { fill: var(--btn-link-text) !important; }
+  }
+  
+  &.mat-flat-button .rbro-button__icon {
+    color: var(--btn-tertiary-text) !important;
+    svg * { fill: var(--btn-tertiary-text) !important; }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Responsive Design - Maintains exact specifications per device
+// -----------------------------------------------------------------------------
+
+@media (max-width: 599px) {
+  :host:not(.rbro-button--device-tablet):not(.rbro-button--device-desktop) .rbro-material-button {
+    padding: 8px 20px !important; // Mobile specification
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  :host:not(.rbro-button--device-mobile):not(.rbro-button--device-desktop) .rbro-material-button {
+    padding: 8px 22px !important; // Tablet specification
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Accessibility - Maintains exact specifications
+// -----------------------------------------------------------------------------
+
+@media (prefers-contrast: high) {
+  .rbro-material-button {
+    border-width: 2px !important;
+    
+    &:focus-visible {
+      outline-width: 3px !important;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rbro-material-button {
+    transition: none !important;
+  }
+  
+  .rbro-material-button .mat-ripple-element {
+    display: none !important;
+  }
+}

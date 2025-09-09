@@ -1,0 +1,19 @@
+<div class="ms-amount-combo" [ngClass]="cssClass">
+	<div class="ms-amount-combo__left" *ngIf="leftAmount">
+		<ms-amount-value 
+			[label]="leftAmount.label"
+			[amount]="leftAmount.amount"
+			[currency]="leftAmount.currency">
+		</ms-amount-value>
+	</div>
+	
+	<div class="ms-amount-combo__divider"></div>
+	
+	<div class="ms-amount-combo__right" *ngIf="rightAmount">
+		<ms-amount-value 
+			[label]="rightAmount.label"
+			[amount]="rightAmount.amount"
+			[currency]="rightAmount.currency">
+		</ms-amount-value>
+	</div>
+</div> 

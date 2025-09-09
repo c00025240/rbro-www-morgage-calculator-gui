@@ -1,0 +1,27 @@
+<div class="ms-web-summary-card">
+	<ms-card>
+		<div class="ms-web-summary-card__content">
+			<!-- Amounts area -->
+			<div class="ms-web-summary-card__stack-12">
+				<ms-amount-combo [leftAmount]="leftTopAmount" [rightAmount]="rightTopAmount"></ms-amount-combo>
+				<ms-amount-combo *ngIf="leftBottomAmount && rightBottomAmount" [leftAmount]="leftBottomAmount" [rightAmount]="rightBottomAmount"></ms-amount-combo>
+			</div>
+
+			<!-- Info cells -->
+			<div class="ms-web-summary-card__stack-12">
+				<ms-info-contained-cell *ngIf="topInfoText" type="info" [text]="topInfoText"></ms-info-contained-cell>
+				<ms-info-contained-cell *ngIf="bottomInfoText" type="info" [text]="bottomInfoText"></ms-info-contained-cell>
+			</div>
+
+			<!-- Actions area -->
+			<div class="ms-web-summary-card__stack-12">
+				<ms-button-primary [label]="primaryButtonLabel" (clicked)="onPrimaryClick()"></ms-button-primary>
+				<div class="ms-web-summary-card__actions-row">
+					<ms-button-secondary [label]="secondaryButtonLabel" (clicked)="onSecondaryClick()"></ms-button-secondary>
+					<ms-button-secondary [label]="'Trimite pe email'" (clicked)="onSecondaryClick()"></ms-button-secondary>
+				</div>
+				<div class="ms-web-summary-card__footnote">{{ footnoteText }}</div>
+			</div>
+		</div>
+	</ms-card>
+</div> 

@@ -1,0 +1,220 @@
+<div class="elevation-showcase" [ngStyle]="getDisplayStyle()">
+  <!-- Header -->
+  <div class="showcase-header">
+    <h1 class="showcase-title">Elevation System</h1>
+    <p class="showcase-description">
+      A comprehensive shadow and depth system for creating visual hierarchy and interactive feedback in the mortgage simulator interface.
+    </p>
+  </div>
+
+  <!-- Elevation Levels -->
+  <section class="elevation-levels">
+    <h2 class="section-title">Elevation Levels</h2>
+    
+    <div class="elevation-grid">
+      <div 
+        *ngFor="let elevation of elevationLevels" 
+        class="elevation-sample"
+        [class.selected]="isSelectedElevation(elevation.level)"
+      >
+        <div class="elevation-card" [class]="elevation.cssClass">
+          <div class="elevation-header">
+            <h3 class="elevation-name">{{ elevation.name }}</h3>
+            <code class="elevation-level">{{ elevation.level }}</code>
+          </div>
+          
+          <p class="elevation-description">{{ elevation.description }}</p>
+          
+          <div class="elevation-details">
+            <div class="detail-section">
+              <h4>Usage</h4>
+              <p>{{ elevation.usage }}</p>
+            </div>
+            
+            <div class="detail-section">
+              <h4>Use Cases</h4>
+              <p>{{ elevation.useCase }}</p>
+            </div>
+            
+            <div class="shadow-value">
+              <h4>Shadow Value</h4>
+              <code>{{ elevation.shadowValue }}</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive States -->
+  <section class="interactive-states" *ngIf="showInteractiveStates">
+    <h2 class="section-title">Interactive States</h2>
+    
+    <div class="interactive-grid">
+      <div class="interactive-sample">
+        <h3>Hover Effects</h3>
+        <div class="state-examples">
+          <div class="state-card elevation-small hover-demo">
+            <span>Small → Hover</span>
+          </div>
+          <div class="state-card elevation-medium hover-demo">
+            <span>Medium → Hover</span>
+          </div>
+          <div class="state-card elevation-large hover-demo">
+            <span>Large → Hover</span>
+          </div>
+        </div>
+        <p class="state-description">
+          Hover over cards to see elevation changes. Buttons and interactive elements should increase elevation on hover.
+        </p>
+      </div>
+
+      <div class="interactive-sample">
+        <h3>Active States</h3>
+        <div class="state-examples">
+          <div class="state-card elevation-small active-demo">
+            <span>Button Active</span>
+          </div>
+          <div class="state-card elevation-zero active-demo">
+            <span>Pressed Down</span>
+          </div>
+        </div>
+        <p class="state-description">
+          Active states often reduce elevation to create a "pressed" effect.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mortgage Examples -->
+  <section class="mortgage-examples" *ngIf="showUsageExamples">
+    <h2 class="section-title">Mortgage Calculator Examples</h2>
+    
+    <div class="examples-grid">
+      <div 
+        *ngFor="let example of mortgageExamples" 
+        class="example-card"
+        [class]="'elevation-' + example.elevation"
+      >
+        <div class="example-header">
+          <h3>{{ example.title }}</h3>
+          <span class="elevation-badge">{{ example.elevation }}</span>
+        </div>
+        <p>{{ example.description }}</p>
+        
+        <!-- Example content based on type -->
+        <div class="example-content">
+          <div *ngIf="example.title.includes('Button')" class="button-example">
+            <button class="demo-button">Calculate Monthly Payment</button>
+          </div>
+          
+          <div *ngIf="example.title.includes('Card')" class="card-example">
+            <div class="loan-details">
+              <div class="detail-row">
+                <span>Loan Amount:</span>
+                <span>$350,000</span>
+              </div>
+              <div class="detail-row">
+                <span>Interest Rate:</span>
+                <span>3.25%</span>
+              </div>
+              <div class="detail-row">
+                <span>Term:</span>
+                <span>30 years</span>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="example.title.includes('Input')" class="input-example">
+            <label>Loan Amount</label>
+            <input type="text" placeholder="Enter amount" />
+          </div>
+          
+          <div *ngIf="example.title.includes('Modal')" class="modal-example">
+            <div class="rate-comparison">
+              <div class="rate-option">
+                <h4>Fixed Rate</h4>
+                <span class="rate">3.25%</span>
+              </div>
+              <div class="rate-option">
+                <h4>Variable Rate</h4>
+                <span class="rate">2.95%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="example.title.includes('Notification')" class="notification-example">
+            <div class="notification-icon">✓</div>
+            <div class="notification-text">
+              <h4>Application Submitted Successfully</h4>
+              <p>We'll review your application and get back to you within 24 hours.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usage Guidelines -->
+  <section class="usage-guidelines">
+    <h2 class="section-title">Usage Guidelines</h2>
+    
+    <div class="guidelines-grid">
+      <div class="guideline">
+        <h3>Elevation Hierarchy</h3>
+        <p>Use elevation to create visual hierarchy. Elements with higher elevation appear closer to the user and should be more important or interactive.</p>
+      </div>
+      
+      <div class="guideline">
+        <h3>Interactive Feedback</h3>
+        <p>Increase elevation on hover and decrease on active/pressed states to provide clear interactive feedback to users.</p>
+      </div>
+      
+      <div class="guideline">
+        <h3>Accessibility</h3>
+        <p>Ensure sufficient contrast between elevated elements and backgrounds. Elevation should supplement, not replace, other visual cues.</p>
+      </div>
+      
+      <div class="guideline">
+        <h3>Performance</h3>
+        <p>Use elevation sparingly on mobile devices and consider reducing shadow complexity for better performance.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Implementation -->
+  <section class="implementation" *ngIf="showCodeExamples">
+    <h2 class="section-title">Implementation</h2>
+    
+    <div class="code-examples">
+      <div class="code-sample">
+        <h3>CSS Custom Properties</h3>
+        <pre><code>/* Apply elevation using CSS custom properties */
+.my-card &#123;
+  border-radius: var(--elevation-border-radius);
+  border: var(--elevation-border);
+  background: var(--elevation-background);
+  box-shadow: var(--elevation-medium);
+  transition: var(--elevation-transition);
+&#125;
+
+.my-card:hover &#123;
+  box-shadow: var(--elevation-medium-hover);
+&#125;</code></pre>
+      </div>
+      
+      <div class="code-sample">
+        <h3>Utility Classes</h3>
+        <pre><code>/* Use predefined elevation classes */
+&lt;div class="elevation-small"&gt;Button&lt;/div&gt;
+&lt;div class="elevation-medium"&gt;Card&lt;/div&gt;
+&lt;div class="elevation-large"&gt;Modal&lt;/div&gt;
+
+/* With interactive states */
+&lt;button class="elevation-small hover:elevation-medium"&gt;
+  Interactive Button
+&lt;/button&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+</div>

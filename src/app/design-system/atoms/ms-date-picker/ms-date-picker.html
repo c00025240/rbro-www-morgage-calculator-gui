@@ -1,0 +1,101 @@
+<div [class]="datePickerClasses">
+  
+  <mat-form-field 
+    [appearance]="appearance"
+    [class.ms-date-picker__field--error]="hasError">
+    
+    <!-- Prefix Icon -->
+    <mat-icon *ngIf="prefixIcon" matPrefix class="ms-date-picker__prefix-icon">{{ prefixIcon }}</mat-icon>
+    
+    <!-- Label -->
+    <mat-label *ngIf="label">
+      {{ label }}
+      <span *ngIf="required" class="ms-date-picker__required">*</span>
+    </mat-label>
+    
+    <!-- Date Input -->
+    <input 
+      matInput
+      [matDatepicker]="picker"
+      [formControl]="dateControl"
+      [placeholder]="computedPlaceholder"
+      [min]="minDate"
+      [max]="maxDate"
+      [readonly]="readonly"
+      [disabled]="disabled"
+      [required]="required"
+      [attr.aria-label]="ariaLabel"
+      [attr.aria-describedby]="ariaDescribedBy"
+      (dateInput)="onDateInput($event)"
+      (dateChange)="onDateChange($event)"
+      class="ms-date-picker__input">
+    
+    <!-- Suffix Icon / Calendar Toggle -->
+    <mat-icon 
+      *ngIf="suffixIcon && !showClearButton"
+      matSuffix 
+      class="ms-date-picker__suffix-icon"
+      (click)="picker.open()">
+      {{ suffixIcon }}
+    </mat-icon>
+    
+    <!-- Clear Button -->
+    <button 
+      *ngIf="showClearButton && dateControl.value && !disabled && !readonly"
+      mat-icon-button
+      matSuffix
+      type="button"
+      class="ms-date-picker__clear-button"
+      (click)="onClear()"
+      [attr.aria-label]="'Clear date'">
+      <mat-icon>close</mat-icon>
+    </button>
+    
+    <!-- Calendar Toggle (when clear button is shown) -->
+    <mat-icon 
+      *ngIf="showClearButton && (!dateControl.value || disabled || readonly)"
+      matSuffix 
+      class="ms-date-picker__calendar-icon"
+      (click)="!disabled && !readonly && picker.open()">
+      {{ suffixIcon }}
+    </mat-icon>
+    
+    <!-- Date Picker -->
+    <mat-datepicker 
+      #picker
+      [startView]="startView"
+      [touchUi]="touchUi"
+      (opened)="onOpened()"
+      (closed)="onClosed()">
+      
+      <!-- Today Button -->
+      <mat-datepicker-actions *ngIf="showTodayButton">
+        <button mat-button matDatepickerCancel>Cancel</button>
+        <button mat-button (click)="onToday(); picker.close()">Today</button>
+        <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
+      </mat-datepicker-actions>
+      
+    </mat-datepicker>
+    
+    <!-- Hint Text -->
+    <mat-hint *ngIf="hint && !hasError" class="ms-date-picker__hint">{{ hint }}</mat-hint>
+    
+    <!-- Error Message -->
+    <mat-error *ngIf="hasError" class="ms-date-picker__error">{{ displayError }}</mat-error>
+    
+  </mat-form-field>
+  
+  <!-- Quick Action Buttons -->
+  <div *ngIf="showTodayButton || showClearButton" class="ms-date-picker__actions">
+    <button 
+      *ngIf="showTodayButton && !disabled && !readonly"
+      mat-button
+      type="button"
+      class="ms-date-picker__action-button"
+      (click)="onToday()">
+      <mat-icon>today</mat-icon>
+      Today
+    </button>
+  </div>
+  
+</div>

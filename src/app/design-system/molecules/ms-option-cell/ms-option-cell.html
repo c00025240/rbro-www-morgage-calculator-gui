@@ -1,0 +1,21 @@
+<div
+  [class]="getOptionCellClasses().join(' ')"
+  (click)="onOptionClick()"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
+
+  <div class="ms-option-cell__content">
+    <!-- Left Area: Label -->
+    <div class="ms-option-cell__left-area">
+      <span class="ms-option-cell__label">{{ label }}</span>
+    </div>
+
+    <!-- Right Area: Icon -->
+    <div class="ms-option-cell__right-area">
+      <div class="ms-option-cell__icon" [class.ms-option-cell__icon--selected]="selected">
+        <!-- Dynamic Icon using innerHTML binding -->
+        <div class="ms-option-cell__dynamic-icon" [innerHTML]="iconContent()"></div>
+      </div>
+    </div>
+  </div>
+</div> 

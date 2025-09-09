@@ -1,0 +1,8 @@
+<div class="ms-page-shell"
+     [class.ms-page-shell--surface-light]="surface === 'light'"
+     [class.ms-page-shell--surface-dark]="surface === 'dark'"
+     [class.ms-page-shell--full-height]="fullHeight"
+     [class.ms-page-shell--scrollable]="scrollable"
+     [class]="cssClass || ''">
+	<ng-content></ng-content>
+</div> 

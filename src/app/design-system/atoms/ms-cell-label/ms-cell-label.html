@@ -1,0 +1,14 @@
+<div [class]="getCellLabelClasses().join(' ')">
+  <span 
+    class="ms-cell-label__text"
+    [title]="isTextTruncated ? text : null">
+    {{ displayText }}
+  </span>
+  <ms-savings-chip
+    *ngIf="rightText !== undefined && rightText !== null && rightText !== ''"
+    [text]="rightText"
+    size="s"
+    [infoOnly]="true"
+    [disabled]="rightTextDisabled">
+  </ms-savings-chip>
+</div> 

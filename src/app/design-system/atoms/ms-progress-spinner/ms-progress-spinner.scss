@@ -1,0 +1,316 @@
+@use '../../_tokens.scss';
+
+.ms-progress-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--backdrop-bg);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &__container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  &__value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    text-align: center;
+    pointer-events: none;
+  }
+  
+  &__label {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-s);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-top: var(--spacing-2);
+  }
+  
+  // Material spinner customization
+  ::ng-deep {
+    .mat-mdc-progress-spinner {
+      // Custom colors for different themes
+      &.mat-primary {
+        circle {
+          stroke: var(--color-accent-primary);
+        }
+      }
+      
+      &.mat-accent {
+        circle {
+          stroke: var(--color-secondary-primary);
+        }
+      }
+      
+      &.mat-warn {
+        circle {
+          stroke: var(--color-error-primary);
+        }
+      }
+      
+      // Enhanced animation
+      circle {
+        transition: stroke 0.3s ease-in-out;
+      }
+      
+      // Smooth rotation
+      svg {
+        animation: ms-spinner-rotate 2s linear infinite;
+      }
+    }
+  }
+  
+  // Size variations
+  &--small {
+    gap: var(--spacing-1);
+    
+    .ms-progress-spinner__value {
+      font-size: var(--font-size-body-xs);
+    }
+    
+    .ms-progress-spinner__label {
+      font-size: var(--font-size-body-xs);
+      margin-top: var(--spacing-1);
+    }
+  }
+  
+  &--medium {
+    // Default size already set above
+  }
+  
+  &--large {
+    gap: var(--spacing-3);
+    
+    .ms-progress-spinner__value {
+      font-size: var(--font-size-body-s);
+    }
+    
+    .ms-progress-spinner__label {
+      font-size: var(--font-size-body-m);
+      margin-top: var(--spacing-3);
+    }
+  }
+  
+  &--custom {
+    // Custom sizing handled by computed properties
+  }
+  
+  // Color variations
+  &--primary {
+    // Default primary colors already set above
+  }
+  
+  &--accent {
+    .ms-progress-spinner__label {
+      color: var(--color-secondary-primary);
+    }
+  }
+  
+  &--warn {
+    .ms-progress-spinner__label {
+      color: var(--color-error-primary);
+    }
+  }
+  
+  // Layout variations
+  &--centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+  }
+  
+  &--inline {
+    display: inline-flex;
+    vertical-align: middle;
+    
+    .ms-progress-spinner__label {
+      margin-top: 0;
+      margin-left: var(--spacing-2);
+    }
+    
+    &.ms-progress-spinner--small {
+      .ms-progress-spinner__label {
+        margin-left: var(--spacing-1);
+      }
+    }
+    
+    &.ms-progress-spinner--large {
+      .ms-progress-spinner__label {
+        margin-left: var(--spacing-3);
+      }
+    }
+  }
+  
+  &--overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    .ms-progress-spinner__container {
+      background-color: var(--color-surface-primary);
+      padding: var(--spacing-6);
+      border-radius: var(--radius-l);
+      box-shadow: var(--elevation-3);
+    }
+    
+    .ms-progress-spinner__label {
+      color: var(--color-text-primary);
+      margin-top: var(--spacing-3);
+    }
+  }
+  
+  // Disabled state
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    
+    .ms-progress-spinner__label {
+      color: var(--color-text-disabled);
+    }
+    
+    ::ng-deep {
+      .mat-mdc-progress-spinner circle {
+        stroke: var(--color-surface-disabled) !important;
+      }
+    }
+  }
+  
+  // Responsive design
+  @media (max-width: 768px) {
+    .ms-progress-spinner__label {
+      font-size: var(--font-size-body-s);
+    }
+    
+    &--overlay {
+      .ms-progress-spinner__container {
+        padding: var(--spacing-4);
+        margin: var(--spacing-4);
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    &--overlay {
+      .ms-progress-spinner__container {
+        padding: var(--spacing-3);
+        margin: var(--spacing-2);
+      }
+    }
+  }
+  
+  // Surface theme support
+  &[data-surface="light"] {
+    .ms-progress-spinner__value,
+    .ms-progress-spinner__label {
+      color: var(--color-text-primary);
+    }
+    
+    &.ms-progress-spinner--overlay {
+      .ms-progress-spinner__container {
+        background-color: var(--color-surface-light);
+      }
+    }
+  }
+  
+  &[data-surface="dark"] {
+    .ms-progress-spinner__value,
+    .ms-progress-spinner__label {
+      color: var(--color-text-on-dark);
+    }
+    
+    &.ms-progress-spinner--overlay {
+      .ms-progress-spinner__container {
+        background-color: var(--color-surface-dark);
+      }
+      
+      .ms-progress-spinner__backdrop {
+        background-color: var(--backdrop-bg-strong);
+      }
+    }
+  }
+}
+
+// Loading button integration
+.ms-progress-spinner--button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  
+  .ms-progress-spinner__label {
+    margin-top: 0;
+  }
+  
+  &.ms-progress-spinner--small {
+    gap: var(--spacing-1);
+  }
+  
+  &.ms-progress-spinner--large {
+    gap: var(--spacing-3);
+  }
+}
+
+// Custom keyframes for spinner rotation
+@keyframes ms-spinner-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Pulse animation for indeterminate spinners
+@keyframes ms-spinner-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+// Enhanced loading states
+.ms-progress-spinner--loading {
+  .ms-progress-spinner__container {
+    animation: ms-spinner-pulse 2s ease-in-out infinite;
+  }
+}
+
+// Button loading state
+.ms-progress-spinner--button-loading {
+  .ms-progress-spinner__label {
+    opacity: 0.7;
+  }
+}

@@ -1,0 +1,68 @@
+<header class="ms-header" 
+        role="banner"
+        [class.ms-header--surface-light]="surface === 'light'"
+        [class.ms-header--surface-dark]="surface === 'dark'"
+        [attr.aria-label]="ariaLabel || 'Navigation header'">
+	<div class="ms-header__container">
+		<!-- Left Area: Back button and Title -->
+		<div class="ms-header__left">
+			<ms-button-secondary
+				*ngIf="showBackButton"
+				[label]="backLabel"
+				iconLeft="back"
+				class="ms-header__back-button"
+				(clicked)="onBackClick($event)"
+				[ariaLabel]="'Navighează înapoi'"
+				[title]="'Întoarce-te la pagina anterioară'">
+			</ms-button-secondary>
+			
+			<h2 class="ms-header__title" 
+			    *ngIf="title" 
+			    [attr.id]="'ms-header-title'"
+			    [attr.aria-level]="2">{{ title }}</h2>
+		</div>
+
+		<!-- Right Area: Action buttons -->
+		<div class="ms-header__right">
+			<!-- Mobile: Only phone button -->
+			<ms-button-secondary
+				*ngIf="primaryAction"
+				class="ms-header__action ms-header__action--mobile-only"
+				[label]="primaryAction.label"
+				[iconLeft]="primaryAction.iconLeft"
+				[iconRight]="primaryAction.iconRight"
+				[disabled]="primaryAction.disabled || false"
+				[ariaLabel]="primaryAction.ariaLabel"
+				[title]="primaryAction.title"
+				(clicked)="onPrimaryActionClick($event)">
+			</ms-button-secondary>
+
+			<!-- Desktop: Both buttons -->
+			<div class="ms-header__desktop-actions">
+				<ms-button-secondary
+					*ngIf="primaryAction"
+					class="ms-header__action"
+					[label]="primaryAction.label"
+					[iconLeft]="primaryAction.iconLeft"
+					[iconRight]="primaryAction.iconRight"
+					[disabled]="primaryAction.disabled || false"
+					[ariaLabel]="primaryAction.ariaLabel"
+					[title]="primaryAction.title"
+					(clicked)="onPrimaryActionClick($event)">
+				</ms-button-secondary>
+
+				<ms-button-secondary
+					*ngIf="secondaryAction"
+					class="ms-header__action"
+					[label]="secondaryAction.label"
+					[iconLeft]="secondaryAction.iconLeft"
+					[iconRight]="secondaryAction.iconRight"
+					[disabled]="secondaryAction.disabled || false"
+					[ariaLabel]="secondaryAction.ariaLabel"
+					[title]="secondaryAction.title"
+					(clicked)="onSecondaryActionClick($event)">
+				</ms-button-secondary>
+			</div>
+		</div>
+	</div>
+</header> 

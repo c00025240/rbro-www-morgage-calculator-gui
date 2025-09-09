@@ -1,0 +1,12 @@
+/* Global styles and design tokens */
+@import 'assets/fonts/amalia-fonts.css';
+@import 'assets/tokens.css';
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Amalia-Regular', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}

@@ -1,0 +1,41 @@
+@use '../../tokens';
+
+.ms-card {
+  // Base layout
+  display: block;
+  box-sizing: border-box;
+  border-radius: 8px; // Using 8px as specified
+  width: 100%; // Ensure card takes full width of parent
+  overflow: hidden; // Prevent child content from overflowing the card
+  
+  // Base themed surface (inherits from root tokens)
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  
+  // Mobile padding (16px)
+  padding: 16px;
+  
+  // Ensure smooth transitions
+  transition: all 0.2s ease-in-out;
+  
+  // Optional: shadow via token
+  box-shadow: var(--card-shadow);
+  
+  // Tablet and up padding (24px)
+  @media (min-width: 768px) { padding: 24px; }
+  
+  // Light surface variant (explicit override)
+  &--surface-light { background-color: var(--card-bg); border: 1px solid var(--card-border); box-shadow: var(--card-shadow); }
+  
+  // Dark surface variant (explicit override)
+  &--surface-dark { background-color: var(--card-bg); border: 1px solid var(--card-border); color: var(--color-text); box-shadow: var(--card-shadow); }
+  
+  // Max width constraint on large screens
+  &--max-width { @media (min-width: 1200px) { max-width: 640px; } }
+  
+  // No padding option for custom layouts
+  &--no-padding { padding: 0; }
+
+  // Allow overlays (dropdowns/tooltips) to overflow card bounds
+  &.ms-card--allow-overflow { overflow: visible; }
+} 

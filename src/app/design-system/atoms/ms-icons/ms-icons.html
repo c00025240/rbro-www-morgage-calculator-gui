@@ -1,0 +1,300 @@
+<div class="icons-showcase">
+  <!-- Header -->
+  <div class="showcase-header">
+    <h1 class="display-3">Icon System</h1>
+    <p class="body-large text-secondary">
+      Comprehensive icon library with {{allIcons.length}} SVG icons. All icons are outlined, with {{getFilledIconsCount()}} also available in filled style.
+    </p>
+    
+    <!-- Asset Path Information -->
+    <div class="asset-path-info">
+      <h3 class="h5 asset-path-title">📁 Asset Location</h3>
+      <div class="asset-paths">
+        <div class="path-item">
+          <span class="path-label">Relative Path:</span>
+          <code class="path-code">{{ getAssetPath() }}</code>
+          <button class="copy-button-small" (click)="copyToClipboard(getAssetPath())">Copy</button>
+        </div>
+        <div class="path-item">
+          <span class="path-label">Full Project Path:</span>
+          <code class="path-code">{{ getFullAssetPath() }}</code>
+          <button class="copy-button-small" (click)="copyToClipboard(getFullAssetPath())">Copy</button>
+        </div>
+      </div>
+      <p class="asset-note">
+        💡 All icon files are stored in the <strong>{{ getAssetPath() }}</strong> directory. File naming follows patterns like 
+        <code>[name]-[style].svg</code> or <code>[name] Style=[style].svg</code> depending on the icon.
+      </p>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <section class="controls-section">
+    <div class="controls-grid">
+      <!-- Search -->
+      <div class="control-group">
+        <label class="label-medium">Search Icons</label>
+        <input 
+          type="text" 
+          class="search-input"
+          [value]="searchTerm"
+          (input)="onSearchChange($event)"
+          placeholder="Search by name or category..."
+        />
+      </div>
+
+      <!-- Category Filter -->
+      <div class="control-group">
+        <label class="label-medium">Category</label>
+        <select 
+          class="category-select"
+          [value]="selectedCategory"
+          (change)="onCategoryChange($event)"
+        >
+          <option *ngFor="let category of categories" [value]="category">
+            {{ formatCategoryName(category) }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Icon Size -->
+      <div class="control-group">
+        <label class="label-medium">Size</label>
+        <select 
+          class="size-select"
+          [value]="iconSize"
+          (change)="iconSize = $any($event.target).value"
+        >
+          <option *ngFor="let size of iconSizes" [value]="size.value">
+            {{ size.name }} ({{ size.size }})
+          </option>
+        </select>
+      </div>
+
+      <!-- Style Toggle -->
+      <div class="control-group">
+        <label class="label-medium">Style</label>
+        <div class="style-toggle">
+          <button 
+            *ngFor="let style of styles"
+            class="style-button"
+            [class.active]="selectedStyle === style"
+            [disabled]="!selectedIconSupportsStyle(style)"
+            (click)="selectedStyle = style"
+          >
+            {{ style | titlecase }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-section">
+    <div class="stat-item">
+      <span class="stat-number h3">{{ filteredIcons.length }}</span>
+      <span class="stat-label body-medium">Icons Available</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number h3">{{ getFilledIconsCount() }}</span>
+      <span class="stat-label body-medium">With Filled Style</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number h3">{{ categories.length - 1 }}</span>
+      <span class="stat-label body-medium">Categories</span>
+    </div>
+  </div>
+
+  <!-- Icons Grid -->
+  <section class="icons-grid-section" *ngIf="showGrid">
+    <h2 class="h4 section-title">
+      {{ selectedCategory === 'all' ? 'All Icons' : formatCategoryName(selectedCategory) }}
+      <span class="count body-small">({{ filteredIcons.length }} icons)</span>
+    </h2>
+    
+    <div class="icons-grid">
+      <div 
+        *ngFor="let icon of filteredIcons" 
+        class="icon-card"
+        [class.selected]="selectedIcon === icon.name"
+        (click)="onIconSelect(icon.name)"
+      >
+        <div class="icon-display" [style.font-size.px]="getSizeNumber()">
+          <div 
+            class="icon-svg"
+            [innerHTML]="getIconContent(icon, selectedStyle)"
+            [class.no-content]="!getIconContent(icon, selectedStyle)"
+          ></div>
+        </div>
+        
+        <div class="icon-info">
+          <div class="icon-name label-small">{{ icon.displayName }}</div>
+          <div class="icon-filename body-tiny">{{ icon.filenames?.[selectedStyle] }}</div>
+          <div class="icon-styles">
+            <span 
+              *ngFor="let style of icon.styles" 
+              class="style-badge"
+              [class.active]="style === selectedStyle"
+            >
+              {{ style }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Selected Icon Details -->
+  <section class="selected-icon-section" *ngIf="getSelectedIconDefinition()">
+    <h2 class="h4 section-title">Selected Icon: {{ getSelectedIconDefinition()?.displayName }}</h2>
+    
+    <div class="selected-icon-content">
+      <div class="icon-preview">
+        <div class="preview-sizes">
+          <div *ngFor="let size of iconSizes" class="preview-size">
+            <div class="size-label caption">{{ size.name }}</div>
+            <div 
+              class="preview-icon"
+              [style.font-size]="size.size"
+              [innerHTML]="getIconContent(getSelectedIconDefinition()!, selectedStyle)"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="icon-details">
+        <div class="detail-item">
+          <span class="label-medium">Name:</span>
+          <code class="code-snippet">{{ getSelectedIconDefinition()?.name }}</code>
+        </div>
+        
+        <div class="detail-item">
+          <span class="label-medium">Available Styles:</span>
+          <div class="styles-list">
+            <span 
+              *ngFor="let style of getSelectedIconDefinition()?.styles" 
+              class="style-tag"
+              [class.current]="style === selectedStyle"
+            >
+              {{ style }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="detail-item">
+          <span class="label-medium">Category:</span>
+          <span class="category-tag">{{ formatCategoryName(getSelectedIconDefinition()?.category || '') }}</span>
+        </div>
+        
+        <div class="detail-item">
+          <span class="label-medium">Usage:</span>
+          <p class="body-small">{{ getSelectedIconDefinition()?.usage }}</p>
+        </div>
+        
+        <!-- File Information -->
+        <div class="detail-item file-info-section">
+          <span class="label-medium">📄 File Information:</span>
+          <div class="file-info-grid">
+            <div 
+              *ngFor="let style of getSelectedIconDefinition()?.styles" 
+              class="file-info-item"
+            >
+              <div class="file-style-header">
+                <span class="file-style-name">{{ style | titlecase }} Style</span>
+                <span 
+                  class="file-style-badge"
+                  [class.current-style]="style === selectedStyle"
+                >
+                  {{ style === selectedStyle ? 'Current' : 'Available' }}
+                </span>
+              </div>
+              
+              <div class="file-details">
+                <div class="file-detail">
+                  <span class="file-detail-label">Filename:</span>
+                  <code class="file-name">{{ getSelectedIconFilenames()[style] }}</code>
+                  <button 
+                    class="copy-button-tiny" 
+                    (click)="copyToClipboard(getSelectedIconFilenames()[style] || '')"
+                    [disabled]="!getSelectedIconFilenames()[style]"
+                  >
+                    Copy
+                  </button>
+                </div>
+                
+                <div class="file-detail">
+                  <span class="file-detail-label">Full Path:</span>
+                  <code class="file-path">{{ getSelectedIconFullPaths()[style] }}</code>
+                  <button 
+                    class="copy-button-tiny" 
+                    (click)="copyToClipboard(getSelectedIconFullPaths()[style] || '')"
+                    [disabled]="!getSelectedIconFullPaths()[style]"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Implementation Examples -->
+  <section class="implementation-section" *ngIf="showImplementation">
+    <h2 class="h4 section-title">Implementation</h2>
+    
+    <div class="implementation-tabs">
+      <button class="tab-button h6" [class.active]="true">Angular</button>
+    </div>
+    
+    <div class="code-examples">
+      <div class="code-block">
+        <div class="code-header">
+          <span class="label-small">Component Usage</span>
+          <button class="copy-button" (click)="copyToClipboard(getAngularCode())">
+            Copy
+          </button>
+        </div>
+        <pre class="code-content"><code>{{ getAngularCode() }}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Usage Guidelines -->
+  <section class="guidelines-section" *ngIf="showUsageExamples">
+    <h2 class="h4 section-title">Usage Guidelines</h2>
+    
+    <div class="guidelines-grid">
+      <div class="guideline-card">
+        <h3 class="h6">Icon Sizes</h3>
+        <ul class="body-small">
+          <li>Small (16px): Use in compact interfaces, badges, or inline with text</li>
+          <li>Medium (24px): Standard size for most UI elements</li>
+          <li>Large (32px): Use for featured actions or emphasis</li>
+          <li>X-Large (48px): Use for hero sections or major features</li>
+        </ul>
+      </div>
+      
+      <div class="guideline-card">
+        <h3 class="h6">Icon Styles</h3>
+        <ul class="body-small">
+          <li>Outlined: Default style, use for most interface elements</li>
+          <li>Filled: Use for active states, selected items, or emphasis</li>
+          <li>Half: Special style for ratings or progress indicators</li>
+        </ul>
+      </div>
+      
+      <div class="guideline-card">
+        <h3 class="h6">Accessibility</h3>
+        <ul class="body-small">
+          <li>Always provide alt text or aria-labels for icons</li>
+          <li>Use sufficient color contrast (4.5:1 minimum)</li>
+          <li>Don't rely solely on icons to convey meaning</li>
+          <li>Test with screen readers and keyboard navigation</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>

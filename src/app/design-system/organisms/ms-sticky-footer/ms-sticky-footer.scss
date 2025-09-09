@@ -1,0 +1,84 @@
+@use '../../_tokens.scss';
+
+:host {
+	display: block;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: var(--z-sticky);
+	width: 100%;
+	max-width: 100%;
+}
+
+.ms-sticky-footer {
+	display: flex;
+	flex-direction: column;
+	background-color: var(--color-bg);
+	border-radius: 24px 24px 0 0;
+	box-shadow: var(--shadow-md);
+	padding: 12px 12px calc(24px + env(safe-area-inset-bottom)) 12px;
+	gap: var(--space-1, 8px);
+	width: 100vw;
+	max-width: 100%;
+	box-sizing: border-box;
+	margin: 0;
+	overflow: hidden;
+
+	&__summary { width: 100%; max-width: 100%; }
+	
+	&__actions {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: stretch;
+		gap: 12px;
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+	}
+	
+	&__details-button,
+	&__primary-button,
+	&__share-button { min-width: 0; }
+	
+	&__primary-button {
+		ms-button-primary { width: 100%; display: block; }
+		ms-button-primary .ms-button-primary__btn { width: 100%; max-width: none; }
+	}
+	
+	&__share-button {
+		flex-shrink: 0;
+		max-width: 96px;
+		ms-button-secondary { min-width: 48px; }
+		ms-button-secondary .ms-button-secondary__btn { aspect-ratio: 1; padding: 0 !important; display: flex; align-items: center; justify-content: center; min-width: 48px; }
+		ms-button-secondary .ms-button-secondary__label { display: none; }
+		ms-button-secondary .ms-button-secondary__icon { margin: 0; }
+	}
+
+	> * { margin-left: 0; margin-right: 0; }
+}
+
+// Surface variations
+.ms-sticky-footer--surface-light {
+	background-color: var(--color-bg);
+}
+
+.ms-sticky-footer--surface-dark {
+	background-color: var(--color-bg); // bg-surface-custom-dark
+	box-shadow: var(--shadow-xl);
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+	.ms-sticky-footer { padding: 12px 12px calc(24px + env(safe-area-inset-bottom)) 12px; }
+}
+
+// Ensure buttons have proper height
+.ms-sticky-footer__details-button,
+.ms-sticky-footer__primary-button,
+.ms-sticky-footer__share-button {
+	ms-button-secondary, ms-button-primary {
+		height: 48px;
+		@media (max-width: 1023px) { height: 40px; }
+	}
+} 

@@ -1,0 +1,17 @@
+<div 
+  [class]="containerClasses().join(' ')"
+  (click)="onClick($event)">
+  
+  <div class="ms-info-contained-cell__content">
+    <!-- Optional Left Icon -->
+    <span 
+      *ngIf="leftIcon" 
+      class="ms-info-contained-cell__icon ms-info-contained-cell__icon--left" 
+      [innerHTML]="getLeftIcon()" 
+      aria-hidden="true">
+    </span>
+    
+    <!-- Text Content -->
+    <span class="ms-info-contained-cell__text">{{ text }}</span>
+  </div>
+</div> 

@@ -1,0 +1,169 @@
+.ms-switch-cell {
+  display: flex;
+  align-items: center; // Vertical center alignment for 56px container
+  width: 100%;
+  height: 56px; // Fixed height instead of min-height
+  background-color: var(--bg-form-cell-opacity);
+  border-radius: var(--border-radius-1, 4px);
+  padding: 16px; // Equal padding on all sides for perfect alignment
+  border: 1px solid var(--border-form-cell);
+  transition: all 0.2s ease-in-out;
+  font-family: var(--radio-font-family, "Amalia") !important;
+  box-sizing: border-box; // Include border in sizing for consistency
+
+  // Hover effect with medium-emphasis border
+  &--hovered:not(&--disabled) {
+    border-color: var(--switch-cell-border-hover);
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%; // Take full height of container
+  }
+
+  &__left-area {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; // Don't shrink, stay compact
+    max-width: calc(100% - 80px); // Leave space for toggle switch (56px) + margin
+  }
+
+  &__label-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1, 4px); // Small gap between label and icon
+    flex-shrink: 0; // Don't shrink the group
+    max-width: 100%;
+  }
+
+  &__label {
+    // Typography - Mobile/Paragraph/Medium from Figma
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 24px !important;
+    color: var(--switch-cell-text);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1; // Allow label to shrink for truncation
+    max-width: 40ch; // Truncate after 40 characters
+  }
+
+  &__info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: var(--border-radius-1, 4px);
+    transition: all 0.2s ease-in-out;
+    flex-shrink: 0; // Don't shrink the icon
+
+    &:hover:not(:disabled) {
+      background-color: var(--switch-cell-icon-hover-bg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--focus-border);
+      outline-offset: 1px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  &__info-icon-svg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; // Fixed 24px size
+    height: 24px; // Fixed 24px size
+    color: var(--switch-cell-icon);
+
+    svg {
+      width: 24px !important; // Force 24px size, not 1em
+      height: 24px !important; // Force 24px size, not 1em
+
+      // Only set fill to currentColor, don't add strokes
+      * {
+        fill: currentColor !important;
+      }
+
+      // For elements that already have fills, keep them as currentColor
+      path[fill]:not([fill="none"]),
+      circle[fill]:not([fill="none"]),
+      rect[fill]:not([fill="none"]) {
+        fill: currentColor !important;
+      }
+
+      // For elements that already have strokes, keep them but don't add new ones
+      path[stroke]:not([stroke="none"]),
+      line[stroke]:not([stroke="none"]),
+      circle[stroke]:not([stroke="none"]) {
+        stroke: currentColor !important;
+      }
+    }
+  }
+
+  &__right-area {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    margin-left: var(--space-2, 8px);
+  }
+
+  // Disabled state
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    
+    .ms-switch-cell__label {
+      color: var(--switch-cell-disabled-text, var(--color-text-disabled));
+    }
+
+    .ms-switch-cell__info-icon {
+      pointer-events: none;
+    }
+
+    .ms-switch-cell__info-icon-svg {
+      color: var(--switch-cell-disabled-icon, var(--color-text-disabled));
+    }
+  }
+
+  // Surface variations
+  &--surface-default {
+    // Default styling already applied above
+  }
+
+    &--surface-light {
+    background-color: var(--bg-form-cell-opacity);
+  }
+  
+  &--surface-dark {
+    background-color: var(--bg-form-cell-opacity);
+    
+    .ms-switch-cell__label { color: var(--text-dark-default); }
+    .ms-switch-cell__info-icon-svg { color: var(--switch-cell-icon); }
+
+    // Dark surface hover effect
+    &.ms-switch-cell--hovered:not(.ms-switch-cell--disabled) { border-color: var(--switch-cell-border-hover-dark); }
+
+    // Disabled state adjustments for dark surface
+    &.ms-switch-cell--disabled {
+      .ms-switch-cell__label { color: var(--switch-cell-disabled-text-dark); }
+      .ms-switch-cell__info-icon-svg { color: var(--switch-cell-disabled-icon-dark); }
+    }
+  }
+} 

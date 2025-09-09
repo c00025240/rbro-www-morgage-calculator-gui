@@ -1,0 +1,39 @@
+<div
+  [class]="getRadioCellClasses().join(' ')"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
+
+  <div class="ms-radio-cell__content">
+    <!-- Left Area: Radio Buttons -->
+    <div class="ms-radio-cell__left-area">
+      <ms-radio-custom
+        [options]="radioOptions"
+        [name]="radioName"
+        [size]="radioSize"
+        [disabled]="radioDisabled || disabled"
+        [required]="radioRequired"
+        (valueChange)="onRadioChange($event)">
+      </ms-radio-custom>
+    </div>
+
+    <!-- Right Area: Single Chip -->
+    <div class="ms-radio-cell__right-area">
+      <!-- Regular Single Chip (Primary, Secondary, Tertiary) -->
+      <ms-chips
+        *ngIf="!isSavingsChip && singleChip"
+        [chips]="[singleChip]"
+        [type]="chipType"
+        [infoOnly]="true"
+        [selectable]="false">
+      </ms-chips>
+
+      <!-- Savings Chip -->
+      <ms-savings-chip
+        *ngIf="isSavingsChip"
+        [text]="savingsChipText"
+        [size]="chipSavingsSize"
+        [infoOnly]="true">
+      </ms-savings-chip>
+    </div>
+  </div>
+</div> 

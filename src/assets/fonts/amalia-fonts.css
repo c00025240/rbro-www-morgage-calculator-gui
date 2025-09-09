@@ -1,0 +1,130 @@
+/* =============================================================================
+   AMALIA FONT FAMILY - Official Raiffeisen Typography
+   ============================================================================= */
+
+/* Amalia Thin */
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-Thin_4209875984.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-ThinItalic_3587474796.otf') format('opentype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Amalia Light */
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-Light_492007798.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-LightItalic_3415467218.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Amalia Regular */
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-Regular_1148265042.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-Italic_4065082581.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Amalia Medium */
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-Medium_1577157600.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-MediumItalic_2663766332.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Amalia Bold */
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-Bold_1872094974.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-BoldItalic_4069848154.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Amalia Black */
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-Black_1696108891.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amalia';
+  src: url('./Amalia-BlackItalic_423170743.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Amalia Condensed */
+@font-face {
+  font-family: 'Amalia Condensed';
+  src: url('./AmaliaCond-Light_3870475262.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amalia Condensed';
+  src: url('./AmaliaCond-Regular_3257298138.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amalia Condensed';
+  src: url('./AmaliaCond-Bold_3837599110.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+} 

@@ -1,0 +1,31 @@
+.ms-web-summary-card {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+
+  ms-card,
+  .ms-card { height: 100%; width: 100%; display: flex; box-sizing: border-box; }
+
+  &__content { display: flex; flex-direction: column; gap: 16px; width: 100%; height: 100%; box-sizing: border-box; }
+
+  &__stack-12 { display: flex; flex-direction: column; gap: 12px; }
+}
+
+.ms-web-summary-card {
+	&__content { display: flex; flex-direction: column; gap: 20px; padding: 24px; }
+	&__stack-12 { display: flex; flex-direction: column; gap: 12px; }
+	&__actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+	&__footnote { margin-top: 8px; font-family: 'Amalia', sans-serif; font-weight: 400; font-size: 14px; line-height: 16px; color: var(--text-default); }
+
+	/* Make primary button fill the entire row */
+	&__stack-12 > ms-button-primary { width: 100%; display: block; }
+	&__stack-12 > ms-button-primary .ms-button-primary__btn { width: 100%; max-width: none; }
+
+	/* Make each secondary button fill its half (grid column) */
+	&__actions-row > ms-button-secondary { width: 100%; display: block; }
+	&__actions-row > ms-button-secondary .ms-button-secondary__btn { width: 100%; max-width: none; }
+
+	&--surface-dark {
+		.ms-web-summary-card__footnote { color: var(--text-dark-accent, #D5D5D6); }
+	}
+} 

@@ -1,0 +1,99 @@
+.ms-toggle {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--radio-font-family, "Amalia") !important;
+
+  &__field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2, 8px);
+  }
+
+  &__label {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 24px !important;
+    color: var(--toggle-label);
+    margin: 0;
+    user-select: none;
+    cursor: pointer;
+  }
+
+  &__switch {
+    position: relative;
+    width: 56px;
+    height: 28px;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    border-radius: 28px;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+
+    &:disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--focus-border);
+      outline-offset: 2px;
+    }
+  }
+
+  &__track {
+    position: absolute;
+    inset: 0;
+    width: 56px;
+    height: 28px;
+    border-radius: 28px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  &__handle {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: all 0.2s ease-in-out;
+    box-shadow: var(--toggle-handle-shadow);
+  }
+
+  /* Default surface */
+  &--surface-default {
+    .ms-toggle__track { background-color: var(--toggle-track-bg); border: 0.5px solid var(--toggle-track-border); }
+    .ms-toggle__handle { background-color: var(--toggle-handle-bg); }
+    &.ms-toggle--checked { .ms-toggle__track { background-color: var(--toggle-checked-track-bg); border: none; } .ms-toggle__handle { background-color: var(--toggle-checked-handle-bg); left: 30px; } }
+    &:not(.ms-toggle--disabled) .ms-toggle__switch:hover { .ms-toggle__track { background-color: var(--toggle-track-bg); } .ms-toggle__handle { background-color: var(--toggle-handle-hover-bg); } }
+    &:not(.ms-toggle--disabled).ms-toggle--checked .ms-toggle__switch:hover { .ms-toggle__track { background-color: var(--toggle-checked-track-bg); } .ms-toggle__handle { background-color: var(--toggle-checked-handle-hover-bg); } }
+    &.ms-toggle--disabled { .ms-toggle__track { background-color: var(--toggle-disabled-track-bg); border: none; } .ms-toggle__handle { background-color: var(--toggle-disabled-handle-bg); box-shadow: var(--toggle-handle-shadow-disabled); } .ms-toggle__label { color: var(--toggle-label-disabled); } &.ms-toggle--checked { .ms-toggle__track { background-color: var(--toggle-disabled-track-bg); } .ms-toggle__handle { background-color: var(--toggle-disabled-handle-bg); } } }
+  }
+
+  /* Light surface */
+  &--surface-light {
+    .ms-toggle__track { background-color: var(--toggle-light-track-bg); border: 0.5px solid var(--toggle-light-track-border); }
+    .ms-toggle__handle { background-color: var(--toggle-light-handle-bg); }
+    &.ms-toggle--checked { .ms-toggle__track { background-color: var(--toggle-light-checked-track-bg); border: none; } .ms-toggle__handle { background-color: var(--toggle-light-checked-handle-bg); left: 30px; } }
+    &:not(.ms-toggle--disabled) .ms-toggle__switch:hover { .ms-toggle__track { background-color: var(--toggle-light-track-bg); } .ms-toggle__handle { background-color: var(--toggle-light-handle-hover-bg); } }
+    &:not(.ms-toggle--disabled).ms-toggle--checked .ms-toggle__switch:hover { .ms-toggle__track { background-color: var(--toggle-light-checked-track-bg); } .ms-toggle__handle { background-color: var(--toggle-light-checked-handle-hover-bg); } }
+    &.ms-toggle--disabled { .ms-toggle__track { background-color: var(--toggle-light-disabled-track-bg); border: none; } .ms-toggle__handle { background-color: var(--toggle-light-disabled-handle-bg); box-shadow: var(--toggle-handle-shadow-disabled); } .ms-toggle__label { color: var(--toggle-label-disabled); } &.ms-toggle--checked { .ms-toggle__track { background-color: var(--toggle-light-disabled-track-bg); } .ms-toggle__handle { background-color: var(--toggle-light-disabled-handle-bg); } } }
+  }
+
+  /* Dark surface */
+  &--surface-dark {
+    .ms-toggle__label { color: var(--color-text); }
+    .ms-toggle__track { background-color: var(--toggle-dark-track-bg); border: 0.5px solid var(--toggle-dark-track-border); }
+    .ms-toggle__handle { background-color: var(--toggle-dark-handle-bg); }
+    &.ms-toggle--checked { .ms-toggle__track { background-color: var(--toggle-dark-checked-track-bg); border: none; } .ms-toggle__handle { background-color: var(--toggle-dark-checked-handle-bg); left: 30px; } }
+    &:not(.ms-toggle--disabled) .ms-toggle__switch:hover { .ms-toggle__track { background-color: var(--toggle-dark-track-bg); } .ms-toggle__handle { background-color: var(--toggle-dark-handle-hover-bg); } }
+    &:not(.ms-toggle--disabled).ms-toggle--checked .ms-toggle__switch:hover { .ms-toggle__track { background-color: var(--toggle-dark-checked-track-bg); } .ms-toggle__handle { background-color: var(--toggle-dark-checked-handle-hover-bg); } }
+    &.ms-toggle--disabled { .ms-toggle__track { background-color: var(--toggle-dark-disabled-track-bg); border: none; } .ms-toggle__handle { background-color: var(--toggle-light-disabled-handle-bg); box-shadow: var(--toggle-handle-shadow-disabled); } .ms-toggle__label { color: var(--toggle-label-disabled); } &.ms-toggle--checked { .ms-toggle__track { background-color: var(--toggle-dark-disabled-track-bg); } .ms-toggle__handle { background-color: var(--toggle-light-disabled-handle-bg); } } }
+  }
+
+  /* Global disabled label */
+  &--disabled .ms-toggle__label { color: var(--toggle-label-disabled); cursor: not-allowed; }
+}

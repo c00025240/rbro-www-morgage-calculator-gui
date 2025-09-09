@@ -1,0 +1,58 @@
+<!-- Modal Backdrop -->
+<div *ngIf="isVisible" 
+     [class]="modalClasses.join(' ')"
+     (click)="onBackdropClick($event)"
+     role="dialog"
+     aria-modal="true"
+     [attr.aria-labelledby]="title ? 'modal-title' : null">
+  
+  <!-- Modal Container -->
+  <div [class]="containerClasses.join(' ')">
+    
+    <!-- Header -->
+    <header [class]="headerClasses.join(' ')">
+      <!-- Title Section -->
+      <div class="ms-modal__title-section">
+        <ms-card-outside-title 
+          [title]="title"
+          [hasHelper]="false"
+          id="modal-title">
+        </ms-card-outside-title>
+      </div>
+      
+      <!-- Close Button -->
+      <button type="button" 
+              [class]="closeButtonClasses.join(' ')"
+              (click)="onClose()"
+              aria-label="Close modal">
+        <span class="ms-modal__close-icon" 
+              [innerHTML]="closeIconHtml"
+              aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <!-- Body -->
+    <main class="ms-modal__body">
+      <!-- Placeholder Content - Will be replaced with actual content -->
+      <div class="ms-modal__placeholder-content">
+        <div class="ms-modal__placeholder-pattern"></div>
+        <div class="ms-modal__placeholder-text">
+          <p>This is placeholder content for the modal body.</p>
+          <p>Replace this area with your actual business content using content projection or custom components.</p>
+        </div>
+      </div>
+      
+      <!-- Content Projection Slot -->
+      <ng-content></ng-content>
+    </main>
+
+    <!-- Optional Footer -->
+    <footer *ngIf="hasFooter" [class]="footerClasses.join(' ')">
+      <ms-button-secondary 
+        [label]="footerButtonLabel"
+        (clicked)="onFooterButtonClick()"
+        class="ms-modal__footer-button">
+      </ms-button-secondary>
+    </footer>
+  </div>
+</div>

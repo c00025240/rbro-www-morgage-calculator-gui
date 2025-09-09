@@ -1,0 +1,38 @@
+<div 
+  class="ms-chips" 
+  [class.ms-chips--disabled]="disabled"
+  [attr.aria-label]="ariaLabel">
+  
+  <div 
+    *ngFor="let chip of chips; trackBy: trackByChipId" 
+    [class]="getChipClasses(chip).join(' ')"
+    [attr.aria-pressed]="selectable ? chip.selected : null"
+    [attr.aria-disabled]="chip.disabled || disabled"
+    [attr.role]="selectable ? 'button' : 'generic'"
+    [attr.tabindex]="(chip.disabled || disabled) ? -1 : 0"
+    (click)="onChipClick(chip)"
+    (keydown.enter)="onChipClick(chip)"
+    (keydown.space)="onChipClick(chip); $event.preventDefault()">
+    
+    <!-- Left Icon -->
+    <span 
+      class="ms-chips__icon ms-chips__icon--left" 
+      *ngIf="chip.iconLeft" 
+      [innerHTML]="getLeftIcon(chip.id)">
+    </span>
+    
+    <!-- Label -->
+    <span 
+      *ngIf="chip.label" 
+      class="ms-chips__label">
+      {{ chip.label }}
+    </span>
+    
+    <!-- Right Icon -->
+    <span 
+      class="ms-chips__icon ms-chips__icon--right" 
+      *ngIf="chip.iconRight" 
+      [innerHTML]="getRightIcon(chip.id)">
+    </span>
+  </div>
+</div>

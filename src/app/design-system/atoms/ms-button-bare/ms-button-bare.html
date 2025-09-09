@@ -1,0 +1,155 @@
+<!-- Angular Material Button with dynamic type -->
+<!-- Basic / default -->
+<button *ngIf="variant === 'basic'" mat-button
+  [color]="color"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-describedby]="ariaDescribedBy"
+  [attr.title]="title"
+  (click)="onClick($event)"
+  (focus)="onFocus($event)"
+  (blur)="onBlur($event)"
+  class="rbro-material-button">
+  
+  @if (hasIcon() && getIconPosition() === 'left') {
+    <span class="rbro-button__icon rbro-button__icon--left" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+  @if (getIconPosition() !== 'only') {
+    <span class="rbro-button__text"><ng-content></ng-content></span>
+  }
+  @if (hasIcon() && getIconPosition() === 'right') {
+    <span class="rbro-button__icon rbro-button__icon--right" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+  @if (hasIcon() && getIconPosition() === 'only') {
+    <span class="rbro-button__icon rbro-button__icon--only" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+</button>
+
+<!-- Raised -->
+<button *ngIf="variant === 'raised'" mat-raised-button
+  [color]="color"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-describedby]="ariaDescribedBy"
+  [attr.title]="title"
+  (click)="onClick($event)"
+  (focus)="onFocus($event)"
+  (blur)="onBlur($event)"
+  class="rbro-material-button">
+  
+  @if (hasIcon() && getIconPosition() === 'left') {
+    <span class="rbro-button__icon rbro-button__icon--left" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+  @if (getIconPosition() !== 'only') {
+    <span class="rbro-button__text"><ng-content></ng-content></span>
+  }
+  @if (hasIcon() && getIconPosition() === 'right') {
+    <span class="rbro-button__icon rbro-button__icon--right" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+  @if (hasIcon() && getIconPosition() === 'only') {
+    <span class="rbro-button__icon rbro-button__icon--only" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+</button>
+
+<!-- Stroked -->
+<button *ngIf="variant === 'stroked'" mat-stroked-button
+  [color]="color"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-describedby]="ariaDescribedBy"
+  [attr.title]="title"
+  (click)="onClick($event)"
+  (focus)="onFocus($event)"
+  (blur)="onBlur($event)"
+  class="rbro-material-button">
+  
+  @if (hasIcon() && getIconPosition() === 'left') {
+    <span class="rbro-button__icon rbro-button__icon--left" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+  @if (getIconPosition() !== 'only') {
+    <span class="rbro-button__text"><ng-content></ng-content></span>
+  }
+  @if (hasIcon() && getIconPosition() === 'right') {
+    <span class="rbro-button__icon rbro-button__icon--right" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+  @if (hasIcon() && getIconPosition() === 'only') {
+    <span class="rbro-button__icon rbro-button__icon--only" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+</button>
+
+<!-- Flat -->
+<button *ngIf="variant === 'flat'" mat-flat-button
+  [color]="color"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-describedby]="ariaDescribedBy"
+  [attr.title]="title"
+  (click)="onClick($event)"
+  (focus)="onFocus($event)"
+  (blur)="onBlur($event)"
+  class="rbro-material-button">
+  
+  @if (hasIcon() && getIconPosition() === 'left') {
+    <span class="rbro-button__icon rbro-button__icon--left" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+  @if (getIconPosition() !== 'only') {
+    <span class="rbro-button__text"><ng-content></ng-content></span>
+  }
+  @if (hasIcon() && getIconPosition() === 'right') {
+    <span class="rbro-button__icon rbro-button__icon--right" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+  @if (hasIcon() && getIconPosition() === 'only') {
+    <span class="rbro-button__icon rbro-button__icon--only" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+</button>
+
+<!-- Icon button -->
+<button *ngIf="variant === 'icon'" mat-icon-button
+  [color]="color"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-describedby]="ariaDescribedBy"
+  [attr.title]="title"
+  (click)="onClick($event)"
+  (focus)="onFocus($event)"
+  (blur)="onBlur($event)"
+  class="rbro-material-button">
+  
+  @if (hasIcon()) {
+    <span class="rbro-button__icon rbro-button__icon--only" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+</button>
+
+<!-- FAB -->
+<button *ngIf="variant === 'fab'" mat-fab
+  [color]="color"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-describedby]="ariaDescribedBy"
+  [attr.title]="title"
+  (click)="onClick($event)"
+  (focus)="onFocus($event)"
+  (blur)="onBlur($event)"
+  class="rbro-material-button">
+  
+  @if (hasIcon()) {
+    <span class="rbro-button__icon rbro-button__icon--only" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+</button>
+
+<!-- Mini-FAB -->
+<button *ngIf="variant === 'mini-fab'" mat-mini-fab
+  [color]="color"
+  [disabled]="disabled"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-describedby]="ariaDescribedBy"
+  [attr.title]="title"
+  (click)="onClick($event)"
+  (focus)="onFocus($event)"
+  (blur)="onBlur($event)"
+  class="rbro-material-button">
+  
+  @if (hasIcon()) {
+    <span class="rbro-button__icon rbro-button__icon--only" [innerHTML]="getIconHtml()" aria-hidden="true"></span>
+  }
+</button>

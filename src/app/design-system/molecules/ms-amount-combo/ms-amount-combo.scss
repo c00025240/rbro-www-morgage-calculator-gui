@@ -1,0 +1,47 @@
+@use '../../_tokens.scss';
+
+:host {
+	display: block;
+	width: 100%;
+}
+
+.ms-amount-combo {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: var(--color-bg-secondary);
+	padding: var(--space-2, 16px) var(--space-2, 16px); // 12px top/bottom, 16px left/right per design but adjusting to match 16px standard
+	border-radius: var(--radius-lg); // 8px
+	gap: var(--space-2, 16px); // 12px gap per design but using standard spacing
+	
+	&__left,
+	&__right {
+		flex: 1;
+		min-width: 0; // Allow flex items to shrink properly
+	}
+	
+	&__divider {
+		width: 1px;
+		height: 100%;
+		background-color: var(--color-border); // low-emphasis border
+		flex-shrink: 0;
+		align-self: stretch;
+	}
+}
+
+// Surface variations
+.ms-amount-combo--surface-light {
+	background-color: var(--color-bg-secondary);
+	
+	.ms-amount-combo__divider {
+		background-color: var(--color-border);
+	}
+}
+
+.ms-amount-combo--surface-dark {
+	background-color: var(--color-bg-secondary);
+	
+	.ms-amount-combo__divider {
+		background-color: var(--overlay-border, var(--color-border));
+	}
+} 

@@ -1,0 +1,419 @@
+<ms-page-shell 
+  [surface]="surface"
+  [fullHeight]="true"
+  [scrollable]="false">
+  
+  <!-- Sticky Header (Desktop & Mobile) -->
+  <ms-header
+    [title]="headerTitle"
+    [backLabel]="headerBackLabel"
+    [surface]="surface"
+    [primaryAction]="headerPrimaryAction"
+    [secondaryAction]="headerSecondaryAction"
+    [showBackButton]="showHeaderBackButton"
+    (backClicked)="onHeaderBackClick($event)"
+    (primaryActionClicked)="onHeaderPrimaryActionClick($event)"
+    (secondaryActionClicked)="onHeaderSecondaryActionClick($event)">
+  </ms-header>
+
+  <!-- Desktop Split-Screen Layout (≥1024px) -->
+  <div class="ms-simulator-page__desktop-layout">
+    
+    <!-- Left Panel: Controls (50% width) -->
+    <div class="ms-simulator-page__left-panel">
+      <div class="ms-simulator-page__left-content">
+        
+        <!-- Simulator Hero Section -->
+        <div class="ms-simulator-page__hero">
+          <ms-simulator-swap-hero
+            [variant]="heroVariant"
+            [label]="heroLabel"
+            [chipLabel]="heroChipLabel"
+            [surface]="surface"
+            [hasClose]="heroHasClose"
+            [disabled]="heroDisabled"
+            (chipClicked)="onHeroChipClick()"
+            (closeClicked)="onHeroCloseClick()">
+          </ms-simulator-swap-hero>
+        </div>
+
+        <!-- Simulator User Inputs Container -->
+        <div class="simulatorUserInputs">
+          <!-- Property Value Input Section -->
+          <ms-property-value-input
+            [label]="propertyLabel"
+            [helperText]="propertyHelperText"
+            [placeholder]="propertyPlaceholder"
+            [currency]="propertyCurrency"
+            [min]="propertyMin"
+            [max]="propertyMax"
+            [step]="propertyStep"
+            [eurConversionRate]="propertyEurConversionRate"
+            [disabled]="propertyDisabled"
+            [surface]="surface"
+            (valueChange)="onPropertyValueChange($event)"
+            (focused)="onPropertyFocused($event)"
+            (blurred)="onPropertyBlurred($event)">
+          </ms-property-value-input>
+          
+          <!-- Loan Duration Input Section -->
+          <ms-loan-duration
+            [label]="loanDurationLabel"
+            [placeholder]="loanDurationPlaceholder"
+            [suffix]="loanDurationSuffix"
+            [min]="loanDurationMin"
+            [max]="loanDurationMax"
+            [step]="loanDurationStep"
+            [disabled]="loanDurationDisabled"
+            [surface]="surface"
+            (valueChange)="onLoanDurationValueChange($event)"
+            (focused)="onLoanDurationFocused($event)"
+            (blurred)="onLoanDurationBlurred($event)">
+          </ms-loan-duration>
+          
+          <!-- Age Input Section (desktop) -->
+          <ms-age
+            [label]="'Spune-mi cati ani ai'"
+            [placeholder]="'30'"
+            [suffix]="'ani'"
+            [min]="18"
+            [max]="70"
+            [step]="1"
+            [surface]="surface"
+            (valueChange)="onAgeValueChange($event)">
+          </ms-age>
+          
+          <!-- Income Section -->
+          <ms-income-section
+            [monthlyIncome]="monthlyIncome"
+            [monthlyInstallments]="monthlyInstallments"
+            [surface]="surface"
+            (monthlyIncomeChange)="onMonthlyIncomeChange($event)"
+            (monthlyInstallmentsChange)="onMonthlyInstallmentsChange($event)">
+          </ms-income-section>
+
+          <!-- Down Payment (simple input) -->
+          <ms-downpayment 
+            label="Avans"
+            [valueProp]="downPaymentAmount"
+            [disabledProp]="downPaymentDisabled"
+            (valueChange)="onDownPaymentAmountChange($event)">
+          </ms-downpayment>
+
+          <!-- Property Location Section -->
+          <ms-property-location-section
+            [selectedCounty]="selectedCounty"
+            [selectedCity]="selectedCity"
+            [surface]="surface"
+            (countyChange)="onCountyChange($event)"
+            (cityChange)="onCityChange($event)">
+          </ms-property-location-section>
+
+          <!-- Owner Status (desktop) -->
+          <ms-owner-status
+            [owner]="hasGuaranteeProperty"
+            [surface]="surface"
+            (ownerChange)="onGuaranteePropertyChange($event)">
+          </ms-owner-status>
+
+          <!-- Info Cell -->
+          <ms-info-contained-cell
+            type="info"
+            [text]="'Suma solicitata: ' + requestedAmount.toLocaleString() + ' Lei'">
+          </ms-info-contained-cell>
+
+          <!-- Interest Preferences Section -->
+          <ms-interest-preferences-section
+            [rateType]="rateType"
+            [interestType]="interestType"
+            [surface]="surface"
+            (rateTypeChange)="onRateTypeChange($event)"
+            (interestTypeChange)="onInterestTypeChange($event)">
+          </ms-interest-preferences-section>
+
+          <!-- Interest Reduction Section -->
+          <ms-interest-reduction-section
+            [lifeInsurance]="lifeInsurance"
+            [salaryTransfer]="salaryTransfer"
+            [greenCertificate]="greenCertificate"
+            [surface]="surface"
+            [savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
+            [savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
+            [savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
+            [totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountAmount"
+            (lifeInsuranceChange)="onLifeInsuranceChange($event)"
+            (salaryTransferChange)="onSalaryTransferChange($event)"
+            (greenCertificateChange)="onGreenCertificateChange($event)">
+          </ms-interest-reduction-section>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Right Panel: Summary (50% width) -->
+    <div class="ms-simulator-page__right-panel">
+      <div class="ms-simulator-page__right-content">
+
+        
+        <!-- Summary Cards -->
+        <div class="ms-simulator-page__right-content-grid">
+        <!-- First Card -->
+        <div *ngIf="calculationResponse && !isLoading" class="ms-simulator-page__summary-card-wrapper">
+          <ms-card-outside-title
+            title="Oferta ta personalizata"
+            helperText="Calculata pe baza datelor introduse"
+            [hasHelper]="true"
+            [surface]="surface">
+          </ms-card-outside-title>
+          <ms-web-summary-card
+            [leftTopAmount]="{
+              label: 'Dobanda initiala',
+              amount: (calculationResponse?.nominalInterestRate || 0).toFixed(2),
+              currency: '%'
+            }"
+            [rightTopAmount]="{
+              label: 'Rata lunara de plata',
+              amount: (calculationResponse?.monthlyInstallment?.amount || 0).toFixed(0),
+              currency: 'Lei/luna'
+            }"
+            [primaryButtonLabel]="'Aplica in doar 2 minute'"
+            [secondaryButtonLabel]="'Detalii oferta'"
+            [topInfoText]="'Dobanda si rata lunara sunt estimative si pot varia in functie de analiza finala.'"
+            [bottomInfoText]="'Oferta supusa termenilor si conditiilor bancii. Pentru detalii, acceseaza pagina produsului.'"
+            (primaryClicked)="onFooterPrimaryClick($event)"
+            (secondaryClicked)="onFooterDetailsClick($event)">
+          </ms-web-summary-card>
+        </div>
+
+        <!-- Second Card -->
+        <div *ngIf="calculationResponseAllDiscounts && !isLoading" class="ms-simulator-page__summary-card-wrapper">
+          <ms-card-outside-title
+            title="Cu toate reducerile"
+            helperText="Toate reducerile aplicate"
+            [hasHelper]="true"
+            [surface]="surface">
+          </ms-card-outside-title>
+          <ms-web-summary-card
+            [leftTopAmount]="{
+              label: 'Dobanda initiala (toate reducerile)',
+              amount: (calculationResponseAllDiscounts?.nominalInterestRate || 0).toFixed(2),
+              currency: '%'
+            }"
+            [rightTopAmount]="{
+              label: 'Rata lunara de plata (toate reducerile)',
+              amount: (calculationResponseAllDiscounts?.monthlyInstallment?.amount || 0).toFixed(0),
+              currency: 'Lei/luna'
+            }"
+            [primaryButtonLabel]="'Aplica in doar 2 minute'"
+            [secondaryButtonLabel]="'Detalii oferta'"
+            (primaryClicked)="onFooterPrimaryClick($event)"
+            (secondaryClicked)="onFooterDetailsClick($event)">
+          </ms-web-summary-card>
+        </div>
+
+        <!-- Third Card -->
+        <div *ngIf="calculationResponseNoDiscounts && !isLoading" class="ms-simulator-page__summary-card-wrapper">
+          <ms-card-outside-title
+            title="Fara reduceri"
+            helperText="Fara reduceri de dobanda"
+            [hasHelper]="true"
+            [surface]="surface">
+          </ms-card-outside-title>
+          <ms-web-summary-card
+            [leftTopAmount]="{
+              label: 'Dobanda initiala (fara reduceri)',
+              amount: (calculationResponseNoDiscounts?.nominalInterestRate || 0).toFixed(2),
+              currency: '%'
+            }"
+            [rightTopAmount]="{
+              label: 'Rata lunara de plata (fara reduceri)',
+              amount: (calculationResponseNoDiscounts?.monthlyInstallment?.amount || 0).toFixed(0),
+              currency: 'Lei/luna'
+            }"
+            [primaryButtonLabel]="'Aplica in doar 2 minute'"
+            [secondaryButtonLabel]="'Detalii oferta'"
+            (primaryClicked)="onFooterPrimaryClick($event)"
+            (secondaryClicked)="onFooterDetailsClick($event)">
+          </ms-web-summary-card>
+        </div>
+        </div>
+        
+        <!-- Loading State -->
+        <ms-card *ngIf="isLoading" class="ms-simulator-page__loading-card">
+          <div class="ms-simulator-page__loading-content">
+            <ms-progress-spinner></ms-progress-spinner>
+            <p>Se calculează oferta...</p>
+          </div>
+        </ms-card>
+        
+        <!-- Error State -->
+        <ms-card *ngIf="errorMessage && !isLoading" class="ms-simulator-page__error-card">
+          <div class="ms-simulator-page__error-content">
+            <p>{{ errorMessage }}</p>
+          </div>
+        </ms-card>
+        
+        
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Mobile Layout (<1024px) - Current behavior maintained -->
+  <div class="ms-simulator-page__mobile-layout">
+    
+    <!-- Main Content Area -->
+    <main class="ms-simulator-page__content">
+      
+      <!-- Simulator Hero Section (Edge-to-Edge) -->
+      <div class="ms-simulator-page__hero">
+        <ms-simulator-swap-hero
+          [variant]="heroVariant"
+          [label]="heroLabel"
+          [chipLabel]="heroChipLabel"
+          [surface]="surface"
+          [hasClose]="heroHasClose"
+          [disabled]="heroDisabled"
+          (chipClicked)="onHeroChipClick()"
+          (closeClicked)="onHeroCloseClick()">
+        </ms-simulator-swap-hero>
+      </div>
+
+      <!-- Simulator User Inputs Container -->
+      <div class="simulatorUserInputs">
+        <!-- Property Value Input Section -->
+        <ms-property-value-input
+          [label]="propertyLabel"
+          [helperText]="propertyHelperText"
+          [placeholder]="propertyPlaceholder"
+          [currency]="propertyCurrency"
+          [min]="propertyMin"
+          [max]="propertyMax"
+          [step]="propertyStep"
+          [eurConversionRate]="propertyEurConversionRate"
+          [disabled]="propertyDisabled"
+          [surface]="surface"
+          (valueChange)="onPropertyValueChange($event)"
+          (focused)="onPropertyFocused($event)"
+          (blurred)="onPropertyBlurred($event)">
+        </ms-property-value-input>
+        
+        <!-- Loan Duration Input Section -->
+        <ms-loan-duration
+          [label]="loanDurationLabel"
+          [placeholder]="loanDurationPlaceholder"
+          [suffix]="loanDurationSuffix"
+          [min]="loanDurationMin"
+          [max]="loanDurationMax"
+          [step]="loanDurationStep"
+          [disabled]="loanDurationDisabled"
+          [surface]="surface"
+          (valueChange)="onLoanDurationValueChange($event)"
+          (focused)="onLoanDurationFocused($event)"
+          (blurred)="onLoanDurationBlurred($event)">
+        </ms-loan-duration>
+        
+        <!-- Age Input Section (mobile) -->
+        <ms-age
+          [label]="'Spune-mi cati ani ai'"
+          [placeholder]="'30'"
+          [suffix]="'ani'"
+          [min]="18"
+          [max]="70"
+          [step]="1"
+          [surface]="surface"
+          (valueChange)="onAgeValueChange($event)">
+        </ms-age>
+        
+        <!-- Income Section -->
+        <ms-income-section
+          [monthlyIncome]="monthlyIncome"
+          [monthlyInstallments]="monthlyInstallments"
+          [surface]="surface"
+          (monthlyIncomeChange)="onMonthlyIncomeChange($event)"
+          (monthlyInstallmentsChange)="onMonthlyInstallmentsChange($event)">
+        </ms-income-section>
+
+        <!-- Down Payment (simple input) -->
+        <ms-downpayment 
+          label="Avans"
+          [valueProp]="downPaymentAmount"
+          [disabledProp]="downPaymentDisabled"
+          (valueChange)="onDownPaymentAmountChange($event)">
+        </ms-downpayment>
+        
+        <!-- Property Location Section -->
+        <ms-property-location-section
+          [selectedCounty]="selectedCounty"
+          [selectedCity]="selectedCity"
+          [surface]="surface"
+          (countyChange)="onCountyChange($event)"
+          (cityChange)="onCityChange($event)">
+        </ms-property-location-section>
+
+        <!-- Owner Status (moved out of preferences) -->
+        <ms-owner-status
+          [owner]="hasGuaranteeProperty"
+          [surface]="surface"
+          (ownerChange)="onGuaranteePropertyChange($event)">
+        </ms-owner-status>
+        
+        <!-- Info Cell -->
+        <ms-info-contained-cell
+          type="info"
+          [text]="'Suma solicitata: ' + requestedAmount.toLocaleString() + ' Lei'">
+        </ms-info-contained-cell>
+        
+        <!-- Interest Preferences Section -->
+        <ms-interest-preferences-section
+          [rateType]="rateType"
+          [interestType]="interestType"
+          [surface]="surface"
+          (rateTypeChange)="onRateTypeChange($event)"
+          (interestTypeChange)="onInterestTypeChange($event)">
+        </ms-interest-preferences-section>
+        
+        <!-- Interest Reduction Section (owner toggle removed) -->
+        <ms-interest-reduction-section
+          [lifeInsurance]="lifeInsurance"
+          [salaryTransfer]="salaryTransfer"
+          [greenCertificate]="greenCertificate"
+          [surface]="surface"
+          [savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
+          [savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
+          [savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
+          [totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountAmount"
+          (lifeInsuranceChange)="onLifeInsuranceChange($event)"
+          (salaryTransferChange)="onSalaryTransferChange($event)"
+          (greenCertificateChange)="onGreenCertificateChange($event)">
+        </ms-interest-reduction-section>
+        
+        <!-- Future input components can be added here with automatic 24px gaps -->
+      </div>
+      
+    </main>
+
+  </div>
+
+  <!-- Sticky Footer (Mobile & Tablet Only) -->
+  <ms-sticky-footer
+    class="ms-simulator-page__footer"
+    [leftAmount]="footerLeftAmount"
+    [rightAmount]="footerRightAmount"
+    [actions]="footerActions"
+    [surface]="surface"
+    (detailsClicked)="onFooterDetailsClick($event)"
+    (primaryClicked)="onFooterPrimaryClick($event)"
+    (shareClicked)="onFooterShareClick($event)">
+  </ms-sticky-footer>
+
+  <!-- Simulator Option Modal -->
+  <simulator-option-modal
+    [isVisible]="isSimulatorModalVisible"
+    [surface]="surface === 'dark' ? 'dark' : 'light'"
+    (closeModal)="onSimulatorModalClose()"
+    (optionSelected)="onSimulatorOptionSelected($event)">
+  </simulator-option-modal>
+
+</ms-page-shell> 

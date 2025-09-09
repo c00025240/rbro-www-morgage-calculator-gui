@@ -1,0 +1,68 @@
+.ms-interest-preferences-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  overflow: visible; // Allow overlays to overflow section
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    overflow: visible; // Don't clip dropdowns
+    
+    // Ensure all child elements are contained
+    * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    // Specific handling for select components
+    ms-select {
+      width: 100%;
+      overflow: visible;
+      
+      // Ensure select dropdowns can overflow
+      ::ng-deep .ms-select {
+        width: 100%;
+        overflow: visible;
+        
+        .ms-select__trigger,
+        .ms-select__input {
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .ms-select__dropdown {
+          width: 100%;
+          max-width: 100%;
+          overflow: auto;
+        }
+        
+        .ms-select__helper-text {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+
+  // Surface variants can be added here when needed
+
+  // States
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // Mobile responsive adjustments
+  @media (max-width: 767px) {
+    &__content {
+      gap: 16px;
+    }
+  }
+} 

@@ -1,0 +1,23 @@
+<div [class]="containerClasses.join(' ')">
+  <!-- Title - H5 for mobile, H4 for large web -->
+  <h5 class="ms-card-outside-title__title-mobile" 
+      [class]="titleClasses.join(' ')">
+    {{ title }}
+  </h5>
+  
+  <h4 class="ms-card-outside-title__title-desktop" 
+      [class]="titleClasses.join(' ')">
+    {{ title }}
+  </h4>
+
+  <!-- Optional Helper Text -->
+  <ms-helper 
+    *ngIf="hasHelper && helperText"
+    state="regular"
+    class="ms-card-outside-title__helper">
+    {{ helperText }}
+  </ms-helper>
+
+  <!-- 8px Gap Spacer -->
+  <div class="ms-card-outside-title__spacer"></div>
+</div> 

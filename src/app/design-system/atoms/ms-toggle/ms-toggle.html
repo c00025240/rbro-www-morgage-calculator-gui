@@ -1,0 +1,30 @@
+<div [class]="getSwitchClasses().join(' ')">
+  <div class="ms-toggle__field">
+    <!-- Label (if provided) -->
+    <span *ngIf="label" class="ms-toggle__label">{{ label }}</span>
+    
+    <!-- Custom Switch -->
+    <button
+      type="button"
+      class="ms-toggle__switch"
+      [attr.role]="getSwitchRole()"
+      [attr.aria-checked]="getSwitchAriaChecked()"
+      [attr.aria-disabled]="getSwitchAriaDisabled()"
+      [attr.aria-label]="ariaLabel || label"
+      [attr.aria-describedby]="ariaDescribedby"
+      [disabled]="disabled"
+      (click)="onToggleChange()"
+      (keydown)="onKeyDown($event)"
+      (mousedown)="onMouseDown()"
+      (mouseup)="onMouseUp()"
+      (focus)="onFocus()"
+      (blur)="onBlur()">
+      
+      <!-- Switch Track/Background -->
+      <div class="ms-toggle__track"></div>
+      
+      <!-- Switch Handle/Thumb -->
+      <div class="ms-toggle__handle"></div>
+    </button>
+  </div>
+</div>

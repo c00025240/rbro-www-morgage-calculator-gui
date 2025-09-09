@@ -1,0 +1,278 @@
+// =============================================================================
+// DESIGN TOKENS - Raiffeisen Bank Romania Mortgage Simulator
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Color Tokens - Official Raiffeisen Brand Colors
+// -----------------------------------------------------------------------------
+
+:root {
+  // Official Raiffeisen Brand Colors
+  --rbro-yellow-primary: #fee600;        // brandLightDigiYellow
+  --rbro-yellow-hover: #e5d119;          // bgPrimaryHover
+  --rbro-yellow-surface: #fff0a6;        // surfaceYellow1
+  --rbro-yellow-alt: #ffd403;            // surfaceYellow2
+  --rbro-off-black: #2b2d33;             // brandLightOffBlack
+  --rbro-white: #ffffff;                 // brandLightWhite
+
+  // Accent Colors (Teal Family)
+  --accent-dark: #004454;                // accentLightDark
+  --accent-default: #037080;             // accentLightDefault
+  --accent-60: #68a9b3;                  // accentLight60
+  --accent-30: #b3d4d8;                  // accentLight30
+  --accent-20: #e5f0f2;                  // accentLight20
+
+  // Utilitarian Colors - Error (Red)
+  --error-dark: #cf030a;                 // utilitarianRedLightDark
+  --error-default: #e61e33;              // utilitarianRedLightDefault
+  --error-60: #f07885;                   // utilitarianRedLight60
+  --error-30: #f7bbc1;                   // utilitarianRedLight30
+  --error-10: #fce8ea;                   // utilitarianRedLight10
+
+  // Utilitarian Colors - Warning (Orange)
+  --warning-dark: #ff1e03;               // utilitarianOrangeLightDark
+  --warning-default: #ff581e;            // utilitarianOrangeLightDefault
+  --warning-60: #ff9b78;                 // utilitarianOrangeLight60
+  --warning-30: #ffccbb;                 // utilitarianOrangeLight30
+  --warning-10: #ffeee8;                 // utilitarianOrangeLight10
+
+  // Utilitarian Colors - Success (Green)
+  --success-dark: #0b7d3e;               // utilitarianGreenLightDark
+  --success-default: #35b37e;            // utilitarianGreenLightDefault
+  --success-60: #86d1b2;                 // utilitarianGreenLight60
+  --success-30: #c2e8d8;                 // utilitarianGreenLight30
+  --success-10: #eaf7f2;                 // utilitarianGreenLight10
+
+  // Utilitarian Colors - Info (Blue)
+  --info-dark: #0093ff;                  // utilitarianBlueLightDark
+  --info-default: #00c2ff;               // utilitarianBlueLightDefault
+  --info-60: #7fe0ff;                    // utilitarianBlueLight60
+  --info-30: #b2ecff;                    // utilitarianBlueLight30
+  --info-10: #e5f8ff;                    // utilitarianBlueLight10
+
+  // Surface Colors
+  --surface-white: #ffffff;              // surfaceWhite
+  --surface-warm-grey: #f1ede6;          // surfaceWarmGrey
+  --surface-warm-grey-50: #f8f6f2;       // surfaceWarmGrey50
+  --surface-grey: #f4f4f4;               // bgGrey
+  --surface-disabled: #d5d5d6;           // bgDisabled
+
+  // Text Colors
+  --text-default: #2b2d33;               // textDefault
+  --text-secondary: #55575c;             // textSecondary
+  --text-accent: #037080;                // textAccent
+  --text-accent-secondary: #68a9b3;      // textAccentSecondary
+  --text-disabled: #aaabad;              // textDisabled
+  --text-on-surface-disabled: #808185;   // textOnSurfaceDisabled
+  --text-on-surface-alternative: #737888; // textOnSurfaceAlternative
+  --text-grey: #e9eaea;                  // textGrey
+  --text-invert: #ffffff;                // textInvert
+  --text-success: #0b7d3e;               // textSuccess
+  --text-warning: #e54f1b;               // textWarning
+  --text-error: #cf030a;                 // textError
+  --text-info: #0076cc;                  // textInfo
+
+  // Background Colors
+  --bg-primary: #fee600;                 // bgPrimary
+  --bg-primary-hover: #e5d119;           // bgPrimaryHover
+  --bg-white: #ffffff;                   // bgWhite
+  --bg-black: #2b2d33;                   // bgBlack
+  --bg-grey: #f4f4f4;                    // bgGrey
+  --bg-grey-secondary: #808185;          // bgGreySecondary
+  --bg-disabled: #d5d5d6;                // bgDisabled
+  --bg-low-emphasis: #2b2d33;            // bgLowEmphasis
+  --bg-accent: #037080;                  // bgAccent
+  --bg-accent-60: #68a9b3;               // bgAccent60
+  --bg-accent-30: #b3d4d8;               // bgAccent30
+  --bg-accent-20: #e5f0f2;               // bgAccent20
+  --bg-success: #0b7d3e;                 // bgSuccess
+  --bg-error: #e61e33;                   // bgError / bgDanger
+  --bg-warning: #ff581e;                 // bgWarning
+  --bg-info: #0093ff;                    // bgInfo
+
+  // Border Colors
+  --border-high-emphasis: #2b2d33;       // borderHighEmphasis
+  --border-medium-emphasis: #2b2d33;     // borderMediumEmphasis
+  --border-low-emphasis: #2b2d33;        // borderLowEmphasis
+
+  // Dark Mode Colors (for future use)
+  --text-dark-default: #ffffff;          // textDarkDefault
+  --text-dark-accent: #d5d5d6;           // textDarkAccent
+  --text-dark-secondary: #d5d5d6;        // textDarkSecondary
+  --text-dark-disabled: #aaabad;         // textDarkDisabled
+  --text-dark-success: #c2e8d8;          // textDarkSuccess
+  --text-dark-error: #f7bbc1;            // textDarkError
+  --text-dark-warning: #ffccbb;          // textDarkWarning
+  --text-dark-info: #b2ecff;             // textDarkInfo
+
+  --bg-dark-black: #2b2d33;              // bgDarkBlack
+  --bg-dark-low-emphasis: #ffffff;       // bgDarkLowEmphasis
+  --bg-dark-primary: #fee600;            // bgDarkPrimary
+  --bg-dark-accent: #d5d5d6;             // bgDarkAccent
+  --bg-dark-success: #c2e8d8;            // bgDarkSuccess
+  --bg-dark-error: #f7bbc1;              // bgDarkError
+  --bg-dark-warning: #ffccbb;            // bgDarkWarning
+  --bg-dark-info: #b2ecff;               // bgDarkInfo
+
+  --border-dark-high-emphasis: #ffffff;  // borderDarkHighEmphasis
+  --border-dark-medium-emphasis: #ffffff; // borderDarkMediumEmphasis
+  --border-dark-low-emphasis: #ffffff;   // borderDarkLowEmphasis
+
+  // Semantic Color Mappings (using official tokens)
+  --color-primary: var(--rbro-yellow-primary);
+  --color-primary-hover: var(--rbro-yellow-hover);
+  --color-primary-surface: var(--rbro-yellow-surface);
+  
+  --color-secondary: var(--accent-default);
+  --color-secondary-light: var(--accent-20);
+  --color-secondary-dark: var(--accent-dark);
+  
+  --color-text-primary: var(--text-default);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-accent-secondary);
+  --color-text-disabled: var(--text-disabled);
+  
+  --color-surface: var(--surface-white);
+  --color-surface-secondary: var(--surface-warm-grey-50);
+  --color-surface-tertiary: var(--surface-grey);
+  
+  --color-border: var(--surface-warm-grey);
+  --color-border-strong: var(--border-medium-emphasis);
+  --color-border-subtle: var(--surface-warm-grey-50);
+
+  // Interactive States
+  --color-hover: rgba(254, 230, 0, 0.1);  // rbro-yellow with opacity
+  --color-active: rgba(254, 230, 0, 0.2);
+  --color-focus: var(--rbro-yellow-primary);
+  --color-disabled: var(--bg-disabled);
+  --color-disabled-text: var(--text-disabled);
+
+  // Gradients
+  --gradient-primary: linear-gradient(135deg, var(--rbro-yellow-primary), var(--rbro-yellow-alt));
+  --gradient-secondary: linear-gradient(135deg, var(--accent-default), var(--accent-dark));
+  --gradient-brand: linear-gradient(135deg, var(--rbro-yellow-primary) 0%, var(--accent-default) 100%);
+  
+  // Accent gradients
+  --gradient-accent: linear-gradient(135deg, var(--accent-default), var(--accent-60));
+  --gradient-success: linear-gradient(135deg, var(--success-default), var(--success-dark));
+  --gradient-warning: linear-gradient(135deg, var(--warning-default), var(--warning-dark));
+  --gradient-error: linear-gradient(135deg, var(--error-default), var(--error-dark));
+}
+
+// -----------------------------------------------------------------------------
+// Spacing Tokens (8px grid system)
+// -----------------------------------------------------------------------------
+
+:root {
+  --space-0: 0;
+  --space-1: 0.5rem;   // 8px
+  --space-2: 1rem;     // 16px
+  --space-3: 1.5rem;   // 24px
+  --space-4: 2rem;     // 32px
+  --space-5: 2.5rem;   // 40px
+  --space-6: 3rem;     // 48px
+  --space-7: 3.5rem;   // 56px
+  --space-8: 4rem;     // 64px
+  --space-10: 5rem;    // 80px
+  --space-12: 6rem;    // 96px
+  --space-16: 8rem;    // 128px
+  --space-20: 10rem;   // 160px
+}
+
+// -----------------------------------------------------------------------------
+// Shadow/Elevation Tokens
+// -----------------------------------------------------------------------------
+
+:root {
+  --shadow-sm: 0 1px 2px 0 rgba(43, 45, 51, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(43, 45, 51, 0.1), 0 1px 2px 0 rgba(43, 45, 51, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(43, 45, 51, 0.1), 0 2px 4px -1px rgba(43, 45, 51, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(43, 45, 51, 0.1), 0 4px 6px -2px rgba(43, 45, 51, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(43, 45, 51, 0.1), 0 10px 10px -5px rgba(43, 45, 51, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(43, 45, 51, 0.25);
+}
+
+// -----------------------------------------------------------------------------
+// Typography Tokens
+// -----------------------------------------------------------------------------
+
+:root {
+  --font-family-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-secondary: "Roboto", "Helvetica Neue", sans-serif;
+  --font-family-mono: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+
+  --font-size-xs: 0.75rem;     // 12px
+  --font-size-sm: 0.875rem;    // 14px
+  --font-size-base: 1rem;      // 16px
+  --font-size-lg: 1.125rem;    // 18px
+  --font-size-xl: 1.25rem;     // 20px
+  --font-size-2xl: 1.5rem;     // 24px
+  --font-size-3xl: 1.875rem;   // 30px
+  --font-size-4xl: 2.25rem;    // 36px
+  --font-size-5xl: 3rem;       // 48px
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+}
+
+// -----------------------------------------------------------------------------
+// Border Radius Tokens
+// -----------------------------------------------------------------------------
+
+:root {
+  --radius-none: 0;
+  --radius-sm: 0.125rem;    // 2px
+  --radius-base: 0.25rem;   // 4px
+  --radius-md: 0.375rem;    // 6px
+  --radius-lg: 0.5rem;      // 8px
+  --radius-xl: 0.75rem;     // 12px
+  --radius-2xl: 1rem;       // 16px
+  --radius-full: 9999px;
+}
+
+// -----------------------------------------------------------------------------
+// Z-Index Tokens
+// -----------------------------------------------------------------------------
+
+:root {
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-fixed: 30;
+  --z-modal-backdrop: 40;
+  --z-modal: 50;
+  --z-popover: 60;
+  --z-tooltip: 70;
+  --z-toast: 80;
+}
+
+// -----------------------------------------------------------------------------
+// SCSS Variables (for use in calculations and mixins)
+// -----------------------------------------------------------------------------
+
+// Color Maps for SCSS functions
+$color-map: (
+  'primary': var(--color-primary),
+  'secondary': var(--color-secondary),
+  'success': var(--success-default),
+  'warning': var(--warning-default),
+  'error': var(--error-default),
+  'info': var(--info-default)
+);
+
+$spacing-map: (
+  0: var(--space-0),
+  1: var(--space-1),
+  2: var(--space-2),
+  3: var(--space-3),
+  4: var(--space-4),
+  5: var(--space-5),
+  6: var(--space-6),
+  7: var(--space-7),
+  8: var(--space-8)
+); 

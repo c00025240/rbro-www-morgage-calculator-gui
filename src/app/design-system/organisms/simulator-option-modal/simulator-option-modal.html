@@ -1,0 +1,22 @@
+<!-- Simulator Option Modal -->
+<ms-modal 
+  [isVisible]="isVisible"
+  [title]="modalTitle"
+  [hasFooter]="false"
+  [surface]="surface"
+  (closeModal)="onModalClose()">
+  
+  <!-- Modal Content: Vertical Stack of Option Cells -->
+  <div class="simulator-option-modal__content">
+    @for (option of options(); track option.id) {
+      <ms-option-cell
+        [label]="option.label"
+        [selected]="option.selected"
+        [disabled]="false"
+        [surface]="surface === 'dark' ? 'dark' : 'default'"
+        (optionClick)="onOptionClick(option.id)"
+        class="simulator-option-modal__option">
+      </ms-option-cell>
+    }
+  </div>
+</ms-modal> 

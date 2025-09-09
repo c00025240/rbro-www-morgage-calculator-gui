@@ -1,0 +1,472 @@
+<div class="radius-showcase">
+  <!-- Premium Header -->
+  <div class="showcase-header">
+    <div class="header-content">
+      <div class="header-badge">Design System</div>
+      <h1 class="display-2">Border Radius Tokens</h1>
+      <p class="body-large text-secondary">
+        Consistent border radius scale for components and interfaces. From sharp corners to fully 
+        rounded elements, creating visual hierarchy and modern aesthetics through purposeful geometry.
+      </p>
+    </div>
+    <div class="header-visual">
+      <div class="floating-demos">
+        <div class="demo-float demo-1"></div>
+        <div class="demo-float demo-2"></div>
+        <div class="demo-float demo-3"></div>
+        <div class="demo-float demo-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Premium Stats Dashboard -->
+  <section class="stats-dashboard">
+    <div class="dashboard-grid">
+      <div class="stat-card primary">
+        <div class="stat-icon">
+          <div class="icon-radius"></div>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number">{{radiusTokens.length}}</div>
+          <div class="stat-label">Radius Tokens</div>
+          <div class="stat-sublabel">Complete Scale</div>
+        </div>
+      </div>
+      
+      <div class="stat-card secondary">
+        <div class="stat-icon">
+          <div class="icon-range"></div>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number">0-24px</div>
+          <div class="stat-label">Pixel Range</div>
+          <div class="stat-sublabel">Plus Full Rounding</div>
+        </div>
+      </div>
+      
+      <div class="stat-card tertiary">
+        <div class="stat-icon">
+          <div class="icon-categories"></div>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Categories</div>
+          <div class="stat-sublabel">Semantic Grouping</div>
+        </div>
+      </div>
+      
+      <div class="stat-card quaternary">
+        <div class="stat-icon">
+          <div class="icon-components"></div>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Use Cases</div>
+          <div class="stat-sublabel">Infinite Flexibility</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Radius Scale -->
+  <section class="radius-scale-section">
+    <div class="section-header">
+      <h2 class="h2 section-title">Interactive Radius Scale</h2>
+      <p class="section-subtitle">Click any token to copy its CSS custom property</p>
+    </div>
+    
+    <div class="radius-showcase-grid">
+      <div 
+        *ngFor="let token of radiusTokens; trackBy: trackByToken" 
+        class="radius-showcase-item"
+        (click)="copyToken(token.token)"
+        [attr.data-radius]="token.name"
+        [attr.data-category]="token.category"
+      >
+        <div class="showcase-item-header">
+          <div class="token-name">{{token.name}}</div>
+          <div class="token-value">{{getPixelDisplay(token.pixels)}}</div>
+        </div>
+        
+        <div class="radius-demonstration">
+          <div class="demo-container">
+            <div 
+              class="radius-demo-shape"
+              [style.border-radius.px]="token.pixels === 9999 ? '50%' : token.pixels"
+            ></div>
+            <div class="demo-overlay">
+              <span class="copy-hint">Click to copy</span>
+            </div>
+          </div>
+          
+          <div class="radius-specs">
+            <div class="spec-row">
+              <span class="spec-label">CSS:</span>
+              <code class="spec-value">var({{token.token}})</code>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label">Value:</span>
+              <span class="spec-value">{{token.value}}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="token-description">
+          <p>{{token.description}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Usage Guidelines -->
+  <section class="usage-guidelines-section">
+    <div class="section-header">
+      <h2 class="h2 section-title">Usage Guidelines</h2>
+      <p class="section-subtitle">Semantic categories for purposeful radius application</p>
+    </div>
+    
+    <div class="guidelines-premium-grid">
+      <!-- Subtle Category -->
+      <div class="guideline-premium-card subtle">
+        <div class="card-header">
+          <div class="category-icon">
+            <div class="icon-demo subtle-demo"></div>
+          </div>
+          <div class="category-info">
+            <h3 class="h4">Subtle</h3>
+            <div class="category-range">0-2px</div>
+          </div>
+        </div>
+        
+        <div class="card-content">
+          <p class="category-description">
+            Minimal rounding for form controls and precise interfaces. 
+            Maintains clean, modern aesthetics without overwhelming content.
+          </p>
+          
+          <div class="token-list">
+            <div 
+              *ngFor="let token of getTokensByCategory('subtle')" 
+              class="token-item"
+              (click)="copyToken(token.token)"
+            >
+              <div class="token-preview">
+                <div 
+                  class="preview-shape"
+                  [style.border-radius.px]="token.pixels"
+                ></div>
+              </div>
+              <div class="token-details">
+                <div class="token-name">{{token.name}}</div>
+                <div class="token-usage">{{getUsageString(token.usage)}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standard Category -->
+      <div class="guideline-premium-card standard">
+        <div class="card-header">
+          <div class="category-icon">
+            <div class="icon-demo standard-demo"></div>
+          </div>
+          <div class="category-info">
+            <h3 class="h4">Standard</h3>
+            <div class="category-range">4-6px</div>
+          </div>
+        </div>
+        
+        <div class="card-content">
+          <p class="category-description">
+            Balanced rounding for buttons and interactive elements. 
+            The sweet spot between modern aesthetics and functional design.
+          </p>
+          
+          <div class="token-list">
+            <div 
+              *ngFor="let token of getTokensByCategory('standard')" 
+              class="token-item"
+              (click)="copyToken(token.token)"
+            >
+              <div class="token-preview">
+                <div 
+                  class="preview-shape"
+                  [style.border-radius.px]="token.pixels"
+                ></div>
+              </div>
+              <div class="token-details">
+                <div class="token-name">{{token.name}}</div>
+                <div class="token-usage">{{getUsageString(token.usage)}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prominent Category -->
+      <div class="guideline-premium-card prominent">
+        <div class="card-header">
+          <div class="category-icon">
+            <div class="icon-demo prominent-demo"></div>
+          </div>
+          <div class="category-info">
+            <h3 class="h4">Prominent</h3>
+            <div class="category-range">8px+</div>
+          </div>
+        </div>
+        
+        <div class="card-content">
+          <p class="category-description">
+            Generous rounding for cards, containers, and focal elements. 
+            Creates strong visual hierarchy and premium aesthetic appeal.
+          </p>
+          
+          <div class="token-list">
+            <div 
+              *ngFor="let token of getTokensByCategory('prominent')" 
+              class="token-item"
+              (click)="copyToken(token.token)"
+            >
+              <div class="token-preview">
+                <div 
+                  class="preview-shape"
+                  [style.border-radius.px]="token.pixels === 9999 ? '50%' : token.pixels"
+                ></div>
+              </div>
+              <div class="token-details">
+                <div class="token-name">{{token.name}}</div>
+                <div class="token-usage">{{getUsageString(token.usage)}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Component Showcase -->
+  <section class="component-showcase-section">
+    <div class="section-header">
+      <h2 class="h2 section-title">Component Showcase</h2>
+      <p class="section-subtitle">Real-world applications of radius tokens in action</p>
+    </div>
+    
+    <div class="showcase-examples-grid">
+      <!-- Input Example -->
+      <div class="example-showcase-card">
+        <div class="example-header">
+          <h3 class="h5">Input Fields</h3>
+          <div class="example-token">radius-2</div>
+        </div>
+        <div class="example-demo-area">
+          <div class="demo-input-field">
+            <label>Email Address</label>
+            <input type="text" placeholder="Enter your email" readonly>
+          </div>
+        </div>
+        <div class="example-specs">
+          <div class="spec-item">
+            <span>Border Radius:</span>
+            <code>var(--radius-2)</code>
+          </div>
+          <div class="spec-item">
+            <span>Use Case:</span>
+            <span>Form controls, dropdowns</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button Example -->
+      <div class="example-showcase-card">
+        <div class="example-header">
+          <h3 class="h5">Buttons</h3>
+          <div class="example-token">radius-4</div>
+        </div>
+        <div class="example-demo-area">
+          <div class="demo-button-group">
+            <button class="demo-btn primary">Primary Action</button>
+            <button class="demo-btn secondary">Secondary</button>
+          </div>
+        </div>
+        <div class="example-specs">
+          <div class="spec-item">
+            <span>Border Radius:</span>
+            <code>var(--radius-4)</code>
+          </div>
+          <div class="spec-item">
+            <span>Use Case:</span>
+            <span>Interactive elements, CTAs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Example -->
+      <div class="example-showcase-card">
+        <div class="example-header">
+          <h3 class="h5">Cards</h3>
+          <div class="example-token">radius-8</div>
+        </div>
+        <div class="example-demo-area">
+          <div class="demo-card-example">
+            <div class="card-image"></div>
+            <div class="card-content">
+              <h4>Premium Card</h4>
+              <p>Beautiful content container with perfect radius.</p>
+            </div>
+          </div>
+        </div>
+        <div class="example-specs">
+          <div class="spec-item">
+            <span>Border Radius:</span>
+            <code>var(--radius-8)</code>
+          </div>
+          <div class="spec-item">
+            <span>Use Case:</span>
+            <span>Content containers, modals</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Avatar Example -->
+      <div class="example-showcase-card">
+        <div class="example-header">
+          <h3 class="h5">Avatars</h3>
+          <div class="example-token">radius-full</div>
+        </div>
+        <div class="example-demo-area">
+          <div class="demo-avatar-group">
+            <div class="demo-avatar large">JD</div>
+            <div class="demo-avatar medium">AM</div>
+            <div class="demo-avatar small">SK</div>
+          </div>
+        </div>
+        <div class="example-specs">
+          <div class="spec-item">
+            <span>Border Radius:</span>
+            <code>var(--radius-full)</code>
+          </div>
+          <div class="spec-item">
+            <span>Use Case:</span>
+            <span>Circular elements, pills</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Premium Implementation Guide -->
+  <section class="implementation-guide-section">
+    <div class="section-header">
+      <h2 class="h2 section-title">Implementation Guide</h2>
+      <p class="section-subtitle">Best practices for implementing radius tokens in your projects</p>
+    </div>
+    
+    <div class="implementation-premium-grid">
+      <!-- CSS Implementation -->
+      <div class="implementation-premium-card">
+        <div class="implementation-header">
+          <div class="impl-icon css-icon"></div>
+          <div class="impl-info">
+            <h3 class="h5">CSS Custom Properties</h3>
+            <p>Modern, flexible implementation</p>
+          </div>
+        </div>
+        
+        <div class="code-showcase">
+          <div class="code-block">
+            <pre><code>/* Basic usage */
+.component {{ '{' }}
+  border-radius: var(--radius-4);
+{{ '}' }}
+
+/* Asymmetric radius */
+.modal {{ '{' }}
+  border-radius: var(--radius-12) var(--radius-12) 
+                 var(--radius-4) var(--radius-4);
+{{ '}' }}
+
+/* Responsive radius */
+.card {{ '{' }}
+  border-radius: var(--radius-8);
+{{ '}' }}
+
+&#64;media (max-width: 768px) {{ '{' }}
+  .card {{ '{' }}
+    border-radius: var(--radius-4);
+  {{ '}' }}
+{{ '}' }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCSS Implementation -->
+      <div class="implementation-premium-card">
+        <div class="implementation-header">
+          <div class="impl-icon scss-icon"></div>
+          <div class="impl-info">
+            <h3 class="h5">SCSS Variables</h3>
+            <p>Enhanced with mixins and utilities</p>
+          </div>
+        </div>
+        
+        <div class="code-showcase">
+          <div class="code-block">
+            <pre><code>/* SCSS variables */
+.component {{ '{' }}
+  border-radius: $radius-4;
+{{ '}' }}
+
+/* Utility mixins */
+&#64;mixin radius-card() {{ '{' }}
+  border-radius: $radius-8;
+  overflow: hidden;
+{{ '}' }}
+
+/* Helper functions */
+&#64;function radius($size) {{ '{' }}
+  &#64;return map-get($radius-tokens, $size);
+{{ '}' }}
+
+.dynamic {{ '{' }}
+  border-radius: radius(12);
+{{ '}' }}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Design System Integration -->
+      <div class="implementation-premium-card">
+        <div class="implementation-header">
+          <div class="impl-icon system-icon"></div>
+          <div class="impl-info">
+            <h3 class="h5">Design System Integration</h3>
+            <p>Consistent across all components</p>
+          </div>
+        </div>
+        
+        <div class="code-showcase">
+          <div class="code-block">
+            <pre><code>/* Design token integration */
+:root {{ '{' }}
+  --radius-0: 0px;
+  --radius-2: 2px;
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-full: 9999px;
+{{ '}' }}
+
+/* Component integration */
+.ms-button {{ '{' }}
+  border-radius: var(--radius-4);
+{{ '}' }}
+
+.ms-card {{ '{' }}
+  border-radius: var(--radius-8);
+{{ '}' }}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div> 

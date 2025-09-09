@@ -1,0 +1,150 @@
+<div [class]="timePickerClasses">
+  
+  <mat-form-field 
+    [appearance]="appearance"
+    [class.ms-time-picker__field--error]="hasError">
+    
+    <!-- Prefix Icon -->
+    <mat-icon *ngIf="prefixIcon" matPrefix class="ms-time-picker__prefix-icon">{{ prefixIcon }}</mat-icon>
+    
+    <!-- Label -->
+    <mat-label *ngIf="label">
+      {{ label }}
+      <span *ngIf="required" class="ms-time-picker__required">*</span>
+    </mat-label>
+    
+    <!-- Time Input -->
+    <input 
+      matInput
+      [formControl]="timeControl"
+      [placeholder]="computedPlaceholder"
+      [readonly]="readonly"
+      [disabled]="disabled"
+      [required]="required"
+      [attr.aria-label]="ariaLabel"
+      [attr.aria-describedby]="ariaDescribedBy"
+      (input)="onTimeInput($event)"
+      (blur)="onTimeChange()"
+      class="ms-time-picker__input">
+    
+    <!-- Suffix Actions -->
+    <div matSuffix class="ms-time-picker__suffix">
+      
+      <!-- Clear Button -->
+      <button 
+        *ngIf="timeControl.value && !disabled && !readonly"
+        mat-icon-button
+        type="button"
+        class="ms-time-picker__clear-button"
+        (click)="onClear()"
+        [attr.aria-label]="'Clear time'">
+        <mat-icon>close</mat-icon>
+      </button>
+      
+      <!-- Presets Menu Button -->
+      <button 
+        *ngIf="showPresets && !disabled && !readonly"
+        mat-icon-button
+        type="button"
+        class="ms-time-picker__presets-button"
+        [matMenuTriggerFor]="presetsMenu"
+        [attr.aria-label]="'Time presets'">
+        <mat-icon>{{ suffixIcon }}</mat-icon>
+      </button>
+      
+      <!-- Time Icon (when no presets) -->
+      <mat-icon 
+        *ngIf="!showPresets && suffixIcon"
+        class="ms-time-picker__time-icon">
+        {{ suffixIcon }}
+      </mat-icon>
+      
+    </div>
+    
+    <!-- Hint Text -->
+    <mat-hint *ngIf="hint && !hasError" class="ms-time-picker__hint">{{ hint }}</mat-hint>
+    
+    <!-- Error Message -->
+    <mat-error *ngIf="hasError" class="ms-time-picker__error">{{ displayError }}</mat-error>
+    
+  </mat-form-field>
+  
+  <!-- Presets Menu -->
+  <mat-menu #presetsMenu="matMenu" class="ms-time-picker__menu">
+    
+    <!-- Quick Actions -->
+    <div class="ms-time-picker__quick-actions">
+      <button 
+        mat-menu-item
+        (click)="onNow()"
+        class="ms-time-picker__quick-action">
+        <mat-icon>schedule</mat-icon>
+        <span>Current Time</span>
+      </button>
+      
+      <button 
+        mat-menu-item
+        (click)="setBusinessHoursStart()"
+        class="ms-time-picker__quick-action">
+        <mat-icon>work</mat-icon>
+        <span>Business Start (9:00 AM)</span>
+      </button>
+      
+      <button 
+        mat-menu-item
+        (click)="setLunchTime()"
+        class="ms-time-picker__quick-action">
+        <mat-icon>restaurant</mat-icon>
+        <span>Lunch Time (12:00 PM)</span>
+      </button>
+      
+      <button 
+        mat-menu-item
+        (click)="setBusinessHoursEnd()"
+        class="ms-time-picker__quick-action">
+        <mat-icon>work_off</mat-icon>
+        <span>Business End (5:00 PM)</span>
+      </button>
+    </div>
+    
+    <mat-divider class="ms-time-picker__divider"></mat-divider>
+    
+    <!-- Preset Times -->
+    <div class="ms-time-picker__presets">
+      <button 
+        *ngFor="let preset of availablePresets"
+        mat-menu-item
+        [disabled]="preset.disabled"
+        (click)="onPresetClick(preset)"
+        class="ms-time-picker__preset">
+        <mat-icon>access_time</mat-icon>
+        <span>{{ preset.label }}</span>
+      </button>
+    </div>
+    
+  </mat-menu>
+  
+  <!-- Quick Action Buttons (External) -->
+  <div *ngIf="showPresets" class="ms-time-picker__external-actions">
+    <button 
+      *ngIf="!disabled && !readonly"
+      mat-button
+      type="button"
+      class="ms-time-picker__action-button"
+      (click)="onNow()">
+      <mat-icon>schedule</mat-icon>
+      Now
+    </button>
+    
+    <button 
+      *ngIf="!disabled && !readonly"
+      mat-button
+      type="button"
+      class="ms-time-picker__action-button"
+      (click)="setAppointmentTime()">
+      <mat-icon>event_available</mat-icon>
+      Next Slot
+    </button>
+  </div>
+  
+</div>

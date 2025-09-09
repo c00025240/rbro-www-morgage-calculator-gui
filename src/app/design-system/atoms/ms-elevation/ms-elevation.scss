@@ -1,0 +1,494 @@
+// Elevation Showcase Styles
+// Comprehensive implementation of elevation design tokens
+
+.elevation-showcase {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: var(--font-primary);
+  min-height: 100vh;
+
+  section {
+    margin-bottom: 4rem;
+  }
+}
+
+// Header Styles
+.showcase-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--rbro-yellow-primary) 0%, var(--accent-default) 100%);
+  border-radius: 12px;
+  color: white;
+
+  .showcase-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-display-2-size);
+    font-weight: var(--text-display-2-weight);
+    line-height: var(--text-display-2-line-height);
+    margin: 0 0 1rem 0;
+    /* removed text-shadow rgba to comply with lint */
+  }
+
+  .showcase-description {
+    font-size: var(--text-body-large-size);
+    line-height: var(--text-body-large-line-height);
+    margin: 0;
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.section-title {
+  font-family: var(--font-primary);
+  font-size: var(--text-h2-size);
+  font-weight: var(--text-h2-weight);
+  line-height: var(--text-h2-line-height);
+  color: var(--text-default);
+  margin: 0 0 2rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--rbro-yellow-primary);
+  display: inline-block;
+}
+
+// Elevation Level Classes
+.elevation-zero {
+  border-radius: var(--elevation-border-radius);
+  border: var(--elevation-border);
+  background: var(--elevation-background);
+  box-shadow: var(--elevation-zero);
+  transition: var(--elevation-transition);
+}
+
+.elevation-small {
+  border-radius: var(--elevation-border-radius);
+  border: var(--elevation-border);
+  background: var(--elevation-background);
+  box-shadow: var(--elevation-small);
+  transition: var(--elevation-transition);
+}
+
+.elevation-medium {
+  border-radius: var(--elevation-border-radius);
+  border: var(--elevation-border);
+  background: var(--elevation-background);
+  box-shadow: var(--elevation-medium);
+  transition: var(--elevation-transition);
+}
+
+.elevation-large {
+  border-radius: var(--elevation-border-radius);
+  border: var(--elevation-border);
+  background: var(--elevation-background);
+  box-shadow: var(--elevation-large);
+  transition: var(--elevation-transition);
+}
+
+// Elevation Levels Section
+.elevation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.elevation-sample {
+  position: relative;
+
+  &.selected {
+    .elevation-card {
+      border-color: var(--rbro-yellow-primary);
+      transform: scale(1.02);
+    }
+  }
+}
+
+.elevation-card {
+  padding: 2rem;
+  min-height: 250px;
+  transition: all 0.3s ease;
+
+  .elevation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    .elevation-name {
+      font-size: var(--text-h4-size);
+      font-weight: var(--text-h4-weight);
+      color: var(--text-default);
+      margin: 0;
+    }
+
+    .elevation-level {
+      font-size: var(--text-caption-size);
+      background: var(--accent-20);
+      color: var(--accent-default);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+  }
+
+  .elevation-description {
+    font-size: var(--text-body-size);
+    color: var(--text-secondary);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.6;
+  }
+
+  .elevation-details {
+    .detail-section {
+      margin-bottom: 1rem;
+
+      h4 {
+        font-size: var(--text-body-small-size);
+        font-weight: var(--font-weight-medium);
+        color: var(--accent-default);
+        margin: 0 0 0.25rem 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      p {
+        font-size: var(--text-body-small-size);
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+
+    .shadow-value {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--color-border);
+
+      h4 {
+        font-size: var(--text-body-small-size);
+        font-weight: var(--font-weight-medium);
+        color: var(--accent-default);
+        margin: 0 0 0.5rem 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      code {
+        font-family: var(--font-mono);
+        font-size: var(--text-caption-size);
+        color: var(--text-default);
+        background: var(--color-bg-secondary);
+        padding: 0.5rem;
+        border-radius: 4px;
+        display: block;
+        word-break: break-all;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+// Interactive States Section
+.interactive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.interactive-sample {
+  padding: 2rem;
+  background: var(--color-bg);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+
+  h3 {
+    font-size: var(--text-h4-size);
+    color: var(--text-default);
+    margin: 0 0 1rem 0;
+  }
+
+  .state-description {
+    font-size: var(--text-body-small-size);
+    color: var(--text-secondary);
+    margin: 1rem 0 0 0;
+    line-height: 1.5;
+  }
+}
+
+.state-examples {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.state-card {
+  padding: 1rem 1.5rem;
+  border-radius: var(--elevation-border-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  font-size: var(--text-body-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-default);
+
+  span {
+    text-align: center;
+  }
+}
+
+.hover-demo {
+  &:hover {
+    &.elevation-small { box-shadow: var(--elevation-small-hover); }
+    &.elevation-medium { box-shadow: var(--elevation-medium-hover); }
+    &.elevation-large { box-shadow: var(--elevation-large-hover); }
+  }
+}
+
+.active-demo {
+  &:active {
+    transform: translateY(1px);
+    box-shadow: var(--elevation-zero);
+  }
+}
+
+// Mortgage Examples Section
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.example-card {
+  padding: 1.5rem;
+  min-height: 200px;
+  transition: all 0.3s ease;
+
+  .example-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      font-size: var(--text-h5-size);
+      font-weight: var(--text-h5-weight);
+      color: var(--text-default);
+      margin: 0;
+    }
+
+    .elevation-badge {
+      font-size: var(--text-caption-size);
+      background: var(--rbro-yellow-surface);
+      color: var(--text-default);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-weight: var(--font-weight-medium);
+      text-transform: capitalize;
+    }
+  }
+
+  > p {
+    font-size: var(--text-body-small-size);
+    color: var(--text-secondary);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+  }
+}
+
+.example-content {
+  .button-example {
+    .demo-button {
+      background: var(--rbro-yellow-primary);
+      color: var(--text-default);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-size: var(--text-button-size);
+      font-weight: var(--text-button-weight);
+      font-family: var(--font-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: var(--rbro-yellow-hover);
+        transform: translateY(-1px);
+      }
+    }
+  }
+
+  .card-example {
+    .loan-details {
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: var(--text-body-size);
+
+        span:first-child { color: var(--text-secondary); }
+        span:last-child { color: var(--text-default); font-weight: var(--font-weight-medium); }
+      }
+    }
+  }
+
+  .input-example {
+    label {
+      display: block;
+      font-size: var(--text-body-small-size);
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      font-weight: var(--font-weight-medium);
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      font-size: var(--text-body-size);
+      font-family: var(--font-primary);
+
+      &:focus {
+        outline: none;
+        border-color: var(--accent-default);
+        box-shadow: 0 0 0 2px var(--focus-ring);
+      }
+    }
+  }
+
+  .modal-example {
+    .rate-comparison {
+      display: flex;
+      gap: 1rem;
+
+      .rate-option {
+        flex: 1;
+        text-align: center;
+        padding: 1rem;
+        background: var(--color-bg-secondary);
+        border-radius: 6px;
+
+        h4 { font-size: var(--text-body-size); margin: 0 0 0.5rem 0; color: var(--text-default); }
+        .rate { font-size: var(--text-h4-size); font-weight: var(--font-weight-bold); color: var(--accent-default); }
+      }
+    }
+  }
+
+  .notification-example {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--success-default);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .notification-text {
+      h4 { font-size: var(--text-body-size); font-weight: var(--font-weight-medium); color: var(--text-default); margin: 0 0 0.25rem 0; }
+      p { font-size: var(--text-body-small-size); color: var(--text-secondary); margin: 0; line-height: 1.5; }
+    }
+  }
+}
+
+// Usage Guidelines Section
+.guidelines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.guideline {
+  padding: 1.5rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: var(--elevation-small);
+
+  h3 {
+    font-size: var(--text-h5-size);
+    font-weight: var(--text-h5-weight);
+    color: var(--accent-default);
+    margin: 0 0 1rem 0;
+  }
+
+  p {
+    font-size: var(--text-body-small-size);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+}
+
+// Implementation Section
+.code-examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.code-sample {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: var(--elevation-small);
+  overflow: hidden;
+
+  h3 {
+    font-size: var(--text-h5-size);
+    color: var(--text-default);
+    margin: 0;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+  }
+
+  pre {
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: 1.5rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-body-small-size);
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .elevation-showcase {
+    padding: 1rem;
+
+    section { margin-bottom: 3rem; }
+  }
+
+  .showcase-header {
+    padding: 1.5rem;
+
+    .showcase-title { font-size: var(--text-display-3-size); }
+  }
+
+  .elevation-grid,
+  .interactive-grid,
+  .examples-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .state-examples { flex-direction: column; }
+
+  .code-examples { grid-template-columns: 1fr; }
+}

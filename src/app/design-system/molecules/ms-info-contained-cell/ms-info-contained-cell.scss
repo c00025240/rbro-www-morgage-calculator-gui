@@ -1,0 +1,92 @@
+@use '../../tokens';
+
+.ms-info-contained-cell {
+  // Layout
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+  
+  // Typography base
+  font-family: 'Amalia', sans-serif;
+  font-size: 16px;
+  font-weight: 500; // Medium
+  line-height: 24px;
+  
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 8px; // 2px gap from Figma, but 8px is more standard
+    width: 100%;
+  }
+  
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    
+    &--left {
+      margin-right: 0; // Gap is handled by parent
+    }
+  }
+  
+  &__text {
+    color: inherit;
+    
+    // Handle bold text parts
+    strong {
+      font-weight: 700; // Bold
+    }
+  }
+  
+  // Type variants
+  &--info {
+    background-color: var(--info-30);
+    color: var(--text-light-default, #2B2D33);
+
+    .ms-info-contained-cell__icon {
+      color: var(--text-light-default, #2B2D33);
+    }
+  }
+
+  &--error {
+    background-color: var(--error-30);
+    color: var(--error-default);
+
+    .ms-info-contained-cell__icon {
+      color: var(--error-default);
+    }
+  }
+
+  &--success {
+    background-color: var(--success-30);
+    color: var(--success-default);
+
+    .ms-info-contained-cell__icon {
+      color: var(--success-default);
+    }
+  }
+  
+  // Disabled state
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  // Hover effect (optional)
+  &:hover:not(&--disabled) {
+    opacity: 0.9;
+  }
+  
+  // Focus effect for accessibility
+  &:focus {
+    outline: 2px solid var(--focus-border);
+    outline-offset: 2px;
+  }
+} 

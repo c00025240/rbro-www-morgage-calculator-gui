@@ -1,0 +1,49 @@
+.ms-savings-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-2, 8px);
+  white-space: nowrap;
+  gap: var(--space-1, 4px);
+  font-family: var(--radio-font-family, "Amalia") !important;
+  font-size: var(--text-caption-size, 12px) !important;
+  font-weight: 500 !important;
+  line-height: var(--text-caption-line-height, 1.33) !important;
+  letter-spacing: var(--text-caption-spacing, 0) !important;
+
+  background-color: var(--color-notifications-bg-success);
+  color: var(--color-notifications-text-success);
+
+  &--size-s { height: 32px; border-radius: 8px; }
+  &--size-m { height: 40px; border-radius: 4px; }
+  &--size-l { height: 48px; border-radius: 4px; }
+
+  &--disabled { 
+    opacity: 0.6; 
+    pointer-events: none; 
+    background-color: var(--color-neutral-200, #e5e7eb) !important;
+    color: var(--color-neutral-500, #6b7280) !important;
+  }
+  &--info-only { cursor: default; pointer-events: none; &:hover { background-color: inherit !important; transform: none !important; } }
+
+  &__text { line-height: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  &__icon { display: flex; align-items: center; justify-content: center; width: 16px; height: 16px; flex-shrink: 0;
+    svg { width: 1em; height: 1em; * { fill: currentColor !important; } path, rect, circle, ellipse, polygon, use { fill: currentColor !important; stroke: currentColor !important; } }
+    &--left { margin-right: var(--space-1, 4px); }
+    &--right { margin-left: var(--space-1, 4px); }
+  }
+
+  // Full width modifier
+  &--full-width {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+
+    // let the text take all available space and keep centered
+    .ms-savings-chip__text {
+      flex: 1;
+      text-align: center;
+    }
+  }
+} 

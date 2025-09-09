@@ -1,0 +1,453 @@
+// Typography Showcase Styles
+// Comprehensive implementation of Amalia font system
+
+.typography-showcase {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: var(--font-primary);
+  background: var(--color-bg-secondary);
+  min-height: 100vh;
+
+  section {
+    margin-bottom: 4rem;
+    background: var(--color-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow-base);
+  }
+}
+
+// Header Styles
+.showcase-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--rbro-yellow-primary) 0%, var(--accent-default) 100%);
+  border-radius: 12px;
+  color: white;
+
+  .showcase-title {
+    font-family: var(--font-primary);
+    font-size: var(--text-display-2-size);
+    font-weight: var(--text-display-2-weight);
+    line-height: var(--text-display-2-line-height);
+    letter-spacing: var(--text-display-2-spacing);
+    margin: 0 0 1rem 0;
+  }
+
+  .showcase-description {
+    font-size: var(--text-body-large-size);
+    line-height: var(--text-body-large-line-height);
+    margin: 0;
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.section-title {
+  font-family: var(--font-primary);
+  font-size: var(--text-h2-size);
+  font-weight: var(--text-h2-weight);
+  line-height: var(--text-h2-line-height);
+  color: var(--text-default);
+  margin: 0 0 2rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--rbro-yellow-primary);
+  display: inline-block;
+}
+
+// Font Family Showcase
+.font-samples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.font-sample {
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg-secondary);
+
+  .sample-title {
+    font-size: var(--text-h4-size);
+    font-weight: var(--text-h4-weight);
+    color: var(--accent-default);
+    margin: 0 0 1rem 0;
+  }
+
+  .sample-text {
+    font-size: var(--text-h3-size);
+    line-height: var(--text-h3-line-height);
+    margin: 0 0 0.5rem 0;
+    color: var(--text-default);
+  }
+
+  .sample-description {
+    font-size: var(--text-body-small-size);
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.amalia-font {
+  font-family: var(--font-primary) !important;
+}
+
+.amalia-condensed-font {
+  font-family: var(--font-condensed) !important;
+}
+
+// Font Weights
+.weight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.weight-sample {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: var(--color-bg);
+
+  .weight-demo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+
+    .weight-name {
+      font-size: var(--text-body-size);
+      color: var(--text-default);
+    }
+
+    .weight-value {
+      font-family: var(--font-mono);
+      font-size: var(--text-caption-size);
+      color: var(--text-secondary);
+      background: var(--color-bg-secondary);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+  }
+
+  .weight-text {
+    font-family: var(--font-primary);
+    font-size: var(--text-body-size);
+    margin: 0;
+    color: var(--text-default);
+  }
+}
+
+// Font Weight Classes
+.font-thin { font-weight: var(--font-weight-thin); }
+.font-light { font-weight: var(--font-weight-light); }
+.font-regular { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-black { font-weight: var(--font-weight-black); }
+
+// Typography Styles Grid
+.styles-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.style-sample {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-bg);
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-default);
+  }
+}
+
+.style-header {
+  padding: 1rem 1.5rem;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .style-name {
+    font-size: var(--text-h5-size);
+    font-weight: var(--text-h5-weight);
+    color: var(--text-default);
+    margin: 0;
+  }
+
+  .style-sizes {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    .size-label {
+      font-size: var(--text-caption-size);
+      color: var(--text-secondary);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .size-value {
+      font-family: var(--font-mono);
+      font-size: var(--text-caption-size);
+      color: var(--accent-default);
+      background: var(--accent-20);
+      padding: 0.125rem 0.375rem;
+      border-radius: 3px;
+    }
+  }
+}
+
+.style-demo {
+  padding: 2rem 1.5rem;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+
+  p {
+    margin: 0;
+    color: var(--text-default);
+    word-break: break-word;
+  }
+}
+
+.style-info {
+  padding: 1rem 1.5rem;
+  background: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+
+  .style-description {
+    font-size: var(--text-body-small-size);
+    color: var(--text-secondary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+  }
+
+  .style-usage {
+    font-size: var(--text-caption-size);
+    color: var(--text-accent);
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+// Typography Classes Implementation
+.display-1 {
+  font-family: var(--font-primary);
+  font-size: var(--text-display-1-size);
+  font-weight: var(--text-display-1-weight);
+  line-height: var(--text-display-1-line-height);
+  letter-spacing: var(--text-display-1-spacing);
+}
+
+.display-2 {
+  font-family: var(--font-primary);
+  font-size: var(--text-display-2-size);
+  font-weight: var(--text-display-2-weight);
+  line-height: var(--text-display-2-line-height);
+  letter-spacing: var(--text-display-2-spacing);
+}
+
+.display-3 {
+  font-family: var(--font-primary);
+  font-size: var(--text-display-3-size);
+  font-weight: var(--text-display-3-weight);
+  line-height: var(--text-display-3-line-height);
+  letter-spacing: var(--text-display-3-spacing);
+}
+
+.h1 {
+  font-family: var(--font-primary);
+  font-size: var(--text-h1-size);
+  font-weight: var(--text-h1-weight);
+  line-height: var(--text-h1-line-height);
+  letter-spacing: var(--text-h1-spacing);
+}
+
+.h2 {
+  font-family: var(--font-primary);
+  font-size: var(--text-h2-size);
+  font-weight: var(--text-h2-weight);
+  line-height: var(--text-h2-line-height);
+  letter-spacing: var(--text-h2-spacing);
+}
+
+.h3 {
+  font-family: var(--font-primary);
+  font-size: var(--text-h3-size);
+  font-weight: var(--text-h3-weight);
+  line-height: var(--text-h3-line-height);
+  letter-spacing: var(--text-h3-spacing);
+}
+
+.h4 {
+  font-family: var(--font-primary);
+  font-size: var(--text-h4-size);
+  font-weight: var(--text-h4-weight);
+  line-height: var(--text-h4-line-height);
+  letter-spacing: var(--text-h4-spacing);
+}
+
+.h5 {
+  font-family: var(--font-primary);
+  font-size: var(--text-h5-size);
+  font-weight: var(--text-h5-weight);
+  line-height: var(--text-h5-line-height);
+  letter-spacing: var(--text-h5-spacing);
+}
+
+.h6 {
+  font-family: var(--font-primary);
+  font-size: var(--text-h6-size);
+  font-weight: var(--text-h6-weight);
+  line-height: var(--text-h6-line-height);
+  letter-spacing: var(--text-h6-spacing);
+}
+
+.body-large {
+  font-family: var(--font-primary);
+  font-size: var(--text-body-large-size);
+  font-weight: var(--text-body-large-weight);
+  line-height: var(--text-body-large-line-height);
+  letter-spacing: var(--text-body-large-spacing);
+}
+
+.body {
+  font-family: var(--font-primary);
+  font-size: var(--text-body-size);
+  font-weight: var(--text-body-weight);
+  line-height: var(--text-body-line-height);
+  letter-spacing: var(--text-body-spacing);
+}
+
+.body-small {
+  font-family: var(--font-primary);
+  font-size: var(--text-body-small-size);
+  font-weight: var(--text-body-small-weight);
+  line-height: var(--text-body-small-line-height);
+  letter-spacing: var(--text-body-small-spacing);
+}
+
+.button {
+  font-family: var(--font-primary);
+  font-size: var(--text-button-size);
+  font-weight: var(--text-button-weight);
+  line-height: var(--text-button-line-height);
+  letter-spacing: var(--text-button-spacing);
+}
+
+.caption {
+  font-family: var(--font-primary);
+  font-size: var(--text-caption-size);
+  font-weight: var(--text-caption-weight);
+  line-height: var(--text-caption-line-height);
+  letter-spacing: var(--text-caption-spacing);
+}
+
+.overline {
+  font-family: var(--font-primary);
+  font-size: var(--text-overline-size);
+  font-weight: var(--text-overline-weight);
+  line-height: var(--text-overline-line-height);
+  letter-spacing: var(--text-overline-spacing);
+  text-transform: var(--text-overline-transform);
+}
+
+// Guidelines Section
+.guidelines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.guideline {
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg-secondary);
+
+  h3 {
+    font-size: var(--text-h5-size);
+    font-weight: var(--text-h5-weight);
+    color: var(--accent-default);
+    margin: 0 0 1rem 0;
+  }
+
+  p {
+    font-size: var(--text-body-small-size);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+}
+
+// Code Examples
+.code-sample {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+
+  h3 {
+    font-size: var(--text-h5-size);
+    color: var(--text-default);
+    margin: 0 0 1rem 0;
+  }
+
+  pre {
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-body-small-size);
+    line-height: 1.5;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .typography-showcase {
+    padding: 1rem;
+
+    section {
+      padding: 1.5rem;
+    }
+  }
+
+  .showcase-header {
+    padding: 1.5rem;
+
+    .showcase-title {
+      font-size: var(--text-display-3-size);
+    }
+  }
+
+  .style-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .font-samples,
+  .weight-grid,
+  .guidelines-grid {
+    grid-template-columns: 1fr;
+  }
+}

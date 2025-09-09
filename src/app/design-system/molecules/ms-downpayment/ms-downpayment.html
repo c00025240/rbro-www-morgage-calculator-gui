@@ -1,0 +1,22 @@
+<ms-card-outside-title
+  [title]="label"
+  [hasHelper]="true"
+  [helperText]="helperText">
+</ms-card-outside-title>
+
+<ms-card>
+  <div class="ms-downpayment" [class.ms-downpayment--disabled]="disabled()" [attr.aria-disabled]="disabled()">
+    <label class="ms-downpayment__label">{{ label }}</label>
+    <ms-text-field-custom
+      [label]="''"
+      type="number"
+      [value]="value()"
+      [suffixText]="currency"
+      [disabled]="disabled()"
+      (valueChange)="onValueChange($event)">
+    </ms-text-field-custom>
+    <div class="ms-downpayment__info">Introduceți avansul în Lei.</div>
+  </div>
+</ms-card>
+
+

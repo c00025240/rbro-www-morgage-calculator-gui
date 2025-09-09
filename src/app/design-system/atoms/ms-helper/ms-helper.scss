@@ -1,0 +1,155 @@
+// Helper Component Styles
+// Based on Figma design tokens for helper text with info icon
+
+.ms-helper-wrapper {
+  display: inline-block;
+  height: 16px;
+  
+  @media (min-width: 1024px) {
+    height: 18px;
+  }
+}
+
+.ms-helper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 16px;
+  font-family: 'Amalia', sans-serif;
+  font-weight: 400;
+  
+  // Mobile typography (default)
+  font-size: 12px;
+  line-height: 16px;
+  
+  // Desktop typography (1024px and up)
+  @media (min-width: 1024px) {
+    font-size: 14px;
+    line-height: 18px;
+    height: 18px;
+  }
+  
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    // Mobile size (12px)
+    width: 12px;
+    height: 12px;
+    
+    // Desktop size (16px)
+    @media (min-width: 1024px) {
+      width: 16px;
+      height: 16px;
+    }
+    
+    &-svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      color: currentColor;
+      
+      svg {
+        width: 100%;
+        height: 100%;
+        * { fill: currentColor !important; }
+        path[stroke], line[stroke], circle[stroke] { stroke: currentColor !important; }
+      }
+    }
+  }
+  
+  &__text {
+    font-weight: 400;
+    
+    // Mobile typography
+    font-size: 12px;
+    line-height: 16px;
+    
+    // Desktop typography
+    @media (min-width: 1024px) {
+      font-size: 14px;
+      line-height: 18px;
+    }
+  }
+
+  // Generic Error State (applies when only ms-helper--error is present)
+  &.ms-helper--error {
+    .ms-helper__icon,
+    .ms-helper__text {
+      color: var(--error-default);
+    }
+  }
+
+  // Surface Default - Regular State
+  &--surface-default {
+    .ms-helper__icon,
+    .ms-helper__text {
+      color: var(--icon-secondary, var(--color-text-secondary));
+    }
+  }
+  
+  // Surface Default - Error State
+  &--surface-default.ms-helper--error {
+    .ms-helper__icon,
+    .ms-helper__text {
+      color: var(--error-default);
+    }
+  }
+
+  // Surface Light - Regular State
+  &--surface-light {
+    .ms-helper__icon,
+    .ms-helper__text {
+      color: var(--icon-secondary, var(--color-text-secondary));
+    }
+  }
+  
+  // Surface Light - Error State
+  &--surface-light.ms-helper--error {
+    .ms-helper__icon,
+    .ms-helper__text {
+      color: var(--error-default);
+    }
+  }
+
+  // Surface Dark - Regular State
+  &--surface-dark {
+    .ms-helper__icon,
+    .ms-helper__text {
+      color: var(--icon-secondary, var(--color-text-secondary));
+    }
+  }
+  
+  // Surface Dark - Error State
+  &--surface-dark.ms-helper--error {
+    .ms-helper__icon,
+    .ms-helper__text {
+      color: var(--error-30);
+    }
+  }
+}
+
+// Host class styling
+.ms-helper-wrapper {
+  &--default {
+    // Default surface styling if needed
+  }
+  
+  &--light {
+    // Light surface styling if needed  
+  }
+  
+  &--dark {
+    // Dark surface styling if needed
+  }
+  
+  &--regular {
+    // Regular state styling if needed
+  }
+  
+  &--error {
+    // Error state styling if needed
+  }
+} 

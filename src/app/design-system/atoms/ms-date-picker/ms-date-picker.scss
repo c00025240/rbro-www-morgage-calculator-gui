@@ -1,0 +1,510 @@
+@use '../../_tokens.scss';
+
+.ms-date-picker {
+  display: block;
+  width: 100%;
+  
+  // Size variations
+  &.ms-date-picker--small {
+    .mat-mdc-form-field {
+      font-size: var(--font-size-body-s);
+      
+      .mat-mdc-form-field-infix {
+        min-height: 40px;
+      }
+      
+      .mat-mdc-form-field-label {
+        font-size: var(--font-size-body-s);
+      }
+    }
+    
+    .ms-date-picker__input {
+      font-size: var(--font-size-body-s);
+      padding: var(--spacing-2) var(--spacing-3);
+    }
+  }
+  
+  &.ms-date-picker--medium {
+    .mat-mdc-form-field {
+      font-size: var(--font-size-body-m);
+      
+      .mat-mdc-form-field-infix {
+        min-height: 48px;
+      }
+    }
+    
+    .ms-date-picker__input {
+      font-size: var(--font-size-body-m);
+      padding: var(--spacing-3) var(--spacing-4);
+    }
+  }
+  
+  &.ms-date-picker--large {
+    .mat-mdc-form-field {
+      font-size: var(--font-size-body-l);
+      
+      .mat-mdc-form-field-infix {
+        min-height: 56px;
+      }
+    }
+    
+    .ms-date-picker__input {
+      font-size: var(--font-size-body-l);
+      padding: var(--spacing-4) var(--spacing-5);
+    }
+  }
+  
+  // Appearance variations
+  &.ms-date-picker--outline {
+    .mat-mdc-form-field {
+      --mdc-outlined-text-field-outline-color: var(--color-border-primary);
+      --mdc-outlined-text-field-hover-outline-color: var(--color-border-hover);
+      --mdc-outlined-text-field-focus-outline-color: var(--color-accent-primary);
+      --mdc-outlined-text-field-outline-width: 1px;
+      --mdc-outlined-text-field-focus-outline-width: 2px;
+    }
+  }
+  
+  &.ms-date-picker--fill {
+    .mat-mdc-form-field {
+      --mdc-filled-text-field-container-color: var(--color-surface-secondary);
+      --mdc-filled-text-field-focus-active-indicator-color: var(--color-accent-primary);
+      --mdc-filled-text-field-hover-active-indicator-color: var(--color-accent-secondary);
+    }
+  }
+  
+  // State variations
+  &.ms-date-picker--disabled {
+    opacity: 0.6;
+    
+    .mat-mdc-form-field {
+      pointer-events: none;
+    }
+  }
+  
+  &.ms-date-picker--readonly {
+    .ms-date-picker__input {
+      cursor: default;
+    }
+    
+    .ms-date-picker__suffix-icon,
+    .ms-date-picker__calendar-icon {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  }
+  
+  &.ms-date-picker--error {
+    .mat-mdc-form-field {
+      --mdc-outlined-text-field-outline-color: var(--color-error-primary);
+      --mdc-outlined-text-field-hover-outline-color: var(--color-error-primary);
+      --mdc-outlined-text-field-focus-outline-color: var(--color-error-primary);
+    }
+  }
+}
+
+// Form field styling
+.mat-mdc-form-field {
+  width: 100%;
+  font-family: var(--font-family-primary);
+  
+  .mat-mdc-form-field-label {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .mat-mdc-form-field-required-marker {
+    color: var(--color-error-primary);
+  }
+  
+  .mat-mdc-form-field-infix {
+    border-top: none;
+  }
+}
+
+// Input styling
+.ms-date-picker__input {
+  font-family: var(--font-family-primary);
+  color: var(--color-text-primary);
+  caret-color: var(--color-accent-primary);
+  
+  &::placeholder {
+    color: var(--color-text-placeholder);
+    opacity: 1;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &[readonly] {
+    cursor: default;
+  }
+  
+  &:disabled {
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+// Icon styling
+.ms-date-picker__prefix-icon,
+.ms-date-picker__suffix-icon,
+.ms-date-picker__calendar-icon {
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  
+  &:hover {
+    color: var(--color-text-primary);
+  }
+  
+  &:focus {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-s);
+  }
+}
+
+.ms-date-picker__clear-button {
+  color: var(--color-text-secondary);
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-secondary);
+  }
+  
+  &:focus {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+}
+
+// Required indicator
+.ms-date-picker__required {
+  color: var(--color-error-primary);
+  margin-left: var(--spacing-1);
+}
+
+// Hint and error text
+.ms-date-picker__hint {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-1);
+}
+
+.ms-date-picker__error {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-error-primary);
+  margin-top: var(--spacing-1);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  
+  &::before {
+    content: '⚠';
+    font-size: var(--font-size-body-s);
+  }
+}
+
+// Quick actions
+.ms-date-picker__actions {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+  
+  .ms-date-picker__action-button {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-s);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    
+    &:hover {
+      color: var(--color-accent-primary);
+      background-color: var(--color-accent-light);
+    }
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// Global datepicker styling
+:global(.mat-mdc-dialog-container) {
+  .mat-datepicker-content {
+    border-radius: var(--radius-m);
+    box-shadow: var(--elevation-4);
+    background-color: var(--color-surface-primary);
+    
+    .mat-calendar {
+      font-family: var(--font-family-primary);
+      
+      .mat-calendar-header {
+        background-color: var(--color-accent-primary);
+        color: var(--color-text-on-accent);
+        
+        .mat-calendar-controls {
+          .mat-calendar-period-button {
+            color: var(--color-text-on-accent);
+            font-weight: var(--font-weight-semibold);
+          }
+          
+          .mat-calendar-previous-button,
+          .mat-calendar-next-button {
+            color: var(--color-text-on-accent);
+            
+            &:hover {
+              background-color: var(--overlay-hover-bg, var(--surface-hover));
+            }
+          }
+        }
+      }
+      
+      .mat-calendar-body {
+        .mat-calendar-body-label {
+          color: var(--color-text-secondary);
+          font-weight: var(--font-weight-medium);
+        }
+        
+        .mat-calendar-body-cell {
+          color: var(--color-text-primary);
+          
+          &:hover .mat-calendar-body-cell-content {
+            background-color: var(--color-accent-light);
+            color: var(--color-accent-primary);
+          }
+          
+          &.mat-calendar-body-selected .mat-calendar-body-cell-content {
+            background-color: var(--color-accent-primary);
+            color: var(--color-text-on-accent);
+          }
+          
+          &.mat-calendar-body-today .mat-calendar-body-cell-content {
+            border-color: var(--color-accent-primary);
+          }
+          
+          &.mat-calendar-body-disabled {
+            color: var(--color-text-disabled);
+          }
+        }
+      }
+    }
+    
+    .mat-datepicker-actions {
+      border-top: 1px solid var(--color-border-light);
+      padding: var(--spacing-3);
+      display: flex;
+      gap: var(--spacing-2);
+      justify-content: flex-end;
+      
+      button {
+        font-family: var(--font-family-primary);
+        border-radius: var(--radius-s);
+        
+        &[mat-button] {
+          color: var(--color-text-secondary);
+          
+          &:hover {
+            background-color: var(--color-surface-secondary);
+          }
+        }
+        
+        &[mat-raised-button] {
+          background-color: var(--color-accent-primary);
+          color: var(--color-text-on-accent);
+          
+          &:hover {
+            background-color: var(--color-accent-dark);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Touch UI specific styling
+:global(.mat-datepicker-touch-ui) {
+  .mat-datepicker-content {
+    border-radius: var(--radius-l) var(--radius-l) 0 0;
+    
+    .mat-calendar {
+      .mat-calendar-header {
+        padding: var(--spacing-4);
+        
+        .mat-calendar-controls {
+          .mat-calendar-period-button {
+            font-size: var(--font-size-heading-s);
+          }
+        }
+      }
+      
+      .mat-calendar-body {
+        padding: var(--spacing-2) var(--spacing-4) var(--spacing-4);
+        
+        .mat-calendar-body-cell {
+          min-height: 44px;
+          min-width: 44px;
+          
+          .mat-calendar-body-cell-content {
+            width: 44px;
+            height: 44px;
+            line-height: 44px;
+          }
+        }
+      }
+    }
+    
+    .mat-datepicker-actions {
+      padding: var(--spacing-4);
+      
+      button {
+        min-height: 44px;
+        padding: 0 var(--spacing-4);
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .ms-date-picker {
+    &.ms-date-picker--large {
+      .mat-mdc-form-field {
+        font-size: var(--font-size-body-m);
+        
+        .mat-mdc-form-field-infix {
+          min-height: 48px;
+        }
+      }
+      
+      .ms-date-picker__input {
+        font-size: var(--font-size-body-m);
+        padding: var(--spacing-3) var(--spacing-4);
+      }
+    }
+  }
+  
+  .ms-date-picker__actions {
+    flex-direction: column;
+    
+    .ms-date-picker__action-button {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .ms-date-picker {
+    .mat-mdc-form-field {
+      .mat-mdc-form-field-label {
+        font-size: var(--font-size-body-s);
+      }
+    }
+    
+    .ms-date-picker__input {
+      font-size: var(--font-size-body-s);
+    }
+    
+    &.ms-date-picker--small .ms-date-picker__input {
+      font-size: var(--font-size-body-xs);
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .ms-date-picker {
+    .mat-mdc-form-field {
+      --mdc-outlined-text-field-outline-width: 2px;
+      --mdc-outlined-text-field-focus-outline-width: 3px;
+    }
+    
+    .ms-date-picker__error {
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+  
+  :global(.mat-datepicker-content) {
+    border: 2px solid var(--color-border-primary);
+    
+    .mat-calendar-body-cell {
+      &.mat-calendar-body-selected .mat-calendar-body-cell-content {
+        border: 2px solid var(--color-text-on-accent);
+      }
+      
+      &.mat-calendar-body-today .mat-calendar-body-cell-content {
+        border-width: 2px;
+      }
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .ms-date-picker__prefix-icon,
+  .ms-date-picker__suffix-icon,
+  .ms-date-picker__calendar-icon,
+  .ms-date-picker__clear-button {
+    transition: none;
+  }
+  
+  :global(.mat-datepicker-content) {
+    .mat-calendar-body-cell:hover .mat-calendar-body-cell-content {
+      transition: none;
+    }
+  }
+}
+
+// Focus management for accessibility
+.ms-date-picker {
+  &:focus-within {
+    .mat-mdc-form-field {
+      --mdc-outlined-text-field-focus-outline-color: var(--color-accent-primary);
+    }
+  }
+}
+
+// Error state enhancements
+.ms-date-picker__field--error {
+  .mat-mdc-form-field-label {
+    color: var(--color-error-primary);
+  }
+  
+  .ms-date-picker__prefix-icon,
+  .ms-date-picker__suffix-icon,
+  .ms-date-picker__calendar-icon {
+    color: var(--color-error-primary);
+  }
+}
+
+// Loading state (if needed)
+.ms-date-picker--loading {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: var(--spacing-3);
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--color-border-light);
+    border-top: 2px solid var(--color-accent-primary);
+    border-radius: 50%;
+    animation: ms-date-picker-spin 1s linear infinite;
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes ms-date-picker-spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}

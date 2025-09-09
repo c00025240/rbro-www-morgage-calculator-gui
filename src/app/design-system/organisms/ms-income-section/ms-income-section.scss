@@ -1,0 +1,66 @@
+.ms-income-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  overflow: hidden; // Prevent any child overflow
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    overflow: hidden; // Ensure content stays within bounds
+    
+    // Ensure all child elements are contained
+    * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    // Specific handling for text field components
+    ms-text-field-custom {
+      width: 100%;
+      overflow: hidden;
+      
+      // Ensure text fields don't overflow
+      ::ng-deep .ms-text-field-custom {
+        width: 100%;
+        overflow: hidden;
+        
+        .ms-text-field-custom__input-container {
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+        }
+        
+        .ms-text-field-custom__input {
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .ms-text-field-custom__suffix {
+          flex-shrink: 0; // Prevent suffix from shrinking
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  // Surface variants can be added here when needed
+
+  // States
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // Mobile responsive adjustments
+  @media (max-width: 767px) {
+    &__content {
+      gap: 16px;
+    }
+  }
+}

@@ -1,0 +1,422 @@
+// ms-select component styles - based on ms-text-field-custom design
+// Using design tokens and Amalia font family
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.ms-select {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+
+  // Label styling (align with ms-cell-label__text)
+  &__label {
+    font-family: var(--font-primary, sans-serif);
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: 24px !important;
+    font-style: normal;
+    color: var(--label-muted, var(--color-text-secondary));
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    user-select: none;
+
+    &--required::after {
+      content: ' *';
+      color: var(--color-error-primary);
+    }
+  }
+
+  // Main container (matching text field input container)
+  &__container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--text-field-bg-default);
+    border: 1px solid var(--text-field-border-default);
+    border-radius: var(--border-radius-m, 8px);
+    transition: all 0.2s ease-in-out;
+    overflow: visible; // Allow dropdown to show outside
+    width: 100%;
+    min-height: 56px; // Spec: 56px field height
+
+    &:hover:not(&--disabled) {
+      border-color: var(--color-border-hover, var(--text-field-border-focus));
+    }
+
+    &--focused {
+      border-color: var(--text-field-border-focus);
+      box-shadow: 0 0 0 3px var(--focus-ring, transparent);
+    }
+
+    &--error {
+      border-color: var(--color-error-primary);
+      box-shadow: 0 0 0 3px var(--error-ring, transparent);
+    }
+
+    &--disabled {
+      background-color: var(--color-surface-disabled);
+      border-color: var(--color-border-disabled);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  // Select trigger (clickable area)
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 16px 16px 12px; // 12px left padding
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    min-height: 56px; // Spec: 56px field height
+    box-sizing: border-box;
+
+    .ms-select__container--disabled & {
+      cursor: not-allowed;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--focus-border);
+      outline-offset: -2px;
+    }
+  }
+
+  // Selected value or placeholder text
+  &__value {
+    font-family: var(--font-primary, sans-serif);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--text-field-text-default);
+    flex: 1;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &--placeholder {
+      color: var(--text-field-placeholder);
+    }
+
+    .ms-select__container--disabled & {
+      color: var(--color-text-disabled);
+    }
+  }
+
+  // Dropdown icon
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-left: var(--space-2, 8px);
+    color: var(--text-field-suffix-default);
+    transition: transform 0.2s ease-in-out;
+    flex-shrink: 0;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .ms-select__container--disabled & {
+      color: var(--color-text-disabled);
+    }
+  }
+
+  // Dropdown panel
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 2000; // Above cards and nearby content
+    background-color: var(--overlay-bg);
+    border: 1px solid var(--overlay-border);
+    border-radius: var(--border-radius-m, 8px);
+    box-shadow: var(--overlay-shadow);
+    margin-top: var(--space-1, 4px);
+    max-height: 240px;
+    overflow: hidden;
+    animation: dropdownFadeIn 0.15s ease-out;
+  }
+
+  // Options container
+  &__options {
+    max-height: 240px;
+    overflow-y: auto;
+    padding: var(--space-1, 4px) 0;
+
+    // Custom scrollbar styling
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--color-surface-secondary);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-border-primary);
+      border-radius: 3px;
+
+      &:hover {
+        background: var(--color-border-hover);
+      }
+    }
+  }
+
+  // Group label
+  &__group-label {
+    font-family: var(--font-primary, sans-serif);
+    font-size: var(--font-size-body-s, 14px);
+    font-weight: var(--font-weight-semibold, 600);
+    line-height: var(--line-height-body-s, 1.43);
+    color: var(--text-field-label-default);
+    padding: var(--space-2, 8px) var(--space-4, 16px) var(--space-1, 4px);
+    padding-bottom: var(--space-1, 4px);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+
+  // Individual option
+  &__option {
+    font-family: var(--font-primary, sans-serif);
+    font-size: var(--font-size-body-m, 16px);
+    font-weight: var(--font-weight-regular, 400);
+    line-height: 24px;
+    color: var(--text-field-text-default);
+    padding: 0 var(--space-4, 16px);
+    height: 56px; // Spec: 56px option row height
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    user-select: none;
+    outline: none;
+
+    &:hover:not(&--disabled) {
+      background-color: var(--color-surface-hover);
+    }
+
+    &:focus {
+      background-color: var(--color-surface-hover);
+      outline: none;
+    }
+
+    &--selected {
+      background-color: var(--color-accent-surface);
+      color: var(--color-accent-primary);
+      font-weight: var(--font-weight-medium, 500);
+
+      &:hover {
+        background-color: var(--color-accent-surface-hover);
+      }
+    }
+
+    &--disabled {
+      color: var(--color-text-disabled);
+      cursor: not-allowed;
+      background-color: transparent;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
+    &--grouped {
+      padding-left: var(--space-6, 24px); // Indent grouped options
+    }
+  }
+
+  // Helper text (matching text field)
+  &__helper {
+    margin-top: var(--space-1, 4px);
+  }
+}
+
+// Surface variants
+.ms-select-component {
+  // Light surface - use existing light tokens
+  &--surface-light {
+    .ms-select {
+      --text-field-label-default: var(--text-field-label-default-light);
+      --text-field-text-default: var(--text-field-text-default-light);
+      --text-field-placeholder: var(--text-field-placeholder-light);
+      --text-field-bg-default: var(--text-field-bg-default-light);
+      --text-field-border-default: var(--text-field-border-default-light);
+      --text-field-border-focus: var(--text-field-border-focus-light);
+      --text-field-suffix-default: var(--text-field-suffix-default-light);
+    }
+  }
+
+  // Default surface behaves like light
+  &--surface-default {
+    .ms-select {
+      --text-field-label-default: var(--text-field-label-default-light);
+      --text-field-text-default: var(--text-field-text-default-light);
+      --text-field-placeholder: var(--text-field-placeholder-light);
+      --text-field-bg-default: var(--text-field-bg-default-light);
+      --text-field-border-default: var(--text-field-border-default-light);
+      --text-field-border-focus: var(--text-field-border-focus-light);
+      --text-field-suffix-default: var(--text-field-suffix-default-light);
+    }
+  }
+
+  // Dark surface - use dark tokens + Figma overrides
+  &--surface-dark {
+    .ms-select {
+      // Use proper dark tokens from design system
+      --text-field-label-default: var(--text-field-label-default-dark);
+      --text-field-text-default: var(--text-field-text-default-dark);
+      --text-field-placeholder: var(--text-field-placeholder-dark);
+      --text-field-suffix-default: var(--text-field-suffix-default-dark);
+      
+      // FIGMA OVERRIDES: Use exact Figma values for background and borders
+      --text-field-bg-default: var(--text-field-bg-default-dark, var(--text-field-bg-default));
+      --text-field-border-default: var(--text-field-border-default-dark, var(--text-field-border-default));
+      --text-field-border-focus: var(--text-field-border-focus-dark, var(--focus-border));
+    }
+
+    .ms-select__trigger {
+      // FIGMA SPEC: exact padding from design (py-3 = 12px)
+      padding: 12px 16px;
+    }
+
+    .ms-select__value {
+      font-weight: 500; // Medium weight from Figma
+    }
+
+    // Dark hover border refinement
+    .ms-select__container:hover:not(.ms-select__container--disabled) {
+      border-color: var(--text-field-border-hover-dark, var(--text-field-border-focus));
+    }
+
+    // FIGMA SPEC: exact focus border color with teal
+    .ms-select__container.ms-select__container--focused {
+      box-shadow: 0 0 0 3px var(--focus-ring, transparent);
+    }
+
+    .ms-select__dropdown {
+      background-color: var(--overlay-bg);
+      border-color: var(--overlay-border);
+      box-shadow: var(--overlay-shadow);
+    }
+
+    .ms-select__options {
+      &::-webkit-scrollbar-track {
+        background: var(--overlay-scrollbar-track, transparent);
+      }
+      &::-webkit-scrollbar-thumb {
+        background: var(--overlay-scrollbar-thumb, var(--overlay-border));
+      }
+    }
+
+    .ms-select__option {
+      &:hover:not(&--disabled) {
+        background-color: var(--surface-hover-dark, var(--color-surface-hover));
+      }
+
+      &--selected {
+        background-color: var(--overlay-accent-selected, var(--color-accent-surface));
+        color: var(--overlay-accent-text, var(--color-accent-primary));
+      }
+    }
+  }
+}
+
+// Animation keyframes
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .ms-select {
+    &__container {
+      min-height: 56px; // Keep 56px on mobile
+    }
+
+    &__trigger {
+      min-height: 56px;
+      padding: 16px var(--space-3, 12px);
+    }
+
+    &__value {
+      font-size: var(--font-size-body-m, 16px); // Prevent zoom on iOS
+    }
+
+    &__dropdown {
+      max-height: 200px; // Shorter on mobile
+    }
+
+    &__option {
+      height: 56px; // Keep row height consistent
+      padding: 0 var(--space-3, 12px);
+      font-size: var(--font-size-body-m, 16px);
+    }
+  }
+
+  // Dark mode mobile adjustments
+  .ms-select-component--surface-dark {
+    .ms-select__trigger {
+      padding: 12px var(--space-3, 12px); // Keep 12px vertical on mobile
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .ms-select {
+    &__container {
+      border-width: 2px;
+    }
+
+    &__option--selected {
+      outline: 2px solid var(--focus-border);
+      outline-offset: -2px;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .ms-select {
+    &__icon {
+      transition: none;
+    }
+
+    &__dropdown {
+      animation: none;
+    }
+
+    &__option {
+      transition: none;
+    }
+  }
+}

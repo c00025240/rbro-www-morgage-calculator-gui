@@ -1,0 +1,126 @@
+@use '../../_tokens.scss';
+
+// PageShell Breakpoints
+// s < 480px, tb < 1024px, l <= 1440px, xl > 1440px
+$breakpoint-s: 479px;
+$breakpoint-tb: 1023px;
+$breakpoint-l: 1440px;
+
+.ms-page-shell {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+	
+	// Default surface - Light background
+	background-color: var(--color-bg-secondary);
+	color: var(--color-text);
+	
+	// Smooth transitions for theme changes
+	transition: background-color 0.2s ease, color 0.2s ease;
+
+	// Full height variant
+	&--full-height {
+		height: 100vh;
+		min-height: 100vh;
+	}
+
+	// Scrollable variant
+	&--scrollable {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	// Light surface styling (same as default)
+	&--surface-light {
+		background-color: var(--color-bg-secondary);
+		color: var(--color-text);
+	}
+
+	// Dark surface styling
+	&--surface-dark {
+		background-color: var(--color-bg);
+		color: var(--color-text);
+	}
+
+	// Responsive breakpoint classes for content
+	.ms-page-shell__content {
+		width: 100%;
+		margin: 0 auto;
+		
+		// Small devices (s < 480px)
+		@media (max-width: #{$breakpoint-s}) {
+			padding: 0 var(--space-2, 16px);
+		}
+		
+		// Tablet (tb < 1024px)
+		@media (min-width: 480px) and (max-width: #{$breakpoint-tb}) {
+			padding: 0 var(--space-3, 24px);
+		}
+		
+		// Large desktop (l <= 1440px)
+		@media (min-width: 1024px) and (max-width: #{$breakpoint-l}) {
+			max-width: 1440px;
+			padding: 0 var(--space-4, 32px);
+		}
+		
+		// Extra large (xl > 1440px)
+		@media (min-width: 1441px) {
+			max-width: 1440px;
+			padding: 0 var(--space-4, 32px);
+		}
+	}
+
+	// Utility classes for breakpoint-specific styling
+	&__breakpoint {
+		&--s {
+			@media (min-width: 480px) {
+				display: none;
+			}
+		}
+		
+		&--tb {
+			@media (max-width: 479px), (min-width: 1024px) {
+				display: none;
+			}
+		}
+		
+		&--l {
+			@media (max-width: 1023px), (min-width: 1441px) {
+				display: none;
+			}
+		}
+		
+		&--xl {
+			@media (max-width: 1440px) {
+				display: none;
+			}
+		}
+	}
+
+	// High contrast mode support
+	@media (prefers-contrast: high) {
+		&--surface-light {
+			background-color: var(--color-bg);
+			color: var(--color-text);
+		}
+		
+		&--surface-dark {
+			background-color: var(--color-bg);
+			color: var(--color-text);
+		}
+	}
+
+	// Reduced motion support
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+
+	// Print styles
+	@media print {
+		background-color: var(--color-bg) !important;
+		color: var(--color-text) !important;
+		box-shadow: none !important;
+	}
+} 

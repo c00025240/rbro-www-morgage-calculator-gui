@@ -1,0 +1,42 @@
+<div class="ms-sticky-footer ms-sticky-footer--surface-{{ surface }}" [ngClass]="cssClass">
+	<!-- Amount Summary Section -->
+	<div class="ms-sticky-footer__summary">
+		<ms-amount-combo 
+			[leftAmount]="leftAmount"
+			[rightAmount]="rightAmount">
+		</ms-amount-combo>
+	</div>
+	
+	<!-- Actions Section -->
+	<div class="ms-sticky-footer__actions">
+		<!-- Details Button (Secondary, max-width 96px) -->
+		<div class="ms-sticky-footer__details-button" *ngIf="actions?.details">
+			<ms-button-secondary
+				[label]="actions.details.label"
+				[disabled]="actions.details.disabled || false"
+				(clicked)="onDetailsClick($event)">
+			</ms-button-secondary>
+		</div>
+		
+		<!-- Primary Action Button (fills remaining space) -->
+		<div class="ms-sticky-footer__primary-button" *ngIf="actions?.primary">
+			<ms-button-primary
+				[label]="actions.primary.label"
+				[disabled]="actions.primary.disabled || false"
+				[iconRight]="actions.primary.iconRight"
+				(clicked)="onPrimaryClick($event)">
+			</ms-button-primary>
+		</div>
+		
+		<!-- Share Button (Secondary with icon, max-width 96px) -->
+		<div class="ms-sticky-footer__share-button" *ngIf="actions?.share">
+			<ms-button-secondary
+				iconRight="share"
+				[disabled]="actions.share.disabled || false"
+				[ariaLabel]="actions.share.ariaLabel || 'Share'"
+				[title]="actions.share.title || 'Share'"
+				(clicked)="onShareClick($event)">
+			</ms-button-secondary>
+		</div>
+	</div>
+</div> 

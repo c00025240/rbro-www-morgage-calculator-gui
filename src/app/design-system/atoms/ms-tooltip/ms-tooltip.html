@@ -1,0 +1,14 @@
+<div 
+  [matTooltip]="tooltip"
+  [matTooltipPosition]="position"
+  [matTooltipShowDelay]="showDelay"
+  [matTooltipHideDelay]="hideDelay"
+  [matTooltipTouchGestures]="touchGestures"
+  [matTooltipDisabled]="disabled"
+  [matTooltipClass]="computedTooltipClass"
+  [style.max-width]="computedMaxWidth"
+  [attr.aria-label]="ariaLabel"
+  [attr.aria-describedby]="ariaDescribedBy"
+  class="ms-tooltip-trigger">
+  <ng-content></ng-content>
+</div>

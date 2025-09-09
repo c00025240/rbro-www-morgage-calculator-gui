@@ -1,0 +1,52 @@
+.ms-button-link {
+	&__btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0;
+		border: none;
+		background: none;
+		cursor: pointer;
+		transition: all 0.2s ease-in-out;
+		border-radius: var(--border-radius-2, 8px);
+		font-family: var(--radio-font-family, "Amalia") !important;
+		font-size: var(--text-h6-size, 16px) !important;
+		font-weight: 500 !important;
+		line-height: var(--text-h6-line-height, 1.5) !important;
+		letter-spacing: var(--text-h6-spacing, 0) !important;
+		padding: 0 var(--space-3, 24px);
+		max-width: 420px;
+		min-height: 48px;
+
+		/* Default surface */
+		color: var(--btn-link-text);
+
+		&:hover:not(&--disabled) { color: var(--btn-link-hover-text); }
+		&:active:not(&--disabled), &--pressed:not(&--disabled) { color: var(--btn-link-text); }
+		&:focus:not(&--disabled), &--focused:not(&--disabled) { outline: 2px solid var(--focus-border); outline-offset: 2px; }
+		&--disabled { color: var(--btn-disabled-text); cursor: not-allowed; }
+
+		&--surface-light {
+			color: var(--btn-link-text);
+			&:hover:not(&--disabled) { color: var(--btn-link-hover-text); }
+			&:active:not(&--disabled), &.ms-button-link__btn--pressed:not(&--disabled) { color: var(--btn-link-text); }
+			&:focus:not(&--disabled), &.ms-button-link__btn--focused:not(&--disabled) { outline-color: var(--focus-border); }
+			&.ms-button-link__btn--disabled { color: var(--btn-disabled-text); }
+		}
+
+		&--surface-dark {
+			color: var(--btn-link-text);
+			&:hover:not(&--disabled) { color: var(--btn-link-hover-text); }
+			&:active:not(&--disabled), &.ms-button-link__btn--pressed:not(&--disabled) { color: var(--btn-link-text); }
+			&:focus:not(&--disabled), &.ms-button-link__btn--focused:not(&--disabled) { outline-color: var(--focus-border); }
+			&.ms-button-link__btn--disabled { color: var(--btn-disabled-text); }
+		}
+
+		&--device-mobile, &--device-tablet { min-height: 40px; }
+		&--device-desktop { min-height: 48px; }
+	}
+
+	&__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; &:not(:first-child) { margin-left: var(--space-2, 8px); } &:not(:last-child) { margin-right: var(--space-2, 8px); } }
+
+	&__icon { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; svg { width: 1em; height: 1em; * { fill: currentColor !important; } path, rect, circle, ellipse, polygon, use { fill: currentColor !important; stroke: none !important; } } }
+} 

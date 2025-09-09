@@ -1,0 +1,21 @@
+<div [class]="getSwitchFormClasses().join(' ')">
+  <!-- Top: Cell Label -->
+  <ms-cell-label
+    [text]="labelText"
+    [maxLength]="labelMaxLength"
+    [rightText]="rightText"
+    [rightTextDisabled]="rightTextDisabled">
+  </ms-cell-label>
+
+  <!-- Bottom: Switch Cell -->
+  <ms-switch-cell
+    [label]="switchLabel"
+    [checked]="checked"
+    [disabled]="disabled"
+    [surface]="surface"
+    [showInfoIcon]="showInfoIcon"
+    [infoTooltip]="infoTooltip"
+    (change)="onSwitchChange($event)"
+    (infoClick)="onInfoIconClick()">
+  </ms-switch-cell>
+</div> 

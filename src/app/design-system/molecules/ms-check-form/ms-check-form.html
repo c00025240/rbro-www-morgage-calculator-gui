@@ -1,0 +1,24 @@
+<div [class]="getCheckFormClasses().join(' ')">
+  <!-- Top: Cell Label -->
+  <ms-cell-label
+    [text]="labelText"
+    [maxLength]="labelMaxLength">
+  </ms-cell-label>
+
+  <!-- Bottom: Check Cell -->
+  <ms-check-cell
+    [checkboxLabel]="checkboxLabel"
+    [checkboxValue]="checkboxValue"
+    [checkboxSize]="checkboxSize"
+    [checkboxDisabled]="checkboxDisabled"
+    [checkboxRequired]="checkboxRequired"
+    [checkboxIndeterminate]="checkboxIndeterminate"
+    [chipType]="chipType"
+    [chipData]="chipData"
+    [chipSavingsSize]="chipSavingsSize"
+    [disabled]="disabled"
+    (checkboxChange)="onCheckboxChange($event)"
+    (chipClicked)="onChipClicked($event)"
+    (chipSelected)="onChipSelected($event)">
+  </ms-check-cell>
+</div> 

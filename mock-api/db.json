@@ -1,0 +1,67 @@
+{
+  "mortgage": {
+    "calculate": {
+      "interestRateType": {
+        "type": "fixed",
+        "value": 5.5
+      },
+      "nominalInterestRate": 5.5,
+      "interestRateFormula": {
+        "bankMarginRate": 2.5,
+        "irccRate": 3.0
+      },
+      "loanAmount": {
+        "currency": "RON",
+        "amount": 400000
+      },
+      "maxAmount": {
+        "currency": "RON",
+        "amount": 500000
+      },
+      "downPayment": {
+        "currency": "RON",
+        "amount": 100000
+      },
+      "loanAmountWithFee": {
+        "currency": "RON",
+        "amount": 410000
+      },
+      "housePrice": {
+        "currency": "RON",
+        "amount": 500000
+      },
+      "totalPaymentAmount": {
+        "currency": "RON",
+        "amount": 750000
+      },
+      "tenor": 360,
+      "monthlyInstallment": {
+        "amountFixedInterest": 2850,
+        "amountVariableInterest": 0
+      },
+      "loanCosts": {
+        "fees": [],
+        "lifeInsurance": [],
+        "discounts": {},
+        "totalDiscountsValues": {}
+      },
+      "annualPercentageRate": 5.8,
+      "noDocAmount": 0,
+      "minGuaranteeAmount": 50000
+    }
+  },
+  "productTypes": {
+    "casaTa": {
+      "name": "Achiziție imobil",
+      "description": "Credit pentru achiziționarea unui imobil"
+    },
+    "refinantare": {
+      "name": "Refinanțare",
+      "description": "Refinanțarea unui credit existent"
+    },
+    "constructie": {
+      "name": "Construcție/renovare",
+      "description": "Credit pentru construcție sau renovare"
+    }
+  }
+}

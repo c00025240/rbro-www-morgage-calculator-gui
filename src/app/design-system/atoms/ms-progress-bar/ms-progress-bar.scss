@@ -1,0 +1,319 @@
+@use '../../_tokens.scss';
+
+.ms-progress-bar {
+  width: 100%;
+  
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2);
+  }
+  
+  &__label {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-s);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+  }
+  
+  &__value {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-s);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+  }
+  
+  // Material progress bar customization
+  ::ng-deep {
+    .mat-mdc-progress-bar {
+      height: 8px;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      
+      .mdc-linear-progress__bar {
+        border-radius: var(--radius-pill);
+      }
+      
+      .mdc-linear-progress__buffer-bar {
+        background-color: var(--color-surface-secondary);
+        border-radius: var(--radius-pill);
+      }
+      
+      .mdc-linear-progress__bar-inner {
+        border-radius: var(--radius-pill);
+        transition: transform 0.3s ease-in-out;
+      }
+      
+      // Progress fill colors
+      &.mat-primary {
+        .mdc-linear-progress__bar-inner {
+          background-color: var(--color-accent-primary);
+        }
+        
+        .mdc-linear-progress__buffer-dots {
+          background-color: var(--color-accent-light);
+        }
+      }
+      
+      &.mat-accent {
+        .mdc-linear-progress__bar-inner {
+          background-color: var(--color-secondary-primary);
+        }
+        
+        .mdc-linear-progress__buffer-dots {
+          background-color: var(--color-secondary-light);
+        }
+      }
+      
+      &.mat-warn {
+        .mdc-linear-progress__bar-inner {
+          background-color: var(--color-error-primary);
+        }
+        
+        .mdc-linear-progress__buffer-dots {
+          background-color: var(--color-error-light);
+        }
+      }
+      
+      // Indeterminate animation
+      &.mdc-linear-progress--indeterminate {
+        .mdc-linear-progress__bar {
+          animation: mdc-linear-progress-primary-indeterminate-translate 2.1s infinite linear;
+        }
+        
+        .mdc-linear-progress__bar-inner {
+          animation: mdc-linear-progress-primary-indeterminate-scale 2.1s infinite linear;
+        }
+      }
+      
+      // Query animation
+      &.mdc-linear-progress--animation-ready.mdc-linear-progress--indeterminate {
+        &.mdc-linear-progress--animation-ready {
+          .mdc-linear-progress__bar {
+            animation: mdc-linear-progress-primary-indeterminate-translate 2.1s infinite linear;
+          }
+        }
+      }
+    }
+  }
+  
+  // Size variations
+  &--small {
+    .ms-progress-bar__header {
+      margin-bottom: var(--spacing-1);
+    }
+    
+    .ms-progress-bar__label,
+    .ms-progress-bar__value {
+      font-size: var(--font-size-body-xs);
+    }
+    
+    ::ng-deep {
+      .mat-mdc-progress-bar {
+        height: 4px;
+      }
+    }
+  }
+  
+  &--medium {
+    // Default size already set above
+  }
+  
+  &--large {
+    .ms-progress-bar__header {
+      margin-bottom: var(--spacing-3);
+    }
+    
+    .ms-progress-bar__label,
+    .ms-progress-bar__value {
+      font-size: var(--font-size-body-m);
+    }
+    
+    ::ng-deep {
+      .mat-mdc-progress-bar {
+        height: 12px;
+      }
+    }
+  }
+  
+  // Color variations
+  &--primary {
+    // Default primary colors already set above
+  }
+  
+  &--accent {
+    .ms-progress-bar__label {
+      color: var(--color-secondary-primary);
+    }
+  }
+  
+  &--warn {
+    .ms-progress-bar__label {
+      color: var(--color-error-primary);
+    }
+  }
+  
+  // Striped variant
+  &--striped {
+    ::ng-deep {
+      .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
+        background-image: linear-gradient(
+          45deg,
+          var(--progress-stripe-color) 25%,
+          transparent 25%,
+          transparent 50%,
+          var(--progress-stripe-color) 50%,
+          var(--progress-stripe-color) 75%,
+          transparent 75%,
+          transparent
+        );
+        background-size: 20px 20px;
+      }
+    }
+  }
+  
+  // Animated stripes
+  &--animated.ms-progress-bar--striped {
+    ::ng-deep {
+      .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
+        animation: ms-progress-stripes 1s linear infinite;
+      }
+    }
+  }
+  
+  // Complete state
+  &--complete {
+    .ms-progress-bar__label {
+      color: var(--color-success-primary);
+    }
+    
+    .ms-progress-bar__value {
+      color: var(--color-success-primary);
+      font-weight: var(--font-weight-medium);
+    }
+    
+    ::ng-deep {
+      .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
+        background-color: var(--color-success-primary) !important;
+        box-shadow: var(--progress-complete-glow);
+      }
+    }
+  }
+  
+  // Disabled state
+  &--disabled {
+    opacity: 0.6;
+    
+    .ms-progress-bar__label,
+    .ms-progress-bar__value {
+      color: var(--color-text-disabled);
+    }
+    
+    ::ng-deep {
+      .mat-mdc-progress-bar {
+        .mdc-linear-progress__buffer-bar {
+          background-color: var(--color-surface-disabled);
+        }
+        
+        .mdc-linear-progress__bar-inner {
+          background-color: var(--color-surface-disabled) !important;
+        }
+      }
+    }
+  }
+  
+  // Responsive design
+  @media (max-width: 768px) {
+    .ms-progress-bar__header {
+      margin-bottom: var(--spacing-2);
+    }
+    
+    .ms-progress-bar__label,
+    .ms-progress-bar__value {
+      font-size: var(--font-size-body-s);
+    }
+    
+    ::ng-deep {
+      .mat-mdc-progress-bar {
+        // Ensure minimum height for touch visibility
+        min-height: 6px;
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    ::ng-deep {
+      .mat-mdc-progress-bar {
+        // Slightly larger on very small screens for better visibility
+        min-height: 8px;
+      }
+    }
+  }
+  
+  // Surface theme support
+  &[data-surface="light"] {
+    .ms-progress-bar__label,
+    .ms-progress-bar__value {
+      color: var(--color-text-primary);
+    }
+  }
+  
+  &[data-surface="dark"] {
+    .ms-progress-bar__label,
+    .ms-progress-bar__value {
+      color: var(--color-text-on-dark);
+    }
+    
+    ::ng-deep {
+      .mat-mdc-progress-bar .mdc-linear-progress__buffer-bar {
+        background-color: var(--color-surface-secondary-on-dark);
+      }
+    }
+  }
+}
+
+// Keyframes for striped animation
+@keyframes ms-progress-stripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0;
+  }
+}
+
+// Enhanced indeterminate animations
+@keyframes mdc-linear-progress-primary-indeterminate-translate {
+  0% {
+    transform: translateX(-145.166611%);
+  }
+  20% {
+    animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495819);
+    transform: translateX(-145.166611%);
+  }
+  59.15% {
+    animation-timing-function: cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);
+    transform: translateX(-61.5041%);
+  }
+  100% {
+    transform: translateX(55.444444%);
+  }
+}
+
+@keyframes mdc-linear-progress-primary-indeterminate-scale {
+  0% {
+    transform: scaleX(0.08);
+  }
+  36.65% {
+    animation-timing-function: cubic-bezier(0.334731, 0.12482, 0.785844, 1);
+    transform: scaleX(0.08);
+  }
+  69.15% {
+    animation-timing-function: cubic-bezier(0.06, 0.11, 0.6, 1);
+    transform: scaleX(0.661479);
+  }
+  100% {
+    transform: scaleX(0.08);
+  }
+}

@@ -1,0 +1,24 @@
+<div [class]="getRadioFormClasses().join(' ')">
+  <!-- Top: Cell Label -->
+  <ms-cell-label
+    [text]="labelText"
+    [maxLength]="labelMaxLength">
+  </ms-cell-label>
+
+  <!-- Bottom: Radio Cell -->
+  <ms-radio-cell
+    [radioOption]="radioOption"
+    [radioValue]="radioValue"
+    [radioName]="radioName"
+    [radioSize]="radioSize"
+    [radioDisabled]="radioDisabled"
+    [radioRequired]="radioRequired"
+    [chipType]="chipType"
+    [chipData]="chipData"
+    [chipSavingsSize]="chipSavingsSize"
+    [disabled]="disabled"
+    (radioChange)="onRadioChange($event)"
+    (chipClicked)="onChipClicked($event)"
+    (chipSelected)="onChipSelected($event)">
+  </ms-radio-cell>
+</div> 

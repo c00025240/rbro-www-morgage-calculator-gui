@@ -1,0 +1,21 @@
+.ms-downpayment {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ms-downpayment__label {
+  font-weight: 600;
+}
+
+.ms-downpayment__info {
+  color: var(--label-muted);
+  font-size: 12px;
+}
+
+.ms-downpayment--disabled {
+  opacity: 0.6;
+  filter: grayscale(0.1);
+}
+
+

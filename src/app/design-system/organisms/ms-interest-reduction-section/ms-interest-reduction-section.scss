@@ -1,0 +1,85 @@
+.ms-interest-reduction-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  overflow: hidden; // Prevent any child overflow
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    overflow: hidden; // Ensure content stays within bounds
+    
+    // Ensure all child elements are contained
+    * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    
+    // Specific handling for switch forms
+    ms-switch-form {
+      width: 100%;
+      overflow: hidden;
+      
+      // Ensure switch forms don't overflow
+      ::ng-deep .ms-switch-form {
+        width: 100%;
+        overflow: hidden;
+        
+        .ms-switch-form__content {
+          width: 100%;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+
+  &__savings {
+    width: 100%;
+    margin-top: 8px;
+    
+    ms-savings-chip {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+    }
+
+    // Target the actual chip element inside ms-savings-chip
+    ::ng-deep .ms-savings-chip {
+      width: 100% !important;
+      max-width: 100% !important;
+      display: flex !important;
+
+      .ms-savings-chip__text {
+        flex: 1;
+        text-align: center;
+      }
+    }
+  }
+
+  // Surface variants can be added here when needed
+
+  // States
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // Mobile responsive adjustments
+  @media (max-width: 767px) {
+    &__content {
+      gap: 16px;
+    }
+    
+    &__savings {
+      margin-top: 16px;
+      
+      ms-savings-chip { 
+        width: 100%;
+        max-width: 100%; 
+      }
+    }
+  }
+} 

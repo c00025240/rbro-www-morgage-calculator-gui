@@ -1,0 +1,243 @@
+@use '../../_tokens.scss';
+
+.ms-tooltip-trigger {
+  display: inline-block;
+  cursor: help;
+}
+
+// Global tooltip styling (applies to the overlay)
+:host ::ng-deep {
+  .ms-tooltip {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-s);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-body-s);
+    border-radius: var(--radius-s);
+    padding: var(--spacing-2) var(--spacing-3);
+    box-shadow: var(--elevation-2);
+    z-index: 1000;
+    
+    // Default theme
+    &.ms-tooltip--default {
+      background-color: var(--color-surface-inverse);
+      color: var(--color-text-on-inverse);
+    }
+    
+    // Size variations
+    &.ms-tooltip--small {
+      font-size: var(--font-size-body-xs);
+      padding: var(--spacing-1) var(--spacing-2);
+      max-width: 200px;
+    }
+    
+    &.ms-tooltip--medium {
+      // Default size already set above
+      max-width: 250px;
+    }
+    
+    &.ms-tooltip--large {
+      font-size: var(--font-size-body-m);
+      padding: var(--spacing-3) var(--spacing-4);
+      max-width: 350px;
+    }
+    
+    // Theme variations
+    &.ms-tooltip--dark {
+      background-color: var(--color-surface-dark);
+      color: var(--color-text-on-dark);
+      border: 1px solid var(--color-border-on-dark);
+    }
+    
+    &.ms-tooltip--light {
+      background-color: var(--color-surface-light);
+      color: var(--color-text-primary);
+      border: 1px solid var(--color-border-primary);
+    }
+    
+    &.ms-tooltip--info {
+      background-color: var(--color-info-primary);
+      color: var(--color-text-on-info);
+    }
+    
+    &.ms-tooltip--warning {
+      background-color: var(--color-warning-primary);
+      color: var(--color-text-on-warning);
+    }
+    
+    &.ms-tooltip--error {
+      background-color: var(--color-error-primary);
+      color: var(--color-text-on-error);
+    }
+    
+    &.ms-tooltip--success {
+      background-color: var(--color-success-primary);
+      color: var(--color-text-on-success);
+    }
+    
+    // Multiline support
+    &.ms-tooltip--multiline {
+      white-space: pre-wrap;
+      text-align: left;
+    }
+    
+    // Persistent tooltips
+    &.ms-tooltip--persistent {
+      pointer-events: auto;
+      cursor: default;
+    }
+    
+    // Animation enhancements
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    
+    // Arrow styling for better visual connection
+    &::before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+    }
+    
+    // Position-specific arrow styling
+    &[data-mat-tooltip-position="above"]::before {
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 6px 0 6px;
+      border-color: currentColor transparent transparent transparent;
+    }
+    
+    &[data-mat-tooltip-position="below"]::before {
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 0 6px 6px 6px;
+      border-color: transparent transparent currentColor transparent;
+    }
+    
+    &[data-mat-tooltip-position="left"]::before {
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 6px 0 6px 6px;
+      border-color: transparent transparent transparent currentColor;
+    }
+    
+    &[data-mat-tooltip-position="right"]::before {
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-width: 6px 6px 6px 0;
+      border-color: transparent currentColor transparent transparent;
+    }
+  }
+}
+
+// Specific trigger styling for different contexts
+.ms-tooltip-trigger {
+  // Icon triggers
+  &.ms-tooltip-trigger--icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-circle);
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease-in-out;
+    
+    &:hover {
+      color: var(--color-text-primary);
+    }
+  }
+  
+  // Text triggers
+  &.ms-tooltip-trigger--text {
+    border-bottom: 1px dotted var(--color-border-secondary);
+    cursor: help;
+    
+    &:hover {
+      border-bottom-color: var(--color-border-primary);
+    }
+  }
+  
+  // Button triggers
+  &.ms-tooltip-trigger--button {
+    cursor: pointer;
+  }
+  
+  // Form field triggers
+  &.ms-tooltip-trigger--field {
+    display: inline-flex;
+    align-items: center;
+    margin-left: var(--spacing-1);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  :host ::ng-deep {
+    .ms-tooltip {
+      font-size: var(--font-size-body-s);
+      max-width: 200px !important;
+      padding: var(--spacing-2);
+      
+      &.ms-tooltip--large {
+        font-size: var(--font-size-body-s);
+        max-width: 250px !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  :host ::ng-deep {
+    .ms-tooltip {
+      font-size: var(--font-size-body-xs);
+      max-width: 180px !important;
+      padding: var(--spacing-1) var(--spacing-2);
+      
+      &.ms-tooltip--large {
+        font-size: var(--font-size-body-s);
+        max-width: 200px !important;
+      }
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :host ::ng-deep {
+    .ms-tooltip {
+      border: 2px solid;
+      
+      &.ms-tooltip--default {
+        border-color: var(--color-text-on-inverse);
+      }
+      
+      &.ms-tooltip--light {
+        border-color: var(--color-text-primary);
+      }
+      
+      &.ms-tooltip--dark {
+        border-color: var(--color-text-on-dark);
+      }
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  :host ::ng-deep {
+    .ms-tooltip {
+      transition: none;
+    }
+  }
+}
+
+// Focus visible for accessibility
+.ms-tooltip-trigger:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-s);
+}

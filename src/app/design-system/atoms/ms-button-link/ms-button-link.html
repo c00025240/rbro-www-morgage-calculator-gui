@@ -1,0 +1,31 @@
+<button
+	[type]="type"
+	[disabled]="disabled"
+	[attr.aria-label]="ariaLabel"
+	[title]="title"
+	class="ms-button-link__btn"
+	[class.ms-button-link__btn--pressed]="isPressed"
+	[class.ms-button-link__btn--focused]="isFocused"
+	[class.ms-button-link__btn--disabled]="disabled"
+	[class.ms-button-link__btn--surface-light]="surface === 'light'"
+	[class.ms-button-link__btn--surface-dark]="surface === 'dark'"
+	[class.ms-button-link__btn--device-mobile]="device === 'mobile'"
+	[class.ms-button-link__btn--device-tablet]="device === 'tablet'"
+	[class.ms-button-link__btn--device-desktop]="device === 'desktop'"
+	(click)="onClick($event)"
+	(focus)="onFocus($event)"
+	(blur)="onBlur($event)"
+	(mousedown)="onMouseDown()"
+	(mouseup)="onMouseUp()"
+	(mouseleave)="onMouseLeave()">
+	
+	<span *ngIf="iconLeft && leftIconContent" 
+		class="ms-button-link__icon ms-button-link__icon--left" 
+		[innerHTML]="leftIconContent"></span>
+	
+	<span class="ms-button-link__label">{{ label }}</span>
+	
+	<span *ngIf="iconRight && rightIconContent" 
+		class="ms-button-link__icon ms-button-link__icon--right" 
+		[innerHTML]="rightIconContent"></span>
+</button> 

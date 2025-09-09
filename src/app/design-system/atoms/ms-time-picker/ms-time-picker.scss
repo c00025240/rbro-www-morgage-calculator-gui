@@ -1,0 +1,596 @@
+@use '../../_tokens.scss';
+
+.ms-time-picker {
+  display: block;
+  width: 100%;
+  
+  // Size variations
+  &.ms-time-picker--small {
+    .mat-mdc-form-field {
+      font-size: var(--font-size-body-s);
+      
+      .mat-mdc-form-field-infix {
+        min-height: 40px;
+      }
+      
+      .mat-mdc-form-field-label {
+        font-size: var(--font-size-body-s);
+      }
+    }
+    
+    .ms-time-picker__input {
+      font-size: var(--font-size-body-s);
+      padding: var(--spacing-2) var(--spacing-3);
+    }
+  }
+  
+  &.ms-time-picker--medium {
+    .mat-mdc-form-field {
+      font-size: var(--font-size-body-m);
+      
+      .mat-mdc-form-field-infix {
+        min-height: 48px;
+      }
+    }
+    
+    .ms-time-picker__input {
+      font-size: var(--font-size-body-m);
+      padding: var(--spacing-3) var(--spacing-4);
+    }
+  }
+  
+  &.ms-time-picker--large {
+    .mat-mdc-form-field {
+      font-size: var(--font-size-body-l);
+      
+      .mat-mdc-form-field-infix {
+        min-height: 56px;
+      }
+    }
+    
+    .ms-time-picker__input {
+      font-size: var(--font-size-body-l);
+      padding: var(--spacing-4) var(--spacing-5);
+    }
+  }
+  
+  // Format variations
+  &.ms-time-picker--12h {
+    .ms-time-picker__input {
+      min-width: 120px;
+    }
+  }
+  
+  &.ms-time-picker--24h {
+    .ms-time-picker__input {
+      min-width: 100px;
+    }
+  }
+  
+  // Appearance variations
+  &.ms-time-picker--outline {
+    .mat-mdc-form-field {
+      --mdc-outlined-text-field-outline-color: var(--color-border-primary);
+      --mdc-outlined-text-field-hover-outline-color: var(--color-border-hover);
+      --mdc-outlined-text-field-focus-outline-color: var(--color-accent-primary);
+      --mdc-outlined-text-field-outline-width: 1px;
+      --mdc-outlined-text-field-focus-outline-width: 2px;
+    }
+  }
+  
+  &.ms-time-picker--fill {
+    .mat-mdc-form-field {
+      --mdc-filled-text-field-container-color: var(--color-surface-secondary);
+      --mdc-filled-text-field-focus-active-indicator-color: var(--color-accent-primary);
+      --mdc-filled-text-field-hover-active-indicator-color: var(--color-accent-secondary);
+    }
+  }
+  
+  // State variations
+  &.ms-time-picker--disabled {
+    opacity: 0.6;
+    
+    .mat-mdc-form-field {
+      pointer-events: none;
+    }
+  }
+  
+  &.ms-time-picker--readonly {
+    .ms-time-picker__input {
+      cursor: default;
+    }
+    
+    .ms-time-picker__suffix button {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  }
+  
+  &.ms-time-picker--error {
+    .mat-mdc-form-field {
+      --mdc-outlined-text-field-outline-color: var(--color-error-primary);
+      --mdc-outlined-text-field-hover-outline-color: var(--color-error-primary);
+      --mdc-outlined-text-field-focus-outline-color: var(--color-error-primary);
+    }
+  }
+}
+
+// Form field styling
+.mat-mdc-form-field {
+  width: 100%;
+  font-family: var(--font-family-primary);
+  
+  .mat-mdc-form-field-label {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .mat-mdc-form-field-required-marker {
+    color: var(--color-error-primary);
+  }
+  
+  .mat-mdc-form-field-infix {
+    border-top: none;
+  }
+}
+
+// Input styling
+.ms-time-picker__input {
+  font-family: var(--font-family-primary);
+  color: var(--color-text-primary);
+  caret-color: var(--color-accent-primary);
+  font-variant-numeric: tabular-nums;
+  
+  &::placeholder {
+    color: var(--color-text-placeholder);
+    opacity: 1;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &[readonly] {
+    cursor: default;
+  }
+  
+  &:disabled {
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+// Suffix area styling
+.ms-time-picker__suffix {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+// Icon styling
+.ms-time-picker__prefix-icon,
+.ms-time-picker__time-icon {
+  color: var(--color-text-secondary);
+  
+  &:hover {
+    color: var(--color-text-primary);
+  }
+}
+
+.ms-time-picker__clear-button,
+.ms-time-picker__presets-button {
+  color: var(--color-text-secondary);
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-secondary);
+  }
+  
+  &:focus {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+}
+
+// Required indicator
+.ms-time-picker__required {
+  color: var(--color-error-primary);
+  margin-left: var(--spacing-1);
+}
+
+// Hint and error text
+.ms-time-picker__hint {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-1);
+}
+
+.ms-time-picker__error {
+  font-size: var(--font-size-body-xs);
+  color: var(--color-error-primary);
+  margin-top: var(--spacing-1);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  
+  &::before {
+    content: '⚠';
+    font-size: var(--font-size-body-s);
+  }
+}
+
+// External action buttons
+.ms-time-picker__external-actions {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+  
+  .ms-time-picker__action-button {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-s);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    
+    &:hover {
+      color: var(--color-accent-primary);
+      background-color: var(--color-accent-light);
+    }
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// Menu styling
+:global(.ms-time-picker__menu) {
+  .mat-mdc-menu-panel {
+    background-color: var(--color-surface-primary);
+    border-radius: var(--radius-m);
+    box-shadow: var(--elevation-3);
+    min-width: 200px;
+    max-width: 280px;
+  }
+  
+  .ms-time-picker__quick-actions {
+    padding: var(--spacing-2) 0;
+    
+    .ms-time-picker__quick-action {
+      font-family: var(--font-family-primary);
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      padding: var(--spacing-2) var(--spacing-3);
+      min-height: 40px;
+      
+      &:hover {
+        background-color: var(--color-surface-secondary);
+      }
+      
+      mat-icon {
+        color: var(--color-text-secondary);
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+      
+      span {
+        font-size: var(--font-size-body-s);
+        font-weight: var(--font-weight-medium);
+      }
+    }
+  }
+  
+  .ms-time-picker__divider {
+    border-color: var(--color-border-light);
+    margin: var(--spacing-1) 0;
+  }
+  
+  .ms-time-picker__presets {
+    padding: var(--spacing-2) 0;
+    max-height: 200px;
+    overflow-y: auto;
+    
+    .ms-time-picker__preset {
+      font-family: var(--font-family-primary);
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      padding: var(--spacing-1) var(--spacing-3);
+      min-height: 36px;
+      
+      &:hover:not([disabled]) {
+        background-color: var(--color-surface-secondary);
+      }
+      
+      &[disabled] {
+        color: var(--color-text-disabled);
+        cursor: not-allowed;
+      }
+      
+      mat-icon {
+        color: var(--color-text-secondary);
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+      
+      span {
+        font-size: var(--font-size-body-s);
+        font-weight: var(--font-weight-regular);
+        font-variant-numeric: tabular-nums;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .ms-time-picker {
+    &.ms-time-picker--large {
+      .mat-mdc-form-field {
+        font-size: var(--font-size-body-m);
+        
+        .mat-mdc-form-field-infix {
+          min-height: 48px;
+        }
+      }
+      
+      .ms-time-picker__input {
+        font-size: var(--font-size-body-m);
+        padding: var(--spacing-3) var(--spacing-4);
+      }
+    }
+  }
+  
+  .ms-time-picker__external-actions {
+    flex-direction: column;
+    
+    .ms-time-picker__action-button {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+  
+  :global(.ms-time-picker__menu) {
+    .mat-mdc-menu-panel {
+      max-width: 90vw;
+    }
+    
+    .ms-time-picker__quick-actions {
+      .ms-time-picker__quick-action {
+        padding: var(--spacing-3) var(--spacing-3);
+        min-height: 44px;
+        
+        mat-icon {
+          font-size: 22px;
+          width: 22px;
+          height: 22px;
+        }
+        
+        span {
+          font-size: var(--font-size-body-m);
+        }
+      }
+    }
+    
+    .ms-time-picker__presets {
+      .ms-time-picker__preset {
+        padding: var(--spacing-2) var(--spacing-3);
+        min-height: 40px;
+        
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+        
+        span {
+          font-size: var(--font-size-body-s);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .ms-time-picker {
+    .mat-mdc-form-field {
+      .mat-mdc-form-field-label {
+        font-size: var(--font-size-body-s);
+      }
+    }
+    
+    .ms-time-picker__input {
+      font-size: var(--font-size-body-s);
+    }
+    
+    &.ms-time-picker--small .ms-time-picker__input {
+      font-size: var(--font-size-body-xs);
+    }
+    
+    &.ms-time-picker--12h .ms-time-picker__input {
+      min-width: 100px;
+    }
+    
+    &.ms-time-picker--24h .ms-time-picker__input {
+      min-width: 80px;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .ms-time-picker {
+    .mat-mdc-form-field {
+      --mdc-outlined-text-field-outline-width: 2px;
+      --mdc-outlined-text-field-focus-outline-width: 3px;
+    }
+    
+    .ms-time-picker__error {
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+  
+  :global(.ms-time-picker__menu) {
+    .mat-mdc-menu-panel {
+      border: 2px solid var(--color-border-primary);
+    }
+    
+    .ms-time-picker__quick-action,
+    .ms-time-picker__preset {
+      &:focus {
+        outline: 2px solid var(--color-accent-primary);
+        outline-offset: -2px;
+      }
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .ms-time-picker__clear-button,
+  .ms-time-picker__presets-button,
+  .ms-time-picker__action-button {
+    transition: none;
+  }
+  
+  :global(.ms-time-picker__menu) {
+    .ms-time-picker__quick-action,
+    .ms-time-picker__preset {
+      transition: none;
+    }
+  }
+}
+
+// Focus management for accessibility
+.ms-time-picker {
+  &:focus-within {
+    .mat-mdc-form-field {
+      --mdc-outlined-text-field-focus-outline-color: var(--color-accent-primary);
+    }
+  }
+}
+
+// Error state enhancements
+.ms-time-picker__field--error {
+  .mat-mdc-form-field-label {
+    color: var(--color-error-primary);
+  }
+  
+  .ms-time-picker__prefix-icon,
+  .ms-time-picker__time-icon {
+    color: var(--color-error-primary);
+  }
+}
+
+// Loading state (if needed)
+.ms-time-picker--loading {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: var(--spacing-3);
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--color-border-light);
+    border-top: 2px solid var(--color-accent-primary);
+    border-radius: 50%;
+    animation: ms-time-picker-spin 1s linear infinite;
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes ms-time-picker-spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+// Custom scrollbar for presets
+:global(.ms-time-picker__menu) {
+  .ms-time-picker__presets {
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: var(--color-surface-secondary);
+      border-radius: var(--radius-s);
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-border-primary);
+      border-radius: var(--radius-s);
+      
+      &:hover {
+        background: var(--color-border-hover);
+      }
+    }
+  }
+}
+
+// Time format indicator
+.ms-time-picker__format-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: var(--font-size-body-xs);
+  color: var(--color-text-secondary);
+  background: var(--color-surface-secondary);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: 0 var(--radius-s) 0 var(--radius-s);
+  pointer-events: none;
+}
+
+// Business hours indicator
+.ms-time-picker--business-hours {
+  .ms-time-picker__input {
+    &:valid {
+      border-left: 3px solid var(--color-success-primary);
+    }
+    
+    &:invalid {
+      border-left: 3px solid var(--color-warning-primary);
+    }
+  }
+}
+
+// Appointment slot styling
+.ms-time-picker__preset {
+  &.ms-time-picker__preset--available {
+    background-color: var(--color-success-light);
+    
+    &:hover {
+      background-color: var(--color-success-primary);
+      color: var(--color-text-on-success);
+    }
+  }
+  
+  &.ms-time-picker__preset--busy {
+    background-color: var(--color-error-light);
+    color: var(--color-error-dark);
+    
+    &[disabled] {
+      opacity: 0.7;
+    }
+  }
+  
+  &.ms-time-picker__preset--preferred {
+    background-color: var(--color-accent-light);
+    
+    &:hover {
+      background-color: var(--color-accent-primary);
+      color: var(--color-text-on-accent);
+    }
+  }
+}

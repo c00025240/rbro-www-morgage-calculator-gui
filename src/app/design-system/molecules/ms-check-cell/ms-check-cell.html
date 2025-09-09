@@ -1,0 +1,41 @@
+<div
+  [class]="getCheckCellClasses().join(' ')"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
+
+  <div class="ms-check-cell__content">
+    <!-- Left Area: Checkbox -->
+    <div class="ms-check-cell__left-area">
+      <ms-checkbox-custom
+        [label]="checkboxLabel"
+        [(ngModel)]="checkboxValue"
+        [size]="checkboxSize"
+        [disabled]="checkboxDisabled || disabled"
+        [required]="checkboxRequired"
+        [indeterminate]="checkboxIndeterminate"
+        (valueChange)="onCheckboxChange($event)">
+      </ms-checkbox-custom>
+    </div>
+
+    <!-- Right Area: Single Chip -->
+    <div class="ms-check-cell__right-area">
+      <!-- Regular Single Chip (Primary, Secondary, Tertiary) -->
+      <ms-chips
+        *ngIf="!isSavingsChip && singleChip"
+        [chips]="[singleChip]"
+        [type]="chipType"
+        [infoOnly]="true"
+        [selectable]="false">
+      </ms-chips>
+
+      <!-- Savings Chip -->
+      <ms-savings-chip
+        *ngIf="isSavingsChip"
+        [text]="savingsChipText"
+        [size]="chipSavingsSize"
+        [infoOnly]="true"
+        [fullWidth]="true">
+      </ms-savings-chip>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,37 @@
+<div [class]="containerClass">
+  <!-- Top Spacer -->
+  <div class="ms-simulator-swap-hero__spacer"></div>
+  
+  <!-- Main Content -->
+  <div class="ms-simulator-swap-hero__content">
+    <div class="ms-simulator-swap-hero__main">
+      <!-- Label -->
+      <div class="ms-simulator-swap-hero__label">
+        {{ label }}
+      </div>
+      
+      <!-- Chip -->
+      <ms-chips 
+        [chips]="chipItems"
+        type="tertiary"
+        [surface]="surface"
+        [disabled]="disabled"
+        (chipClicked)="onChipClick()">
+      </ms-chips>
+    </div>
+    
+    <!-- Close Button (optional) -->
+    <ms-button-link 
+      *ngIf="hasClose"
+      class="ms-simulator-swap-hero__close"
+      iconLeft="close"
+      [surface]="surface"
+      [disabled]="disabled"
+      ariaLabel="Close simulator swapper"
+      (clicked)="onCloseClick($event)">
+    </ms-button-link>
+  </div>
+  
+  <!-- Bottom Spacer -->
+  <div class="ms-simulator-swap-hero__spacer"></div>
+</div> 

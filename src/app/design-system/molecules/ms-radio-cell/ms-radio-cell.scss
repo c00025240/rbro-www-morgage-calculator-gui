@@ -1,0 +1,40 @@
+.ms-radio-cell {
+  display: flex;
+  width: 100%;
+  min-height: 56px;
+  background-color: var(--bg-form-cell-opacity);
+  border-radius: var(--border-radius-medium, 8px);
+  padding: var(--space-2, 8px) var(--space-3, 16px);
+  border: 1px solid var(--border-form-cell);
+  transition: border-color 0.2s ease-in-out;
+  font-family: var(--radio-font-family, "Amalia") !important;
+  align-items: center;
+
+  // Hover effect - same as SwitchCell
+  &--hovered { border-color: var(--switch-cell-border-hover); }
+
+  // Disabled state
+  &--disabled { opacity: 0.6; pointer-events: none; cursor: not-allowed; }
+
+  // Content layout
+  &__content { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: var(--space-3, 16px); }
+
+  // Left area: Radio buttons
+  &__left-area { display: flex; align-items: center; flex: 1; min-width: 0; // Allow shrinking
+    ms-radio-custom { width: 100%; }
+  }
+
+  // Right area: Chips
+  &__right-area { display: flex; align-items: center; flex-shrink: 0; // Don't shrink chips
+    ms-chips, ms-savings-chip { display: flex; align-items: center; }
+  }
+}
+
+:host.ms-radio-cell { background-color: var(--bg-form-cell-light) !important; }
+:host-context([data-theme='dark']).ms-radio-cell { background-color: var(--bg-form-cell-dark) !important; }
+
+// Ensure proper radio group styling within the cell
+.ms-radio-cell ms-radio-custom {
+  .ms-radio-group { gap: var(--space-2, 8px); margin: 0; }
+  .ms-radio { min-height: auto; padding: var(--space-1, 4px) 0; }
+} 

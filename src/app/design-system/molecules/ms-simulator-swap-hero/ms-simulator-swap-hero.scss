@@ -1,0 +1,201 @@
+// SimulatorSwapHero Component Styles
+.ms-simulator-swap-hero {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  
+  // Mobile/Tablet: Basic variant styles
+  &--variant-basic {
+    background: var(--color-bg);
+    box-shadow: var(--shadow-xl);
+    
+    // Desktop: NO background, NO elevation
+    @media (min-width: 1024px) {
+      background: transparent;
+      box-shadow: none;
+    }
+  }
+  
+  // Mobile/Tablet: Epic variant styles  
+  &--variant-epic {
+    background: var(--btn-primary-bg);
+    box-shadow: var(--shadow-xl);
+    
+    // Desktop: NO background, NO elevation
+    @media (min-width: 1024px) {
+      background: transparent;
+      box-shadow: none;
+    }
+  }
+  
+  // Surface adaptations
+  &--surface-dark {
+    // Mobile/Tablet: Dark surface background
+    @media (max-width: 1023px) {
+      &.ms-simulator-swap-hero--variant-basic {
+        background: var(--color-bg);
+      }
+    }
+    
+    .ms-simulator-swap-hero__label {
+      color: var(--color-text);
+    }
+  }
+  
+  &--surface-light,
+  &--surface-default {
+    .ms-simulator-swap-hero__label {
+      color: var(--color-text);
+    }
+  }
+  
+  // Disabled state
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+// Spacers
+.ms-simulator-swap-hero__spacer {
+  width: 100%;
+  height: 8px;
+  flex-shrink: 0;
+  
+  // Mobile: remove spacers to achieve 64px total height
+  @media (max-width: 1023px) {
+    height: 0;
+  }
+}
+
+// Main content container
+.ms-simulator-swap-hero__content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 64px; // Fixed height as requested
+  overflow: hidden;
+  padding: 0;
+  
+  // Mobile styles
+  @media (max-width: 1023px) {
+    padding: 0 16px;
+    padding-right: 0; // Remove right padding for close button positioning
+    height: 64px; // Ensure exact 64px height on mobile
+  }
+  
+  // Desktop styles
+  @media (min-width: 1024px) {
+    padding: 0; // Remove all padding on desktop
+    padding-right: 0; // Ensure no right padding for close button positioning
+  }
+}
+
+// Main content area (label + chip)
+.ms-simulator-swap-hero__main {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+// Label styles
+.ms-simulator-swap-hero__label {
+  font-family: 'Amalia', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--color-text);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+// Close button positioning
+.ms-simulator-swap-hero__close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 64px; // Match container height
+  
+  // Mobile: 16px distance from right margin
+  @media (max-width: 1023px) {
+    margin-right: 16px;
+  }
+  
+  // Desktop: 0px padding to right margin (flush to edge)
+  @media (min-width: 1024px) {
+    margin-right: 0;
+  }
+}
+
+// Responsive behavior
+@media (max-width: 1023px) {
+  .ms-simulator-swap-hero {
+    // Mobile: full width
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ms-simulator-swap-hero {
+    // Desktop: card-like, max-width 640px, centered
+    max-width: 640px;
+    margin: 0 auto;
+    
+    // Content area: NO background, NO elevation on desktop
+    .ms-simulator-swap-hero__content {
+      border-radius: 0; // Remove border radius
+      box-shadow: none; // Remove elevation
+      background: transparent; // Ensure no background
+    }
+  }
+}
+
+// Ensure chips component integration
+.ms-simulator-swap-hero {
+  ::ng-deep ms-chips {
+    // Ensure chips container doesn't grow
+    flex-shrink: 0;
+    
+    .ms-chips__chip {
+      // Mobile: strict height control - NO min-height!
+      @media (max-width: 1023px) {
+        max-height: 32px;
+        padding: 4px 8px;
+        font-size: 16px;
+        line-height: 24px;
+      }
+      
+      // Desktop: allow slightly more height - NO min-height!
+      @media (min-width: 1024px) {
+        max-height: 40px;
+      }
+    }
+    
+    .ms-chips__chip--tertiary {
+      background: var(--chip-tertiary-bg-dark, var(--color-text));
+      color: var(--chip-tertiary-text-dark, var(--color-bg));
+      
+      .ms-chips__chip-label {
+        font-family: 'Amalia', sans-serif;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        // Prevent text overflow
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+} 

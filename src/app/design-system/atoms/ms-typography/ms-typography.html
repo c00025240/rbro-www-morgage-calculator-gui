@@ -1,0 +1,123 @@
+<div class="typography-showcase">
+  <!-- Header -->
+  <div class="showcase-header">
+    <h1 class="showcase-title">Amalia Typography System</h1>
+    <p class="showcase-description">
+      The official Raiffeisen typography system using the Amalia font family. 
+      Designed for optimal readability across desktop, tablet, and mobile devices.
+    </p>
+  </div>
+
+  <!-- Font Family Overview -->
+  <section class="font-family-section">
+    <h2 class="section-title">Font Family</h2>
+    <div class="font-samples">
+      <div class="font-sample">
+        <h3 class="sample-title">Amalia (Primary)</h3>
+        <p class="sample-text amalia-font">The quick brown fox jumps over the lazy dog</p>
+        <p class="sample-description">Primary font family for all content</p>
+      </div>
+      
+      <div class="font-sample">
+        <h3 class="sample-title">Amalia Condensed</h3>
+        <p class="sample-text amalia-condensed-font">The quick brown fox jumps over the lazy dog</p>
+        <p class="sample-description">Condensed variant for space-constrained layouts</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Font Weights -->
+  <section class="font-weights-section">
+    <h2 class="section-title">Font Weights</h2>
+    <div class="weight-grid">
+      <div class="weight-sample" *ngFor="let weight of fontWeights">
+        <div class="weight-demo" [class]="weight.class">
+          <span class="weight-name">{{ weight.name }}</span>
+          <span class="weight-value">{{ weight.weight }}</span>
+        </div>
+        <p class="weight-text" [class]="weight.class">
+          The quick brown fox jumps over the lazy dog
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Typography Styles by Category -->
+  <section class="typography-styles" *ngFor="let category of getCategories()">
+    <h2 class="section-title">{{ getCategoryTitle(category) }}</h2>
+    
+    <div class="styles-grid">
+      <div class="style-sample" *ngFor="let style of getStylesByCategory(category)">
+        <div class="style-header">
+          <h3 class="style-name">{{ style.name }}</h3>
+          <div class="style-sizes">
+            <span class="size-label">Desktop:</span>
+            <span class="size-value">{{ style.desktopSize }}</span>
+            <span class="size-label">Tablet:</span>
+            <span class="size-value">{{ style.tabletSize }}</span>
+            <span class="size-label">Mobile:</span>
+            <span class="size-value">{{ style.mobileSize }}</span>
+          </div>
+        </div>
+        
+        <div class="style-demo">
+          <p [class]="style.cssClass">
+            The quick brown fox jumps over the lazy dog
+          </p>
+        </div>
+        
+        <div class="style-info">
+          <p class="style-description">{{ style.description }}</p>
+          <p class="style-usage"><strong>Usage:</strong> {{ style.usage }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Typography Guidelines -->
+  <section class="typography-guidelines">
+    <h2 class="section-title">Typography Guidelines</h2>
+    
+    <div class="guidelines-grid">
+      <div class="guideline">
+        <h3>Hierarchy</h3>
+        <p>Use consistent typography hierarchy to guide users through content. Display styles for major headers, headings for sections, and body text for content.</p>
+      </div>
+      
+      <div class="guideline">
+        <h3>Responsive Design</h3>
+        <p>Typography scales automatically across devices. Desktop uses larger sizes, tablet provides medium sizing, and mobile optimizes for readability.</p>
+      </div>
+      
+      <div class="guideline">
+        <h3>Accessibility</h3>
+        <p>All typography meets WCAG AA contrast requirements. Use appropriate font weights and sizes to ensure readability for all users.</p>
+      </div>
+      
+      <div class="guideline">
+        <h3>Brand Consistency</h3>
+        <p>Amalia font reflects Raiffeisen's brand identity. Use consistently across all mortgage simulator interfaces for brand recognition.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Example -->
+  <section class="code-examples">
+    <h2 class="section-title">Implementation</h2>
+    
+    <div class="code-sample">
+      <h3>CSS Custom Properties</h3>
+      <pre><code>/* Use typography tokens */
+.my-heading &#123;
+  font-family: var(--font-primary);
+  font-size: var(--text-h1-size);
+  font-weight: var(--text-h1-weight);
+  line-height: var(--text-h1-line-height);
+  letter-spacing: var(--text-h1-spacing);
+&#125;
+
+/* Or use predefined classes */
+&lt;h1 class="h1"&gt;My Heading&lt;/h1&gt;</code></pre>
+    </div>
+  </section>
+</div>

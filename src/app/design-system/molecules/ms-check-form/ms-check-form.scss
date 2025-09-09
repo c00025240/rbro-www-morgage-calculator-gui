@@ -1,0 +1,31 @@
+// CheckForm Component - Based on RadioForm but for Checkboxes
+.ms-check-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 4px); // 2px vertical gap between label and cell
+  width: 100%;
+
+  // Surface variants
+  &--surface-default,
+  &--surface-light {
+    // Light theme styling if needed
+  }
+
+  &--surface-dark {
+    // Dark theme styling if needed
+  }
+
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // Ensure proper spacing between cell label and check cell
+  ms-cell-label {
+    margin-bottom: 0; // Remove any default margin, use gap instead
+  }
+
+  ms-check-cell {
+    margin-top: 0; // Remove any default margin, use gap instead
+  }
+} 

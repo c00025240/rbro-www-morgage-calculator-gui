@@ -1,0 +1,31 @@
+<div [class]="wrapperClasses">
+  
+  <!-- Overlay backdrop -->
+  <div *ngIf="overlay" class="ms-progress-spinner__backdrop"></div>
+  
+  <!-- Spinner container -->
+  <div class="ms-progress-spinner__container">
+    
+    <!-- Material progress spinner -->
+    <mat-progress-spinner
+      [mode]="mode"
+      [value]="normalizedValue"
+      [diameter]="computedDiameter"
+      [strokeWidth]="computedStrokeWidth"
+      [color]="color"
+      [attr.aria-label]="ariaLabel || label || 'Loading'">
+    </mat-progress-spinner>
+    
+    <!-- Value display (for determinate mode) -->
+    <div *ngIf="mode === 'determinate' && showValue" class="ms-progress-spinner__value">
+      {{ displayValue }}
+    </div>
+    
+  </div>
+  
+  <!-- Label -->
+  <div *ngIf="label" class="ms-progress-spinner__label">
+    {{ label }}
+  </div>
+  
+</div>
