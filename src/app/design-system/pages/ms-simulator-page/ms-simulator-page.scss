@@ -8,22 +8,22 @@
   
   // Unified spacing: ensure identical space between any ms-card-outside-title and the next block (card/component)
   ms-card-outside-title + * {
-    margin-top: 1px;
+    margin-top: 4px;
   }
 
   // Normalize internal spacer of the title component to match 4px globally
-  .ms-card-outside-title__spacer { height: 1px !important; }
+  .ms-card-outside-title__spacer { height: 4px !important; }
 
   // Explicitly ensure the same spacing on the left panel content, overriding any component margins
   .ms-simulator-page__left-content {
-    ms-card-outside-title + * { margin-top: 1px !important; }
-    // Normalize inner margins so the 1px rule is the single source of truth
+    ms-card-outside-title + * { margin-top: 4px !important; }
+    // Normalize inner margins so the 4px rule is the single source of truth
     ms-card-outside-title { margin-bottom: 0 !important; }
     ms-card, .ms-card { margin-top: 0 !important; }
     ms-card-outside-title + ms-card,
-    ms-card-outside-title + .ms-card { margin-top: 1px !important; }
+    ms-card-outside-title + .ms-card { margin-top: 4px !important; }
     // Ensure same spacing for Avans (downpayment) specifically
-    ms-downpayment ms-card-outside-title + ms-card { margin-top: 1px !important; }
+    ms-downpayment ms-card-outside-title + ms-card { margin-top: 4px !important; }
   }
   
   // Override page shell max-width constraint for split-screen layout
@@ -173,31 +173,32 @@
     // Bottom spacer for scroll completion indicator
     &::after { content: ''; display: block; height: 240px; width: 100%; }
 
-    // Inner container to guarantee gap from scrollbar
-    .ms-simulator-page__right-content-inner {
-      box-sizing: content-box;
-      padding-right: 0; // match left (no extra inner gap)
+    // Summary cards grid: responsive grid layout - moved out of inner container
+    .ms-simulator-page__right-content-grid {
+      display: flex;
+      flex-direction: column; // Stack wrappers vertically
+      gap: 24px; // Space between each wrapper (title+card)
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
-      overflow: hidden;
-
-      // Summary cards grid: responsive grid layout
-      .ms-simulator-page__right-content-grid {
-        display: flex;
-        flex-direction: column; // Stack wrappers vertically
-        gap: 24px; // Space between each wrapper (title+card)
-        width: 100%;
-        max-width: 100%;
-        margin: 0 auto;
-        padding: 0;
-        align-items: stretch; // Wrappers fill available width
-        box-sizing: border-box;
-        overflow-x: hidden; // Ensure content doesn't push beyond panel
-        
-        // Responsive adjustments for different desktop sizes
-        @media (min-width: 1400px) { gap: 24px; }
-        @media (min-width: 1600px) { gap: 28px; }
+      padding: 0;
+      align-items: stretch; // Wrappers fill available width
+      box-sizing: border-box;
+      overflow-x: hidden; // Ensure content doesn't push beyond panel
+      
+      // Responsive adjustments for different desktop sizes
+      @media (min-width: 1400px) { gap: 32px; }
+      @media (min-width: 1600px) { gap: 40px; }
+      
+      // Force spacing between summary card wrappers
+      > .ms-simulator-page__summary-card-wrapper {
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+      }
+      
+      // Add extra spacing between wrappers if gap is not working
+      > .ms-simulator-page__summary-card-wrapper + .ms-simulator-page__summary-card-wrapper {
+        margin-top: 24px !important;
       }
     }
 
@@ -208,10 +209,9 @@
       width: 100%; // Wrapper fills entire grid cell width
       max-width: 100%;
       margin: 0; // No outer margin; rely on grid gap for spacing
-      margin-top: 8px; // Reduced to match left spacing rhythm
       min-width: 0; // Prevent intrinsic sizing from overflowing the grid cell
-      // Match spacing (half): 4px between title and card
-      gap: var(--space-1, 4px);
+      // Match spacing with left panel: 4px between title and card
+      gap: 4px;
       box-sizing: border-box;
       justify-content: flex-start;
       align-items: flex-start; // Keep content aligned to card start
@@ -220,33 +220,7 @@
       position: relative; // ensure static stacking context
     }
 
-
-    // Ensure all wrapper containers fill grid cells equally
-    .ms-simulator-page__right-content-grid > .ms-simulator-page__summary-card-wrapper {
-      width: 100%;
-      max-width: 100%;
-      margin: 0;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start; // Align titles to start where card starts
-    }
-
-    // Make the summary card inside wrapper fill remaining space
-    .ms-simulator-page__summary-card-wrapper ms-web-summary-card {
-      flex: 1;
-      width: 100%;
-      max-width: 100%;
-      min-width: 0; // Prevent content from forcing overflow
-      display: flex;
-      flex-direction: column;
-      overflow: visible; // Ensure inner content is fully visible
-      height: auto; // Let card height follow content to avoid overlap
-    }
-
     // Ensure both title and card are fully contained within the grid cell
-    // Center inner content while keeping wrapper stretched to grid cell
     .ms-simulator-page__summary-card-wrapper > ms-card-outside-title,
     .ms-simulator-page__summary-card-wrapper > ms-web-summary-card {
       width: 100%;
@@ -264,11 +238,9 @@
       text-overflow: unset;
       white-space: normal; // Allow wrapping
       word-wrap: break-word;
-      margin-top: 4px; // tighter space above title to match left
+      margin-top: 0; // no extra margin - spacing handled by wrapper gap
       margin-bottom: 0; // spacing handled by wrapper gap
     }
-
-    // Remove explicit positioning to avoid overlap in single-column layouts
   }
 }
 

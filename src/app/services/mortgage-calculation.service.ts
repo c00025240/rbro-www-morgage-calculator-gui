@@ -4,14 +4,17 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { MortgageCalculationRequest } from '../../model/MortgageCalculationRequest';
 import { MortgageCalculationResponse } from '../../model/MortgageCalculationResponse';
-import { getApiUrl, API_CONFIG } from '../config/api.config';
+import { getApiUrl, getDirectUrl, API_CONFIG } from '../config/api.config';
 import { CustomHeaders, DEFAULT_HEADERS, AUTH_HEADERS, TRACKING_HEADERS, BUSINESS_HEADERS } from '../config/headers.config';
+import { District } from '../../model/District';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MortgageCalculationService {
   private readonly apiUrl = getApiUrl(API_CONFIG.MORTGAGE_CALCULATOR); // Real backend endpoint
+  private readonly districtsUrl = getDirectUrl(API_CONFIG.DISTRICTS_URL); // Direct URL to admin service
+
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +23,7 @@ export class MortgageCalculationService {
    * @param productCode The product code for business headers
    * @returns HttpHeaders object with custom headers
    */
-  private getCustomHeaders(productCode?: string): HttpHeaders {
+  private getCustomHeaders(): HttpHeaders {
     const headers: CustomHeaders = {
       ...DEFAULT_HEADERS,
       ...this.getTrackingHeaders()
@@ -41,7 +44,10 @@ export class MortgageCalculationService {
     return {
       'X-Request-ID': requestId,
       'X-Timestamp': timestamp,
-      'X-Correlation-ID': correlationId
+      'X-Correlation-ID': correlationId,
+      'X-RBRO-Request-Id': requestId,
+      'X-B3-TraceId': requestId,
+      'X-B3-SpanId': requestId
     };
   }
 
@@ -139,7 +145,7 @@ export class MortgageCalculationService {
    * @returns Observable of mortgage calculation response
    */
   calculateMortgage(request: MortgageCalculationRequest): Observable<MortgageCalculationResponse> {
-    const headers = this.getCustomHeaders(request.productCode);
+    const headers = this.getCustomHeaders();
     
     console.log('🚀 Making mortgage calculation request with headers:', {
       url: this.apiUrl,
@@ -150,6 +156,25 @@ export class MortgageCalculationService {
     return this.http.post<MortgageCalculationResponse>(this.apiUrl, request, { headers })
       .pipe(
         retry(2), // Retry up to 2 times on failure
+        catchError((error) => this.handleError(error))
+      );
+  }
+
+  /**
+   * Get districts list for location dropdowns
+   * @returns Observable of districts list
+   */
+  getDistricts(): Observable<District[]> {
+    const headers = this.getCustomHeaders();
+    
+    console.log('🚀 Making districts request with headers:', {
+      url: this.districtsUrl,
+      headers: Object.fromEntries(headers.keys().map(key => [key, headers.get(key)]))
+    });
+
+    return this.http.get<District[]>(this.districtsUrl, { headers })
+      .pipe(
+        retry(2), 
         catchError((error) => this.handleError(error))
       );
   }

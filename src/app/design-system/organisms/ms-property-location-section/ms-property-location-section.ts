@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MsCardOutsideTitleComponent } from '../../molecules/ms-card-outside-title/ms-card-outside-title';
 import { MsCard } from '../../molecules/ms-card/ms-card';
@@ -52,28 +52,29 @@ export interface LocationOption {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MsPropertyLocationSection {
+export class MsPropertyLocationSection implements OnChanges {
   @Input() selectedCounty: string = 'Bucuresti';
   @Input() selectedCity: string = 'Bucuresti';
-  @Input() countyOptions: LocationOption[] = [
-    { value: 'Bucuresti', label: 'Bucuresti' },
-    { value: 'Cluj', label: 'Cluj' },
-    { value: 'Timis', label: 'Timis' },
-    { value: 'Constanta', label: 'Constanta' },
-    { value: 'Iasi', label: 'Iasi' }
-  ];
-  @Input() cityOptions: LocationOption[] = [
-    { value: 'Bucuresti', label: 'Bucuresti' },
-    { value: 'Sector1', label: 'Sector 1' },
-    { value: 'Sector2', label: 'Sector 2' },
-    { value: 'Sector3', label: 'Sector 3' },
-    { value: 'Sector4', label: 'Sector 4' }
-  ];
+  @Input() countyOptions: LocationOption[] = []; // Will be populated from districts API
+  @Input() cityOptions: LocationOption[] = []; // Will be populated from districts API
   @Input() disabled: boolean = false;
   @Input() surface: 'default' | 'light' | 'dark' = 'default';
 
   @Output() countyChange = new EventEmitter<string>();
   @Output() cityChange = new EventEmitter<string>();
+
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  ngOnChanges(): void {
+    // Force change detection when input properties change
+    console.log('🔄 MsPropertyLocationSection - Changes detected:', {
+      countyOptions: this.countyOptions,
+      cityOptions: this.cityOptions,
+      selectedCounty: this.selectedCounty,
+      selectedCity: this.selectedCity
+    });
+    this.cdr.markForCheck();
+  }
 
   get cardSurface(): 'light' | 'dark' {
     return this.surface === 'dark' ? 'dark' : 'light';

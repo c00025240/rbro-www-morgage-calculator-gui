@@ -60,7 +60,8 @@ export class MsSimulatorSwapHero implements OnInit, OnChanges {
     this.containerClass = classes.join(' ');
   }
 
-  onChipClick(): void {
+  onChipClick(chip?: ChipItem): void {
+    console.log('🔘 Chip clicked in ms-simulator-swap-hero:', chip);
     if (!this.disabled) {
       this.chipClicked.emit();
     }

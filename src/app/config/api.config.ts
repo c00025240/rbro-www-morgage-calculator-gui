@@ -5,6 +5,9 @@ export const API_CONFIG = {
   // Mortgage calculation endpoint - backend expects /calculator/mortgage-calculator
   MORTGAGE_CALCULATOR: '/calculator/mortgage-calculator',
   
+  // Districts endpoint - direct URL to admin service (bypasses proxy)
+  DISTRICTS_URL: 'https://rbro-loan-calculation-admin-service-www.apps.ocp4-test.rbro.rbg.cc/app/loan-admin/v1/districts',
+
   // Other potential endpoints
   // PRODUCTS: '/api/products',
   // RATES: '/api/rates',
@@ -13,4 +16,8 @@ export const API_CONFIG = {
 
 export const getApiUrl = (endpoint: string): string => {
   return `${API_CONFIG.BASE_URL}${endpoint}`;
+};
+
+export const getDirectUrl = (url: string): string => {
+  return url;
 };

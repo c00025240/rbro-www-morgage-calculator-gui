@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, Subscription, takeUntil, debounceTime } from 'rxjs';
 import { MsPageShell } from '../../molecules/ms-page-shell/ms-page-shell';
@@ -29,6 +29,14 @@ import { Area } from '../../../../model/Area';
 import { Income } from '../../../../model/Income';
 import { SpecialOfferRequirements } from '../../../../model/SpecialOfferRequirements';
 import { InstallmentType } from '../../../../model/InstallmentType';
+import { District } from '../../../../model/District';
+
+// Location option interface for dropdown options
+export interface LocationOption {
+  value: string;
+  label: string;
+}
+
 
 export type SimulatorPageSurface = 'default' | 'light' | 'dark';
 
@@ -121,6 +129,40 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() selectedCounty: string = 'Bucuresti';
   @Input() selectedCity: string = 'Bucuresti';
   
+  // Districts data for location dropdowns
+  districts: District[] = [];
+  counties: string[] = [];
+  cities: string[] = [];
+  isLoadingDistricts: boolean = false;
+
+  // Getters for location dropdown options
+  get countyOptions(): LocationOption[] {
+    const options = this.counties.map(county => ({
+      value: county,
+      label: county
+    }));
+    console.log('🗺️ County options generated:', {
+      countiesCount: this.counties.length,
+      options: options,
+      selectedCounty: this.selectedCounty
+    });
+    return options;
+  }
+
+  get cityOptions(): LocationOption[] {
+    const options = this.cities.map(city => ({
+      value: city,
+      label: city
+    }));
+    console.log('🏘️ City options generated:', {
+      citiesCount: this.cities.length,
+      options: options,
+      selectedCity: this.selectedCity,
+      selectedCounty: this.selectedCounty
+    });
+    return options;
+  }
+  
   // Interest Preferences Section configuration
   @Input() rateType: string = 'egale';
   @Input() interestType: string = 'fixa_3';
@@ -153,7 +195,6 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   // Form data and calculation state
   private destroy$ = new Subject<void>();
   private formDataSubject = new Subject<void>();
-  private activeCalculationSub?: Subscription;
   isLoading: boolean = false;
   calculationResponse?: MortgageCalculationResponse;
   calculationResponseAllDiscounts?: MortgageCalculationResponse;
@@ -163,9 +204,27 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   // Form validation state
   isFormValid: boolean = true;
   
-  constructor(private mortgageService: MortgageCalculationService) {}
+  constructor(private mortgageService: MortgageCalculationService, private cdr: ChangeDetectorRef) {
+    // Initialize test data immediately in constructor to ensure it's available before ngOnInit
+    this.initializeTestData();
+  }
   
   ngOnInit(): void {
+    // Test data is already initialized in constructor
+    console.log('🚀 ngOnInit - Data state:', {
+      districtsCount: this.districts.length,
+      countiesCount: this.counties.length,
+      citiesCount: this.cities.length,
+      selectedCounty: this.selectedCounty,
+      selectedCity: this.selectedCity
+    });
+    
+    // Debug complete state
+    this.debugLocationDropdowns();
+    
+    // Load districts data from API (will replace test data when successful)
+    this.loadDistricts();
+    
     // Set up form data change detection with debouncing
     this.formDataSubject
       .pipe(
@@ -186,6 +245,48 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Trigger initial validation with default values
     console.log('🚀 Initial form validation triggered');
     this.triggerFormValidation();
+  }
+
+  private initializeTestData(): void {
+    // Initialize with comprehensive test data for all counties
+    this.districts = [
+      // Bucuresti
+      { city: 'Bucuresti', county: 'Bucuresti' },
+      { city: 'Sector 1', county: 'Bucuresti' },
+      { city: 'Sector 2', county: 'Bucuresti' },
+      { city: 'Sector 3', county: 'Bucuresti' },
+      { city: 'Sector 4', county: 'Bucuresti' },
+      { city: 'Sector 5', county: 'Bucuresti' },
+      { city: 'Sector 6', county: 'Bucuresti' },
+      // Cluj
+      { city: 'Cluj-Napoca', county: 'Cluj' },
+      { city: 'Turda', county: 'Cluj' },
+      { city: 'Dej', county: 'Cluj' },
+      { city: 'Campia Turzii', county: 'Cluj' },
+      // Timis
+      { city: 'Timisoara', county: 'Timis' },
+      { city: 'Lugoj', county: 'Timis' },
+      { city: 'Sannicolau Mare', county: 'Timis' },
+      // Iasi
+      { city: 'Iasi', county: 'Iasi' },
+      { city: 'Pascani', county: 'Iasi' },
+      { city: 'Harlau', county: 'Iasi' },
+      // Constanta
+      { city: 'Constanta', county: 'Constanta' },
+      { city: 'Mangalia', county: 'Constanta' },
+      { city: 'Medgidia', county: 'Constanta' }
+    ];
+    
+    // Extract counties and update cities for the selected county
+    this.counties = [...new Set(this.districts.map(d => d.county))].sort();
+    this.updateCitiesForCounty(this.selectedCounty);
+    
+    console.log('🧪 Initialized with test data:');
+    console.log('   Counties:', this.counties);
+    console.log('   Selected county:', this.selectedCounty);
+    console.log('   Cities for selected county:', this.cities);
+    
+    this.cdr.markForCheck();
   }
   
   ngOnDestroy(): void {
@@ -339,31 +440,26 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Map the selected product type to the corresponding product code
     switch (productType) {
       case 'achizitie-imobil':
-        return 'casaTa';
+        return 'CasaTa';
       case 'refinantare':
-        return 'refinantare';
+        return 'FlexiIntegral';
       case 'constructie-renovare':
-        return 'constructie';
+        return 'Constructie';
       case 'credit-venit':
-        return 'creditVenit';
+        return 'CreditVenit';
       default:
         return 'casaTa'; // Default fallback
     }
   }
   
   private calculateMortgage(): void {
-    // Cancel any in-flight request to return the latest result faster
-    if (this.activeCalculationSub) {
-      this.activeCalculationSub.unsubscribe();
-    }
-
     this.isLoading = true;
     this.errorMessage = undefined;
 
     const request = this.createMortgageRequest();
     console.log("############ Mortgage Request:", request);
 
-    this.activeCalculationSub = this.mortgageService.calculateMortgage(request)
+    this.mortgageService.calculateMortgage(request)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -435,12 +531,86 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.formDataSubject.next();
   }
 
+  // Districts and location methods
+  private loadDistricts(): void {
+    this.isLoadingDistricts = true;
+    
+    this.mortgageService.getDistricts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (districts) => {
+          console.log('✅ Districts loaded successfully:', districts);
+          this.districts = districts;
+          this.updateLocationDropdowns();
+          this.isLoadingDistricts = false;
+        },
+        error: (error) => {
+          console.error('❌ Error loading districts:', error);
+          this.isLoadingDistricts = false;
+          
+          // Fallback to default values on error
+          this.districts = [
+            { city: 'Bucuresti', county: 'Bucuresti' }
+          ];
+          this.updateLocationDropdowns();
+        }
+      });
+  }
+  
+  private updateLocationDropdowns(): void {
+    // Extract unique counties from API data
+    this.counties = [...new Set(this.districts.map(d => d.county))].sort();
+    console.log('📍 Counties updated from API:', this.counties);
+    
+    // Update cities based on selected county
+    this.updateCitiesForCounty(this.selectedCounty);
+    console.log('🏙️ Cities updated for county', this.selectedCounty, ':', this.cities);
+    
+    // Force change detection
+    this.cdr.markForCheck();
+  }
+  
+  private updateCitiesForCounty(county: string): void {
+    const filteredDistricts = this.districts.filter(d => d.county === county);
+    this.cities = filteredDistricts.map(d => d.city).sort();
+    
+    console.log(`🏙️ Updating cities for county "${county}":`, {
+      allDistricts: this.districts.length,
+      filteredDistricts: filteredDistricts.length,
+      cities: this.cities
+    });
+    
+    // If no cities found for selected county, use all available cities as fallback
+    if (this.cities.length === 0 && this.districts.length > 0) {
+      this.cities = [...new Set(this.districts.map(d => d.city))].sort();
+      console.log('⚠️ No cities found for county, using all cities as fallback:', this.cities);
+    }
+  }
+
+  // Debug method to test dropdown data
+  debugLocationDropdowns(): void {
+    console.log('🔍 DEBUG - Location Dropdowns State:');
+    console.log('   Districts:', this.districts);
+    console.log('   Counties:', this.counties);
+    console.log('   Cities:', this.cities);
+    console.log('   Selected County:', this.selectedCounty);
+    console.log('   Selected City:', this.selectedCity);
+    console.log('   County Options:', this.countyOptions);
+    console.log('   City Options:', this.cityOptions);
+  }
+
   // Event handlers
   onHeaderBackClick(event: MouseEvent): void { this.headerBackClicked.emit(event); }
   onHeaderPrimaryActionClick(event: MouseEvent): void { this.headerPrimaryActionClicked.emit(event); }
   onHeaderSecondaryActionClick(event: MouseEvent): void { this.headerSecondaryActionClicked.emit(event); }
   onHeroChipClick(): void { 
+    console.log('🎯 Hero chip clicked! Opening simulator modal...');
     this.isSimulatorModalVisible = true;
+    console.log('📱 Modal visibility set to:', this.isSimulatorModalVisible);
+    
+    // Force change detection to ensure modal shows
+    this.cdr.markForCheck();
+    
     this.heroChipClicked.emit(); 
   }
   onHeroCloseClick(): void { this.heroCloseClicked.emit(); }
@@ -495,7 +665,21 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   }
   // Property Location Section event handlers
   onCountyChange(value: string): void { 
+    console.log(`🏛️ County changed from "${this.selectedCounty}" to "${value}"`);
+    
     this.selectedCounty = value;
+    this.updateCitiesForCounty(value);
+    
+    // Reset city selection if current city is not available in new county
+    const previousCity = this.selectedCity;
+    if (!this.cities.includes(this.selectedCity)) {
+      this.selectedCity = this.cities[0] || '';
+      console.log(`🔄 City reset from "${previousCity}" to "${this.selectedCity}" (cities available: ${this.cities.length})`);
+    }
+    
+    // Force change detection to update the UI
+    this.cdr.markForCheck();
+    
     this.countyChange.emit(value);
     this.triggerFormValidation();
   }
@@ -534,14 +718,20 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   
   // Simulator Option Modal event handlers
   onSimulatorModalClose(): void {
+    console.log('❌ Simulator modal closed');
     this.isSimulatorModalVisible = false;
+    this.cdr.markForCheck();
   }
   
   onSimulatorOptionSelected(optionId: string): void {
+    console.log('✅ Simulator option selected:', optionId);
+    
     // Update the selected product type
+    const previousProductType = this.selectedProductType;
     this.selectedProductType = optionId;
     
     // Update the chip label based on selected option
+    const previousChipLabel = this.heroChipLabel;
     switch (optionId) {
       case 'achizitie-imobil':
         this.heroChipLabel = 'Achiziție imobil';
@@ -559,8 +749,18 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         this.heroChipLabel = 'Achiziție imobil';
     }
     
+    console.log('🔄 Product type changed:', {
+      from: previousProductType,
+      to: this.selectedProductType,
+      chipLabelFrom: previousChipLabel,
+      chipLabelTo: this.heroChipLabel
+    });
+    
     // Close the modal
     this.isSimulatorModalVisible = false;
+    
+    // Force change detection to update UI
+    this.cdr.markForCheck();
     
     // Trigger form validation to recalculate with new product type
     this.triggerFormValidation();
@@ -568,4 +768,4 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Emit the selection event for parent components
     this.simulatorOptionSelected.emit(optionId);
   }
-} 
+}
