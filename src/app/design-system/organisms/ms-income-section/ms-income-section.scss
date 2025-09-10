@@ -5,6 +5,11 @@
   width: 100%;
   overflow: hidden; // Prevent any child overflow
 
+  // Ensure title-to-card spacing matches the global rule (1px)
+  ms-card-outside-title + ms-card,
+  ms-card-outside-title + .ms-card { margin-top: 1px !important; }
+  .ms-card-outside-title__spacer { height: 1px !important; }
+
   &__content {
     display: flex;
     flex-direction: column;

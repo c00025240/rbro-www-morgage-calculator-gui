@@ -15,9 +15,16 @@
     // Layout only - ms-card component now provides background, border, radius, and padding
     display: flex;
     flex-direction: column;
-    gap: var(--space-2, 8px);
+    gap: var(--space-1, 4px); // match global title-to-card spacing
     width: 100%; // Ensure card fills the available width
   }
+
+  // Ensure external title-to-card spacing is unified even if local styles differ
+  :host ms-card-outside-title + ms-card,
+  :host ms-card-outside-title + .ms-card { margin-top: 1px !important; }
+  :host .ms-card-outside-title__spacer { height: 1px !important; }
+  // Ensure the title's internal spacer matches globally
+  :host .ms-card-outside-title__spacer { height: var(--space-2, 8px) !important; }
 
   &__field-section {
     width: 100%;

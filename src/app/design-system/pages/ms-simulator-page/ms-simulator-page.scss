@@ -6,6 +6,26 @@
   touch-action: pan-y pinch-zoom;
   overscroll-behavior-x: none;
   
+  // Unified spacing: ensure identical space between any ms-card-outside-title and the next block (card/component)
+  ms-card-outside-title + * {
+    margin-top: 1px;
+  }
+
+  // Normalize internal spacer of the title component to match 4px globally
+  .ms-card-outside-title__spacer { height: 1px !important; }
+
+  // Explicitly ensure the same spacing on the left panel content, overriding any component margins
+  .ms-simulator-page__left-content {
+    ms-card-outside-title + * { margin-top: 1px !important; }
+    // Normalize inner margins so the 1px rule is the single source of truth
+    ms-card-outside-title { margin-bottom: 0 !important; }
+    ms-card, .ms-card { margin-top: 0 !important; }
+    ms-card-outside-title + ms-card,
+    ms-card-outside-title + .ms-card { margin-top: 1px !important; }
+    // Ensure same spacing for Avans (downpayment) specifically
+    ms-downpayment ms-card-outside-title + ms-card { margin-top: 1px !important; }
+  }
+  
   // Override page shell max-width constraint for split-screen layout
   @media (min-width: 1240px) {
     ::ng-deep ms-page-shell,
@@ -55,7 +75,8 @@
     flex-direction: column;
     width: 50%;
     height: calc(100vh - 120px); // Subtract header height
-    overflow-y: auto;
+    box-sizing: border-box; // Include padding in panel width
+    overflow-y: auto; // Restore scrolling on panel
     overflow-x: hidden;
     position: fixed;
     top: 120px; // Start below header
@@ -64,11 +85,10 @@
     align-items: center; // Center the content within the panel
     justify-content: flex-start;
     z-index: 1; // Ensure left panel is above right panel
+    padding-right: 0; // No panel padding; spacing handled by content
+    scrollbar-gutter: stable; // Reserve space for scrollbar
     
-    // Custom scrollbar
-    &::-webkit-scrollbar { width: 6px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background: var(--overlay-border, var(--color-border)); border-radius: 3px; &:hover { background: var(--focus-ring); } }
+    // Use default theme scrollbars (revert to original color)
   }
 }
 
@@ -83,8 +103,13 @@
     width: 100%;
     max-width: 800px; // Restore centered content width
     margin: 0 auto; // Center the content container
-    padding: 0 24px; // Restore comfortable side padding
-    min-height: calc(100vh - 120px); // Account for header height
+    padding: 0 24px; // content padding only; inner gaps handled below
+    height: calc(100vh - 120px); // Make content the scroll container
+    overflow-y: auto; // Scrollbar on content
+    overflow-x: hidden;
+    scrollbar-gutter: stable both-edges; // Reserve scrollbar space
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; // Firefox
     box-sizing: border-box;
     align-items: center; // Center all child elements
     justify-content: flex-start;
@@ -106,7 +131,8 @@
     flex-direction: column;
     width: 50%;
     height: calc(100vh - 120px); // Subtract header height
-    overflow-y: auto;
+    box-sizing: border-box; // Include padding in panel width
+    overflow-y: auto; // Enable scrolling on panel (fixes no-scroll issue)
     overflow-x: hidden;
     position: fixed;
     top: 120px; // Start below header
@@ -115,11 +141,9 @@
     align-items: center; // Center the content within the panel
     justify-content: flex-start;
     z-index: 0; // Ensure right panel is below left panel
-    
-    // Custom scrollbar
-    &::-webkit-scrollbar { width: 6px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background: var(--overlay-border, var(--color-border)); border-radius: 3px; &:hover { background: var(--focus-ring); } }
+    padding-right: 0; // No panel padding; spacing handled by content
+    scrollbar-gutter: stable; // Reserve space for scrollbar
+    // Use default theme scrollbars (revert to original color)
   }
 }
 
@@ -134,8 +158,12 @@
     width: 100%;
     max-width: 600px;
     margin: 0 auto; // Center the content container
-    padding: 0 24px; // left/right padding only
-    min-height: calc(100vh - 120px); // Account for header height
+    padding: 0 32px 0 24px; // match left content padding
+    min-height: calc(100vh - 120px);
+    overflow: visible; // no inner scrolling
+    scrollbar-gutter: stable both-edges; // Reserve scrollbar space
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; // Firefox
     box-sizing: border-box;
     align-items: center; // Center all child elements
     justify-content: flex-start;
@@ -145,22 +173,32 @@
     // Bottom spacer for scroll completion indicator
     &::after { content: ''; display: block; height: 240px; width: 100%; }
 
-    // Summary cards grid: responsive grid layout
-    .ms-simulator-page__right-content-grid {
-      display: flex;
-      flex-direction: column; // Stack wrappers vertically
-      gap: 24px; // Space between each wrapper (title+card)
+    // Inner container to guarantee gap from scrollbar
+    .ms-simulator-page__right-content-inner {
+      box-sizing: content-box;
+      padding-right: 0; // match left (no extra inner gap)
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
-      padding: 0;
-      align-items: stretch; // Wrappers fill available width
-      box-sizing: border-box;
-      overflow-x: hidden; // Ensure content doesn't push beyond panel
-      
-      // Responsive adjustments for different desktop sizes
-      @media (min-width: 1400px) { gap: 24px; }
-      @media (min-width: 1600px) { gap: 28px; }
+      overflow: hidden;
+
+      // Summary cards grid: responsive grid layout
+      .ms-simulator-page__right-content-grid {
+        display: flex;
+        flex-direction: column; // Stack wrappers vertically
+        gap: 24px; // Space between each wrapper (title+card)
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0;
+        align-items: stretch; // Wrappers fill available width
+        box-sizing: border-box;
+        overflow-x: hidden; // Ensure content doesn't push beyond panel
+        
+        // Responsive adjustments for different desktop sizes
+        @media (min-width: 1400px) { gap: 24px; }
+        @media (min-width: 1600px) { gap: 28px; }
+      }
     }
 
     // Summary card wrapper styling
@@ -170,8 +208,10 @@
       width: 100%; // Wrapper fills entire grid cell width
       max-width: 100%;
       margin: 0; // No outer margin; rely on grid gap for spacing
+      margin-top: 8px; // Reduced to match left spacing rhythm
       min-width: 0; // Prevent intrinsic sizing from overflowing the grid cell
-      gap: 16px; // Space between title and card inside wrapper
+      // Match spacing (half): 4px between title and card
+      gap: var(--space-1, 4px);
       box-sizing: border-box;
       justify-content: flex-start;
       align-items: flex-start; // Keep content aligned to card start
@@ -179,6 +219,7 @@
       min-height: auto; // Height defined by content to prevent overlaps
       position: relative; // ensure static stacking context
     }
+
 
     // Ensure all wrapper containers fill grid cells equally
     .ms-simulator-page__right-content-grid > .ms-simulator-page__summary-card-wrapper {
@@ -223,6 +264,7 @@
       text-overflow: unset;
       white-space: normal; // Allow wrapping
       word-wrap: break-word;
+      margin-top: 4px; // tighter space above title to match left
       margin-bottom: 0; // spacing handled by wrapper gap
     }
 
@@ -285,14 +327,17 @@
   max-width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-start;
   
   // Mobile and tablet: edge-to-edge, no gap from header
   @media (max-width: 1239px) {
     margin-top: 0;
     width: 100%;
     max-width: 100%;
+    // Match mobile inputs horizontal padding
+    padding: 0 24px;
+    box-sizing: border-box;
   }
   
   // Desktop: same centered behavior as mobile
@@ -301,6 +346,15 @@
     margin-bottom: 24px;
     width: 100%;
     max-width: 100%;
+    // Use container padding only (left-content has 0 24px)
+    padding: 0;
+    box-sizing: border-box;
+    align-items: stretch;
+    justify-content: flex-start;
+    
+    // Ensure inner component fills the available width
+    > * { width: 100%; margin: 0; }
+    .ms-simulator-swap-hero { width: 100%; margin: 0 !important; }
   }
 }
 
@@ -315,7 +369,7 @@
   touch-action: pan-y pinch-zoom;
   overflow-x: hidden;
   overscroll-behavior-x: none;
-  align-items: center; // Center all input elements
+  align-items: stretch; // Inputs align uniformly from the same start edge
   justify-content: flex-start;
   
   // Mobile and tablet: 16px left/right padding, 24px top/bottom padding, 24px gaps
@@ -323,29 +377,35 @@
     padding: 24px 24px;
     gap: 24px;
     box-sizing: border-box;
-    > * { 
-      width: 100%; 
+    align-items: stretch;
+    > * {
+      width: 100%;
       max-width: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch; // Start from the same left edge
+      margin: 0 !important;
+      align-self: stretch;
     }
   }
   
   // Desktop: same behavior as mobile - centered and responsive
   @media (min-width: 1240px) {
     padding: 0;
-    gap: 24px;
+    gap: 24px; // identical spacing between inputs
     width: 100%;
     max-width: 100%;
+    align-items: stretch;
     
-    // Ensure all child components are centered like in mobile
+    // Ensure all child components start at the same left point and fill width
     > * {
       width: 100%;
       max-width: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
+      margin: 0 !important;
+      align-self: stretch;
     }
   }
 }

@@ -148,9 +148,9 @@
 
 @media (min-width: 1024px) {
   .ms-simulator-swap-hero {
-    // Desktop: card-like, max-width 640px, centered
-    max-width: 640px;
-    margin: 0 auto;
+    // Desktop: allow full width so page controls alignment
+    max-width: none;
+    margin: 0;
     
     // Content area: NO background, NO elevation on desktop
     .ms-simulator-swap-hero__content {
