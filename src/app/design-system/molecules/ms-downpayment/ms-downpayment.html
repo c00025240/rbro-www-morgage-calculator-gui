@@ -5,17 +5,39 @@
 </ms-card-outside-title>
 
 <ms-card>
-  <div class="ms-downpayment" [class.ms-downpayment--disabled]="disabled()" [attr.aria-disabled]="disabled()">
-    <label class="ms-downpayment__label">{{ label }}</label>
-    <ms-text-field-custom
-      [label]="''"
-      type="number"
-      [value]="value()"
-      [suffixText]="currency"
-      [disabled]="disabled()"
-      (valueChange)="onValueChange($event)">
-    </ms-text-field-custom>
-    <div class="ms-downpayment__info">Introduceți avansul în Lei.</div>
+  <div class="ms-downpayment__content">
+    <div class="ms-downpayment__field-section">
+      <ms-text-field-custom
+        [label]="''"
+        type="number"
+        [value]="value()"
+        [suffixText]="currency"
+        [disabled]="disabled()"
+        (valueChange)="onValueChange($event)">
+      </ms-text-field-custom>
+    </div>
+
+    <div class="ms-downpayment__slider-section">
+      <div class="ms-downpayment__slider"
+           (touchstart)="onSliderTouchStart($event)"
+           (touchmove)="onSliderTouchMove($event)">
+        <div class="ms-downpayment__slider-track"></div>
+        <div class="ms-downpayment__slider-progress" [style.width.%]="progressPercentage"></div>
+        <div class="ms-downpayment__slider-handle" [style.left.%]="progressPercentage"></div>
+        <input
+          type="range"
+          class="ms-downpayment__slider-input"
+          [min]="min"
+          [max]="max"
+          [step]="step"
+          [value]="currentValue"
+          [disabled]="disabled()"
+          [attr.aria-label]="'Down payment slider'"
+          (input)="onSliderChange($event)"
+          (touchstart)="onSliderInputTouchStart($event)"
+          (touchmove)="onSliderInputTouchMove($event)">
+      </div>
+    </div>
   </div>
 </ms-card>
 

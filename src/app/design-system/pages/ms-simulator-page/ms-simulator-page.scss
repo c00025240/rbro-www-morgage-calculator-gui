@@ -43,7 +43,7 @@
   }
 }
 
-// Left Panel (Controls) - 50% width
+// Left Panel (Controls) - 40% width
 .ms-simulator-page__left-panel {
   // Hidden on mobile and tablet (use mobile layout instead)
   @media (max-width: 1239px) {
@@ -51,15 +51,19 @@
   }
   
   @media (min-width: 1240px) {
-    display: block;
-    width: 42vw;
-    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: calc(100vh - 120px); // Subtract header height
     overflow-y: auto;
     overflow-x: hidden;
-    position: fixed; // Changed from relative to fixed
-    top: 0;
-    left: 0; // Position from the left edge
+    position: fixed;
+    top: 120px; // Start below header
+    left: 0;
     background-color: var(--sim-left-panel-bg);
+    align-items: center; // Center the content within the panel
+    justify-content: flex-start;
+    z-index: 1; // Ensure left panel is above right panel
     
     // Custom scrollbar
     &::-webkit-scrollbar { width: 6px; }
@@ -74,34 +78,43 @@
   @media (max-width: 1239px) { display: none; }
   
   @media (min-width: 1240px) {
-    display: block;
-    width: 560px !important;
-    max-width: 560px;
-    min-width: 560px;
-    margin-left: auto; // Right-aligned within 50% area
-    margin-right: 0;
-    padding: 0 24px; // left/right padding only
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px; // Restore centered content width
+    margin: 0 auto; // Center the content container
+    padding: 0 24px; // Restore comfortable side padding
+    min-height: calc(100vh - 120px); // Account for header height
     box-sizing: border-box;
+    align-items: center; // Center all child elements
+    justify-content: flex-start;
+    overflow-x: hidden; // Prevent horizontal overflow
     
-    // Top spacer for header clearance
-    &::before { content: ''; display: block; height: 160px; width: 100%; }
+    // No top spacer needed - panels start below header
     // Bottom spacer for scroll completion indicator
     &::after { content: ''; display: block; height: 240px; width: 100%; }
   }
 }
 
-// Right Panel (Summary) - 50% width
+// Right Panel (Summary) - 60% width
 .ms-simulator-page__right-panel {
   // Completely hidden on mobile and tablet
   @media (max-width: 1239px) { display: none !important; visibility: hidden; width: 0; height: 0; overflow: hidden; }
   
   @media (min-width: 1240px) {
-    display: block; visibility: visible;
-    width: 58vw; height: 100vh;
-    overflow-y: auto; overflow-x: hidden;
-    position: fixed; top: 0; right: 0;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: calc(100vh - 120px); // Subtract header height
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed;
+    top: 120px; // Start below header
+    right: 0;
     background-color: var(--sim-right-panel-bg);
+    align-items: center; // Center the content within the panel
+    justify-content: flex-start;
+    z-index: 0; // Ensure right panel is below left panel
     
     // Custom scrollbar
     &::-webkit-scrollbar { width: 6px; }
@@ -116,76 +129,104 @@
   @media (max-width: 1239px) { display: none !important; visibility: hidden; width: 0; height: 0; overflow: hidden; }
   
   @media (min-width: 1240px) {
-    display: block; visibility: visible;
-    width: 58vw; // Use viewport width instead of fixed width
-    max-width: 860px; min-width: 600px;
-    margin-right: 0; margin-left: auto; // Right-aligned to create space on the right
-    padding: 0 24px 24px 24px; // lr + bottom padding
-    min-height: 100vh; box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto; // Center the content container
+    padding: 0 24px; // left/right padding only
+    min-height: calc(100vh - 120px); // Account for header height
+    box-sizing: border-box;
+    align-items: center; // Center all child elements
+    justify-content: flex-start;
     
-    // Responsive scaling for smaller desktop screens - keep same position, just scale content
-    @media (max-width: 1400px) {
-      transform: scale(0.9);
-      transform-origin: top left;
-    }
-    
-    @media (max-width: 1300px) {
-      transform: scale(0.8);
-      transform-origin: top left;
-    }
-    
-    // Top spacer for header clearance
-    &::before { content: ''; display: block; height: 160px; width: 100%; }
-    
-    // Ensure all child components fill the full width but cap inner content to 800px
-    > * { width: 100%; max-width: 800px; margin: 0 auto; }
+    // Top spacer to match left panel hero section positioning (64px hero + 24px margin = 88px)
+    &::before { content: ''; display: block; height: 88px; width: 100%; }
+    // Bottom spacer for scroll completion indicator
+    &::after { content: ''; display: block; height: 240px; width: 100%; }
 
-    // Summary cards grid: two on first row, one on second
+    // Summary cards grid: responsive grid layout
     .ms-simulator-page__right-content-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr; // Equal columns
-      grid-template-rows: 1fr 1fr; // Equal rows
-      gap: 16px;
+      display: flex;
+      flex-direction: column; // Stack wrappers vertically
+      gap: 24px; // Space between each wrapper (title+card)
       width: 100%;
-      max-width: none; // override outer cap
-      margin: 0 auto; // Center the grid in the right panel
-      padding: 0 8px; // Reduced lateral spacing
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0;
+      align-items: stretch; // Wrappers fill available width
+      box-sizing: border-box;
+      overflow-x: hidden; // Ensure content doesn't push beyond panel
+      
+      // Responsive adjustments for different desktop sizes
+      @media (min-width: 1400px) { gap: 24px; }
+      @media (min-width: 1600px) { gap: 28px; }
     }
 
     // Summary card wrapper styling
     .ms-simulator-page__summary-card-wrapper {
       display: flex;
       flex-direction: column;
-      width: 100%;
-      height: 100%;
-      gap: 12px;
+      width: 100%; // Wrapper fills entire grid cell width
+      max-width: 100%;
+      margin: 0; // No outer margin; rely on grid gap for spacing
+      min-width: 0; // Prevent intrinsic sizing from overflowing the grid cell
+      gap: 16px; // Space between title and card inside wrapper
       box-sizing: border-box;
+      justify-content: flex-start;
+      align-items: flex-start; // Keep content aligned to card start
+      overflow: visible; // Show full content
+      min-height: auto; // Height defined by content to prevent overlaps
+      position: relative; // ensure static stacking context
     }
 
     // Ensure all wrapper containers fill grid cells equally
     .ms-simulator-page__right-content-grid > .ms-simulator-page__summary-card-wrapper {
       width: 100%;
-      height: 100%;
-      max-width: none;
+      max-width: 100%;
       margin: 0;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start; // Align titles to start where card starts
     }
 
     // Make the summary card inside wrapper fill remaining space
     .ms-simulator-page__summary-card-wrapper ms-web-summary-card {
       flex: 1;
-      height: 100%;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0; // Prevent content from forcing overflow
       display: flex;
       flex-direction: column;
+      overflow: visible; // Ensure inner content is fully visible
+      height: auto; // Let card height follow content to avoid overlap
     }
 
-    // Explicitly position third card in first column on second row
-    .ms-simulator-page__right-content-grid > .ms-simulator-page__summary-card-wrapper:nth-child(3) {
-      grid-column: 1;
-      grid-row: 2;
+    // Ensure both title and card are fully contained within the grid cell
+    // Center inner content while keeping wrapper stretched to grid cell
+    .ms-simulator-page__summary-card-wrapper > ms-card-outside-title,
+    .ms-simulator-page__summary-card-wrapper > ms-web-summary-card {
+      width: 100%;
+      max-width: 720px; // visual max-width for content
+      box-sizing: border-box;
+      margin: 0 auto; // center within stretched wrapper
+      position: static; // prevent any accidental overlay
     }
+
+    // Ensure outside title spans full card width
+    .ms-simulator-page__summary-card-wrapper ms-card-outside-title {
+      width: 100%;
+      max-width: 100%;
+      overflow: visible;
+      text-overflow: unset;
+      white-space: normal; // Allow wrapping
+      word-wrap: break-word;
+      margin-bottom: 0; // spacing handled by wrapper gap
+    }
+
+    // Remove explicit positioning to avoid overlap in single-column layouts
   }
 }
 
@@ -241,17 +282,25 @@
 
 .ms-simulator-page__hero {
   width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   
   // Mobile and tablet: edge-to-edge, no gap from header
   @media (max-width: 1239px) {
     margin-top: 0;
+    width: 100%;
+    max-width: 100%;
   }
   
-  // Desktop: fill full width within container, no additional margins
+  // Desktop: same centered behavior as mobile
   @media (min-width: 1240px) {
     margin-top: 0;
     margin-bottom: 24px;
-    width: 100%; // Fill the 640px container
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -266,25 +315,37 @@
   touch-action: pan-y pinch-zoom;
   overflow-x: hidden;
   overscroll-behavior-x: none;
+  align-items: center; // Center all input elements
+  justify-content: flex-start;
   
   // Mobile and tablet: 16px left/right padding, 24px top/bottom padding, 24px gaps
   @media (max-width: 1239px) {
     padding: 24px 24px;
     gap: 24px;
     box-sizing: border-box;
-    > * { width: 100%; max-width: none; }
+    > * { 
+      width: 100%; 
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
   
-  // Desktop: fill full width within container, no additional padding, 24px gaps
+  // Desktop: same behavior as mobile - centered and responsive
   @media (min-width: 1240px) {
     padding: 0;
     gap: 24px;
-    width: 100%; // Fill the 640px container
+    width: 100%;
+    max-width: 100%;
     
-    // Ensure all child components fill the full width
+    // Ensure all child components are centered like in mobile
     > * {
       width: 100%;
-      max-width: none; // Override any component max-width constraints
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   }
 }
@@ -446,7 +507,12 @@
 .ms-simulator-page__error-card,
 .ms-simulator-page__default-card {
   width: 100%;
+  max-width: 100%;
   margin: var(--space-4, 16px) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .ms-simulator-page__loading-content,
@@ -459,6 +525,8 @@
   padding: var(--space-6, 24px);
   text-align: center;
   gap: var(--space-3, 12px);
+  width: 100%;
+  max-width: 100%;
   
   p {
     font-size: var(--font-size-body-m, 16px);
