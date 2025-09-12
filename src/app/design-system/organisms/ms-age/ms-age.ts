@@ -87,6 +87,7 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy {
   @Input() step: number = 1;
   @Input() disabled = false;
   @Input() surface: 'default' | 'light' | 'dark' = 'default';
+  @Input() value: number = 30; // default age value
 
   @Output() valueChange = new EventEmitter<number>();
   @Output() focused = new EventEmitter<FocusEvent>();
@@ -117,9 +118,10 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy {
       Validators.min(this.min),
       Validators.max(this.max)
     ]);
-    // Initialize with min value
-    this.inputControl.setValue(String(this.min), { emitEvent: false });
-    this.sliderControl.setValue(this.min, { emitEvent: false });
+    // Initialize with provided default value (clamped)
+    const initial = Math.min(Math.max(this.value ?? 30, this.min), this.max);
+    this.inputControl.setValue(String(initial), { emitEvent: false });
+    this.sliderControl.setValue(initial, { emitEvent: false });
     this.syncControls();
   }
 

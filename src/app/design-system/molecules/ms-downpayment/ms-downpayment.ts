@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, signal, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, signal, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-text-field-custom';
 import { MsCard } from '../ms-card/ms-card';
@@ -13,6 +13,7 @@ import { MsCardOutsideTitleComponent } from '../ms-card-outside-title/ms-card-ou
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MsDownpaymentComponent implements OnChanges {
+  constructor(private cdr: ChangeDetectorRef) {}
   @Input() label: string = 'Avans';
   @Input() helperText: string = 'Introduceți avansul pe care doriți să îl plătiți';
   @Input() currency: string = 'RON';
@@ -63,6 +64,7 @@ export class MsDownpaymentComponent implements OnChanges {
     if (!Number.isNaN(numeric)) {
       this.currentValue.set(numeric);
       this.valueChange.emit(numeric);
+      this.cdr.markForCheck();
     }
   }
 
@@ -73,6 +75,7 @@ export class MsDownpaymentComponent implements OnChanges {
       this.currentValue.set(numeric);
       this.value.set(String(numeric));
       this.valueChange.emit(numeric);
+      this.cdr.markForCheck();
     }
   }
 

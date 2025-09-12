@@ -132,7 +132,7 @@
     width: 50%;
     height: calc(100vh - 120px); // Subtract header height
     box-sizing: border-box; // Include padding in panel width
-    overflow-y: auto; // Enable scrolling on panel (fixes no-scroll issue)
+    overflow-y: hidden; // Scroll moved to content to avoid overlaying content
     overflow-x: hidden;
     position: fixed;
     top: 120px; // Start below header
@@ -141,8 +141,8 @@
     align-items: center; // Center the content within the panel
     justify-content: flex-start;
     z-index: 0; // Ensure right panel is below left panel
-    padding-right: 0; // No panel padding; spacing handled by content
-    scrollbar-gutter: stable; // Reserve space for scrollbar
+    padding-right: 0; // No panel padding; gutter handled in content container
+    scrollbar-gutter: stable; // Content container will reserve gutter
     // Use default theme scrollbars (revert to original color)
   }
 }
@@ -158,10 +158,12 @@
     width: 100%;
     max-width: 600px;
     margin: 0 auto; // Center the content container
-    padding: 0 32px 0 24px; // match left content padding
+    padding: 0 56px 0 24px; // extra right padding so scrollbar sits further right
     min-height: calc(100vh - 120px);
-    overflow: visible; // no inner scrolling
-    scrollbar-gutter: stable both-edges; // Reserve scrollbar space
+    height: calc(100vh - 120px);
+    overflow-y: auto; // Make content the scroll container
+    overflow-x: hidden;
+    scrollbar-gutter: stable both-edges; // Reserve scrollbar space inside content
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin; // Firefox
     box-sizing: border-box;

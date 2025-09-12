@@ -1,8 +1,10 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MsCardOutsideTitleComponent } from '../../molecules/ms-card-outside-title/ms-card-outside-title';
 import { MsCard } from '../../molecules/ms-card/ms-card';
 import { MsSelect } from '../../atoms/ms-select/ms-select';
+import { MortgageCalculationService } from '../../../services/mortgage-calculation.service';
+import { District } from '../../../../model/District';
 
 export interface LocationOption {
   value: string;
@@ -52,9 +54,9 @@ export interface LocationOption {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MsPropertyLocationSection implements OnChanges {
-  @Input() selectedCounty: string = 'Bucuresti';
-  @Input() selectedCity: string = 'Bucuresti';
+export class MsPropertyLocationSection implements OnChanges, OnInit {
+  @Input() selectedCounty: string = 'BUCURESTI';
+  @Input() selectedCity: string = 'BUCURESTI';
   @Input() countyOptions: LocationOption[] = []; // Will be populated from districts API
   @Input() cityOptions: LocationOption[] = []; // Will be populated from districts API
   @Input() disabled: boolean = false;
@@ -63,7 +65,40 @@ export class MsPropertyLocationSection implements OnChanges {
   @Output() countyChange = new EventEmitter<string>();
   @Output() cityChange = new EventEmitter<string>();
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  private districts: District[] = [];
+
+  constructor(private cdr: ChangeDetectorRef, private mortgageService: MortgageCalculationService) {}
+
+  ngOnInit(): void {
+    // If parent did not provide options, populate from service
+    const needsPopulate = (!this.countyOptions || this.countyOptions.length === 0) || (!this.cityOptions || this.cityOptions.length === 0);
+    if (needsPopulate) {
+      this.mortgageService.getDistricts().subscribe({
+        next: (list) => {
+          this.districts = list || [];
+          // Build unique counties
+          const uniqueCounties = Array.from(new Set(this.districts.map(d => d.county))).sort();
+          this.countyOptions = uniqueCounties.map(c => ({ value: c, label: c }));
+          // Ensure selected county exists
+          if (!this.selectedCounty || !uniqueCounties.includes(this.selectedCounty)) {
+            this.selectedCounty = this.countyOptions[0]?.value || '';
+          }
+          // Build cities for selected county
+          this.cityOptions = this.buildCityOptions(this.selectedCounty);
+          // Ensure selected city exists
+          const cityValues = this.cityOptions.map(o => o.value);
+          if (!this.selectedCity || !cityValues.includes(this.selectedCity)) {
+            this.selectedCity = this.cityOptions[0]?.value || '';
+          }
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          // Leave options as-is on error
+          this.cdr.markForCheck();
+        }
+      });
+    }
+  }
 
   ngOnChanges(): void {
     // Force change detection when input properties change
@@ -82,6 +117,13 @@ export class MsPropertyLocationSection implements OnChanges {
 
   onCountyChange(value: string): void {
     this.countyChange.emit(value);
+    // Update cities when county changes if we have local districts
+    if (this.districts && this.districts.length > 0) {
+      this.cityOptions = this.buildCityOptions(value);
+      // Reset selected city to first available
+      this.selectedCity = this.cityOptions[0]?.value || '';
+      this.cdr.markForCheck();
+    }
   }
 
   onCityChange(value: string): void {
@@ -99,5 +141,13 @@ export class MsPropertyLocationSection implements OnChanges {
     }
 
     return classes;
+  }
+
+  private buildCityOptions(county: string): LocationOption[] {
+    const cities = this.districts
+      .filter(d => d.county === county)
+      .map(d => d.city);
+    const uniqueCities = Array.from(new Set(cities)).sort();
+    return uniqueCities.map(c => ({ value: c, label: c }));
   }
 } 

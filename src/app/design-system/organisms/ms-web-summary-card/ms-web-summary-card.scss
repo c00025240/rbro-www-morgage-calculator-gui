@@ -17,6 +17,48 @@
 	&__actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 	&__footnote { margin-top: 8px; font-family: 'Amalia', sans-serif; font-weight: 400; font-size: 14px; line-height: 16px; color: var(--text-default); }
 
+	/* Expandable details styles */
+	/* Summary box aligned to amount combos appearance */
+	&__extra { display: flex; flex-direction: column; gap: 8px; padding-top: 0; margin: 0; }
+
+	/* Combined container (second amounts + summary) */
+	&__combined-box {
+		background: var(--color-bg-secondary);
+		border-radius: var(--radius-lg);
+		padding: 2px var(--space-2, 16px) var(--space-2, 16px);
+		box-sizing: border-box;
+		color: var(--color-text-secondary);
+
+		/* Reduce space beneath amounts inside this combined box */
+		ms-amount-combo { margin-bottom: 2px; }
+	}
+	
+	/* Separator line between amounts and summary */
+	&__separator {
+		height: 1px;
+		background-color: var(--color-text-secondary);
+		margin: 2px 0 0;
+		opacity: 0.3;
+	}
+	
+	&__extra-box {
+		background: transparent;
+		border-radius: var(--radius-lg);
+		padding: 0;
+		border: none;
+		color: var(--color-text-secondary);
+		box-sizing: border-box;
+	}
+	&__extra-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+	&__extra-title { font-weight: 600; color: var(--color-text-secondary); font-size: var(--font-size-body-s, 14px); line-height: 1.3; }
+	&__extra-caret { display: inline-flex; align-items: center; justify-content: center; color: var(--color-text-secondary); }
+	.caret-svg { display: block; color: var(--color-text-secondary); }
+	&__extra-row { display: flex; justify-content: space-between; gap: 12px; margin: 0; }
+	&__extra-line { color: var(--color-text-secondary); font-size: 14px; line-height: 1.4; }
+	&__extra-label { font-weight: 400; color: var(--color-text-secondary); }
+	&__extra-value { font-weight: 600; color: var(--color-text-secondary); }
+	&__extra-spacer { height: 12px; }
+
 	/* Make primary button fill the entire row */
 	&__stack-12 > ms-button-primary { width: 100%; display: block; }
 	&__stack-12 > ms-button-primary .ms-button-primary__btn { width: 100%; max-width: none; }

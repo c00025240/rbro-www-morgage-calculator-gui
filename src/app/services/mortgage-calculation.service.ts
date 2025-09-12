@@ -165,18 +165,36 @@ export class MortgageCalculationService {
    * @returns Observable of districts list
    */
   getDistricts(): Observable<District[]> {
-    const headers = this.getCustomHeaders();
-    
-    console.log('🚀 Making districts request with headers:', {
-      url: this.districtsUrl,
-      headers: Object.fromEntries(headers.keys().map(key => [key, headers.get(key)]))
-    });
+    // TEMP: Hardcoded fallback while districts service is down
+    // ORIGINAL IMPLEMENTATION (restore when service is available):
+    // const headers = this.getCustomHeaders();
+    // console.log('🚀 Making districts request with headers:', {
+    //   url: this.districtsUrl,
+    //   headers: Object.fromEntries(headers.keys().map(key => [key, headers.get(key)]))
+    // });
+    // return this.http.get<District[]>(this.districtsUrl, { headers })
+    //   .pipe(
+    //     retry(2),
+    //     catchError((error) => this.handleError(error))
+    //   );
 
-    return this.http.get<District[]>(this.districtsUrl, { headers })
-      .pipe(
-        retry(2), 
-        catchError((error) => this.handleError(error))
-      );
+    const hardcoded: District[] = [
+      { city: 'BUCURESTI', county: 'BUCURESTI' },
+      { city: 'CLUJ-NAPOCA', county: 'CLUJ' },
+      { city: 'TIMISOARA', county: 'TIMIS' },
+      { city: 'IASI', county: 'IASI' },
+      { city: 'BRASOV', county: 'BRASOV' },
+      { city: 'CONSTANTA', county: 'CONSTANTA' },
+      { city: 'SIBIU', county: 'SIBIU' },
+      { city: 'ORADEA', county: 'BIHOR' },
+      { city: 'PLOIESTI', county: 'PRAHOVA' },
+      { city: 'GALATI', county: 'GALATI' }
+    ];
+
+    return new Observable<District[]>((subscriber) => {
+      subscriber.next(hardcoded);
+      subscriber.complete();
+    });
   }
 
   /**

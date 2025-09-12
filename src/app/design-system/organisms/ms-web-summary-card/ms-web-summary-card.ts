@@ -34,6 +34,11 @@ export class MsWebSummaryCard {
   @Output() primaryClicked = new EventEmitter<void>();
   @Output() secondaryClicked = new EventEmitter<void>();
 
+  // Optional expandable details area
+  @Input() extraDetails?: Array<{ label: string; value: string }>;
+  isExpanded = false;
+  toggleDetails(): void { this.isExpanded = !this.isExpanded; }
+
   onPrimaryClick(): void { this.primaryClicked.emit(); }
   onSecondaryClick(): void { this.secondaryClicked.emit(); }
 } 

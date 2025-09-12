@@ -25,7 +25,6 @@ import { Subject, takeUntil, filter } from 'rxjs';
 import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-text-field-custom';
 import { MsCard } from '../ms-card/ms-card';
 import { MsCardOutsideTitleComponent } from '../ms-card-outside-title/ms-card-outside-title';
-import { debounceTime } from 'rxjs/operators';
 
 // Value accessor provider
 const PROPERTY_VALUE_INPUT_VALUE_ACCESSOR = {
@@ -111,6 +110,7 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
   @Input() eurConversionRate: number = 5.0;
   @Input() disabled = false;
   @Input() surface: 'default' | 'light' | 'dark' = 'default';
+  @Input() value?: number; // default value from parent
 
   @Output() valueChange = new EventEmitter<number>();
   @Output() focused = new EventEmitter<FocusEvent>();
@@ -154,9 +154,17 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
       Validators.max(this.max)
     ]);
     
-    // Initialize FormControls with current min value
-    this.inputControl.setValue(this.min.toString(), { emitEvent: false });
-    this.sliderControl.setValue(this.min, { emitEvent: false });
+    // Initialize with provided default value if given, otherwise keep current defaults
+    if (typeof this.value === 'number' && !Number.isNaN(this.value)) {
+      const clamped = Math.max(this.min, Math.min(this.max, this.value));
+      this.inputControl.setValue(clamped.toString(), { emitEvent: false });
+      this.sliderControl.setValue(clamped, { emitEvent: false });
+    } else {
+      // Ensure defaults are within bounds
+      const def = Math.max(this.min, Math.min(this.max, Number(this.inputControl.value) || this.min));
+      this.inputControl.setValue(def.toString(), { emitEvent: false });
+      this.sliderControl.setValue(def, { emitEvent: false });
+    }
 
     this.setupSynchronization();
   }
@@ -190,10 +198,9 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
         }
       });
 
-    // INPUT (typing) → emit debounced value changes
+    // INPUT (typing) → emit instant value changes
     this.inputControl.valueChanges
       .pipe(
-        debounceTime(200),
         takeUntil(this.destroy$)
       )
       .subscribe(textValue => {

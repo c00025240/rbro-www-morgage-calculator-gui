@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject, Subscription, takeUntil, debounceTime } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { MsPageShell } from '../../molecules/ms-page-shell/ms-page-shell';
 import { MsHeader, HeaderAction } from '../../organisms/ms-header/ms-header';
 import { MsSimulatorSwapHero } from '../../molecules/ms-simulator-swap-hero/ms-simulator-swap-hero';
@@ -110,10 +110,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() loanDurationMax: number = 360; // 30 years maximum
   @Input() loanDurationStep: number = 6; // 6 month increments
   @Input() loanDurationDisabled: boolean = false;
-  @Input() loanDurationValue: number = 360; // Default loan duration
+  @Input() loanDurationValue: number = 360; // Default loan duration (30 ani)
   
   // Age input configuration
-  @Input() ageValue: number = 30;
+  @Input() ageValue: number = 30; // Default age
+  @Input() ageMin: number = 18;
+  @Input() ageMax: number = 70;
+  @Input() ageStep: number = 1;
+  @Input() ageSuffix: string = 'ani';
+  @Input() ageDisabled: boolean = false;
   
   // Income Section configuration
   @Input() monthlyIncome: number = 12000;
@@ -126,8 +131,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() downPaymentDisabled: boolean = true; // Disabled by default
   
   // Property Location Section configuration
-  @Input() selectedCounty: string = 'Bucuresti';
-  @Input() selectedCity: string = 'Bucuresti';
+  @Input() selectedCounty: string = 'BUCURESTI';
+  @Input() selectedCity: string = 'BUCURESTI';
   
   // Districts data for location dropdowns
   districts: District[] = [];
@@ -225,10 +230,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Load districts data from API (will replace test data when successful)
     this.loadDistricts();
     
-    // Set up form data change detection with debouncing
+    // Set up form data change detection without debouncing
     this.formDataSubject
       .pipe(
-        debounceTime(350),
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
@@ -250,31 +254,31 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   private initializeTestData(): void {
     // Initialize with comprehensive test data for all counties
     this.districts = [
-      // Bucuresti
-      { city: 'Bucuresti', county: 'Bucuresti' },
-      { city: 'Sector 1', county: 'Bucuresti' },
-      { city: 'Sector 2', county: 'Bucuresti' },
-      { city: 'Sector 3', county: 'Bucuresti' },
-      { city: 'Sector 4', county: 'Bucuresti' },
-      { city: 'Sector 5', county: 'Bucuresti' },
-      { city: 'Sector 6', county: 'Bucuresti' },
-      // Cluj
-      { city: 'Cluj-Napoca', county: 'Cluj' },
-      { city: 'Turda', county: 'Cluj' },
-      { city: 'Dej', county: 'Cluj' },
-      { city: 'Campia Turzii', county: 'Cluj' },
-      // Timis
-      { city: 'Timisoara', county: 'Timis' },
-      { city: 'Lugoj', county: 'Timis' },
-      { city: 'Sannicolau Mare', county: 'Timis' },
-      // Iasi
-      { city: 'Iasi', county: 'Iasi' },
-      { city: 'Pascani', county: 'Iasi' },
-      { city: 'Harlau', county: 'Iasi' },
-      // Constanta
-      { city: 'Constanta', county: 'Constanta' },
-      { city: 'Mangalia', county: 'Constanta' },
-      { city: 'Medgidia', county: 'Constanta' }
+      // BUCURESTI
+      { city: 'BUCURESTI', county: 'BUCURESTI' },
+      { city: 'SECTOR 1', county: 'BUCURESTI' },
+      { city: 'SECTOR 2', county: 'BUCURESTI' },
+      { city: 'SECTOR 3', county: 'BUCURESTI' },
+      { city: 'SECTOR 4', county: 'BUCURESTI' },
+      { city: 'SECTOR 5', county: 'BUCURESTI' },
+      { city: 'SECTOR 6', county: 'BUCURESTI' },
+      // CLUJ
+      { city: 'CLUJ-NAPOCA', county: 'CLUJ' },
+      { city: 'TURDA', county: 'CLUJ' },
+      { city: 'DEJ', county: 'CLUJ' },
+      { city: 'CAMPIA TURZII', county: 'CLUJ' },
+      // TIMIS
+      { city: 'TIMISOARA', county: 'TIMIS' },
+      { city: 'LUGOJ', county: 'TIMIS' },
+      { city: 'SANNICOLAU MARE', county: 'TIMIS' },
+      // IASI
+      { city: 'IASI', county: 'IASI' },
+      { city: 'PASCANI', county: 'IASI' },
+      { city: 'HARLAU', county: 'IASI' },
+      // CONSTANTA
+      { city: 'CONSTANTA', county: 'CONSTANTA' },
+      { city: 'MANGALIA', county: 'CONSTANTA' },
+      { city: 'MEDGIDIA', county: 'CONSTANTA' }
     ];
     
     // Extract counties and update cities for the selected county
@@ -490,6 +494,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           
           this.isLoading = false;
 
+          // Force change detection to update UI immediately
+          this.cdr.markForCheck();
+
           // Trigger variant calculations in background
           try {
             const baseRequest = this.createMortgageRequest();
@@ -500,6 +507,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           this.errorMessage = error.message || 'A apărut o eroare la calcularea creditului. Vă rugăm să încercați din nou.';
           this.isLoading = false;
           console.error('Mortgage calculation error:', error);
+          
+          // Force change detection to update UI even on error
+          this.cdr.markForCheck();
         }
       });
   }
@@ -550,7 +560,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           
           // Fallback to default values on error
           this.districts = [
-            { city: 'Bucuresti', county: 'Bucuresti' }
+            { city: 'BUCURESTI', county: 'BUCURESTI' }
           ];
           this.updateLocationDropdowns();
         }

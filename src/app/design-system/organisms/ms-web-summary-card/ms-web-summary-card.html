@@ -3,8 +3,46 @@
 		<div class="ms-web-summary-card__content">
 			<!-- Amounts area -->
 			<div class="ms-web-summary-card__stack-12">
+				<!-- First (top) amounts block stays separate -->
 				<ms-amount-combo [leftAmount]="leftTopAmount" [rightAmount]="rightTopAmount"></ms-amount-combo>
-				<ms-amount-combo *ngIf="leftBottomAmount && rightBottomAmount" [leftAmount]="leftBottomAmount" [rightAmount]="rightBottomAmount"></ms-amount-combo>
+
+				<!-- Combined chenar: second amounts + summary in același container -->
+				<div *ngIf="(leftBottomAmount && rightBottomAmount) || (extraDetails?.length)" class="ms-web-summary-card__combined-box">
+					<ms-amount-combo *ngIf="leftBottomAmount && rightBottomAmount" [leftAmount]="leftBottomAmount" [rightAmount]="rightBottomAmount"></ms-amount-combo>
+
+					<div *ngIf="extraDetails?.length" class="ms-web-summary-card__extra">
+						<!-- Separator line inside same chenar -->
+						<div class="ms-web-summary-card__separator"></div>
+						<div class="ms-web-summary-card__extra-header" (click)="toggleDetails()">
+							<span class="ms-web-summary-card__extra-title">Sumar calcule</span>
+							<span class="ms-web-summary-card__extra-caret">
+								<svg *ngIf="!isExpanded" class="caret-svg" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+									<circle cx="12" cy="12" r="11" fill="var(--color-bg-secondary)"/>
+									<path d="M10 7l6 5-6 5V7z" fill="currentColor"/>
+								</svg>
+								<svg *ngIf="isExpanded" class="caret-svg" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+									<circle cx="12" cy="12" r="11" fill="var(--color-bg-secondary)"/>
+									<path d="M7 10l5 6 5-6H7z" fill="currentColor"/>
+								</svg>
+							</span>
+						</div>
+						<div *ngIf="isExpanded" class="ms-web-summary-card__extra-list">
+							<ng-container *ngFor="let row of extraDetails">
+								<ng-container *ngIf="row.label || row.value; else spacerTpl">
+									<div class="ms-web-summary-card__extra-row">
+										<span class="ms-web-summary-card__extra-line">
+											<span *ngIf="row.label" class="ms-web-summary-card__extra-label">{{ row.label }}:</span>
+											<span class="ms-web-summary-card__extra-value"> {{ row.value }}</span>
+										</span>
+									</div>
+								</ng-container>
+							</ng-container>
+							<ng-template #spacerTpl>
+								<div class="ms-web-summary-card__extra-spacer"></div>
+							</ng-template>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<!-- Info cells -->

@@ -149,10 +149,6 @@ export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, On
       Validators.max(this.max)
     ]);
     
-    // Initialize FormControls with current min value
-    this.inputControl.setValue(this.min.toString(), { emitEvent: false });
-    this.sliderControl.setValue(this.min, { emitEvent: false });
-
     this.setupSynchronization();
   }
 
