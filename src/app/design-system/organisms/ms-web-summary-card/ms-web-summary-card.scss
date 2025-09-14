@@ -68,6 +68,6 @@
 	&__actions-row > ms-button-secondary .ms-button-secondary__btn { width: 100%; max-width: none; }
 
 	&--surface-dark {
-		.ms-web-summary-card__footnote { color: var(--text-dark-accent, #D5D5D6); }
+		.ms-web-summary-card__footnote { color: var(--text-dark-accent, var(--text-dark-accent)); }
 	}
 } 

@@ -8,22 +8,22 @@
   
   // Unified spacing: ensure identical space between any ms-card-outside-title and the next block (card/component)
   ms-card-outside-title + * {
-    margin-top: 4px;
+    margin-top: var(--radius-base, 4px); // Using design token for consistent spacing
   }
 
   // Normalize internal spacer of the title component to match 4px globally
-  .ms-card-outside-title__spacer { height: 4px !important; }
+  .ms-card-outside-title__spacer { height: var(--radius-base, 4px) !important; }
 
   // Explicitly ensure the same spacing on the left panel content, overriding any component margins
   .ms-simulator-page__left-content {
-    ms-card-outside-title + * { margin-top: 4px !important; }
+    ms-card-outside-title + * { margin-top: var(--radius-base, 4px) !important; }
     // Normalize inner margins so the 4px rule is the single source of truth
     ms-card-outside-title { margin-bottom: 0 !important; }
     ms-card, .ms-card { margin-top: 0 !important; }
     ms-card-outside-title + ms-card,
-    ms-card-outside-title + .ms-card { margin-top: 4px !important; }
+    ms-card-outside-title + .ms-card { margin-top: var(--radius-base, 4px) !important; }
     // Ensure same spacing for Avans (downpayment) specifically
-    ms-downpayment ms-card-outside-title + ms-card { margin-top: 4px !important; }
+    ms-downpayment ms-card-outside-title + ms-card { margin-top: var(--radius-base, 4px) !important; }
   }
   
   // Override page shell max-width constraint for split-screen layout
@@ -103,7 +103,7 @@
     width: 100%;
     max-width: 800px; // Restore centered content width
     margin: 0 auto; // Center the content container
-    padding: 0 24px; // content padding only; inner gaps handled below
+    padding: 0 var(--space-3, 1.5rem); // content padding only; inner gaps handled below
     height: calc(100vh - 120px); // Make content the scroll container
     overflow-y: auto; // Scrollbar on content
     overflow-x: hidden;
@@ -117,7 +117,7 @@
     
     // No top spacer needed - panels start below header
     // Bottom spacer for scroll completion indicator
-    &::after { content: ''; display: block; height: 240px; width: 100%; }
+    &::after { content: ''; display: block; height: var(--space-20, 10rem); width: 100%; } // 240px
   }
 }
 
@@ -156,9 +156,9 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 600px;
+    max-width: 100%; // Remove fixed max-width to make grid fully responsive
     margin: 0 auto; // Center the content container
-    padding: 0 56px 0 24px; // extra right padding so scrollbar sits further right
+    padding: 0 var(--space-3, 1.5rem); // symmetric padding for centered elements
     min-height: calc(100vh - 120px);
     height: calc(100vh - 120px);
     overflow-y: auto; // Make content the scroll container
@@ -170,16 +170,16 @@
     align-items: center; // Center all child elements
     justify-content: flex-start;
     
-    // Top spacer to match left panel hero section positioning (64px hero + 24px margin = 88px)
-    &::before { content: ''; display: block; height: 88px; width: 100%; }
+    // Top spacer to match left panel hero section positioning - align with hero chip
+    &::before { content: ''; display: block; height: calc(var(--space-8, 4rem) + var(--space-3, 1.5rem)); width: 100%; } // 88px
     // Bottom spacer for scroll completion indicator
-    &::after { content: ''; display: block; height: 240px; width: 100%; }
+    &::after { content: ''; display: block; height: var(--space-20, 10rem); width: 100%; } // 240px
 
     // Summary cards grid: responsive grid layout - moved out of inner container
     .ms-simulator-page__right-content-grid {
       display: flex;
       flex-direction: column; // Stack wrappers vertically
-      gap: 24px; // Space between each wrapper (title+card)
+      gap: var(--space-3, 1.5rem); // Space between each wrapper (title+card)
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
@@ -189,8 +189,8 @@
       overflow-x: hidden; // Ensure content doesn't push beyond panel
       
       // Responsive adjustments for different desktop sizes
-      @media (min-width: 1400px) { gap: 32px; }
-      @media (min-width: 1600px) { gap: 40px; }
+      @media (min-width: 1400px) { gap: var(--space-4, 2rem); } // 32px
+      @media (min-width: 1600px) { gap: var(--space-5, 2.5rem); } // 40px
       
       // Force spacing between summary card wrappers
       > .ms-simulator-page__summary-card-wrapper {
@@ -200,7 +200,7 @@
       
       // Add extra spacing between wrappers if gap is not working
       > .ms-simulator-page__summary-card-wrapper + .ms-simulator-page__summary-card-wrapper {
-        margin-top: 24px !important;
+        margin-top: var(--space-3, 1.5rem) !important; // 24px
       }
     }
 
@@ -213,7 +213,7 @@
       margin: 0; // No outer margin; rely on grid gap for spacing
       min-width: 0; // Prevent intrinsic sizing from overflowing the grid cell
       // Match spacing with left panel: 4px between title and card
-      gap: 4px;
+      gap: var(--radius-base, 4px); // Using design token for consistent spacing
       box-sizing: border-box;
       justify-content: flex-start;
       align-items: flex-start; // Keep content aligned to card start
@@ -226,20 +226,21 @@
     .ms-simulator-page__summary-card-wrapper > ms-card-outside-title,
     .ms-simulator-page__summary-card-wrapper > ms-web-summary-card {
       width: 100%;
-      max-width: 720px; // visual max-width for content
+      max-width: 50rem; // Match left panel input width (800px)
       box-sizing: border-box;
       margin: 0 auto; // center within stretched wrapper
       position: static; // prevent any accidental overlay
     }
 
-    // Ensure outside title spans full card width
+    // Ensure outside title aligns with card width and remains responsive
     .ms-simulator-page__summary-card-wrapper ms-card-outside-title {
       width: 100%;
-      max-width: 100%;
+      max-width: 50rem; // Match left panel input width (800px)
       overflow: visible;
       text-overflow: unset;
       white-space: normal; // Allow wrapping
       word-wrap: break-word;
+      margin: 0 auto; // Center to align with card
       margin-top: 0; // no extra margin - spacing handled by wrapper gap
       margin-bottom: 0; // spacing handled by wrapper gap
     }
@@ -255,7 +256,7 @@
   @media (min-width: 1240px) { display: none !important; visibility: hidden; }
   @media (max-width: 1239px) {
     display: flex !important; visibility: visible; width: 100%; min-height: 100vh; flex-direction: column; overflow: hidden; touch-action: pan-y pinch-zoom; overscroll-behavior: contain;
-    padding-bottom: 88px; // reserve space for fixed sticky footer
+    padding-bottom: calc(var(--space-8, 4rem) + var(--space-3, 1.5rem)); // reserve space for fixed sticky footer (88px)
     box-sizing: border-box;
     
     // Light mode background
@@ -279,7 +280,7 @@
     touch-action: pan-y pinch-zoom;
     overflow-x: hidden;
     overscroll-behavior: contain;
-    padding: 0 0 88px 0; // reserve space for sticky footer
+    padding: 0 0 calc(var(--space-8, 4rem) + var(--space-3, 1.5rem)) 0; // reserve space for sticky footer (88px)
     box-sizing: border-box;
     
     // Light mode background
@@ -310,14 +311,14 @@
     width: 100%;
     max-width: 100%;
     // Match mobile inputs horizontal padding
-    padding: 0 24px;
+    padding: 0 var(--space-3, 1.5rem);
     box-sizing: border-box;
   }
   
   // Desktop: same centered behavior as mobile
   @media (min-width: 1240px) {
     margin-top: 0;
-    margin-bottom: 24px;
+    margin-bottom: var(--space-3, 1.5rem);
     width: 100%;
     max-width: 100%;
     // Use container padding only (left-content has 0 24px)
@@ -348,8 +349,8 @@
   
   // Mobile and tablet: 16px left/right padding, 24px top/bottom padding, 24px gaps
   @media (max-width: 1239px) {
-    padding: 24px 24px;
-    gap: 24px;
+    padding: var(--space-3, 1.5rem) var(--space-3, 1.5rem);
+    gap: var(--space-3, 1.5rem);
     box-sizing: border-box;
     align-items: stretch;
     > * {
@@ -366,7 +367,7 @@
   // Desktop: same behavior as mobile - centered and responsive
   @media (min-width: 1240px) {
     padding: 0;
-    gap: 24px; // identical spacing between inputs
+    gap: var(--space-3, 1.5rem); // identical spacing between inputs
     width: 100%;
     max-width: 100%;
     align-items: stretch;
@@ -394,7 +395,7 @@
     position: fixed;
     bottom: 0; left: 0; right: 0;
     z-index: calc(var(--z-sticky) + 5);
-    background: var(--color-bg, #fff);
+    background: var(--color-surface, var(--surface-white));
     padding-bottom: max(env(safe-area-inset-bottom), 0px);
     width: 100%;
   }
@@ -579,6 +580,6 @@
 
 .ms-simulator-page__error-content {
   p {
-    color: var(--color-error, #dc2626);
+    color: var(--color-error, var(--error-default));
   }
 } 

@@ -378,6 +378,7 @@
           [max]="propertyMax"
           [step]="propertyStep"
           [eurConversionRate]="propertyEurConversionRate"
+          [value]="propertyValue"
           [disabled]="propertyDisabled"
           [surface]="surface"
           (valueChange)="onPropertyValueChange($event)"
@@ -495,6 +496,13 @@
     (primaryClicked)="onFooterPrimaryClick($event)"
     (shareClicked)="onFooterShareClick($event)">
   </ms-sticky-footer>
+
+  <!-- Mobile/Tablet Summary Modal (shown only when pressing Detalii) -->
+  <ms-mobile-summary-modal
+    *ngIf="isMobileSummaryVisible && calculationResponse"
+    [offers]="getMobileOffers()"
+    (closed)="onMobileSummaryClosed()">
+  </ms-mobile-summary-modal>
 
   <!-- Simulator Option Modal -->
   <simulator-option-modal

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil, debounceTime } from 'rxjs';
 import { MsPageShell } from '../../molecules/ms-page-shell/ms-page-shell';
 import { MsHeader, HeaderAction } from '../../organisms/ms-header/ms-header';
 import { MsSimulatorSwapHero } from '../../molecules/ms-simulator-swap-hero/ms-simulator-swap-hero';
@@ -21,6 +21,7 @@ import { MsCardOutsideTitleComponent } from '../../molecules/ms-card-outside-tit
 import { SimulatorOptionModal } from '../../organisms/simulator-option-modal/simulator-option-modal';
 import { MsDownpaymentComponent } from '../../molecules/ms-downpayment/ms-downpayment';
 import { MsProgressSpinner } from '../../atoms/ms-progress-spinner/ms-progress-spinner';
+import { MsMobileSummaryModalComponent } from '../../molecules/ms-mobile-summary-modal/ms-mobile-summary-modal';
 import { MortgageCalculationService } from '../../../services/mortgage-calculation.service';
 import { MortgageCalculationRequest } from '../../../../model/MortgageCalculationRequest';
 import { MortgageCalculationResponse } from '../../../../model/MortgageCalculationResponse';
@@ -63,7 +64,8 @@ export type SimulatorPageSurface = 'default' | 'light' | 'dark';
     MsCardOutsideTitleComponent,
     SimulatorOptionModal,
     MsDownpaymentComponent,
-    MsProgressSpinner
+    MsProgressSpinner,
+    MsMobileSummaryModalComponent
   ],
   templateUrl: './ms-simulator-page.html',
   styleUrls: ['./ms-simulator-page.scss'],
@@ -193,6 +195,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() footerLeftAmount?: AmountData;
   @Input() footerRightAmount?: AmountData;
   @Input() footerActions?: StickyFooterActions;
+
+  // Mobile summary modal state
+  isMobileSummaryVisible: boolean = false;
   
   // Simulator Option Modal state
   isSimulatorModalVisible: boolean = false;
@@ -230,9 +235,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Load districts data from API (will replace test data when successful)
     this.loadDistricts();
     
-    // Set up form data change detection without debouncing
+    // Set up form data change detection with debouncing to avoid multiple API calls
     this.formDataSubject
       .pipe(
+        debounceTime(300), // Wait 300ms after last change before calculating
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
@@ -460,10 +466,16 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = undefined;
 
-    const request = this.createMortgageRequest();
-    console.log("############ Mortgage Request:", request);
+    const baseRequest = this.createMortgageRequest();
+    console.log("############ Mortgage Request:", baseRequest);
 
-    this.mortgageService.calculateMortgage(request)
+    // Make all 3 calls in parallel
+    this.calculateAllVariants(baseRequest);
+  }
+
+  private calculateAllVariants(baseRequest: MortgageCalculationRequest): void {
+    // Call 1: Current user settings (base request)
+    this.mortgageService.calculateMortgage(baseRequest)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -493,29 +505,17 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           };
           
           this.isLoading = false;
-
-          // Force change detection to update UI immediately
           this.cdr.markForCheck();
-
-          // Trigger variant calculations in background
-          try {
-            const baseRequest = this.createMortgageRequest();
-            this.calculateVariants(baseRequest);
-          } catch {}
         },
         error: (error) => {
           this.errorMessage = error.message || 'A apărut o eroare la calcularea creditului. Vă rugăm să încercați din nou.';
           this.isLoading = false;
           console.error('Mortgage calculation error:', error);
-          
-          // Force change detection to update UI even on error
           this.cdr.markForCheck();
         }
       });
-  }
 
-  private calculateVariants(baseRequest: MortgageCalculationRequest): void {
-    // All discounts true
+    // Call 2: All discounts true
     const reqAll: MortgageCalculationRequest = JSON.parse(JSON.stringify(baseRequest));
     reqAll.hasInsurance = true;
     reqAll.specialOfferRequirements = reqAll.specialOfferRequirements || new SpecialOfferRequirements();
@@ -523,9 +523,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     reqAll.specialOfferRequirements.casaVerde = true;
     this.mortgageService.calculateMortgage(reqAll)
       .pipe(takeUntil(this.destroy$))
-      .subscribe({ next: r => this.calculationResponseAllDiscounts = r, error: () => {} });
+      .subscribe({ 
+        next: r => {
+          this.calculationResponseAllDiscounts = r;
+          this.cdr.markForCheck();
+        }, 
+        error: () => {} 
+      });
 
-    // All discounts false
+    // Call 3: All discounts false
     const reqNone: MortgageCalculationRequest = JSON.parse(JSON.stringify(baseRequest));
     reqNone.hasInsurance = false;
     reqNone.specialOfferRequirements = reqNone.specialOfferRequirements || new SpecialOfferRequirements();
@@ -533,7 +539,13 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     reqNone.specialOfferRequirements.casaVerde = false;
     this.mortgageService.calculateMortgage(reqNone)
       .pipe(takeUntil(this.destroy$))
-      .subscribe({ next: r => this.calculationResponseNoDiscounts = r, error: () => {} });
+      .subscribe({ 
+        next: r => {
+          this.calculationResponseNoDiscounts = r;
+          this.cdr.markForCheck();
+        }, 
+        error: () => {} 
+      });
   }
   
   private triggerFormValidation(): void {
@@ -643,7 +655,80 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.ageValueChange.emit(value);
     this.triggerFormValidation();
   }
-  onFooterDetailsClick(event: MouseEvent): void { this.footerDetailsClicked.emit(event); }
+  onFooterDetailsClick(event: MouseEvent): void {
+    this.footerDetailsClicked.emit(event);
+    const isMobileOrTablet = typeof window !== 'undefined' && window.matchMedia('(max-width: 1239px)').matches;
+    if (isMobileOrTablet) {
+      this.isMobileSummaryVisible = true;
+      this.cdr.markForCheck();
+    }
+  }
+  onMobileSummaryClosed(): void {
+    this.isMobileSummaryVisible = false;
+    this.cdr.markForCheck();
+  }
+
+  getMobileOffers(): Array<{
+    title: string;
+    monthlyInstallment: string;
+    fixedRate: string;
+    variableRate: string;
+    variableInstallment: string;
+    dae: string;
+    installmentType: string;
+    downPayment: string;
+    loanAmount: string;
+    totalAmount: string;
+  }> {
+    if (!this.calculationResponse) {
+      return [];
+    }
+
+    // Use the same 3 responses as desktop cards
+    const responses = [
+      this.calculationResponse, // Current user settings
+      this.calculationResponseAllDiscounts, // All discounts applied
+      this.calculationResponseNoDiscounts // No discounts
+    ];
+
+    const titles = [
+      'Oferta ta personalizata',
+      'Cu toate reducerile', 
+      'Fara reduceri'
+    ];
+
+    return responses.map((response, index) => {
+      if (!response) {
+        // Fallback to main response if variant not available yet
+        const fallbackResponse = this.calculationResponse;
+        return {
+          title: titles[index],
+          monthlyInstallment: ((fallbackResponse?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' RON',
+          fixedRate: (fallbackResponse?.nominalInterestRate || 0).toFixed(2) + '%',
+          variableRate: ((fallbackResponse?.interestRateFormula?.bankMarginRate || 0) + (fallbackResponse?.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
+          variableInstallment: ((fallbackResponse?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' RON',
+          dae: (fallbackResponse?.annualPercentageRate || 0).toFixed(2) + '%',
+          installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
+          downPayment: ((fallbackResponse?.downPayment?.amount) || 0).toFixed(0) + ' RON (30%)',
+          loanAmount: ((fallbackResponse?.loanAmount?.amount) || 0).toFixed(0) + ' RON',
+          totalAmount: ((fallbackResponse?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' RON'
+        };
+      }
+
+      return {
+        title: titles[index],
+        monthlyInstallment: ((response.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' RON',
+        fixedRate: (response.nominalInterestRate || 0).toFixed(2) + '%',
+        variableRate: ((response.interestRateFormula?.bankMarginRate || 0) + (response.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
+        variableInstallment: ((response.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' RON',
+        dae: (response.annualPercentageRate || 0).toFixed(2) + '%',
+        installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
+        downPayment: ((response.downPayment?.amount) || 0).toFixed(0) + ' RON (30%)',
+        loanAmount: ((response.loanAmount?.amount) || 0).toFixed(0) + ' RON',
+        totalAmount: ((response.totalPaymentAmount?.amount) || 0).toFixed(0) + ' RON'
+      };
+    });
+  }
   onFooterPrimaryClick(event: MouseEvent): void { this.footerPrimaryClicked.emit(event); }
   onFooterShareClick(event: MouseEvent): void { this.footerShareClicked.emit(event); }
   // Income Section event handlers

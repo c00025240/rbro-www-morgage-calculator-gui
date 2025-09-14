@@ -1,11 +1,11 @@
 import {
+  BidiModule
+} from "./chunk-VVXGHRTS.js";
+import {
   NgTemplateOutlet,
   isPlatformBrowser
 } from "./chunk-LIAKAOWN.js";
 import "./chunk-CSPLI7JI.js";
-import {
-  BidiModule
-} from "./chunk-VVXGHRTS.js";
 import {
   ANIMATION_MODULE_TYPE,
   APP_ID,

@@ -1,0 +1,237 @@
+.ms-mobile-summary-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  z-index: 1000;
+  background: var(--color-surface);
+
+  &__dialog {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2, 1rem) 20px var(--space-1, 0.5rem) 20px;
+    background: var(--color-surface);
+  }
+
+  &__offer-type {
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary);
+  }
+
+  &__close {
+    background: transparent;
+    border: 0;
+    font-size: var(--font-size-2xl, 1.5rem);
+    cursor: pointer;
+    color: var(--color-text-primary);
+    width: var(--space-4, 2rem);
+    height: var(--space-4, 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-base, 0.25rem);
+    
+    &:hover {
+      background: var(--color-hover);
+    }
+  }
+
+  &__card {
+    flex: 1;
+    padding: 20px; // Keep 20px as it's a specific design requirement
+    overflow-y: auto;
+  }
+
+  &__installment-section {
+    margin-bottom: var(--space-3, 1.5rem);
+  }
+
+  &__installment-label {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-1, 0.5rem);
+  }
+
+  &__installment-value {
+    font-size: var(--font-size-4xl, 2.25rem);
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-text-primary);
+    line-height: 1.2;
+  }
+
+  &__rates-section {
+    margin-bottom: 20px; // Keep 20px as it's a specific design requirement
+  }
+
+  &__rate-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--space-1-5, 0.75rem); // 12px
+  }
+
+  &__rate-label {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary);
+    margin-bottom: 4px; // Keep 4px as it's a specific design requirement
+  }
+
+  &__rate-value {
+    font-size: var(--font-size-base, 1rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary);
+  }
+
+  &__variable-section {
+    margin-bottom: 20px; // Keep 20px as it's a specific design requirement
+  }
+
+  &__variable-label {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-1, 0.5rem);
+  }
+
+  &__variable-value {
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary);
+  }
+
+  &__dae-section {
+    margin-bottom: 20px; // Keep 20px as it's a specific design requirement
+  }
+
+  &__dae-label {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-1, 0.5rem);
+  }
+
+  &__dae-value {
+    font-size: var(--font-size-lg, 1.125rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary);
+  }
+
+  &__type-section {
+    margin-bottom: 20px; // Keep 20px as it's a specific design requirement
+  }
+
+  &__type-label {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-1, 0.5rem);
+  }
+
+  &__type-value {
+    font-size: var(--font-size-base, 1rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary);
+  }
+
+  &__separator {
+    height: 1px;
+    background: var(--color-border);
+    margin: var(--space-3, 1.5rem) 0;
+  }
+
+  &__credit-section {
+    margin-bottom: 20px; // Keep 20px as it's a specific design requirement
+  }
+
+  &__credit-header {
+    font-size: var(--font-size-base, 1rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-2, 1rem);
+  }
+
+  &__credit-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--space-1-5, 0.75rem); // 12px
+  }
+
+  &__credit-label {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary);
+    margin-bottom: 4px; // Keep 4px as it's a specific design requirement
+  }
+
+  &__credit-value {
+    font-size: var(--font-size-base, 1rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--color-text-primary);
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2, 1rem) 20px;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    gap: var(--space-1-5, 0.75rem); // 12px
+
+    // Custom styling for navigation buttons to center icons properly
+    ms-button-secondary {
+      .ms-button-secondary__btn {
+        min-width: var(--space-6, 3rem);
+        width: var(--space-6, 3rem);
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+      }
+
+      .ms-button-secondary__label {
+        display: none; // Hide empty labels
+      }
+
+      .ms-button-secondary__icon {
+        width: var(--space-3, 1.5rem);
+        height: var(--space-3, 1.5rem);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+
+        svg {
+          width: var(--space-3, 1.5rem) !important;
+          height: var(--space-3, 1.5rem) !important;
+        }
+      }
+    }
+
+    // Custom styling for apply button to make it wider
+    ms-button-primary {
+      .ms-button-primary__btn {
+        min-width: 7.5rem; // 120px
+        width: 7.5rem; // 120px
+        padding: 0 var(--space-3, 1.5rem);
+      }
+    }
+  }
+}
+
+@media (min-width: 1240px) {
+  .ms-mobile-summary-modal { display: none; }
+}
+
+
