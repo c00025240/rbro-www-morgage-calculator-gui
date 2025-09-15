@@ -205,10 +205,11 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
       )
       .subscribe(textValue => {
         const numericValue = parseInt(textValue || '', 10);
-        if (!Number.isNaN(numericValue)) {
-          const clampedValue = Math.max(this.min, Math.min(this.max, numericValue));
-          this.valueChange.emit(clampedValue);
-          this.onChange(clampedValue);
+        if (!Number.isNaN(numericValue) && numericValue >= this.min && numericValue <= this.max) {
+          // Sync slider only when value is valid
+          this.sliderControl.setValue(numericValue, { emitEvent: false });
+          this.valueChange.emit(numericValue);
+          this.onChange(numericValue);
         }
       });
 
@@ -226,21 +227,9 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
   onInputBlur(): void {
     this.isInputFocused = false;
     
-    // Parse and validate the current input value
-    const textValue = this.inputControl.value || '';
-    const numericValue = parseInt(textValue, 10) || this.min;
-    const clampedValue = Math.max(this.min, Math.min(this.max, numericValue));
-    
-    // Format and update the input field with the final value
-    this.inputControl.setValue(clampedValue.toString(), { emitEvent: false });
-    
-    // Sync the slider to match the validated input value
-    this.sliderControl.setValue(clampedValue, { emitEvent: false });
-    
-    // Emit the change events
-    this.valueChange.emit(clampedValue);
-    this.onChange(clampedValue);
-    
+    // Do not auto-correct/clamp on blur; leave the user's value as-is
+    // Do not emit valueChange for invalid values
+    // Only mark as touched and emit blur for parent logic/validation
     this.onTouched();
     this.blurred.emit();
     this.cdr.markForCheck();

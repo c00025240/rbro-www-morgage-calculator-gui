@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectionStrategy, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject, Subscription, takeUntil, debounceTime } from 'rxjs';
+import { Subject, Subscription, takeUntil, debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { MsPageShell } from '../../molecules/ms-page-shell/ms-page-shell';
 import { MsHeader, HeaderAction } from '../../organisms/ms-header/ms-header';
 import { MsSimulatorSwapHero } from '../../molecules/ms-simulator-swap-hero/ms-simulator-swap-hero';
@@ -124,7 +124,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   
   // Income Section configuration
   @Input() monthlyIncome: number = 12000;
-  @Input() monthlyInstallments: number = 2100;
+  @Input() monthlyInstallments: number = 1500;
   
   // Down Payment Section configuration
   @Input() hasGuaranteeProperty: boolean = true;
@@ -205,6 +205,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   // Form data and calculation state
   private destroy$ = new Subject<void>();
   private formDataSubject = new Subject<void>();
+  private lastFormDataHash: string = '';
+  private lastIsFormValid: boolean = true;
   isLoading: boolean = false;
   calculationResponse?: MortgageCalculationResponse;
   calculationResponseAllDiscounts?: MortgageCalculationResponse;
@@ -235,20 +237,32 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Load districts data from API (will replace test data when successful)
     this.loadDistricts();
     
-    // Set up form data change detection with debouncing to avoid multiple API calls
+    // Set up form data change detection with smart debouncing to avoid multiple API calls
     this.formDataSubject
       .pipe(
-        debounceTime(300), // Wait 300ms after last change before calculating
+        debounceTime(1000), // Wait 1 second after last change before calculating (increased for keyboard input)
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        console.log('📝 Form data changed, validating...');
+        const currentFormDataHash = this.getFormDataHash();
+
+        // Always re-validate to detect transitions invalid -> valid
         this.validateForm();
-        if (this.isFormValid) {
-          console.log('✅ Form is valid, calculating mortgage...');
+
+        const becameValid = !this.lastIsFormValid && this.isFormValid;
+        const changedData = currentFormDataHash !== this.lastFormDataHash;
+
+        // Update snapshots for next tick
+        this.lastFormDataHash = currentFormDataHash;
+        this.lastIsFormValid = this.isFormValid;
+
+        if (this.isFormValid && (changedData || becameValid)) {
+          console.log('✅ Form is valid and changed (or became valid), calculating mortgage...');
           this.calculateMortgage();
-        } else {
+        } else if (!this.isFormValid) {
           console.log('❌ Form is not valid, skipping calculation');
+        } else {
+          console.log('🔄 Form valid but unchanged, skipping calculation');
         }
       });
     
@@ -352,27 +366,54 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
   // Form validation and calculation methods
   private validateForm(): void {
+    const isPropertyValid = typeof this.propertyValue === 'number'
+      && this.propertyValue >= this.propertyMin
+      && this.propertyValue <= this.propertyMax;
+
+    const isLoanDurationValid = typeof this.loanDurationValue === 'number'
+      && this.loanDurationValue >= this.loanDurationMin
+      && this.loanDurationValue <= this.loanDurationMax;
+
+    const isAgeValid = typeof this.ageValue === 'number'
+      && this.ageValue >= this.ageMin
+      && this.ageValue <= this.ageMax;
+
+    const isIncomeValid = typeof this.monthlyIncome === 'number' && this.monthlyIncome > 0;
+
+    const hasLocation = !!(this.selectedCounty && this.selectedCity);
+    const hasRates = !!(this.rateType && this.interestType);
+
     this.isFormValid = !!(
-      this.propertyValue &&
-      this.loanDurationValue &&
-      this.ageValue &&
-      this.monthlyIncome &&
-      this.selectedCounty &&
-      this.selectedCity &&
-      this.rateType &&
-      this.interestType
+      isPropertyValid &&
+      isLoanDurationValid &&
+      isAgeValid &&
+      isIncomeValid &&
+      hasLocation &&
+      hasRates
       // downPaymentAmount is not required for validation since it's disabled initially
     );
     
     console.log('🔍 Form validation:', {
       propertyValue: this.propertyValue,
+      propertyMin: this.propertyMin,
+      propertyMax: this.propertyMax,
+      isPropertyValid,
       loanDurationValue: this.loanDurationValue,
+      loanDurationMin: this.loanDurationMin,
+      loanDurationMax: this.loanDurationMax,
+      isLoanDurationValid,
       ageValue: this.ageValue,
+      ageMin: this.ageMin,
+      ageMax: this.ageMax,
+      isAgeValid,
       monthlyIncome: this.monthlyIncome,
+      isIncomeValid,
       selectedCounty: this.selectedCounty,
       selectedCity: this.selectedCity,
+      hasLocation,
       rateType: this.rateType,
       interestType: this.interestType,
+      hasRates,
       isFormValid: this.isFormValid
     });
   }
@@ -553,6 +594,30 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.formDataSubject.next();
   }
 
+  private getFormDataHash(): string {
+    // Create a hash of all form data to detect real changes
+    const formData = {
+      propertyValue: this.propertyValue,
+      loanDurationValue: this.loanDurationValue,
+      ageValue: this.ageValue,
+      monthlyIncome: this.monthlyIncome,
+      monthlyInstallments: this.monthlyInstallments,
+      hasGuaranteeProperty: this.hasGuaranteeProperty,
+      selectedGuaranteeValue: this.selectedGuaranteeValue,
+      downPaymentAmount: this.downPaymentAmount,
+      selectedCounty: this.selectedCounty,
+      selectedCity: this.selectedCity,
+      rateType: this.rateType,
+      interestType: this.interestType,
+      lifeInsurance: this.lifeInsurance,
+      salaryTransfer: this.salaryTransfer,
+      greenCertificate: this.greenCertificate,
+      selectedProductType: this.selectedProductType
+    };
+    
+    return JSON.stringify(formData);
+  }
+
   // Districts and location methods
   private loadDistricts(): void {
     this.isLoadingDistricts = true;
@@ -641,15 +706,29 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.propertyValueChange.emit(value);
     this.triggerFormValidation();
   }
-  onPropertyFocused(event: FocusEvent): void { this.propertyFocused.emit(event); }
-  onPropertyBlurred(event: FocusEvent): void { this.propertyBlurred.emit(event); }
+  onPropertyFocused(event: FocusEvent): void { 
+    this.propertyFocused.emit(event);
+    // Don't trigger validation on focus - wait for user to finish typing
+  }
+  onPropertyBlurred(event: FocusEvent): void { 
+    this.propertyBlurred.emit(event);
+    // Trigger validation immediately on blur (user finished typing)
+    this.triggerFormValidation();
+  }
   onLoanDurationValueChange(value: number): void { 
     this.loanDurationValue = value;
     this.loanDurationValueChange.emit(value);
     this.triggerFormValidation();
   }
-  onLoanDurationFocused(event: FocusEvent): void { this.loanDurationFocused.emit(event); }
-  onLoanDurationBlurred(event: FocusEvent): void { this.loanDurationBlurred.emit(event); }
+  onLoanDurationFocused(event: FocusEvent): void { 
+    this.loanDurationFocused.emit(event);
+    // Don't trigger validation on focus - wait for user to finish typing
+  }
+  onLoanDurationBlurred(event: FocusEvent): void { 
+    this.loanDurationBlurred.emit(event);
+    // Trigger validation immediately on blur (user finished typing)
+    this.triggerFormValidation();
+  }
   onAgeValueChange(value: number): void {
     this.ageValue = value;
     this.ageValueChange.emit(value);
