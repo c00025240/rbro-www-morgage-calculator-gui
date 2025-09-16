@@ -4,10 +4,19 @@
 			<!-- Offers area: three columns in one card -->
 			<div class="ms-web-summary-card__offers-grid" *ngIf="columns?.length; else legacySingle">
 				<div class="ms-web-summary-card__offer-col" *ngFor="let col of columns; let i = index">
-					<div class="ms-web-summary-card__offer-title" *ngIf="col.title">{{ col.title }}</div>
 					<div class="ms-web-summary-card__combined-box">
-						<ms-amount-combo [leftAmount]="col.leftTop" [rightAmount]="col.rightTop"></ms-amount-combo>
-						<ms-amount-combo *ngIf="col.leftBottom && col.rightBottom" [leftAmount]="col.leftBottom" [rightAmount]="col.rightBottom"></ms-amount-combo>
+						<div class="ms-web-summary-card__offer-heading" *ngIf="col.title">{{ col.title }}</div>
+						<div class="ms-web-summary-card__kpi">
+							<div class="ms-web-summary-card__kpi-label">Rata lunară</div>
+							<div class="ms-web-summary-card__kpi-amount">
+								<span class="value">{{ col.rightTop?.amount }}</span>
+								<span class="currency">{{ col.rightTop?.currency }}</span>
+							</div>
+						</div>
+						<div class="ms-web-summary-card__secondary-info" *ngIf="col.leftTop">
+							<span class="label">Dobândă inițială</span>
+							<span class="value">{{ col.leftTop.amount }} {{ col.leftTop.currency }}</span>
+						</div>
 						<div *ngIf="col.extraDetails?.length" class="ms-web-summary-card__extra">
 							<div class="ms-web-summary-card__separator"></div>
 							<div class="ms-web-summary-card__extra-header" (click)="toggleDetailsIndex(i)">
@@ -27,10 +36,8 @@
 								<ng-container *ngFor="let row of col.extraDetails">
 									<ng-container *ngIf="row.label || row.value; else spacerTpl">
 										<div class="ms-web-summary-card__extra-row">
-											<span class="ms-web-summary-card__extra-line">
-												<span *ngIf="row.label" class="ms-web-summary-card__extra-label">{{ row.label }}:</span>
-												<span class="ms-web-summary-card__extra-value"> {{ row.value }}</span>
-											</span>
+											<div *ngIf="row.label" class="ms-web-summary-card__extra-label">{{ row.label }}</div>
+											<div class="ms-web-summary-card__extra-value">{{ row.value }}</div>
 										</div>
 									</ng-container>
 								</ng-container>
@@ -66,10 +73,8 @@
 						<ng-container *ngFor="let row of extraDetails">
 							<ng-container *ngIf="row.label || row.value; else spacerTpl">
 								<div class="ms-web-summary-card__extra-row">
-									<span class="ms-web-summary-card__extra-line">
-										<span *ngIf="row.label" class="ms-web-summary-card__extra-label">{{ row.label }}:</span>
-										<span class="ms-web-summary-card__extra-value"> {{ row.value }}</span>
-									</span>
+									<div *ngIf="row.label" class="ms-web-summary-card__extra-label">{{ row.label }}</div>
+									<div class="ms-web-summary-card__extra-value">{{ row.value }}</div>
 								</div>
 							</ng-container>
 						</ng-container>

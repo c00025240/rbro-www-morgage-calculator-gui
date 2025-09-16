@@ -49,15 +49,9 @@ export class MsWebSummaryCard {
   toggleDetails(): void { this.isExpanded = !this.isExpanded; }
 
   // Per-column expand state for multi-column mode
-  private expandedColumns = new Set<number>();
-  isExpandedIndex(index: number): boolean { return this.expandedColumns.has(index); }
-  toggleDetailsIndex(index: number): void {
-    if (this.expandedColumns.has(index)) {
-      this.expandedColumns.delete(index);
-    } else {
-      this.expandedColumns.add(index);
-    }
-  }
+  isExpandedAll = false;
+  isExpandedIndex(index: number): boolean { return this.isExpandedAll; }
+  toggleDetailsIndex(index: number): void { this.isExpandedAll = !this.isExpandedAll; }
 
   onPrimaryClick(): void { this.primaryClicked.emit(); }
   onSecondaryClick(): void { this.secondaryClicked.emit(); }
