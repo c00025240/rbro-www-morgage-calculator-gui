@@ -160,54 +160,17 @@
       <div class="ms-simulator-page__right-content">
 
         
-        <!-- Summary Cards -->
+        <!-- Summary - Single Card With All Offers -->
         <div class="ms-simulator-page__right-content-grid">
-        <!-- First Card -->
-        <div *ngIf="calculationResponse && !isLoading" class="ms-simulator-page__summary-card-wrapper">
+        <div *ngIf="(calculationResponse || calculationResponseAllDiscounts || calculationResponseNoDiscounts) && !isLoading" class="ms-simulator-page__summary-card-wrapper">
           <ms-card-outside-title
-            title="Oferta ta personalizata"
-            helperText="Calculata pe baza datelor introduse"
+            title="Ofertele tale"
+            helperText="Comparatie intre variante"
             [hasHelper]="true"
             [surface]="surface">
           </ms-card-outside-title>
           <ms-web-summary-card
-            [leftTopAmount]="{
-              label: 'Dobanda initiala',
-              amount: (calculationResponse?.nominalInterestRate || 0).toFixed(2),
-              currency: '%'
-            }"
-            [rightTopAmount]="{
-              label: 'Rata lunara de plata',
-              amount: (calculationResponse?.monthlyInstallment?.amountFixedInterest || 0).toFixed(0),
-              currency: 'Lei/luna'
-            }"
-            [leftBottomAmount]="{
-              label: 'Suma solicitata',
-              amount: (calculationResponse?.loanAmount?.amount || 0).toFixed(0),
-              currency: 'Lei'
-            }"
-            [rightBottomAmount]="{
-              label: 'Suma maxima pe care o poti solicita',
-              amount: (calculationResponse?.maxAmount?.amount || 0).toFixed(0),
-              currency: 'Lei'
-            }"
-            [extraDetails]="[
-              { label: 'Suma credit (comision inclus)', value: ((calculationResponse?.loanAmountWithFee?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Comision analiza', value: ((calculationResponse?.loanCosts?.fees?.fee?.fixedAmount?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Perioada de creditare', value: (calculationResponse?.tenor || 0).toString() + ' ani' },
-              { label: 'Tip rate', value: ((rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
-              { label: '', value: '' },
-              { label: 'Rata lunara (dobanda fixa)', value: ((calculationResponse?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei' },
-              { label: 'Rata lunara (dobanda variabila)', value: ((calculationResponse?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
-              { label: '', value: '' },
-              { label: 'Rata dobanzii (dobanda fixa)', value: ((calculationResponse?.nominalInterestRate || 0).toFixed(2)) + ' % pentru ' + ((calculationResponse?.interestRateType?.fixedPeriod) || 0) + ' ani, apoi variabila' },
-              { label: 'Rata dobanzii (dobanda variabila)', value: ((calculationResponse?.interestRateFormula?.bankMarginRate || 0).toFixed(2)) + ' + ' + ((calculationResponse?.interestRateFormula?.irccRate || 0).toFixed(2)) + ' % (marja ' + ((calculationResponse?.interestRateFormula?.bankMarginRate || 0).toFixed(2)) + ' %, IRCC ' + ((calculationResponse?.interestRateFormula?.irccRate || 0).toFixed(2)) + ' %)' },
-              { label: '', value: '*Rata lunara aferenta dobanzii variabile a fost calculata tinand cont de valoarea actuala a IRCC. Ea se va modifica in functie de indicele IRCC.' },
-              { label: '', value: '' },
-              { label: 'DAE', value: (calculationResponse?.annualPercentageRate || 0).toFixed(2) + ' %' },
-              { label: 'Valoarea totala platibila', value: ((calculationResponse?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Economisesti', value: ((calculationResponse?.totalDiscountsValues?.totalDiscountAmount || 0).toFixed(0)) + ' Lei din Valoarea totala platibila sau ' + ((calculationResponse?.totalDiscountsValues?.totalDiscountInstallment || 0).toFixed(0)) + ' Lei din Rata lunara' }
-            ]"
+            [columns]="getWebSummaryColumns()"
             [primaryButtonLabel]="'Aplica in doar 2 minute'"
             [secondaryButtonLabel]="'Detalii oferta'"
             [topInfoText]="'Dobanda si rata lunara sunt estimative si pot varia in functie de analiza finala.'"
@@ -217,111 +180,6 @@
           </ms-web-summary-card>
         </div>
 
-        <!-- Second Card -->
-        <div *ngIf="calculationResponseAllDiscounts && !isLoading" class="ms-simulator-page__summary-card-wrapper">
-          <ms-card-outside-title
-            title="Cu toate reducerile"
-            helperText="Toate reducerile aplicate"
-            [hasHelper]="true"
-            [surface]="surface">
-          </ms-card-outside-title>
-          <ms-web-summary-card
-            [leftTopAmount]="{
-              label: 'Dobanda initiala (toate reducerile)',
-              amount: (calculationResponseAllDiscounts?.nominalInterestRate || 0).toFixed(2),
-              currency: '%'
-            }"
-            [rightTopAmount]="{
-              label: 'Rata lunara de plata (toate reducerile)',
-              amount: (calculationResponseAllDiscounts?.monthlyInstallment?.amountFixedInterest || 0).toFixed(0),
-              currency: 'Lei/luna'
-            }"
-            [leftBottomAmount]="{
-              label: 'Suma solicitata',
-              amount: (calculationResponseAllDiscounts?.loanAmount?.amount || 0).toFixed(0),
-              currency: 'Lei'
-            }"
-            [rightBottomAmount]="{
-              label: 'Suma maxima pe care o poti solicita',
-              amount: (calculationResponseAllDiscounts?.maxAmount?.amount || 0).toFixed(0),
-              currency: 'Lei'
-            }"
-            [primaryButtonLabel]="'Aplica in doar 2 minute'"
-            [secondaryButtonLabel]="'Detalii oferta'"
-            (primaryClicked)="onFooterPrimaryClick($event)"
-            (secondaryClicked)="onFooterDetailsClick($event)"
-            [extraDetails]="[
-              { label: 'Suma credit (comision inclus)', value: ((calculationResponseAllDiscounts?.loanAmountWithFee?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Comision analiza', value: ((calculationResponseAllDiscounts?.loanCosts?.fees?.fee?.fixedAmount?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Perioada de creditare', value: (calculationResponseAllDiscounts?.tenor || 0).toString() + ' ani' },
-              { label: 'Tip rate', value: ((rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
-              { label: '', value: '' },
-              { label: 'Rata lunara (dobanda fixa)', value: ((calculationResponseAllDiscounts?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei' },
-              { label: 'Rata lunara (dobanda variabila)', value: ((calculationResponseAllDiscounts?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
-              { label: '', value: '' },
-              { label: 'Rata dobanzii (dobanda fixa)', value: ((calculationResponseAllDiscounts?.nominalInterestRate || 0).toFixed(2)) + ' % pentru ' + ((calculationResponseAllDiscounts?.interestRateType?.fixedPeriod) || 0) + ' ani, apoi variabila' },
-              { label: 'Rata dobanzii (dobanda variabila)', value: ((calculationResponseAllDiscounts?.interestRateFormula?.bankMarginRate || 0).toFixed(2)) + ' + ' + ((calculationResponseAllDiscounts?.interestRateFormula?.irccRate || 0).toFixed(2)) + ' % (marja ' + ((calculationResponseAllDiscounts?.interestRateFormula?.bankMarginRate || 0).toFixed(2)) + ' %, IRCC ' + ((calculationResponseAllDiscounts?.interestRateFormula?.irccRate || 0).toFixed(2)) + ' %)' },
-              { label: '', value: '*Rata lunara aferenta dobanzii variabile a fost calculata tinand cont de valoarea actuala a IRCC. Ea se va modifica in functie de indicele IRCC.' },
-              { label: '', value: '' },
-              { label: 'DAE', value: (calculationResponseAllDiscounts?.annualPercentageRate || 0).toFixed(2) + ' %' },
-              { label: 'Valoarea totala platibila', value: ((calculationResponseAllDiscounts?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Economisesti', value: ((calculationResponseAllDiscounts?.totalDiscountsValues?.totalDiscountAmount || 0).toFixed(0)) + ' Lei din Valoarea totala platibila sau ' + ((calculationResponseAllDiscounts?.totalDiscountsValues?.totalDiscountInstallment || 0).toFixed(0)) + ' Lei din Rata lunara' }
-            ]">
-          </ms-web-summary-card>
-        </div>
-
-        <!-- Third Card -->
-        <div *ngIf="calculationResponseNoDiscounts && !isLoading" class="ms-simulator-page__summary-card-wrapper">
-          <ms-card-outside-title
-            title="Fara reduceri"
-            helperText="Fara reduceri de dobanda"
-            [hasHelper]="true"
-            [surface]="surface">
-          </ms-card-outside-title>
-          <ms-web-summary-card
-            [leftTopAmount]="{
-              label: 'Dobanda initiala (fara reduceri)',
-              amount: (calculationResponseNoDiscounts?.nominalInterestRate || 0).toFixed(2),
-              currency: '%'
-            }"
-            [rightTopAmount]="{
-              label: 'Rata lunara de plata (fara reduceri)',
-              amount: (calculationResponseNoDiscounts?.monthlyInstallment?.amountFixedInterest || 0).toFixed(0),
-              currency: 'Lei/luna'
-            }"
-            [leftBottomAmount]="{
-              label: 'Suma solicitata',
-              amount: (calculationResponseNoDiscounts?.loanAmount?.amount || 0).toFixed(0),
-              currency: 'Lei'
-            }"
-            [rightBottomAmount]="{
-              label: 'Suma maxima pe care o poti solicita',
-              amount: (calculationResponseNoDiscounts?.maxAmount?.amount || 0).toFixed(0),
-              currency: 'Lei'
-            }"
-            [primaryButtonLabel]="'Aplica in doar 2 minute'"
-            [secondaryButtonLabel]="'Detalii oferta'"
-            (primaryClicked)="onFooterPrimaryClick($event)"
-            (secondaryClicked)="onFooterDetailsClick($event)"
-            [extraDetails]="[
-              { label: 'Suma credit (comision inclus)', value: ((calculationResponseNoDiscounts?.loanAmountWithFee?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Comision analiza', value: ((calculationResponseNoDiscounts?.loanCosts?.fees?.fee?.fixedAmount?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Perioada de creditare', value: (calculationResponseNoDiscounts?.tenor || 0).toString() + ' ani' },
-              { label: 'Tip rate', value: ((rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
-              { label: '', value: '' },
-              { label: 'Rata lunara (dobanda fixa)', value: ((calculationResponseNoDiscounts?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei' },
-              { label: 'Rata lunara (dobanda variabila)', value: ((calculationResponseNoDiscounts?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
-              { label: '', value: '' },
-              { label: 'Rata dobanzii (dobanda fixa)', value: ((calculationResponseNoDiscounts?.nominalInterestRate || 0).toFixed(2)) + ' % pentru ' + ((calculationResponseNoDiscounts?.interestRateType?.fixedPeriod) || 0) + ' ani, apoi variabila' },
-              { label: 'Rata dobanzii (dobanda variabila)', value: ((calculationResponseNoDiscounts?.interestRateFormula?.bankMarginRate || 0).toFixed(2)) + ' + ' + ((calculationResponseNoDiscounts?.interestRateFormula?.irccRate || 0).toFixed(2)) + ' % (marja ' + ((calculationResponseNoDiscounts?.interestRateFormula?.bankMarginRate || 0).toFixed(2)) + ' %, IRCC ' + ((calculationResponseNoDiscounts?.interestRateFormula?.irccRate || 0).toFixed(2)) + ' %)' },
-              { label: '', value: '*Rata lunara aferenta dobanzii variabile a fost calculata tinand cont de valoarea actuala a IRCC. Ea se va modifica in functie de indicele IRCC.' },
-              { label: '', value: '' },
-              { label: 'DAE', value: (calculationResponseNoDiscounts?.annualPercentageRate || 0).toFixed(2) + ' %' },
-              { label: 'Valoarea totala platibila', value: ((calculationResponseNoDiscounts?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei' },
-              { label: 'Economisesti', value: ((calculationResponseNoDiscounts?.totalDiscountsValues?.totalDiscountAmount || 0).toFixed(0)) + ' Lei din Valoarea totala platibila sau ' + ((calculationResponseNoDiscounts?.totalDiscountsValues?.totalDiscountInstallment || 0).toFixed(0)) + ' Lei din Rata lunara' }
-            ]">
-          </ms-web-summary-card>
-        </div>
         </div>
         
         <!-- Loading State -->

@@ -942,4 +942,66 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Emit the selection event for parent components
     this.simulatorOptionSelected.emit(optionId);
   }
+
+  // Build columns for desktop web summary card (three offers in one card)
+  getWebSummaryColumns(): Array<{
+    leftTop: any;
+    rightTop: any;
+    leftBottom?: any;
+    rightBottom?: any;
+    extraDetails?: Array<{ label: string; value: string }>;
+    title?: string;
+  }> {
+    const columns: Array<any> = [];
+
+    const variants: Array<any | undefined> = [
+      this.calculationResponse,
+      this.calculationResponseAllDiscounts,
+      this.calculationResponseNoDiscounts
+    ];
+    const titles = [
+      'Oferta ta personalizata',
+      'Cu toate reducerile',
+      'Fara reduceri'
+    ];
+
+    variants.forEach((resp, idx) => {
+      if (!resp) { return; }
+      columns.push({
+        title: titles[idx] || '',
+        leftTop: {
+          label: 'Dobanda initiala',
+          amount: (resp?.nominalInterestRate || 0).toFixed(2),
+          currency: '%'
+        },
+        rightTop: {
+          label: 'Rata lunara de plata',
+          amount: (resp?.monthlyInstallment?.amountFixedInterest || 0).toFixed(0),
+          currency: 'Lei/luna'
+        },
+        leftBottom: {
+          label: 'Suma solicitata',
+          amount: (resp?.loanAmount?.amount || 0).toFixed(0),
+          currency: 'Lei'
+        },
+        rightBottom: {
+          label: 'Suma maxima pe care o poti solicita',
+          amount: (resp?.maxAmount?.amount || 0).toFixed(0),
+          currency: 'Lei'
+        },
+        extraDetails: [
+          { label: 'Suma credit (comision inclus)', value: ((resp?.loanAmountWithFee?.amount) || 0).toFixed(0) + ' Lei' },
+          { label: 'Comision analiza', value: ((resp?.loanCosts?.fees?.fee?.fixedAmount?.amount) || 0).toFixed(0) + ' Lei' },
+          { label: 'Perioada de creditare', value: (resp?.tenor || 0).toString() + ' ani' },
+          { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
+          { label: 'Rata lunara (dobanda fixa)', value: ((resp?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei' },
+          { label: 'Rata lunara (dobanda variabila)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
+          { label: 'DAE', value: (resp?.annualPercentageRate || 0).toFixed(2) + ' %' },
+          { label: 'Valoarea totala platibila', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei' }
+        ]
+      });
+    });
+
+    return columns;
+  }
 }

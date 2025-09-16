@@ -73,7 +73,7 @@
   @media (min-width: 1240px) {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 35%;
     height: calc(100vh - 120px); // Subtract header height
     box-sizing: border-box; // Include padding in panel width
     overflow-y: auto; // Restore scrolling on panel
@@ -129,7 +129,7 @@
   @media (min-width: 1240px) {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 65%;
     height: calc(100vh - 120px); // Subtract header height
     box-sizing: border-box; // Include padding in panel width
     overflow-y: hidden; // Scroll moved to content to avoid overlaying content
@@ -170,10 +170,14 @@
     align-items: center; // Center all child elements
     justify-content: flex-start;
     
-    // Top spacer to match left panel hero section positioning - align with hero chip
-    &::before { content: ''; display: block; height: calc(var(--space-8, 4rem) + var(--space-3, 1.5rem)); width: 100%; } // 88px
-    // Bottom spacer for scroll completion indicator
-    &::after { content: ''; display: block; height: var(--space-20, 10rem); width: 100%; } // 240px
+    // Match left panel: no top spacer, large bottom spacer for scroll completion
+    // Top spacer to visually align with left panel's starting offset
+    &::before { content: ''; display: block; height: var(--space-4, 2rem); width: 100%; }
+    // Use a smaller bottom spacer on the right to match perceived spacing with the left
+    &::after { content: ''; display: block; height: var(--space-4, 2rem); width: 100%; }
+
+    // No extra bottom padding; keep content tight to the bottom
+    padding-bottom: 0;
 
     // Summary cards grid: responsive grid layout - moved out of inner container
     .ms-simulator-page__right-content-grid {
@@ -226,21 +230,21 @@
     .ms-simulator-page__summary-card-wrapper > ms-card-outside-title,
     .ms-simulator-page__summary-card-wrapper > ms-web-summary-card {
       width: 100%;
-      max-width: 50rem; // Match left panel input width (800px)
+      max-width: 100%; // Allow full panel width for 3-column layout
       box-sizing: border-box;
-      margin: 0 auto; // center within stretched wrapper
+      margin: 0; // use panel padding/grid spacing
       position: static; // prevent any accidental overlay
     }
 
     // Ensure outside title aligns with card width and remains responsive
     .ms-simulator-page__summary-card-wrapper ms-card-outside-title {
       width: 100%;
-      max-width: 50rem; // Match left panel input width (800px)
+      max-width: 100%;
       overflow: visible;
       text-overflow: unset;
       white-space: normal; // Allow wrapping
       word-wrap: break-word;
-      margin: 0 auto; // Center to align with card
+      margin: 0; // spacing handled by wrapper gap
       margin-top: 0; // no extra margin - spacing handled by wrapper gap
       margin-bottom: 0; // spacing handled by wrapper gap
     }
@@ -353,6 +357,8 @@
     gap: var(--space-3, 1.5rem);
     box-sizing: border-box;
     align-items: stretch;
+    // Make input cards more compact on mobile
+    .ms-card { padding: 12px !important; }
     > * {
       width: 100%;
       max-width: 100%;
@@ -371,6 +377,8 @@
     width: 100%;
     max-width: 100%;
     align-items: stretch;
+    // Make input cards more compact on desktop/tablet
+    .ms-card { padding: 16px !important; }
     
     // Ensure all child components start at the same left point and fill width
     > * {

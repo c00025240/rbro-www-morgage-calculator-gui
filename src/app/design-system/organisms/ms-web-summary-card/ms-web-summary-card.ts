@@ -20,6 +20,15 @@ export class MsWebSummaryCard {
   @Input() rightTopAmount!: AmountData;
   @Input() leftBottomAmount?: AmountData;
   @Input() rightBottomAmount?: AmountData;
+  // New: optional multi-column API to render multiple offers in one card
+  @Input() columns?: Array<{
+    leftTop: AmountData;
+    rightTop: AmountData;
+    leftBottom?: AmountData;
+    rightBottom?: AmountData;
+    title?: string;
+    extraDetails?: Array<{ label: string; value: string }>;
+  }>;
   @Input() primaryButtonLabel: string = '';
   @Input() secondaryButtonLabel: string = '';
   @Input() helperText?: string;
@@ -34,10 +43,21 @@ export class MsWebSummaryCard {
   @Output() primaryClicked = new EventEmitter<void>();
   @Output() secondaryClicked = new EventEmitter<void>();
 
-  // Optional expandable details area
+  // Optional expandable details area (legacy single-mode)
   @Input() extraDetails?: Array<{ label: string; value: string }>;
   isExpanded = false;
   toggleDetails(): void { this.isExpanded = !this.isExpanded; }
+
+  // Per-column expand state for multi-column mode
+  private expandedColumns = new Set<number>();
+  isExpandedIndex(index: number): boolean { return this.expandedColumns.has(index); }
+  toggleDetailsIndex(index: number): void {
+    if (this.expandedColumns.has(index)) {
+      this.expandedColumns.delete(index);
+    } else {
+      this.expandedColumns.add(index);
+    }
+  }
 
   onPrimaryClick(): void { this.primaryClicked.emit(); }
   onSecondaryClick(): void { this.secondaryClicked.emit(); }
