@@ -33,21 +33,55 @@
     color: var(--color-text-primary);
   }
 
+  // Badge styles for offer titles
+  .ms-badge {
+    display: inline-block;
+    padding: 0.375rem 0.75rem; // 6px 12px
+    border-radius: var(--radius-lg, 0.5rem);
+    font-size: var(--font-size-sm, 0.875rem);
+    font-weight: var(--font-weight-semibold, 600);
+    line-height: 1;
+    border: 1px solid transparent;
+    box-shadow: var(--shadow-sm);
+  }
+  // Filled variants to match screenshot (white text on solid bg)
+  .ms-badge--primary {
+    background: var(--bg-accent);
+    color: var(--text-invert);
+    border-color: var(--accent-dark);
+  }
+  .ms-badge--secondary {
+    background: var(--success-default);
+    color: var(--text-invert);
+    border-color: var(--success-dark);
+  }
+  .ms-badge--success {
+    background: var(--warning-default);
+    color: var(--text-invert);
+    border-color: var(--warning-dark);
+  }
+  .ms-badge--info {
+    background: var(--info-default);
+    color: var(--text-invert);
+    border-color: var(--info-dark);
+  }
+
   &__close {
-    background: transparent;
-    border: 0;
+    background: var(--color-surface);
+    border: 1px solid var(--accent-default);
     font-size: var(--font-size-2xl, 1.5rem);
     cursor: pointer;
-    color: var(--color-text-primary);
+    color: var(--accent-dark);
     width: var(--space-4, 2rem);
     height: var(--space-4, 2rem);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-base, 0.25rem);
+    box-shadow: var(--shadow-sm);
     
     &:hover {
-      background: var(--color-hover);
+      background: var(--bg-accent-20);
     }
   }
 

@@ -101,6 +101,11 @@ export class MsMobileSummaryModalComponent {
     return this.getCurrentOffer().title;
   }
 
+  getBadgeClass(): string {
+    // Use the same visual style for all offers as the personalized offer
+    return 'ms-badge--primary';
+  }
+
   onPreviousOffer(): void {
     if (this.currentOfferIndex > 0) {
       this.currentOfferIndex--;

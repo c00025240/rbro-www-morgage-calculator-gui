@@ -2,7 +2,9 @@
   <div class="ms-mobile-summary-modal__dialog" (click)="$event.stopPropagation()">
     <!-- Header with offer type and close button -->
     <div class="ms-mobile-summary-modal__header">
-      <div class="ms-mobile-summary-modal__offer-type">{{ getTitle() }}</div>
+      <div class="ms-mobile-summary-modal__offer-type">
+        <span class="ms-badge" [ngClass]="getBadgeClass()">{{ getTitle() }}</span>
+      </div>
       <button class="ms-mobile-summary-modal__close" (click)="onCloseClick()">×</button>
     </div>
 
