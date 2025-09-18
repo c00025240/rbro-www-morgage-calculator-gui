@@ -39,118 +39,121 @@
 
         <!-- Simulator User Inputs Container -->
         <div class="simulatorUserInputs">
-          <!-- Property Value Input Section -->
-          <ms-property-value-input
-            [label]="propertyLabel"
-            [helperText]="propertyHelperText"
-            [placeholder]="propertyPlaceholder"
-            [currency]="propertyCurrency"
-            [min]="propertyMin"
-            [max]="propertyMax"
-            [step]="propertyStep"
-            [eurConversionRate]="propertyEurConversionRate"
-            [value]="propertyValue"
-            [disabled]="propertyDisabled"
-            [surface]="surface"
-            (valueChange)="onPropertyValueChange($event)"
-            (focused)="onPropertyFocused($event)"
-            (blurred)="onPropertyBlurred($event)">
-          </ms-property-value-input>
-          
-          <!-- Loan Duration Input Section -->
-          <ms-loan-duration
-            [label]="loanDurationLabel"
-            [placeholder]="loanDurationPlaceholder"
-            [suffix]="loanDurationSuffix"
-            [min]="loanDurationMin"
-            [max]="loanDurationMax"
-            [step]="loanDurationStep"
-            [disabled]="loanDurationDisabled"
-            [surface]="surface"
-            (valueChange)="onLoanDurationValueChange($event)"
-            (focused)="onLoanDurationFocused($event)"
-            (blurred)="onLoanDurationBlurred($event)">
-          </ms-loan-duration>
-          
-          <!-- Age Input Section (desktop) -->
-          <ms-age
-            [label]="'Spune-mi cati ani ai'"
-            [placeholder]="ageValue.toString()"
-            [suffix]="ageSuffix"
-            [min]="ageMin"
-            [max]="ageMax"
-            [step]="ageStep"
-            [value]="ageValue"
-            [disabled]="ageDisabled"
-            [surface]="surface"
-            (valueChange)="onAgeValueChange($event)">
-          </ms-age>
-          
-          <!-- Income Section -->
-          <ms-income-section
-            [monthlyIncome]="monthlyIncome"
-            [monthlyInstallments]="monthlyInstallments"
-            [surface]="surface"
-            (monthlyIncomeChange)="onMonthlyIncomeChange($event)"
-            (monthlyInstallmentsChange)="onMonthlyInstallmentsChange($event)">
-          </ms-income-section>
+			<!-- 1) Venitul tau -->
+			<ms-income-section
+				[monthlyIncome]="monthlyIncome"
+				[monthlyInstallments]="monthlyInstallments"
+				[surface]="surface"
+				(monthlyIncomeChange)="onMonthlyIncomeChange($event)"
+				(monthlyInstallmentsChange)="onMonthlyInstallmentsChange($event)">
+			</ms-income-section>
 
-          <!-- Down Payment (simple input) -->
-          <ms-downpayment 
-            label="Avans"
-            [valueProp]="downPaymentAmount"
-            [disabledProp]="downPaymentDisabled"
-            (valueChange)="onDownPaymentAmountChange($event)">
-          </ms-downpayment>
+			<!-- 2) Varsta -->
+			<ms-age
+				[label]="'Spune-mi cati ani ai'"
+				[placeholder]="ageValue.toString()"
+				[suffix]="ageSuffix"
+				[min]="ageMin"
+				[max]="ageMax"
+				[step]="ageStep"
+				[value]="ageValue"
+				[disabled]="ageDisabled"
+				[surface]="surface"
+				(valueChange)="onAgeValueChange($event)">
+			</ms-age>
 
-          <!-- Property Location Section -->
-          <ms-property-location-section
-            [selectedCounty]="selectedCounty"
-            [selectedCity]="selectedCity"
-            [countyOptions]="countyOptions"
-            [cityOptions]="cityOptions"
-            [surface]="surface"
-            (countyChange)="onCountyChange($event)"
-            (cityChange)="onCityChange($event)">
-          </ms-property-location-section>
+			<!-- 3) Zona -->
+			<ms-property-location-section
+				[selectedCounty]="selectedCounty"
+				[selectedCity]="selectedCity"
+				[countyOptions]="countyOptions"
+				[cityOptions]="cityOptions"
+				[surface]="surface"
+				(countyChange)="onCountyChange($event)"
+				(cityChange)="onCityChange($event)">
+			</ms-property-location-section>
 
-          <!-- Owner Status (desktop) -->
-          <ms-owner-status
-            [owner]="hasGuaranteeProperty"
-            [surface]="surface"
-            (ownerChange)="onGuaranteePropertyChange($event)">
-          </ms-owner-status>
+			<!-- 4) Status proprietar -->
+			<ms-owner-status
+				[owner]="hasGuaranteeProperty"
+				[surface]="surface"
+				(ownerChange)="onGuaranteePropertyChange($event)">
+			</ms-owner-status>
 
-          <!-- Info Cell -->
-          <ms-info-contained-cell
-            type="info"
-            [text]="'Suma solicitata: ' + requestedAmount.toLocaleString() + ' Lei'">
-          </ms-info-contained-cell>
+			<!-- 5) Valoarea proprietatii -->
+			<ms-property-value-input
+				[label]="propertyLabel"
+				[helperText]="propertyHelperText"
+				[placeholder]="propertyPlaceholder"
+				[currency]="propertyCurrency"
+				[min]="propertyMin"
+				[max]="propertyMax"
+				[step]="propertyStep"
+				[eurConversionRate]="propertyEurConversionRate"
+				[value]="propertyValue"
+				[disabled]="propertyDisabled"
+				[surface]="surface"
+				(valueChange)="onPropertyValueChange($event)"
+				(focused)="onPropertyFocused($event)"
+				(blurred)="onPropertyBlurred($event)">
+			</ms-property-value-input>
 
-          <!-- Interest Preferences Section -->
-          <ms-interest-preferences-section
-            [rateType]="rateType"
-            [interestType]="interestType"
-            [surface]="surface"
-            (rateTypeChange)="onRateTypeChange($event)"
-            (interestTypeChange)="onInterestTypeChange($event)">
-          </ms-interest-preferences-section>
+			<!-- 6) Avans -->
+			<ms-downpayment 
+				label="Avans"
+				[valueProp]="downPaymentAmount"
+				[disabledProp]="downPaymentDisabled"
+				(valueChange)="onDownPaymentAmountChange($event)">
+			</ms-downpayment>
 
-          <!-- Interest Reduction Section -->
-          <ms-interest-reduction-section
-            [lifeInsurance]="lifeInsurance"
-            [salaryTransfer]="salaryTransfer"
-            [greenCertificate]="greenCertificate"
-            [surface]="surface"
-            [savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
-            [savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
-            [savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
-            [totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountAmount"
-            (lifeInsuranceChange)="onLifeInsuranceChange($event)"
-            (salaryTransferChange)="onSalaryTransferChange($event)"
-            (greenCertificateChange)="onGreenCertificateChange($event)">
-          </ms-interest-reduction-section>
-        </div>
+			<!-- 7) Perioada imprumutului -->
+			<ms-loan-duration
+				[label]="loanDurationLabel"
+				[placeholder]="loanDurationPlaceholder"
+				[suffix]="loanDurationSuffix"
+				[min]="loanDurationMin"
+				[max]="loanDurationMax"
+				[step]="loanDurationStep"
+				[value]="loanDurationValue"
+				[disabled]="loanDurationDisabled"
+				[surface]="surface"
+				(valueChange)="onLoanDurationValueChange($event)"
+				(focused)="onLoanDurationFocused($event)"
+				(blurred)="onLoanDurationBlurred($event)">
+			</ms-loan-duration>
+ 
+ 			<!-- Info Cell -->
+ 			<ms-info-contained-cell
+ 				type="info"
+ 				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString() + ' Lei'">
+ 			</ms-info-contained-cell>
+ 			
+ 			<!-- Interest Preferences Section -->
+ 			<ms-interest-preferences-section
+ 				[rateType]="rateType"
+ 				[interestType]="interestType"
+ 				[surface]="surface"
+ 				(rateTypeChange)="onRateTypeChange($event)"
+ 				(interestTypeChange)="onInterestTypeChange($event)">
+ 			</ms-interest-preferences-section>
+ 			
+ 			<!-- Interest Reduction Section (owner toggle removed) -->
+ 			<ms-interest-reduction-section
+ 				[lifeInsurance]="lifeInsurance"
+ 				[salaryTransfer]="salaryTransfer"
+ 				[greenCertificate]="greenCertificate"
+ 				[surface]="surface"
+ 				[savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
+ 				[savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
+ 				[savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
+ 				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountAmount"
+ 				(lifeInsuranceChange)="onLifeInsuranceChange($event)"
+ 				(salaryTransferChange)="onSalaryTransferChange($event)"
+ 				(greenCertificateChange)="onGreenCertificateChange($event)">
+ 			</ms-interest-reduction-section>
+ 			
+ 			<!-- Future input components can be added here with automatic 24px gaps -->
+ 		</div>
 
       </div>
     </div>
@@ -159,6 +162,17 @@
     <div class="ms-simulator-page__right-panel">
       <div class="ms-simulator-page__right-content">
 
+        <!-- Business error (e.g., 422) - displayed at top -->
+        <div *ngIf="errorMessage" class="ms-simulator-page__error-wrapper">
+          <div class="ms-error-banner" role="alert" aria-live="assertive">
+            <span class="ms-error-banner__icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C12.3631 2 12.6976 2.19718 12.874 2.51465L22.874 20.5146C23.0459 20.8242 23.0417 21.2016 22.8623 21.5068C22.6826 21.8122 22.3543 22 22 22H1.99998C1.64566 22 1.31736 21.8122 1.13767 21.5068C0.958254 21.2016 0.954051 20.8242 1.12595 20.5146L11.126 2.51465C11.3023 2.19718 11.6368 2 12 2ZM3.6992 20H20.3008L12 5.05957L3.6992 20ZM12 16.25C12.6903 16.25 13.25 16.8096 13.25 17.5C13.25 18.1904 12.6903 18.75 12 18.75C11.3096 18.75 10.75 18.1904 10.75 17.5C10.75 16.8096 11.3096 16.25 12 16.25ZM13 15H11V10H13V15Z" fill="var(--error-default)"/>
+              </svg>
+            </span>
+            <span class="ms-error-banner__text">{{ errorMessage }}</span>
+          </div>
+        </div>
         
         <!-- Summary - Single Card With All Offers -->
         <div class="ms-simulator-page__right-content-grid">
@@ -179,7 +193,7 @@
             (secondaryClicked)="onFooterDetailsClick($event)">
           </ms-web-summary-card>
         </div>
-
+        
         </div>
         
         <!-- Loading State -->
@@ -187,13 +201,6 @@
           <div class="ms-simulator-page__loading-content">
             <ms-progress-spinner></ms-progress-spinner>
             <p>Se calculează oferta...</p>
-          </div>
-        </ms-card>
-        
-        <!-- Error State -->
-        <ms-card *ngIf="errorMessage && !isLoading" class="ms-simulator-page__error-card">
-          <div class="ms-simulator-page__error-content">
-            <p>{{ errorMessage }}</p>
           </div>
         </ms-card>
         
@@ -226,118 +233,121 @@
 
       <!-- Simulator User Inputs Container -->
       <div class="simulatorUserInputs">
-        <!-- Property Value Input Section -->
-        <ms-property-value-input
-          [label]="propertyLabel"
-          [helperText]="propertyHelperText"
-          [placeholder]="propertyPlaceholder"
-          [currency]="propertyCurrency"
-          [min]="propertyMin"
-          [max]="propertyMax"
-          [step]="propertyStep"
-          [eurConversionRate]="propertyEurConversionRate"
-          [value]="propertyValue"
-          [disabled]="propertyDisabled"
-          [surface]="surface"
-          (valueChange)="onPropertyValueChange($event)"
-          (focused)="onPropertyFocused($event)"
-          (blurred)="onPropertyBlurred($event)">
-        </ms-property-value-input>
-        
-        <!-- Loan Duration Input Section -->
-        <ms-loan-duration
-          [label]="loanDurationLabel"
-          [placeholder]="loanDurationPlaceholder"
-          [suffix]="loanDurationSuffix"
-          [min]="loanDurationMin"
-          [max]="loanDurationMax"
-          [step]="loanDurationStep"
-          [disabled]="loanDurationDisabled"
-          [surface]="surface"
-          (valueChange)="onLoanDurationValueChange($event)"
-          (focused)="onLoanDurationFocused($event)"
-          (blurred)="onLoanDurationBlurred($event)">
-        </ms-loan-duration>
-        
-        <!-- Age Input Section (mobile) -->
-        <ms-age
-          [label]="'Spune-mi cati ani ai'"
-          [placeholder]="'30'"
-          [suffix]="'ani'"
-          [min]="18"
-          [max]="70"
-          [step]="1"
-          [surface]="surface"
-          (valueChange)="onAgeValueChange($event)">
-        </ms-age>
-        
-        <!-- Income Section -->
-        <ms-income-section
-          [monthlyIncome]="monthlyIncome"
-          [monthlyInstallments]="monthlyInstallments"
-          [surface]="surface"
-          (monthlyIncomeChange)="onMonthlyIncomeChange($event)"
-          (monthlyInstallmentsChange)="onMonthlyInstallmentsChange($event)">
-        </ms-income-section>
+			<!-- 1) Venitul tau -->
+			<ms-income-section
+				[monthlyIncome]="monthlyIncome"
+				[monthlyInstallments]="monthlyInstallments"
+				[surface]="surface"
+				(monthlyIncomeChange)="onMonthlyIncomeChange($event)"
+				(monthlyInstallmentsChange)="onMonthlyInstallmentsChange($event)">
+			</ms-income-section>
 
-        <!-- Down Payment (simple input) -->
-        <ms-downpayment 
-          label="Avans"
-          [valueProp]="downPaymentAmount"
-          [disabledProp]="downPaymentDisabled"
-          (valueChange)="onDownPaymentAmountChange($event)">
-        </ms-downpayment>
-        
-        <!-- Property Location Section -->
-        <ms-property-location-section
-          [selectedCounty]="selectedCounty"
-          [selectedCity]="selectedCity"
-          [countyOptions]="countyOptions"
-          [cityOptions]="cityOptions"
-          [surface]="surface"
-          (countyChange)="onCountyChange($event)"
-          (cityChange)="onCityChange($event)">
-        </ms-property-location-section>
+			<!-- 2) Varsta -->
+			<ms-age
+				[label]="'Spune-mi cati ani ai'"
+				[placeholder]="ageValue.toString()"
+				[suffix]="ageSuffix"
+				[min]="ageMin"
+				[max]="ageMax"
+				[step]="ageStep"
+				[value]="ageValue"
+				[disabled]="ageDisabled"
+				[surface]="surface"
+				(valueChange)="onAgeValueChange($event)">
+			</ms-age>
 
-        <!-- Owner Status (moved out of preferences) -->
-        <ms-owner-status
-          [owner]="hasGuaranteeProperty"
-          [surface]="surface"
-          (ownerChange)="onGuaranteePropertyChange($event)">
-        </ms-owner-status>
-        
-        <!-- Info Cell -->
-        <ms-info-contained-cell
-          type="info"
-          [text]="'Suma solicitata: ' + requestedAmount.toLocaleString() + ' Lei'">
-        </ms-info-contained-cell>
-        
-        <!-- Interest Preferences Section -->
-        <ms-interest-preferences-section
-          [rateType]="rateType"
-          [interestType]="interestType"
-          [surface]="surface"
-          (rateTypeChange)="onRateTypeChange($event)"
-          (interestTypeChange)="onInterestTypeChange($event)">
-        </ms-interest-preferences-section>
-        
-        <!-- Interest Reduction Section (owner toggle removed) -->
-        <ms-interest-reduction-section
-          [lifeInsurance]="lifeInsurance"
-          [salaryTransfer]="salaryTransfer"
-          [greenCertificate]="greenCertificate"
-          [surface]="surface"
-          [savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
-          [savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
-          [savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
-          [totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountAmount"
-          (lifeInsuranceChange)="onLifeInsuranceChange($event)"
-          (salaryTransferChange)="onSalaryTransferChange($event)"
-          (greenCertificateChange)="onGreenCertificateChange($event)">
-        </ms-interest-reduction-section>
-        
-        <!-- Future input components can be added here with automatic 24px gaps -->
-      </div>
+			<!-- 3) Zona -->
+			<ms-property-location-section
+				[selectedCounty]="selectedCounty"
+				[selectedCity]="selectedCity"
+				[countyOptions]="countyOptions"
+				[cityOptions]="cityOptions"
+				[surface]="surface"
+				(countyChange)="onCountyChange($event)"
+				(cityChange)="onCityChange($event)">
+			</ms-property-location-section>
+
+			<!-- 4) Status proprietar -->
+			<ms-owner-status
+				[owner]="hasGuaranteeProperty"
+				[surface]="surface"
+				(ownerChange)="onGuaranteePropertyChange($event)">
+			</ms-owner-status>
+
+			<!-- 5) Valoarea proprietatii -->
+			<ms-property-value-input
+				[label]="propertyLabel"
+				[helperText]="propertyHelperText"
+				[placeholder]="propertyPlaceholder"
+				[currency]="propertyCurrency"
+				[min]="propertyMin"
+				[max]="propertyMax"
+				[step]="propertyStep"
+				[eurConversionRate]="propertyEurConversionRate"
+				[value]="propertyValue"
+				[disabled]="propertyDisabled"
+				[surface]="surface"
+				(valueChange)="onPropertyValueChange($event)"
+				(focused)="onPropertyFocused($event)"
+				(blurred)="onPropertyBlurred($event)">
+			</ms-property-value-input>
+
+			<!-- 6) Avans -->
+			<ms-downpayment 
+				label="Avans"
+				[valueProp]="downPaymentAmount"
+				[disabledProp]="downPaymentDisabled"
+				(valueChange)="onDownPaymentAmountChange($event)">
+			</ms-downpayment>
+
+			<!-- 7) Perioada imprumutului -->
+			<ms-loan-duration
+				[label]="loanDurationLabel"
+				[placeholder]="loanDurationPlaceholder"
+				[suffix]="loanDurationSuffix"
+				[min]="loanDurationMin"
+				[max]="loanDurationMax"
+				[step]="loanDurationStep"
+				[value]="loanDurationValue"
+				[disabled]="loanDurationDisabled"
+				[surface]="surface"
+				(valueChange)="onLoanDurationValueChange($event)"
+				(focused)="onLoanDurationFocused($event)"
+				(blurred)="onLoanDurationBlurred($event)">
+			</ms-loan-duration>
+ 			
+ 			<!-- Info Cell -->
+ 			<ms-info-contained-cell
+ 				type="info"
+ 				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString() + ' Lei'">
+ 			</ms-info-contained-cell>
+ 			
+ 			<!-- Interest Preferences Section -->
+ 			<ms-interest-preferences-section
+ 				[rateType]="rateType"
+ 				[interestType]="interestType"
+ 				[surface]="surface"
+ 				(rateTypeChange)="onRateTypeChange($event)"
+ 				(interestTypeChange)="onInterestTypeChange($event)">
+ 			</ms-interest-preferences-section>
+ 			
+ 			<!-- Interest Reduction Section (owner toggle removed) -->
+ 			<ms-interest-reduction-section
+ 				[lifeInsurance]="lifeInsurance"
+ 				[salaryTransfer]="salaryTransfer"
+ 				[greenCertificate]="greenCertificate"
+ 				[surface]="surface"
+ 				[savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
+ 				[savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
+ 				[savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
+ 				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountAmount"
+ 				(lifeInsuranceChange)="onLifeInsuranceChange($event)"
+ 				(salaryTransferChange)="onSalaryTransferChange($event)"
+ 				(greenCertificateChange)="onGreenCertificateChange($event)">
+ 			</ms-interest-reduction-section>
+ 			
+ 			<!-- Future input components can be added here with automatic 24px gaps -->
+ 		</div>
       
     </main>
 
@@ -369,10 +379,5 @@
     (closeModal)="onSimulatorModalClose()"
     (optionSelected)="onSimulatorOptionSelected($event)">
   </simulator-option-modal>
-
-  <!-- Debug: Display modal state -->
-  <div *ngIf="isSimulatorModalVisible" style="position: fixed; top: 10px; right: 10px; background: red; color: white; padding: 10px; z-index: 9999;">
-    Modal should be visible!
-  </div>
 
 </ms-page-shell> 

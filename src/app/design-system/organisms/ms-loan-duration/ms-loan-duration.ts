@@ -99,11 +99,12 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
 export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, OnDestroy, OnChanges {
   
   @Input() label?: string = 'Perioada imprumutului';
-  @Input() placeholder: string = '360';
-  @Input() suffix: string = 'luni';
-  @Input() min: number = 12; // 1 year minimum
-  @Input() max: number = 360; // 30 years maximum
-  @Input() step: number = 6; // 6 month increments
+  @Input() placeholder: string = '30';
+  @Input() suffix: string = 'ani';
+  @Input() min: number = 1; // 1 an minimum
+  @Input() max: number = 30; // 30 ani maximum
+  @Input() step: number = 1; // 1 an increment
+  @Input() value?: number; // external value in years
   @Input() disabled = false;
   @Input() surface: 'default' | 'light' | 'dark' = 'dark';
 
@@ -127,9 +128,9 @@ export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, On
     return this.surface === 'dark' ? 'dark' : 'light';
   }
 
-  // Core FormControls for loan duration in months
-  inputControl = new FormControl('360');   // String for text field (default 30 years)
-  sliderControl = new FormControl(360);    // Number for slider (default 30 years)
+  // Core FormControls for loan duration in years
+  inputControl = new FormControl('30');   // String for text field (default 30 ani)
+  sliderControl = new FormControl(30);    // Number for slider (default 30 ani)
 
   // State management
   isInputFocused = false;
@@ -155,6 +156,21 @@ export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, On
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['disabled']) {
       this.setDisabledState(changes['disabled'].currentValue);
+    }
+    if (changes['min'] || changes['max']) {
+      this.inputControl.setValidators([
+        Validators.required,
+        Validators.min(this.min),
+        Validators.max(this.max)
+      ]);
+    }
+    if (changes['value'] && changes['value'].currentValue !== undefined && changes['value'].currentValue !== null) {
+      const v = Number(changes['value'].currentValue);
+      if (Number.isFinite(v)) {
+        this.inputControl.setValue(v.toString(), { emitEvent: false });
+        this.sliderControl.setValue(v, { emitEvent: false });
+        this.cdr.markForCheck();
+      }
     }
   }
 
@@ -284,12 +300,12 @@ export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, On
 
   // Computed properties
   get currentHelperText(): string {
-    const textValue = this.inputControl.value || '360';
+    const textValue = this.inputControl.value || '30';
     const currentValue = parseInt(textValue, 10) || this.min;
     
     // Show validation error for out-of-range values
     if (currentValue < this.min || currentValue > this.max) {
-      return `Durata trebuie să fie între ${this.min} și ${this.max} luni`;
+      return `Durata trebuie să fie între ${this.min} și ${this.max} ani`;
     }
     
     // Show the full helper text with calculated years/months
@@ -298,23 +314,14 @@ export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, On
   }
 
   get hasInputError(): boolean {
-    const textValue = this.inputControl.value || '360';
+    const textValue = this.inputControl.value || '30';
     const currentValue = parseInt(textValue, 10) || this.min;
     return currentValue < this.min || currentValue > this.max;
   }
 
-  // Helper method to convert months to years and months display
-  getDisplayText(months: number): string {
-    const years = Math.floor(months / 12);
-    const remainingMonths = months % 12;
-    
-    if (years === 0) {
-      return `${remainingMonths} lun${remainingMonths !== 1 ? 'i' : 'a'}`;
-    } else if (remainingMonths === 0) {
-      return `${years} an${years !== 1 ? 'i' : ''}`;
-    } else {
-      return `${years} an${years !== 1 ? 'i' : ''} si ${remainingMonths} lun${remainingMonths !== 1 ? 'i' : 'a'}`;
-    }
+  // Helper method to display years string
+  getDisplayText(years: number): string {
+    return `${years} an${years !== 1 ? 'i' : ''}`;
   }
 
   // Public methods

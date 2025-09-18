@@ -28,14 +28,15 @@ export interface PreferenceOption {
 
       <ms-card [allowOverflow]="true">
         <div class="ms-interest-preferences-section__content">
-          <ms-select
-            label="Tip calcul rate"
-            [value]="rateType"
-            [options]="rateTypeOptions"
-            helperText="Aceasta rata lunara pe toata durata creditului, cu un efort financiar constant."
-            [disabled]="disabled"
-            (valueChange)="onRateTypeChange($event)">
-          </ms-select>
+			<ms-select
+				*ngIf="false"
+				label="Tip calcul rate"
+				[value]="rateType"
+				[options]="rateTypeOptions"
+				helperText="Aceasta rata lunara pe toata durata creditului, cu un efort financiar constant."
+				[disabled]="true"
+				(valueChange)="onRateTypeChange($event)">
+			</ms-select>
 
           <ms-select
             label="Tip dobanda"

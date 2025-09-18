@@ -1,0 +1,16 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="24" height="24" fill="#EBEBEB"/>
+<g id="People, social, loyalty">
+<rect x="-80" y="-100" width="608" height="2549" rx="40" fill="white"/>
+<rect x="-79.5" y="-99.5" width="607" height="2548" rx="39.5" stroke="#9C967F" stroke-opacity="0.24"/>
+<g id="man">
+<rect x="-15.5" y="-15.5" width="95" height="55" rx="4.5" stroke="#7B61FF" stroke-opacity="0.2" stroke-dasharray="10 5"/>
+<g id="Style=outlined">
+<g id="shape">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2ZM9 7C9 5.34315 10.3431 4 12 4C13.6569 4 15 5.34315 15 7C15 8.65685 13.6569 10 12 10C10.3431 10 9 8.65685 9 7Z" fill="#2B2D34"/>
+<path d="M12.0001 13C6.58967 13 3.5 17.5983 3.5 22H5.5C5.5 18.4017 7.97308 15 12.0001 15C16.0271 15 18.5 18.4017 18.5 22H20.5C20.5 17.5983 17.4106 13 12.0001 13Z" fill="#2B2D34"/>
+</g>
+</g>
+</g>
+</g>
+</svg>

@@ -95,24 +95,24 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   // Property value input configuration
   @Input() propertyLabel: string = 'Valoarea proprietății';
   @Input() propertyHelperText: string = 'Introduceți valoarea totală a proprietății pe care doriți să o achiziționați';
-  @Input() propertyPlaceholder: string = '0';
+  @Input() propertyPlaceholder: string = '355000';
   @Input() propertyCurrency: string = 'RON';
   @Input() propertyMin: number = 100000;
   @Input() propertyMax: number = 1000000;
   @Input() propertyStep: number = 5000;
   @Input() propertyEurConversionRate: number = 5.0;
   @Input() propertyDisabled: boolean = false;
-  @Input() propertyValue: number = 500000; // Default property value
+  @Input() propertyValue: number = 355000; // Default property value per request
   
   // Loan duration input configuration
   @Input() loanDurationLabel: string = 'Perioada imprumutului';
-  @Input() loanDurationPlaceholder: string = '360';
-  @Input() loanDurationSuffix: string = 'luni';
-  @Input() loanDurationMin: number = 12; // 1 year minimum
-  @Input() loanDurationMax: number = 360; // 30 years maximum
-  @Input() loanDurationStep: number = 6; // 6 month increments
+  @Input() loanDurationPlaceholder: string = '30';
+  @Input() loanDurationSuffix: string = 'ani';
+  @Input() loanDurationMin: number = 1; // 1 an minimum
+  @Input() loanDurationMax: number = 30; // 30 ani maximum
+  @Input() loanDurationStep: number = 1; // 1 an increment
   @Input() loanDurationDisabled: boolean = false;
-  @Input() loanDurationValue: number = 360; // Default loan duration (30 ani)
+  @Input() loanDurationValue: number = 30; // Default loan duration (30 ani)
   
   // Age input configuration
   @Input() ageValue: number = 30; // Default age
@@ -123,8 +123,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() ageDisabled: boolean = false;
   
   // Income Section configuration
-  @Input() monthlyIncome: number = 12000;
-  @Input() monthlyInstallments: number = 1500;
+  @Input() monthlyIncome: number = 5500; // Default income per request
+  @Input() monthlyInstallments: number = 0; // Default other installments per request
   
   // Down Payment Section configuration
   @Input() hasGuaranteeProperty: boolean = true;
@@ -432,7 +432,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Loan amount - calculated from property value minus down payment
     request.loanAmount = new Amount();
     request.loanAmount.currency = 'RON';
-    request.loanAmount.amount = this.calculateLoanAmount();
+    request.loanAmount.amount = this.propertyValue;
     
     // Area information
     request.area = new Area();
@@ -521,7 +521,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.calculationResponse = response;
-          
+          const tenorRaw = Number(response?.tenor);
+          if (Number.isFinite(tenorRaw)) {
+            const allowedYears = Math.max(this.loanDurationMin, Math.min(this.loanDurationMax, tenorRaw));
+            // Update slider maximum and set value + placeholder to tenor in years
+            this.loanDurationMax = allowedYears;
+            this.loanDurationValue = allowedYears;
+            this.loanDurationPlaceholder = allowedYears.toString();
+          }
+
           // Update down payment amount from backend response
           if (response.downPayment && response.downPayment.amount) {
             this.downPaymentAmount = response.downPayment.amount;
@@ -546,14 +554,20 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           };
           
           this.isLoading = false;
+          this.errorMessage = undefined; // clear any previous error (e.g., 422)
           this.cdr.markForCheck();
         },
         error: (error) => {
-          this.errorMessage = error.message || 'A apărut o eroare la calcularea creditului. Vă rugăm să încercați din nou.';
-          this.isLoading = false;
-          console.error('Mortgage calculation error:', error);
-          this.cdr.markForCheck();
-        }
+ 					if (error?.status === 422) {
+ 						const msg = error?.error?.reasons?.[0]?.message ?? error?.error?.message ?? error?.message;
+ 						this.errorMessage = msg || 'Ne pare rau! Cererea nu poate fi procesata.';
+ 					} else {
+ 						this.errorMessage = error?.message || 'A apărut o eroare la calcularea creditului. Vă rugăm să încercați din nou.';
+ 					}
+ 					this.isLoading = false;
+ 					console.error('Mortgage calculation error:', error);
+ 					this.cdr.markForCheck();
+ 				}
       });
 
     // Call 2: All discounts true

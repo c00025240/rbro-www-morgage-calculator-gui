@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/design-system/molecules/ms-switch-form/ms-switch-form.scss"],
+  "sourcesContent": [".ms-switch-form {\n  display: flex;\n  flex-direction: column;\n  gap: 2px; // 2px gap between CellLabel and SwitchCell\n  width: 100%;\n  font-family: var(--radio-font-family, \"Amalia\") !important;\n\n  // Surface variations\n  &--surface-default {\n    // Default styling\n  }\n\n  &--surface-light {\n    // Light surface styling (if needed in future)\n  }\n\n  &--surface-dark {\n    // Dark surface styling (if needed in future)\n  }\n\n  // Disabled state\n  &--disabled {\n    opacity: 0.6;\n    pointer-events: none;\n    cursor: not-allowed;\n  }\n\n  // Ensure proper spacing and alignment\n  ms-cell-label {\n    width: 100%;\n  }\n\n  ms-switch-cell {\n    width: 100%;\n  }\n} "],
+  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,kBAAA;AACA,OAAA;AACA,SAAA;AACA,eAAA,IAAA,mBAAA,EAAA;;AAgBA,CAAA;AACE,WAAA;AACA,kBAAA;AACA,UAAA;;AAIF,CA5BF,eA4BE;AACE,SAAA;;AAGF,CAhCF,eAgCE;AACE,SAAA;;",
+  "names": []
+}

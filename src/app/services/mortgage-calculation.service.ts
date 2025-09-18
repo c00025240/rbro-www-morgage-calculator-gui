@@ -203,6 +203,11 @@ export class MortgageCalculationService {
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'A apărut o eroare necunoscută';
 
+    // Preserve full backend payload for business validation errors (422)
+    if (error?.status === 422) {
+      return throwError(() => error);
+    }
+
     const isBrowserErrorEvent = typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent;
     if (isBrowserErrorEvent) {
       errorMessage = `Eroare client: ${error.error.message}`;
@@ -226,6 +231,15 @@ export class MortgageCalculationService {
     }
 
     console.error('Mortgage calculation error:', error);
-    return throwError(() => new Error(errorMessage));
+    // Re-emit as HttpErrorResponse with friendly message for non-422 cases
+    const friendly = new HttpErrorResponse({
+      error: error.error,
+      headers: error.headers,
+      status: error.status,
+      statusText: error.statusText,
+      url: error.url || undefined
+    });
+    Object.defineProperty(friendly, 'message', { value: errorMessage });
+    return throwError(() => friendly);
   }
 }
