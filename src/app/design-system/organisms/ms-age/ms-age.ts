@@ -8,6 +8,8 @@ import {
   HostBinding,
   OnInit,
   OnDestroy,
+  OnChanges,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -78,7 +80,7 @@ const AGE_VALUE_ACCESSOR = {
   `,
   styleUrls: ['./ms-age.scss'],
 })
-export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, OnChanges {
   @Input() label: string = 'Spune-mi cati ani ai';
   @Input() placeholder: string = '30';
   @Input() suffix: string = 'ani';
@@ -123,6 +125,30 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy {
     this.inputControl.setValue(String(initial), { emitEvent: false });
     this.sliderControl.setValue(initial, { emitEvent: false });
     this.syncControls();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Update validators if bounds changed
+    if (changes['min'] || changes['max']) {
+      this.inputControl.setValidators([
+        Validators.required,
+        Validators.min(this.min),
+        Validators.max(this.max)
+      ]);
+    }
+
+    // Reflect external value changes into internal controls
+    if (changes['value'] && !changes['value'].firstChange) {
+      const v = typeof this.value === 'number' ? this.value : 30;
+      const clamped = Math.min(Math.max(v, this.min), this.max);
+      this.sliderControl.setValue(clamped, { emitEvent: false });
+      this.inputControl.setValue(String(clamped), { emitEvent: false });
+    }
+
+    // Sync disabled state if changed externally
+    if (changes['disabled'] && !changes['disabled'].firstChange) {
+      this.setDisabledState(!!this.disabled);
+    }
   }
 
   ngOnDestroy(): void {

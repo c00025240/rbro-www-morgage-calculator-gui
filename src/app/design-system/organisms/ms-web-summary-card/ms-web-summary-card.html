@@ -2,7 +2,11 @@
 	<ms-card [maxWidth]="false">
 		<div class="ms-web-summary-card__content">
 			<!-- Offers area: three columns in one card -->
-			<div class="ms-web-summary-card__offers-grid" *ngIf="columns?.length; else legacySingle">
+			<div class="ms-web-summary-card__offers-grid" *ngIf="columns?.length; else legacySingle" [ngClass]="{
+				'cols-1': columns?.length === 1,
+				'cols-2': columns?.length === 2,
+				'cols-3': (columns?.length || 0) >= 3
+			}">
 				<div class="ms-web-summary-card__offer-col" *ngFor="let col of columns; let i = index">
 					<div class="ms-web-summary-card__combined-box">
 						<div class="ms-web-summary-card__offer-heading" *ngIf="col.title">{{ col.title }}</div>

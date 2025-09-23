@@ -178,6 +178,24 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
     if (changes['disabled']) {
       this.setDisabledState(changes['disabled'].currentValue);
     }
+
+    if (changes['min'] || changes['max']) {
+      this.inputControl.setValidators([
+        Validators.required,
+        Validators.min(this.min),
+        Validators.max(this.max)
+      ]);
+    }
+
+    if (changes['value'] && !changes['value'].firstChange) {
+      const incoming = changes['value'].currentValue as number;
+      if (typeof incoming === 'number' && !Number.isNaN(incoming)) {
+        const clamped = Math.max(this.min, Math.min(this.max, incoming));
+        this.inputControl.setValue(clamped.toString(), { emitEvent: false });
+        this.sliderControl.setValue(clamped, { emitEvent: false });
+        this.cdr.markForCheck();
+      }
+    }
   }
 
   // Core synchronization logic - using text field's value API

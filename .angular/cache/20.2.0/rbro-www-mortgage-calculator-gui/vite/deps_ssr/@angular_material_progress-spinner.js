@@ -1,12 +1,12 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
-  BidiModule
-} from "./chunk-RHLM6VFL.js";
-import {
   NgTemplateOutlet,
   isPlatformBrowser
 } from "./chunk-LO4HW5AL.js";
 import "./chunk-YLQ75DQI.js";
+import {
+  BidiModule
+} from "./chunk-RHLM6VFL.js";
 import {
   ANIMATION_MODULE_TYPE,
   APP_ID,

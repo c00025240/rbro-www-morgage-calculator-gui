@@ -24,7 +24,24 @@
 		gap: var(--space-3, 1.5rem);
 		align-items: start;
 	}
-	&__offer-col { display: flex; flex-direction: column; gap: var(--space-2, 8px); }
+
+	/* Responsive column count classes */
+	&__offers-grid.cols-3 { grid-template-columns: repeat(3, 1fr); justify-content: initial; }
+	&__offers-grid.cols-2 { grid-template-columns: repeat(2, 1fr); justify-content: start; }
+	&__offers-grid.cols-1 { grid-template-columns: 1fr; justify-content: start; }
+
+	/* Remove reliance on :has() for browser support */
+	/* previous :has() variants removed in favor of explicit classes */
+
+	/* Responsive tweaks */
+	@media (max-width: 1024px) {
+		&__offers-grid.cols-2 { grid-template-columns: 1fr; }
+	}
+	@media (max-width: 640px) {
+		&__offers-grid.cols-1 { grid-template-columns: 1fr; }
+	}
+
+	&__offer-col { display: flex; flex-direction: column; gap: var(--space-2, 8px); width: 100%; }
 	&__offer-title { font-weight: 600; font-size: var(--font-size-base, 1rem); color: var(--color-text-primary); margin-bottom: var(--space-1, 0.5rem); }
 	&__offer-heading { font-weight: 600; font-size: var(--font-size-base, 1rem); color: var(--color-text-primary); margin: var(--space-2, 8px) 0; }
 	&__kpi { margin: var(--space-2, 8px) 0; }

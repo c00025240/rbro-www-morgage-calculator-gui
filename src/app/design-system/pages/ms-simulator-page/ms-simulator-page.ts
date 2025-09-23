@@ -148,11 +148,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       value: county,
       label: county
     }));
-    console.log('🗺️ County options generated:', {
-      countiesCount: this.counties.length,
-      options: options,
-      selectedCounty: this.selectedCounty
-    });
+
     return options;
   }
 
@@ -161,12 +157,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       value: city,
       label: city
     }));
-    console.log('🏘️ City options generated:', {
-      citiesCount: this.cities.length,
-      options: options,
-      selectedCity: this.selectedCity,
-      selectedCounty: this.selectedCounty
-    });
+
     return options;
   }
   
@@ -198,6 +189,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
   // Mobile summary modal state
   isMobileSummaryVisible: boolean = false;
+  // No UI toggles; inputs should reinitialize via bound values
   
   // Simulator Option Modal state
   isSimulatorModalVisible: boolean = false;
@@ -212,27 +204,20 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   calculationResponseAllDiscounts?: MortgageCalculationResponse;
   calculationResponseNoDiscounts?: MortgageCalculationResponse;
   errorMessage?: string;
+  // Track whether user changed at least one input; if false, we show only two offers
+  private hasUserInteracted: boolean = false;
+  private readonly STORAGE_SELECTED_PRODUCT_KEY = 'ms-sim-selectedProductType';
+  private readonly STORAGE_FORM_STATE_KEY = 'ms-sim-form-state-v1';
   
   // Form validation state
   isFormValid: boolean = true;
   
   constructor(private mortgageService: MortgageCalculationService, private cdr: ChangeDetectorRef) {
-    // Initialize test data immediately in constructor to ensure it's available before ngOnInit
-    this.initializeTestData();
+
   }
   
   ngOnInit(): void {
-    // Test data is already initialized in constructor
-    console.log('🚀 ngOnInit - Data state:', {
-      districtsCount: this.districts.length,
-      countiesCount: this.counties.length,
-      citiesCount: this.cities.length,
-      selectedCounty: this.selectedCounty,
-      selectedCity: this.selectedCity
-    });
-    
-    // Debug complete state
-    this.debugLocationDropdowns();
+    // Do not restore any state from localStorage; start with defaults
     
     // Load districts data from API (will replace test data when successful)
     this.loadDistricts();
@@ -240,7 +225,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Set up form data change detection with smart debouncing to avoid multiple API calls
     this.formDataSubject
       .pipe(
-        debounceTime(1000), // Wait 1 second after last change before calculating (increased for keyboard input)
+        debounceTime(400), // Faster feedback on user input
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
@@ -271,48 +256,6 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.triggerFormValidation();
   }
 
-  private initializeTestData(): void {
-    // Initialize with comprehensive test data for all counties
-    this.districts = [
-      // BUCURESTI
-      { city: 'BUCURESTI', county: 'BUCURESTI' },
-      { city: 'SECTOR 1', county: 'BUCURESTI' },
-      { city: 'SECTOR 2', county: 'BUCURESTI' },
-      { city: 'SECTOR 3', county: 'BUCURESTI' },
-      { city: 'SECTOR 4', county: 'BUCURESTI' },
-      { city: 'SECTOR 5', county: 'BUCURESTI' },
-      { city: 'SECTOR 6', county: 'BUCURESTI' },
-      // CLUJ
-      { city: 'CLUJ-NAPOCA', county: 'CLUJ' },
-      { city: 'TURDA', county: 'CLUJ' },
-      { city: 'DEJ', county: 'CLUJ' },
-      { city: 'CAMPIA TURZII', county: 'CLUJ' },
-      // TIMIS
-      { city: 'TIMISOARA', county: 'TIMIS' },
-      { city: 'LUGOJ', county: 'TIMIS' },
-      { city: 'SANNICOLAU MARE', county: 'TIMIS' },
-      // IASI
-      { city: 'IASI', county: 'IASI' },
-      { city: 'PASCANI', county: 'IASI' },
-      { city: 'HARLAU', county: 'IASI' },
-      // CONSTANTA
-      { city: 'CONSTANTA', county: 'CONSTANTA' },
-      { city: 'MANGALIA', county: 'CONSTANTA' },
-      { city: 'MEDGIDIA', county: 'CONSTANTA' }
-    ];
-    
-    // Extract counties and update cities for the selected county
-    this.counties = [...new Set(this.districts.map(d => d.county))].sort();
-    this.updateCitiesForCounty(this.selectedCounty);
-    
-    console.log('🧪 Initialized with test data:');
-    console.log('   Counties:', this.counties);
-    console.log('   Selected county:', this.selectedCounty);
-    console.log('   Cities for selected county:', this.cities);
-    
-    this.cdr.markForCheck();
-  }
-  
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -393,29 +336,6 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       // downPaymentAmount is not required for validation since it's disabled initially
     );
     
-    console.log('🔍 Form validation:', {
-      propertyValue: this.propertyValue,
-      propertyMin: this.propertyMin,
-      propertyMax: this.propertyMax,
-      isPropertyValid,
-      loanDurationValue: this.loanDurationValue,
-      loanDurationMin: this.loanDurationMin,
-      loanDurationMax: this.loanDurationMax,
-      isLoanDurationValid,
-      ageValue: this.ageValue,
-      ageMin: this.ageMin,
-      ageMax: this.ageMax,
-      isAgeValid,
-      monthlyIncome: this.monthlyIncome,
-      isIncomeValid,
-      selectedCounty: this.selectedCounty,
-      selectedCity: this.selectedCity,
-      hasLocation,
-      rateType: this.rateType,
-      interestType: this.interestType,
-      hasRates,
-      isFormValid: this.isFormValid
-    });
   }
   
   private createMortgageRequest(): MortgageCalculationRequest {
@@ -583,24 +503,37 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           this.calculationResponseAllDiscounts = r;
           this.cdr.markForCheck();
         }, 
-        error: () => {} 
+        error: () => { 
+          // Hide the "all discounts" card on error
+          this.calculationResponseAllDiscounts = undefined;
+          this.cdr.markForCheck();
+        } 
       });
 
-    // Call 3: All discounts false
+    // Call 3: All discounts false (only after user interacts with inputs)
     const reqNone: MortgageCalculationRequest = JSON.parse(JSON.stringify(baseRequest));
     reqNone.hasInsurance = false;
     reqNone.specialOfferRequirements = reqNone.specialOfferRequirements || new SpecialOfferRequirements();
     reqNone.specialOfferRequirements.hasSalaryInTheBank = false;
     reqNone.specialOfferRequirements.casaVerde = false;
-    this.mortgageService.calculateMortgage(reqNone)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({ 
-        next: r => {
-          this.calculationResponseNoDiscounts = r;
-          this.cdr.markForCheck();
-        }, 
-        error: () => {} 
-      });
+    if (this.hasUserInteracted) {
+      this.mortgageService.calculateMortgage(reqNone)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({ 
+          next: r => {
+            this.calculationResponseNoDiscounts = r;
+            this.cdr.markForCheck();
+          }, 
+          error: () => { 
+            // Hide the "no discounts" card on error
+            this.calculationResponseNoDiscounts = undefined;
+            this.cdr.markForCheck();
+          } 
+        });
+    } else {
+      // Ensure it's hidden on initial default view
+      this.calculationResponseNoDiscounts = undefined;
+    }
   }
   
   private triggerFormValidation(): void {
@@ -688,17 +621,6 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     }
   }
 
-  // Debug method to test dropdown data
-  debugLocationDropdowns(): void {
-    console.log('🔍 DEBUG - Location Dropdowns State:');
-    console.log('   Districts:', this.districts);
-    console.log('   Counties:', this.counties);
-    console.log('   Cities:', this.cities);
-    console.log('   Selected County:', this.selectedCounty);
-    console.log('   Selected City:', this.selectedCity);
-    console.log('   County Options:', this.countyOptions);
-    console.log('   City Options:', this.cityOptions);
-  }
 
   // Event handlers
   onHeaderBackClick(event: MouseEvent): void { this.headerBackClicked.emit(event); }
@@ -716,8 +638,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   }
   onHeroCloseClick(): void { this.heroCloseClicked.emit(); }
   onPropertyValueChange(value: number): void { 
+    this.markInteracted();
     this.propertyValue = value;
     this.propertyValueChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onPropertyFocused(event: FocusEvent): void { 
@@ -730,8 +654,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.triggerFormValidation();
   }
   onLoanDurationValueChange(value: number): void { 
+    this.markInteracted();
     this.loanDurationValue = value;
     this.loanDurationValueChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onLoanDurationFocused(event: FocusEvent): void { 
@@ -744,8 +670,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.triggerFormValidation();
   }
   onAgeValueChange(value: number): void {
+    this.markInteracted();
     this.ageValue = value;
     this.ageValueChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onFooterDetailsClick(event: MouseEvent): void {
@@ -826,34 +754,45 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onFooterShareClick(event: MouseEvent): void { this.footerShareClicked.emit(event); }
   // Income Section event handlers
   onMonthlyIncomeChange(value: number): void { 
+    this.markInteracted();
     this.monthlyIncome = value;
     this.monthlyIncomeChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onMonthlyInstallmentsChange(value: number): void { 
+    this.markInteracted();
     this.monthlyInstallments = value;
     this.monthlyInstallmentsChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   // Down Payment Section event handlers
   onGuaranteePropertyChange(value: boolean): void { 
+    this.markInteracted();
     this.hasGuaranteeProperty = value;
     this.guaranteePropertyChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onGuaranteeValueChange(value: string): void { 
+    this.markInteracted();
     this.selectedGuaranteeValue = value;
     this.guaranteeValueChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onDownPaymentAmountChange(value: number): void { 
+    this.markInteracted();
     this.downPaymentAmount = value;
     this.downPaymentAmountChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   // Property Location Section event handlers
   onCountyChange(value: string): void { 
     console.log(`🏛️ County changed from "${this.selectedCounty}" to "${value}"`);
+    this.markInteracted();
     
     this.selectedCounty = value;
     this.updateCitiesForCounty(value);
@@ -869,38 +808,51 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.cdr.markForCheck();
     
     this.countyChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onCityChange(value: string): void { 
+    this.markInteracted();
     this.selectedCity = value;
     this.cityChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   // Interest Preferences Section event handlers
   onRateTypeChange(value: string): void { 
+    this.markInteracted();
     this.rateType = value;
     this.rateTypeChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onInterestTypeChange(value: string): void { 
+    this.markInteracted();
     this.interestType = value;
     this.interestTypeChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   // Interest Reduction Section event handlers
   onLifeInsuranceChange(value: boolean): void { 
+    this.markInteracted();
     this.lifeInsurance = value;
     this.lifeInsuranceChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onSalaryTransferChange(value: boolean): void { 
+    this.markInteracted();
     this.salaryTransfer = value;
     this.salaryTransferChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onGreenCertificateChange(value: boolean): void { 
+    this.markInteracted();
     this.greenCertificate = value;
     this.greenCertificateChange.emit(value);
+    this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   
@@ -914,28 +866,12 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onSimulatorOptionSelected(optionId: string): void {
     console.log('✅ Simulator option selected:', optionId);
     
-    // Update the selected product type
+    // Update the selected product type (do not persist state on switch)
     const previousProductType = this.selectedProductType;
-    this.selectedProductType = optionId;
+    this.applyProductType(optionId, false);
     
-    // Update the chip label based on selected option
+    // Keep for logging purposes
     const previousChipLabel = this.heroChipLabel;
-    switch (optionId) {
-      case 'achizitie-imobil':
-        this.heroChipLabel = 'Achiziție imobil';
-        break;
-      case 'refinantare':
-        this.heroChipLabel = 'Refinanțare';
-        break;
-      case 'constructie-renovare':
-        this.heroChipLabel = 'Construcție/renovare';
-        break;
-      case 'credit-venit':
-        this.heroChipLabel = 'Credit în funcție de venit';
-        break;
-      default:
-        this.heroChipLabel = 'Achiziție imobil';
-    }
     
     console.log('🔄 Product type changed:', {
       from: previousProductType,
@@ -955,6 +891,65 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     
     // Emit the selection event for parent components
     this.simulatorOptionSelected.emit(optionId);
+  }
+
+  private applyProductType(optionId: string, persist: boolean): void {
+    this.selectedProductType = optionId;
+    switch (optionId) {
+      case 'achizitie-imobil':
+        this.heroChipLabel = 'Achiziție imobil';
+        break;
+      case 'refinantare':
+        this.heroChipLabel = 'Refinanțare';
+        break;
+      case 'constructie-renovare':
+        this.heroChipLabel = 'Construcție/renovare';
+        break;
+      case 'credit-venit':
+        this.heroChipLabel = 'Credit în funcție de venit';
+        break;
+      default:
+        this.heroChipLabel = 'Achiziție imobil';
+    }
+
+    // Reset inputs to defaults for new credit type
+    this.propertyValue = 355000;
+    this.loanDurationValue = 30;
+    this.ageValue = 30;
+    this.monthlyIncome = 5500;
+    this.monthlyInstallments = 0;
+    this.hasGuaranteeProperty = true;
+    this.downPaymentAmount = 0;
+    this.selectedCounty = 'BUCURESTI';
+    this.selectedCity = 'BUCURESTI';
+    this.rateType = 'egale';
+    this.interestType = 'fixa_3';
+    this.lifeInsurance = true;
+    this.salaryTransfer = true;
+    this.greenCertificate = true;
+
+    // Show only two offers until user interacts
+    this.hasUserInteracted = false;
+    this.calculationResponseNoDiscounts = undefined;
+
+    // Reset location to Bucuresti if available in loaded districts; otherwise keep first
+    if (this.counties.length > 0) {
+      this.selectedCounty = this.counties.includes('BUCURESTI') ? 'BUCURESTI' : (this.counties[0] || this.selectedCounty);
+      this.updateCitiesForCounty(this.selectedCounty);
+      this.selectedCity = this.cities.includes('BUCURESTI') ? 'BUCURESTI' : (this.cities[0] || this.selectedCity);
+    }
+
+    // Do not persist form or product type state when switching credit type
+    // Clear any previously saved state to ensure defaults are used
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.removeItem(this.STORAGE_FORM_STATE_KEY);
+        window.localStorage.removeItem(this.STORAGE_SELECTED_PRODUCT_KEY);
+      } catch {}
+    }
+
+    // Trigger recalculation with defaults
+    this.triggerFormValidation();
   }
 
   // Build columns for desktop web summary card (three offers in one card)
@@ -1017,5 +1012,20 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     });
 
     return columns;
+  }
+
+  private markInteracted(): void {
+    this.hasUserInteracted = true;
+    // Do not persist product type on interaction
+  }
+
+  private saveFormState(): void {
+    // Intentionally left as no-op: we do not persist form state
+    return;
+  }
+
+  private coerceNumber(value: any, fallback: number): number {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : fallback;
   }
 }

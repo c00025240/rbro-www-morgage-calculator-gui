@@ -61,11 +61,13 @@ export class MsPropertyLocationSection implements OnChanges, OnInit {
   @Input() cityOptions: LocationOption[] = []; // Will be populated from districts API
   @Input() disabled: boolean = false;
   @Input() surface: 'default' | 'light' | 'dark' = 'default';
+  // reset removed
 
   @Output() countyChange = new EventEmitter<string>();
   @Output() cityChange = new EventEmitter<string>();
 
   private districts: District[] = [];
+  // remount toggle removed
 
   constructor(private cdr: ChangeDetectorRef, private mortgageService: MortgageCalculationService) {}
 
@@ -101,6 +103,19 @@ export class MsPropertyLocationSection implements OnChanges, OnInit {
   }
 
   ngOnChanges(): void {
+    // explicit reset removed; rely on normalization below
+    // Normalize county selection against provided options (fallback safety)
+    const countyValues = (this.countyOptions || []).map(o => o.value);
+    if (countyValues.length > 0 && !countyValues.includes(this.selectedCounty)) {
+      this.selectedCounty = countyValues.includes('BUCURESTI') ? 'BUCURESTI' : countyValues[0];
+    }
+
+    // Normalize city selection against provided options (fallback safety)
+    const cityValues = (this.cityOptions || []).map(o => o.value);
+    if (cityValues.length > 0 && !cityValues.includes(this.selectedCity)) {
+      this.selectedCity = cityValues.includes('BUCURESTI') ? 'BUCURESTI' : cityValues[0];
+    }
+
     // Force change detection when input properties change
     console.log('🔄 MsPropertyLocationSection - Changes detected:', {
       countyOptions: this.countyOptions,

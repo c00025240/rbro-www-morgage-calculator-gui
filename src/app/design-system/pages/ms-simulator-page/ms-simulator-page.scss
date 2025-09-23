@@ -116,8 +116,8 @@
     overflow-x: hidden; // Prevent horizontal overflow
     
     // No top spacer needed - panels start below header
-    // Bottom spacer for scroll completion indicator
-    &::after { content: ''; display: block; height: var(--space-20, 10rem); width: 100%; } // 240px
+    // Remove bottom spacer
+    &::after { content: none; display: none; height: 0; width: 0; }
   }
 }
 
@@ -171,10 +171,9 @@
     justify-content: flex-start;
     
     // Match left panel: no top spacer, large bottom spacer for scroll completion
-    // Top spacer to visually align with left panel's starting offset
-    &::before { content: ''; display: block; height: var(--space-4, 2rem); width: 100%; }
-    // Use a smaller bottom spacer on the right to match perceived spacing with the left
-    &::after { content: ''; display: block; height: var(--space-4, 2rem); width: 100%; }
+    // Remove extra spacers on the right panel
+    &::before { content: none; display: none; height: 0; width: 0; }
+    &::after { content: none; display: none; height: 0; width: 0; }
 
     // No extra bottom padding; keep content tight to the bottom
     padding-bottom: 0;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { MortgageCalculationRequest } from '../../model/MortgageCalculationRequest';
 import { MortgageCalculationResponse } from '../../model/MortgageCalculationResponse';
 import { getApiUrl, getDirectUrl, API_CONFIG } from '../config/api.config';
@@ -155,7 +155,6 @@ export class MortgageCalculationService {
 
     return this.http.post<MortgageCalculationResponse>(this.apiUrl, request, { headers })
       .pipe(
-        retry(2), // Retry up to 2 times on failure
         catchError((error) => this.handleError(error))
       );
   }
@@ -174,7 +173,6 @@ export class MortgageCalculationService {
     // });
     // return this.http.get<District[]>(this.districtsUrl, { headers })
     //   .pipe(
-    //     retry(2),
     //     catchError((error) => this.handleError(error))
     //   );
 
