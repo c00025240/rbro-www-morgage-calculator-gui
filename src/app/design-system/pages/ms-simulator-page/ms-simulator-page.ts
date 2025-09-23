@@ -127,7 +127,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() monthlyInstallments: number = 0; // Default other installments per request
   
   // Down Payment Section configuration
-  @Input() hasGuaranteeProperty: boolean = true;
+  @Input() hasGuaranteeProperty: boolean = false;
   @Input() selectedGuaranteeValue: string = '240567';
   @Input() downPaymentAmount: number = 0;
   @Input() downPaymentDisabled: boolean = true; // Disabled by default
@@ -915,10 +915,11 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Reset inputs to defaults for new credit type
     this.propertyValue = 355000;
     this.loanDurationValue = 30;
+    this.loanDurationMax = 30;
     this.ageValue = 30;
     this.monthlyIncome = 5500;
     this.monthlyInstallments = 0;
-    this.hasGuaranteeProperty = true;
+    this.hasGuaranteeProperty = false;
     this.downPaymentAmount = 0;
     this.selectedCounty = 'BUCURESTI';
     this.selectedCity = 'BUCURESTI';

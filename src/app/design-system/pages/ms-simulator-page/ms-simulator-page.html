@@ -62,6 +62,22 @@
 				(valueChange)="onAgeValueChange($event)">
 			</ms-age>
 
+			<!-- 7) Perioada imprumutului -->
+			<ms-loan-duration
+					[label]="loanDurationLabel"
+					[placeholder]="loanDurationPlaceholder"
+					[suffix]="loanDurationSuffix"
+					[min]="loanDurationMin"
+					[max]="loanDurationMax"
+					[step]="loanDurationStep"
+					[value]="loanDurationValue"
+					[disabled]="loanDurationDisabled"
+					[surface]="surface"
+					(valueChange)="onLoanDurationValueChange($event)"
+					(focused)="onLoanDurationFocused($event)"
+					(blurred)="onLoanDurationBlurred($event)">
+			</ms-loan-duration>
+
 			<!-- 3) Zona -->
 			<ms-property-location-section
 				[selectedCounty]="selectedCounty"
@@ -105,22 +121,6 @@
 				[disabledProp]="downPaymentDisabled"
 				(valueChange)="onDownPaymentAmountChange($event)">
 			</ms-downpayment>
-
-			<!-- 7) Perioada imprumutului -->
-			<ms-loan-duration
-				[label]="loanDurationLabel"
-				[placeholder]="loanDurationPlaceholder"
-				[suffix]="loanDurationSuffix"
-				[min]="loanDurationMin"
-				[max]="loanDurationMax"
-				[step]="loanDurationStep"
-				[value]="loanDurationValue"
-				[disabled]="loanDurationDisabled"
-				[surface]="surface"
-				(valueChange)="onLoanDurationValueChange($event)"
-				(focused)="onLoanDurationFocused($event)"
-				(blurred)="onLoanDurationBlurred($event)">
-			</ms-loan-duration>
  
  			<!-- Info Cell -->
  			<ms-info-contained-cell
@@ -256,6 +256,22 @@
 				(valueChange)="onAgeValueChange($event)">
 			</ms-age>
 
+		  <!-- 7) Perioada imprumutului -->
+		  <ms-loan-duration
+				  [label]="loanDurationLabel"
+				  [placeholder]="loanDurationPlaceholder"
+				  [suffix]="loanDurationSuffix"
+				  [min]="loanDurationMin"
+				  [max]="loanDurationMax"
+				  [step]="loanDurationStep"
+				  [value]="loanDurationValue"
+				  [disabled]="loanDurationDisabled"
+				  [surface]="surface"
+				  (valueChange)="onLoanDurationValueChange($event)"
+				  (focused)="onLoanDurationFocused($event)"
+				  (blurred)="onLoanDurationBlurred($event)">
+		  </ms-loan-duration>
+
 			<!-- 3) Zona -->
 			<ms-property-location-section
 				[selectedCounty]="selectedCounty"
@@ -299,22 +315,6 @@
 				[disabledProp]="downPaymentDisabled"
 				(valueChange)="onDownPaymentAmountChange($event)">
 			</ms-downpayment>
-
-			<!-- 7) Perioada imprumutului -->
-			<ms-loan-duration
-				[label]="loanDurationLabel"
-				[placeholder]="loanDurationPlaceholder"
-				[suffix]="loanDurationSuffix"
-				[min]="loanDurationMin"
-				[max]="loanDurationMax"
-				[step]="loanDurationStep"
-				[value]="loanDurationValue"
-				[disabled]="loanDurationDisabled"
-				[surface]="surface"
-				(valueChange)="onLoanDurationValueChange($event)"
-				(focused)="onLoanDurationFocused($event)"
-				(blurred)="onLoanDurationBlurred($event)">
-			</ms-loan-duration>
  			
  			<!-- Info Cell -->
  			<ms-info-contained-cell
