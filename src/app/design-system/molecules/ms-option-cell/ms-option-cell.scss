@@ -86,7 +86,7 @@
   // Left area: Label
   &__left-area { display: flex; align-items: center; flex: 1; min-width: 0; }
   &__label {
-    font-family: "Amalia", sans-serif;
+    font-family: var(--font-family-primary, "Amalia"), sans-serif;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;

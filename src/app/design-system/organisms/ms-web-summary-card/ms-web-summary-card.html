@@ -1,8 +1,19 @@
 <div class="ms-web-summary-card">
 	<ms-card [maxWidth]="false">
 		<div class="ms-web-summary-card__content">
+			<!-- Error banner inside card when personalized offer fails -->
+			<div *ngIf="showErrorBanner" class="ms-web-summary-card__error">
+				<div class="ms-error-banner" role="alert" aria-live="assertive">
+					<span class="ms-error-banner__icon" aria-hidden="true">
+						<svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M12 2C12.3631 2 12.6976 2.19718 12.874 2.51465L22.874 20.5146C23.0459 20.8242 23.0417 21.2016 22.8623 21.5068C22.6826 21.8122 22.3543 22 22 22H1.99998C1.64566 22 1.31736 21.8122 1.13767 21.5068C0.958254 21.2016 0.954051 20.8242 1.12595 20.5146L11.126 2.51465C11.3023 2.19718 11.6368 2 12 2ZM3.6992 20H20.3008L12 5.05957L3.6992 20ZM12 16.25C12.6903 16.25 13.25 16.8096 13.25 17.5C13.25 18.1904 12.6903 18.75 12 18.75C11.3096 18.75 10.75 18.1904 10.75 17.5C10.75 16.8096 11.3096 16.25 12 16.25ZM13 15H11V10H13V15Z" fill="var(--error-default)"/>
+						</svg>
+					</span>
+					<span class="ms-error-banner__text">{{ errorText }}</span>
+				</div>
+			</div>
 			<!-- Offers area: three columns in one card -->
-			<div class="ms-web-summary-card__offers-grid" *ngIf="columns?.length; else legacySingle" [ngClass]="{
+			<div class="ms-web-summary-card__offers-grid" *ngIf="!showErrorBanner && columns?.length; else legacySingle" [ngClass]="{
 				'cols-1': columns?.length === 1,
 				'cols-2': columns?.length === 2,
 				'cols-3': (columns?.length || 0) >= 3
@@ -54,6 +65,7 @@
 			</div>
 			</div>
 			<ng-template #legacySingle>
+				<div *ngIf="!showErrorBanner">
 				<div class="ms-web-summary-card__offer-col">
 					<ms-amount-combo [leftAmount]="leftTopAmount" [rightAmount]="rightTopAmount"></ms-amount-combo>
 					<ms-amount-combo *ngIf="leftBottomAmount && rightBottomAmount" [leftAmount]="leftBottomAmount" [rightAmount]="rightBottomAmount"></ms-amount-combo>
@@ -86,6 +98,7 @@
 							<div class="ms-web-summary-card__extra-spacer"></div>
 						</ng-template>
 					</div>
+				</div>
 				</div>
 			</ng-template>
 

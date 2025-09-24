@@ -102,7 +102,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() propertyStep: number = 5000;
   @Input() propertyEurConversionRate: number = 5.0;
   @Input() propertyDisabled: boolean = false;
-  @Input() propertyValue: number = 355000; // Default property value per request
+  @Input() propertyValue: number = 330000; // Default property value per request
   
   // Loan duration input configuration
   @Input() loanDurationLabel: string = 'Perioada imprumutului';
@@ -204,6 +204,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   calculationResponseAllDiscounts?: MortgageCalculationResponse;
   calculationResponseNoDiscounts?: MortgageCalculationResponse;
   errorMessage?: string;
+  // Flag to show error banner inside the offers card when personalized offer fails
+  showOffersErrorBanner: boolean = false;
   // Track whether user changed at least one input; if false, we show only two offers
   private hasUserInteracted: boolean = false;
   private readonly STORAGE_SELECTED_PRODUCT_KEY = 'ms-sim-selectedProductType';
@@ -397,6 +399,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     if (this.interestType === 'fixa_3') {
       backendType = 'MIXED';
       backendValue = 3;
+    } else if (this.interestType === 'fixa_5') {
+      backendType = 'MIXED';
+      backendValue = 5;
     } else if (this.interestType === 'variabila') {
       backendType = 'VARIABLE';
     }
@@ -426,10 +431,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   private calculateMortgage(): void {
     this.isLoading = true;
     this.errorMessage = undefined;
+    this.showOffersErrorBanner = false;
 
     const baseRequest = this.createMortgageRequest();
-    console.log("############ Mortgage Request:", baseRequest);
-
     // Make all 3 calls in parallel
     this.calculateAllVariants(baseRequest);
   }
@@ -475,6 +479,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           
           this.isLoading = false;
           this.errorMessage = undefined; // clear any previous error (e.g., 422)
+          this.showOffersErrorBanner = false;
           this.cdr.markForCheck();
         },
         error: (error) => {
@@ -485,6 +490,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
  						this.errorMessage = error?.message || 'A apărut o eroare la calcularea creditului. Vă rugăm să încercați din nou.';
  					}
  					this.isLoading = false;
+          // In any error case for personalized offer, flip the banner flag on
+          this.showOffersErrorBanner = true;
  					console.error('Mortgage calculation error:', error);
  					this.cdr.markForCheck();
  				}
@@ -701,54 +708,35 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     loanAmount: string;
     totalAmount: string;
   }> {
-    if (!this.calculationResponse) {
-      return [];
+    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; }> = [];
+
+    const responses = [
+      { resp: this.calculationResponse, title: 'Oferta ta personalizata' },
+      { resp: this.calculationResponseAllDiscounts, title: 'Cu toate reducerile' },
+      { resp: this.calculationResponseNoDiscounts, title: 'Fara reduceri' }
+    ];
+
+    // Initially: only first two offers (personalizata + all discounts)
+    const limit = this.hasUserInteracted ? responses.length : 2;
+
+    for (let i = 0; i < limit; i++) {
+      const r = responses[i];
+      if (!r.resp) continue; // skip missing variants, no fallback
+      out.push({
+        title: r.title,
+        monthlyInstallment: ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' RON',
+        fixedRate: (r.resp.nominalInterestRate || 0).toFixed(2) + '%',
+        variableRate: ((r.resp.interestRateFormula?.bankMarginRate || 0) + (r.resp.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
+        variableInstallment: ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' RON',
+        dae: (r.resp.annualPercentageRate || 0).toFixed(2) + '%',
+        installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
+        downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(0) + ' RON (30%)',
+        loanAmount: ((r.resp.loanAmount?.amount) || 0).toFixed(0) + ' RON',
+        totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(0) + ' RON'
+      });
     }
 
-    // Use the same 3 responses as desktop cards
-    const responses = [
-      this.calculationResponse, // Current user settings
-      this.calculationResponseAllDiscounts, // All discounts applied
-      this.calculationResponseNoDiscounts // No discounts
-    ];
-
-    const titles = [
-      'Oferta ta personalizata',
-      'Cu toate reducerile', 
-      'Fara reduceri'
-    ];
-
-    return responses.map((response, index) => {
-      if (!response) {
-        // Fallback to main response if variant not available yet
-        const fallbackResponse = this.calculationResponse;
-        return {
-          title: titles[index],
-          monthlyInstallment: ((fallbackResponse?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' RON',
-          fixedRate: (fallbackResponse?.nominalInterestRate || 0).toFixed(2) + '%',
-          variableRate: ((fallbackResponse?.interestRateFormula?.bankMarginRate || 0) + (fallbackResponse?.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
-          variableInstallment: ((fallbackResponse?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' RON',
-          dae: (fallbackResponse?.annualPercentageRate || 0).toFixed(2) + '%',
-          installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
-          downPayment: ((fallbackResponse?.downPayment?.amount) || 0).toFixed(0) + ' RON (30%)',
-          loanAmount: ((fallbackResponse?.loanAmount?.amount) || 0).toFixed(0) + ' RON',
-          totalAmount: ((fallbackResponse?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' RON'
-        };
-      }
-
-      return {
-        title: titles[index],
-        monthlyInstallment: ((response.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' RON',
-        fixedRate: (response.nominalInterestRate || 0).toFixed(2) + '%',
-        variableRate: ((response.interestRateFormula?.bankMarginRate || 0) + (response.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
-        variableInstallment: ((response.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' RON',
-        dae: (response.annualPercentageRate || 0).toFixed(2) + '%',
-        installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
-        downPayment: ((response.downPayment?.amount) || 0).toFixed(0) + ' RON (30%)',
-        loanAmount: ((response.loanAmount?.amount) || 0).toFixed(0) + ' RON',
-        totalAmount: ((response.totalPaymentAmount?.amount) || 0).toFixed(0) + ' RON'
-      };
-    });
+    return out;
   }
   onFooterPrimaryClick(event: MouseEvent): void { this.footerPrimaryClicked.emit(event); }
   onFooterShareClick(event: MouseEvent): void { this.footerShareClicked.emit(event); }
@@ -913,7 +901,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     }
 
     // Reset inputs to defaults for new credit type
-    this.propertyValue = 355000;
+    this.propertyValue = 330000;
     this.loanDurationValue = 30;
     this.loanDurationMax = 30;
     this.ageValue = 30;

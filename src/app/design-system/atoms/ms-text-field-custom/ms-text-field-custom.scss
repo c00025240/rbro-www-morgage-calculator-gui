@@ -1,8 +1,8 @@
 @use '../../_tokens.scss';
 
-:host {
+::host {
   display: block;
-  font-family: var(--text-field-font-family, "Amalia");
+  font-family: var(--font-family-primary, "Amalia");
 }
 
 .ms-text-field {
@@ -62,6 +62,7 @@
 
   &__input {
     flex: 1;
+    min-width: 0; // allow input to shrink so suffix stays on the same line
     border: none;
     background: transparent;
     outline: none;
@@ -124,8 +125,11 @@
     gap: var(--text-field-suffix-spacing, 4px);
     margin-left: var(--text-field-suffix-spacing, 4px);
     flex-shrink: 0;
+    flex: 0 0 auto; // keep suffix on same row
+    white-space: nowrap; // never wrap suffix content
 
     &-divider {
+      flex: 0 0 2px;
       width: 2px;
       height: 32px;
       background-color: var(--text-field-divider);
@@ -183,7 +187,7 @@
 }
 
 /* Surface context overrides */
-:host(.ms-text-field-custom--surface-light) {
+::host(.ms-text-field-custom--surface-light) {
   .ms-text-field {
     &__label {
       color: var(--text-field-label-default);
@@ -228,7 +232,7 @@
   }
 }
 
-:host(.ms-text-field-custom--surface-dark) {
+::host(.ms-text-field-custom--surface-dark) {
   .ms-text-field {
     &__label {
       color: var(--text-field-label-default);
@@ -278,7 +282,7 @@
 }
 
 /* Error state */
-:host(.ms-text-field-custom--error) {
+::host(.ms-text-field-custom--error) {
   .ms-text-field {
     &__label {
       color: var(--text-field-label-error);
@@ -295,7 +299,7 @@
 }
 
 /* Error state for dark surface */
-:host(.ms-text-field-custom--error.ms-text-field-custom--surface-dark) {
+::host(.ms-text-field-custom--error.ms-text-field-custom--surface-dark) {
   .ms-text-field {
     &__label {
       color: var(--text-field-label-error-dark, var(--text-field-label-error));
@@ -312,7 +316,7 @@
 }
 
 /* Disabled state */
-:host(.ms-text-field-custom--disabled) {
+::host(.ms-text-field-custom--disabled) {
   .ms-text-field {
     &__label {
       color: var(--text-field-label-disabled);

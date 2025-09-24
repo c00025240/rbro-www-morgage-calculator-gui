@@ -4,6 +4,7 @@
 :host {
   display: block;
   width: 100%;
+  font-family: var(--font-family-primary, "Amalia");
 }
 
 .ms-select {
@@ -14,7 +15,7 @@
 
   // Label styling (align with ms-cell-label__text)
   &__label {
-    font-family: var(--font-primary, sans-serif);
+    font-family: inherit;
     font-size: 16px !important;
     font-weight: 400 !important;
     line-height: 24px !important;
@@ -94,7 +95,7 @@
 
   // Selected value or placeholder text
   &__value {
-    font-family: var(--font-primary, sans-serif);
+    font-family: inherit;
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
@@ -185,7 +186,7 @@
 
   // Group label
   &__group-label {
-    font-family: var(--font-primary, sans-serif);
+    font-family: inherit;
     font-size: var(--font-size-body-s, 14px);
     font-weight: var(--font-weight-semibold, 600);
     line-height: var(--line-height-body-s, 1.43);
@@ -199,7 +200,7 @@
 
   // Individual option
   &__option {
-    font-family: var(--font-primary, sans-serif);
+    font-family: inherit;
     font-size: var(--font-size-body-m, 16px);
     font-weight: var(--font-weight-regular, 400);
     line-height: 24px;

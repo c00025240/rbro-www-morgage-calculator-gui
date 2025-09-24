@@ -17,6 +17,11 @@
     flex-direction: column;
     padding: 0;
     box-sizing: border-box;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg, 0.5rem);
+    overflow: hidden; /* ensure rounded corners clip inner content */
+    box-shadow: var(--shadow-md, 0 8px 24px rgba(0, 0, 0, 0.12));
+    margin: var(--space-1, 0.5rem); /* create space around the dialog so border is visible */
   }
 
   &__header {
@@ -89,6 +94,7 @@
     flex: 1;
     padding: 20px; // Keep 20px as it's a specific design requirement
     overflow-y: auto;
+    border-top: 1px solid var(--color-border);
   }
 
   &__installment-section {
@@ -261,6 +267,43 @@
         padding: 0 var(--space-3, 1.5rem);
       }
     }
+  }
+
+  &__card-content {
+    will-change: transform, opacity;
+  }
+
+  .slide-in-left {
+    animation: ms-slide-in-left 250ms ease-out;
+  }
+
+  .slide-in-right {
+    animation: ms-slide-in-right 250ms ease-out;
+  }
+
+  @keyframes ms-slide-in-left {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes ms-slide-in-right {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .slide-in-left-alt {
+    animation: ms-slide-in-left-alt 250ms ease-out;
+  }
+  .slide-in-right-alt {
+    animation: ms-slide-in-right-alt 250ms ease-out;
+  }
+  @keyframes ms-slide-in-left-alt {
+    from { transform: translateX(22px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes ms-slide-in-right-alt {
+    from { transform: translateX(-22px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
   }
 }
 

@@ -27,6 +27,8 @@ export class MsMobileSummaryModalComponent {
   @Output() closed = new EventEmitter<void>();
 
   currentOfferIndex: number = 0;
+  private lastDirection: 'next' | 'prev' | 'none' = 'none';
+  private animationNonce: number = 0;
 
   // Swipe gesture properties
   private touchStartX: number = 0;
@@ -112,6 +114,8 @@ export class MsMobileSummaryModalComponent {
     } else {
       this.currentOfferIndex = this.offers.length - 1;
     }
+    this.lastDirection = 'prev';
+    this.animationNonce++;
     this.cdr.markForCheck();
   }
 
@@ -121,6 +125,8 @@ export class MsMobileSummaryModalComponent {
     } else {
       this.currentOfferIndex = 0;
     }
+    this.lastDirection = 'next';
+    this.animationNonce++;
     this.cdr.markForCheck();
   }
 
@@ -196,6 +202,13 @@ export class MsMobileSummaryModalComponent {
       // Swipe left - go to next offer
       this.onNextOffer();
     }
+  }
+
+  getTransitionClass(): string {
+    const alt = (this.animationNonce % 2) === 0 ? '' : '-alt';
+    if (this.lastDirection === 'next') return `slide-in-left${alt}`;
+    if (this.lastDirection === 'prev') return `slide-in-right${alt}`;
+    return '';
   }
 }
 

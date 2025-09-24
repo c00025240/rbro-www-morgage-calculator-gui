@@ -45,7 +45,8 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
       <ms-card-outside-title
         *ngIf="label"
         [title]="label"
-        [hasHelper]="false">
+        [helperText]="currentHelperText"
+        [hasHelper]="true">
       </ms-card-outside-title>
 
       <!-- Card wrapper for content -->
@@ -57,7 +58,6 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
               #textField
               [placeholder]="placeholder"
               [error]="hasInputError"
-              [helperText]="currentHelperText"
               [suffixText]="suffix"
               [type]="'text'"
               [formControl]="inputControl"

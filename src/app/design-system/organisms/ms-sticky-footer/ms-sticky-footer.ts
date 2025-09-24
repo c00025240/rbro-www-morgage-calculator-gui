@@ -48,6 +48,9 @@ export class MsStickyFooter {
 	/** Additional CSS class for custom styling */
 	@Input() cssClass?: string;
 
+	/** Optional error banner text; when set, replaces the amount summary */
+	@Input() errorBannerText?: string;
+
 	/** Emitted when details button is clicked */
 	@Output() detailsClicked = new EventEmitter<MouseEvent>();
 	

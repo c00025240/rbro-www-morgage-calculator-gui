@@ -89,8 +89,8 @@ export class MsButtonSecondary implements OnInit, OnDestroy {
 
 	private loadIcon(iconName: string, side: 'left' | 'right'): void {
 		const possibleFilenames = [
-			`${iconName}-outlined.svg`,
 			`${iconName}.svg`,
+			`${iconName}-outlined.svg`,
 			`${iconName} Style=outlined.svg`,
 			`${iconName} Style=Outlined.svg`,
 			`${iconName} Style=outline.svg`

@@ -10,84 +10,86 @@
 
     <!-- Main content card -->
     <div class="ms-mobile-summary-modal__card">
-      <!-- Monthly installment section -->
-      <div class="ms-mobile-summary-modal__installment-section">
-        <div class="ms-mobile-summary-modal__installment-label">Rata lunara fixa (3 ani)</div>
-        <div class="ms-mobile-summary-modal__installment-value">{{ getMonthlyInstallment() }}</div>
-      </div>
-
-      <!-- Separator after monthly installment -->
-      <div class="ms-mobile-summary-modal__separator"></div>
-
-      <!-- Interest rates section -->
-      <div class="ms-mobile-summary-modal__rates-section">
-        <div class="ms-mobile-summary-modal__rate-row">
-          <span class="ms-mobile-summary-modal__rate-label">Dobanda fixa (3 ani)</span>
-          <span class="ms-mobile-summary-modal__rate-value">{{ getFixedRate() }}</span>
+      <div class="ms-mobile-summary-modal__card-content" [ngClass]="getTransitionClass()">
+        <!-- Monthly installment section -->
+        <div class="ms-mobile-summary-modal__installment-section">
+          <div class="ms-mobile-summary-modal__installment-label">Rata lunara fixa (3 ani)</div>
+          <div class="ms-mobile-summary-modal__installment-value">{{ getMonthlyInstallment() }}</div>
         </div>
-        <div class="ms-mobile-summary-modal__rate-row">
-          <span class="ms-mobile-summary-modal__rate-label">Dobanda variabila (din anul 4)</span>
-          <span class="ms-mobile-summary-modal__rate-value">{{ getVariableRate() }}</span>
+
+        <!-- Separator after monthly installment -->
+        <div class="ms-mobile-summary-modal__separator"></div>
+
+        <!-- Interest rates section -->
+        <div class="ms-mobile-summary-modal__rates-section">
+          <div class="ms-mobile-summary-modal__rate-row">
+            <span class="ms-mobile-summary-modal__rate-label">Dobanda fixa (3 ani)</span>
+            <span class="ms-mobile-summary-modal__rate-value">{{ getFixedRate() }}</span>
+          </div>
+          <div class="ms-mobile-summary-modal__rate-row">
+            <span class="ms-mobile-summary-modal__rate-label">Dobanda variabila (din anul 4)</span>
+            <span class="ms-mobile-summary-modal__rate-value">{{ getVariableRate() }}</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Variable installment section -->
-      <div class="ms-mobile-summary-modal__variable-section">
-        <div class="ms-mobile-summary-modal__variable-label">Prima rata lunara (anul 4)</div>
-        <div class="ms-mobile-summary-modal__variable-value">{{ getVariableInstallment() }}</div>
-      </div>
-
-      <!-- DAE section -->
-      <div class="ms-mobile-summary-modal__dae-section">
-        <div class="ms-mobile-summary-modal__dae-label">DAE</div>
-        <div class="ms-mobile-summary-modal__dae-value">{{ getDAE() }}</div>
-      </div>
-
-      <!-- Installment type section -->
-      <div class="ms-mobile-summary-modal__type-section">
-        <div class="ms-mobile-summary-modal__type-label">Tip calcul rate</div>
-        <div class="ms-mobile-summary-modal__type-value">{{ getInstallmentType() }}</div>
-      </div>
-
-      <!-- Separator line -->
-      <div class="ms-mobile-summary-modal__separator"></div>
-
-      <!-- Credit details section -->
-      <div class="ms-mobile-summary-modal__credit-section">
-        <div class="ms-mobile-summary-modal__credit-header">Detalii credit</div>
-        <div class="ms-mobile-summary-modal__credit-row">
-          <span class="ms-mobile-summary-modal__credit-label">Avans</span>
-          <span class="ms-mobile-summary-modal__credit-value">{{ getDownPayment() }}</span>
+        <!-- Variable installment section -->
+        <div class="ms-mobile-summary-modal__variable-section">
+          <div class="ms-mobile-summary-modal__variable-label">Prima rata lunara (anul 4)</div>
+          <div class="ms-mobile-summary-modal__variable-value">{{ getVariableInstallment() }}</div>
         </div>
-        <div class="ms-mobile-summary-modal__credit-row">
-          <span class="ms-mobile-summary-modal__credit-label">Valoare imprumutata</span>
-          <span class="ms-mobile-summary-modal__credit-value">{{ getLoanAmount() }}</span>
+
+        <!-- DAE section -->
+        <div class="ms-mobile-summary-modal__dae-section">
+          <div class="ms-mobile-summary-modal__dae-label">DAE</div>
+          <div class="ms-mobile-summary-modal__dae-value">{{ getDAE() }}</div>
         </div>
-        <div class="ms-mobile-summary-modal__credit-row">
-          <span class="ms-mobile-summary-modal__credit-label">Valoare totala de rambursat</span>
-          <span class="ms-mobile-summary-modal__credit-value">{{ getTotalAmount() }}</span>
+
+        <!-- Installment type section -->
+        <div class="ms-mobile-summary-modal__type-section">
+          <div class="ms-mobile-summary-modal__type-label">Tip calcul rate</div>
+          <div class="ms-mobile-summary-modal__type-value">{{ getInstallmentType() }}</div>
+        </div>
+
+        <!-- Separator line -->
+        <div class="ms-mobile-summary-modal__separator"></div>
+
+        <!-- Credit details section -->
+        <div class="ms-mobile-summary-modal__credit-section">
+          <div class="ms-mobile-summary-modal__credit-header">Detalii credit</div>
+          <div class="ms-mobile-summary-modal__credit-row">
+            <span class="ms-mobile-summary-modal__credit-label">Avans</span>
+            <span class="ms-mobile-summary-modal__credit-value">{{ getDownPayment() }}</span>
+          </div>
+          <div class="ms-mobile-summary-modal__credit-row">
+            <span class="ms-mobile-summary-modal__credit-label">Valoare imprumutata</span>
+            <span class="ms-mobile-summary-modal__credit-value">{{ getLoanAmount() }}</span>
+          </div>
+          <div class="ms-mobile-summary-modal__credit-row">
+            <span class="ms-mobile-summary-modal__credit-label">Valoare totala de rambursat</span>
+            <span class="ms-mobile-summary-modal__credit-value">{{ getTotalAmount() }}</span>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Footer with navigation buttons -->
     <div class="ms-mobile-summary-modal__footer">
-      <ms-button-secondary 
-        [label]="''" 
-        [disabled]="!canGoPrevious()"
+      <ms-button-secondary
         [iconLeft]="'go-left'"
+        [label]="''"
+        [disabled]="!canGoPrevious()"
         (clicked)="onPreviousOffer()">
       </ms-button-secondary>
-      
-      <ms-button-primary 
-        [label]="'Aplica'"
+
+      <ms-button-primary
+        [label]="'Aplică'"
         (clicked)="onApplyClick()">
       </ms-button-primary>
-      
-      <ms-button-secondary 
-        [label]="''" 
+
+      <ms-button-secondary
+        [iconRight]="'go-right'"
+        [label]="''"
         [disabled]="!canGoNext()"
-        [iconLeft]="'go-right'"
         (clicked)="onNextOffer()">
       </ms-button-secondary>
     </div>

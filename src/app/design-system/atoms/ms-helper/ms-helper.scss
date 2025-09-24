@@ -15,7 +15,7 @@
   align-items: center;
   gap: 4px;
   height: 16px;
-  font-family: 'Amalia', sans-serif;
+  font-family: var(--font-family-primary, 'Amalia'), sans-serif;
   font-weight: 400;
   
   // Mobile typography (default)

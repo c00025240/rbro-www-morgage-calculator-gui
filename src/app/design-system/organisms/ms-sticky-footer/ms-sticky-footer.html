@@ -1,16 +1,26 @@
 <div class="ms-sticky-footer ms-sticky-footer--surface-{{ surface }}" [ngClass]="cssClass">
-	<!-- Amount Summary Section -->
-	<div class="ms-sticky-footer__summary">
+	<!-- Amount Summary Section or Error Banner -->
+	<div class="ms-sticky-footer__summary" *ngIf="!errorBannerText; else errorTpl">
 		<ms-amount-combo 
 			[leftAmount]="leftAmount"
 			[rightAmount]="rightAmount">
 		</ms-amount-combo>
 	</div>
-	
+	<ng-template #errorTpl>
+		<div class="ms-error-banner" role="alert" aria-live="assertive">
+			<span class="ms-error-banner__icon" aria-hidden="true">
+				<svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M12 2C12.3631 2 12.6976 2.19718 12.874 2.51465L22.874 20.5146C23.0459 20.8242 23.0417 21.2016 22.8623 21.5068C22.6826 21.8122 22.3543 22 22 22H1.99998C1.64566 22 1.31736 21.8122 1.13767 21.5068C0.958254 21.2016 0.954051 20.8242 1.12595 20.5146L11.126 2.51465C11.3023 2.19718 11.6368 2 12 2ZM3.6992 20H20.3008L12 5.05957L3.6992 20ZM12 16.25C12.6903 16.25 13.25 16.8096 13.25 17.5C13.25 18.1904 12.6903 18.75 12 18.75C11.3096 18.75 10.75 18.1904 10.75 17.5C10.75 16.8096 11.3096 16.25 12 16.25ZM13 15H11V10H13V15Z" fill="var(--error-default)"/>
+				</svg>
+			</span>
+			<span class="ms-error-banner__text">{{ errorBannerText }}</span>
+		</div>
+	</ng-template>
+
 	<!-- Actions Section -->
 	<div class="ms-sticky-footer__actions">
 		<!-- Details Button (Secondary, max-width 96px) -->
-		<div class="ms-sticky-footer__details-button" *ngIf="actions?.details">
+		<div class="ms-sticky-footer__details-button" *ngIf="actions?.details && !errorBannerText">
 			<ms-button-secondary
 				[label]="actions.details.label"
 				[disabled]="actions.details.disabled || false"
@@ -19,7 +29,7 @@
 		</div>
 		
 		<!-- Primary Action Button (fills remaining space) -->
-		<div class="ms-sticky-footer__primary-button" *ngIf="actions?.primary">
+		<div class="ms-sticky-footer__primary-button" *ngIf="actions?.primary && !errorBannerText">
 			<ms-button-primary
 				[label]="actions.primary.label"
 				[disabled]="actions.primary.disabled || false"
@@ -29,7 +39,7 @@
 		</div>
 		
 		<!-- Share Button (Secondary with icon, max-width 96px) -->
-		<div class="ms-sticky-footer__share-button" *ngIf="actions?.share">
+		<div class="ms-sticky-footer__share-button" *ngIf="actions?.share && !errorBannerText">
 			<ms-button-secondary
 				iconRight="share"
 				[disabled]="actions.share.disabled || false"

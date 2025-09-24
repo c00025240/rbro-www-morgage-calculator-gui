@@ -8,5 +8,5 @@ html, body {
 
 body {
   margin: 0;
-  font-family: 'Amalia-Regular', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: var(--font-family-primary, 'Amalia-Regular'), system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }

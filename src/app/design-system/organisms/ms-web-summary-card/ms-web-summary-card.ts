@@ -40,6 +40,10 @@ export class MsWebSummaryCard {
   // New: footnote text under the buttons
   @Input() footnoteText: string = 'Apasand butonul “Aplica” vei fi redirectionat catre un formular de contact. Vei fi sunat in maxim 1 zi lucratoare pentru a primi raspunsuri la orice intrebare ai.';
 
+  // Error banner control from parent
+  @Input() showErrorBanner: boolean = false;
+  @Input() errorText: string = '';
+
   @Output() primaryClicked = new EventEmitter<void>();
   @Output() secondaryClicked = new EventEmitter<void>();
 

@@ -42,7 +42,7 @@ export interface PreferenceOption {
             label="Tip dobanda"
             [value]="interestType"
             [options]="interestTypeOptions"
-            helperText="Ai rate stabile 3 ani, apoi pot varia in functie de piata."
+            helperText="Ai rate stabile in perioada fixa, apoi pot varia in functie de piata."
             [disabled]="disabled"
             (valueChange)="onInterestTypeChange($event)">
           </ms-select>
@@ -63,6 +63,7 @@ export class MsInterestPreferencesSection {
   ];
   @Input() interestTypeOptions: PreferenceOption[] = [
     { value: 'fixa_3', label: 'Dobanda fixa primii 3 ani' },
+    { value: 'fixa_5', label: 'Dobanda fixa primii 5 ani' },
     { value: 'variabila', label: 'Dobanda variabila' }
   ];
   @Input() disabled: boolean = false;
