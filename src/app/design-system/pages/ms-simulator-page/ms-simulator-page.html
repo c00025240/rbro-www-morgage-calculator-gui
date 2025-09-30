@@ -115,8 +115,8 @@
 			</ms-property-value-input>
 
 			<!-- 6) Avans -->
-			<ms-downpayment 
-				label="Avans"
+			<ms-downpayment *ngIf="selectedProductType !== 'refinantare'" 
+				[label]="selectedProductType === 'constructie-renovare' ? 'Contributie proprie' : 'Avans'"
 				[valueProp]="downPaymentAmount"
 				[disabledProp]="downPaymentDisabled"
 				(valueChange)="onDownPaymentAmountChange($event)">
@@ -146,7 +146,7 @@
  				[savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
  				[savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
  				[savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
- 				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountAmount"
+ 				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountInstallment"
  				(lifeInsuranceChange)="onLifeInsuranceChange($event)"
  				(salaryTransferChange)="onSalaryTransferChange($event)"
  				(greenCertificateChange)="onGreenCertificateChange($event)">
@@ -176,8 +176,8 @@
             [columns]="getWebSummaryColumns()"
             [primaryButtonLabel]="'Aplica in doar 2 minute'"
             [secondaryButtonLabel]="'Detalii oferta'"
-            [topInfoText]="'Dobanda si rata lunara sunt estimative si pot varia in functie de analiza finala.'"
-            [bottomInfoText]="'Oferta supusa termenilor si conditiilor bancii. Pentru detalii, acceseaza pagina produsului.'"
+            [topInfoText]="'Informatiile prezentate sunt pur orientative si nu antreneaza banca in angajamente contractuale. Suma maxima ce ti-ar putea fi oferita a fost calculata pe baza informatiilor furnizate. Pentru a afla informatii personalizate, suma exacta si perioada creditului solicita Scrisoarea de avizare financiara GRATUIT si FARA OBLIGATIA DE A CONTRACTA CREDITUL.'"
+            [bottomInfoText]="''"
             [showErrorBanner]="showOffersErrorBanner"
             [errorText]="errorMessage || 'Ne pare rau! Cererea nu poate fi procesata.'"
             (primaryClicked)="onFooterPrimaryClick($event)"
@@ -300,8 +300,8 @@
 			</ms-property-value-input>
 
 			<!-- 6) Avans -->
-			<ms-downpayment 
-				label="Avans"
+			<ms-downpayment *ngIf="selectedProductType !== 'refinantare'" 
+				[label]="selectedProductType === 'constructie-renovare' ? 'Contributie proprie' : 'Avans'"
 				[valueProp]="downPaymentAmount"
 				[disabledProp]="downPaymentDisabled"
 				(valueChange)="onDownPaymentAmountChange($event)">
@@ -331,7 +331,7 @@
  				[savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
  				[savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
  				[savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
- 				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountAmount"
+ 				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountInstallment"
  				(lifeInsuranceChange)="onLifeInsuranceChange($event)"
  				(salaryTransferChange)="onSalaryTransferChange($event)"
  				(greenCertificateChange)="onGreenCertificateChange($event)">

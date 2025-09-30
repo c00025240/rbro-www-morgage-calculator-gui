@@ -23,6 +23,8 @@ export class MsMobileSummaryModalComponent {
     downPayment: string;
     loanAmount: string;
     totalAmount: string;
+    noDocAmount?: string;
+    housePriceMin?: string;
   }> = [];
   @Output() closed = new EventEmitter<void>();
 

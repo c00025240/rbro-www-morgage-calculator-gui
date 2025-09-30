@@ -305,6 +305,12 @@
     from { transform: translateX(-22px); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
   }
+
+  &__legal {
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+  }
 }
 
 @media (min-width: 1240px) {

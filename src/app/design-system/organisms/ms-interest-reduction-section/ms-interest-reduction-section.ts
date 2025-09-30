@@ -26,10 +26,10 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
       <ms-card>
         <div class="ms-interest-reduction-section__content">
           <!-- Life Insurance Switch -->
-          <ms-switch-form 
+            <ms-switch-form 
             [surface]="effectiveSurface"
             [labelText]="insuranceLabel"
-            [rightText]="savingsInsurance > 0 ? formatSavings(savingsInsurance) : ''"
+              [rightText]="savingsInsurance > 0 ? formatSavings(savingsInsurance) : ''"
             [rightTextDisabled]="!lifeInsurance"
             switchLabel="Asigurare de viata"
             [checked]="lifeInsurance"
@@ -40,10 +40,10 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
           </ms-switch-form>
           
           <!-- Salary Transfer Switch -->
-          <ms-switch-form 
+            <ms-switch-form 
             [surface]="effectiveSurface"
             [labelText]="salaryLabel"
-            [rightText]="savingsSalary > 0 ? formatSavings(savingsSalary) : ''"
+              [rightText]="savingsSalary > 0 ? formatSavings(savingsSalary) : ''"
             [rightTextDisabled]="!salaryTransfer"
             switchLabel="Incasare salariu la Raiffeisen"
             [checked]="salaryTransfer"
@@ -54,10 +54,10 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
           </ms-switch-form>
           
           <!-- Green Certificate Switch -->
-          <ms-switch-form 
+            <ms-switch-form 
             [surface]="effectiveSurface"
             [labelText]="greenLabel"
-            [rightText]="savingsGreen > 0 ? formatSavings(savingsGreen) : ''"
+              [rightText]="savingsGreen > 0 ? formatSavings(savingsGreen) : ''"
             [rightTextDisabled]="!greenCertificate"
             switchLabel="Certificat de locuinta verde"
             [checked]="greenCertificate"
@@ -72,7 +72,7 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
           <!-- Savings Chip -->
           <div class="ms-interest-reduction-section__savings">
             <ms-savings-chip 
-              [text]="totalSavings + ' Lei salvati'"
+              [text]="totalSavings + ' Lei economisiti'"
               size="m"
               [infoOnly]="true"
               iconLeft="checkmark-ring"
@@ -112,7 +112,7 @@ export class MsInterestReductionSection {
 
   formatSavings(value: number): string {
     const v = Math.abs(value || 0);
-    return `${v.toFixed(0)} Lei salvati`;
+    return `${v.toFixed(0)} Lei economisiti`;
   }
 
   get totalSavings(): string {

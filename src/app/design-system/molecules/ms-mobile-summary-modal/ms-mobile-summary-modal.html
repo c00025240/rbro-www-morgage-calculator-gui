@@ -68,6 +68,22 @@
             <span class="ms-mobile-summary-modal__credit-label">Valoare totala de rambursat</span>
             <span class="ms-mobile-summary-modal__credit-value">{{ getTotalAmount() }}</span>
           </div>
+          <div class="ms-mobile-summary-modal__credit-row" *ngIf="getCurrentOffer()?.noDocAmount">
+            <span class="ms-mobile-summary-modal__credit-label">Sume fara justificare</span>
+            <span class="ms-mobile-summary-modal__credit-value">{{ getCurrentOffer()?.noDocAmount }}</span>
+          </div>
+          <div class="ms-mobile-summary-modal__credit-row" *ngIf="getCurrentOffer()?.housePriceMin">
+            <span class="ms-mobile-summary-modal__credit-label">Valoare minima a garantiei</span>
+            <span class="ms-mobile-summary-modal__credit-value">{{ getCurrentOffer()?.housePriceMin }}</span>
+          </div>
+        </div>
+        
+        <!-- Spacer before legal text -->
+        <div class="ms-mobile-summary-modal__separator"></div>
+        
+        <!-- Legal text -->
+        <div class="ms-mobile-summary-modal__legal" role="note">
+          Informatiile prezentate sunt pur orientative si nu antreneaza banca in angajamente contractuale. Suma maxima ce ti-ar putea fi oferita a fost calculata pe baza informatiilor furnizate. Pentru a afla informatii personalizate, suma exacta si perioada creditului solicita Scrisoarea de avizare financiara GRATUIT si FARA OBLIGATIA DE A CONTRACTA CREDITUL.
         </div>
       </div>
     </div>

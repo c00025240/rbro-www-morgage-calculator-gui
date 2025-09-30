@@ -50,7 +50,7 @@ import { RadioOption } from '../../atoms/ms-radio-custom/ms-radio-custom';
             [radioValue]="selectedGuaranteeValue"
             radioName="garantie"
             chipType="savings"
-            chipData="45,81 Lei salvati"
+            chipData="45,81 Lei economisiti"
             [disabled]="disabled"
             (radioChange)="onGuaranteeValueChange($event)">
           </ms-radio-form>

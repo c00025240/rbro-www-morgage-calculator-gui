@@ -130,7 +130,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() hasGuaranteeProperty: boolean = false;
   @Input() selectedGuaranteeValue: string = '240567';
   @Input() downPaymentAmount: number = 0;
-  @Input() downPaymentDisabled: boolean = true; // Disabled by default
+  @Input() downPaymentDisabled: boolean = false; // Enabled by default
   
   // Property Location Section configuration
   @Input() selectedCounty: string = 'BUCURESTI';
@@ -223,6 +223,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     
     // Load districts data from API (will replace test data when successful)
     this.loadDistricts();
+    
+    // Initialize default down payment based on product type
+    this.downPaymentAmount = this.computeDefaultDownPaymentAmount();
     
     // Set up form data change detection with smart debouncing to avoid multiple API calls
     this.formDataSubject
@@ -457,7 +460,6 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           // Update down payment amount from backend response
           if (response.downPayment && response.downPayment.amount) {
             this.downPaymentAmount = response.downPayment.amount;
-            this.downPaymentDisabled = false; // Enable the input after first calculation
           }
 
           // Populate sticky footer (tablet) amounts and actions
@@ -503,6 +505,13 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     reqAll.specialOfferRequirements = reqAll.specialOfferRequirements || new SpecialOfferRequirements();
     reqAll.specialOfferRequirements.hasSalaryInTheBank = true;
     reqAll.specialOfferRequirements.casaVerde = true;
+    // For the "all discounts" offer, set down payment to 20% of property value,
+    // except for refinancing, where it remains 0
+    if (this.selectedProductType === 'refinantare') {
+      reqAll.downPayment = 0;
+    } else {
+      reqAll.downPayment = Math.round((this.propertyValue || 0) * 0.20);
+    }
     this.mortgageService.calculateMortgage(reqAll)
       .pipe(takeUntil(this.destroy$))
       .subscribe({ 
@@ -707,8 +716,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     downPayment: string;
     loanAmount: string;
     totalAmount: string;
+    noDocAmount?: string;
+    housePriceMin?: string;
   }> {
-    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; }> = [];
+    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; }> = [];
 
     const responses = [
       { resp: this.calculationResponse, title: 'Oferta ta personalizata' },
@@ -722,6 +733,16 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     for (let i = 0; i < limit; i++) {
       const r = responses[i];
       if (!r.resp) continue; // skip missing variants, no fallback
+      let noDocStr: string | undefined;
+      let housePriceStr: string | undefined;
+      const noDoc = (r.resp?.noDocAmount) as number | undefined;
+      const housePrice = (r.resp?.housePrice?.amount ?? r.resp?.housePrice) as number | undefined;
+      if (this.selectedProductType === 'constructie-renovare') {
+        if (typeof noDoc === 'number') noDocStr = (noDoc || 0).toFixed(0) + ' RON';
+        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' RON';
+      } else if (this.selectedProductType === 'refinantare') {
+        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' RON';
+      }
       out.push({
         title: r.title,
         monthlyInstallment: ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' RON',
@@ -732,7 +753,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
         downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(0) + ' RON (30%)',
         loanAmount: ((r.resp.loanAmount?.amount) || 0).toFixed(0) + ' RON',
-        totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(0) + ' RON'
+        totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(0) + ' RON',
+        noDocAmount: noDocStr,
+        housePriceMin: housePriceStr
       });
     }
 
@@ -917,6 +940,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.salaryTransfer = true;
     this.greenCertificate = true;
 
+    // Set default down payment per product type
+    this.downPaymentAmount = this.computeDefaultDownPaymentAmount();
+
     // Show only two offers until user interacts
     this.hasUserInteracted = false;
     this.calculationResponseNoDiscounts = undefined;
@@ -939,6 +965,18 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
     // Trigger recalculation with defaults
     this.triggerFormValidation();
+  }
+
+  private computeDefaultDownPaymentAmount(): number {
+    // Constructie/renovare: 500 lei fix; Refinantare: 0; Restul: 15% din valoarea proprietatii
+    if (this.selectedProductType === 'constructie-renovare') {
+      return 500;
+    }
+    if (this.selectedProductType === 'refinantare') {
+      return 0;
+    }
+    const base = Number(this.propertyValue) || 0;
+    return Math.round(base * 0.15);
   }
 
   // Build columns for desktop web summary card (three offers in one card)
@@ -965,6 +1003,34 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
     variants.forEach((resp, idx) => {
       if (!resp) { return; }
+      const extraDetails: Array<{ label: string; value: string }> = [
+        { label: 'Suma credit (comision inclus)', value: ((resp?.loanAmountWithFee?.amount) || 0).toFixed(0) + ' Lei' },
+        { label: 'Comision analiza', value: ((resp?.loanCosts?.fees?.fee?.fixedAmount?.amount) || 0).toFixed(0) + ' Lei' },
+        { label: 'Perioada de creditare', value: (resp?.tenor || 0).toString() + ' ani' },
+        { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
+        { label: 'Rata lunara (dobanda fixa)', value: ((resp?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei' },
+        { label: 'Rata lunara (dobanda variabila)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
+        { label: 'DAE', value: (resp?.annualPercentageRate || 0).toFixed(2) + ' %' },
+        { label: 'Valoarea totala platibila', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei' }
+      ];
+
+      // Product-specific extra details
+      if (this.selectedProductType === 'constructie-renovare') {
+        const noDoc = (resp?.noDocAmount) as number | undefined;
+        const housePrice = (resp?.housePrice?.amount ?? resp?.housePrice) as number | undefined;
+        if (typeof noDoc === 'number') {
+          extraDetails.push({ label: 'Sume fara justificare', value: (noDoc || 0).toFixed(0) + ' Lei' });
+        }
+        if (typeof housePrice === 'number') {
+          extraDetails.push({ label: 'Valoare minima a garantiei', value: (housePrice || 0).toFixed(0) + ' Lei' });
+        }
+      } else if (this.selectedProductType === 'refinantare') {
+        const housePrice = (resp?.housePrice?.amount ?? resp?.housePrice) as number | undefined;
+        if (typeof housePrice === 'number') {
+          extraDetails.push({ label: 'Valoare minima a garantiei', value: (housePrice || 0).toFixed(0) + ' Lei' });
+        }
+      }
+
       columns.push({
         title: titles[idx] || '',
         leftTop: {
@@ -987,16 +1053,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           amount: (resp?.maxAmount?.amount || 0).toFixed(0),
           currency: 'Lei'
         },
-        extraDetails: [
-          { label: 'Suma credit (comision inclus)', value: ((resp?.loanAmountWithFee?.amount) || 0).toFixed(0) + ' Lei' },
-          { label: 'Comision analiza', value: ((resp?.loanCosts?.fees?.fee?.fixedAmount?.amount) || 0).toFixed(0) + ' Lei' },
-          { label: 'Perioada de creditare', value: (resp?.tenor || 0).toString() + ' ani' },
-          { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
-          { label: 'Rata lunara (dobanda fixa)', value: ((resp?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei' },
-          { label: 'Rata lunara (dobanda variabila)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
-          { label: 'DAE', value: (resp?.annualPercentageRate || 0).toFixed(2) + ' %' },
-          { label: 'Valoarea totala platibila', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei' }
-        ]
+        extraDetails
       });
     });
 
