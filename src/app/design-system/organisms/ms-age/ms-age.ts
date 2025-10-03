@@ -112,6 +112,7 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, 
   private destroy$ = new Subject<void>();
   private onChange: (value: number) => void = () => {};
   private onTouched: () => void = () => {};
+  private isInputFocused: boolean = false;
 
   ngOnInit(): void {
     // Validators and initial values aligned with loan duration pattern
@@ -193,7 +194,9 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, 
       .pipe(takeUntil(this.destroy$))
       .subscribe(v => {
         const clamped = Math.min(Math.max(v ?? this.min, this.min), this.max);
-        this.inputControl.setValue(String(clamped), { emitEvent: false });
+        if (!this.isInputFocused) {
+          this.inputControl.setValue(String(clamped), { emitEvent: false });
+        }
         this.valueChange.emit(clamped);
         this.onChange(clamped);
       });
@@ -204,6 +207,7 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, 
         filter(val => val !== null && val !== undefined)
       )
       .subscribe(text => {
+        if (this.isInputFocused) return; // Defer syncing while user is typing
         const parsed = parseInt((text || '').toString().replace(/[^0-9]/g, ''), 10);
         if (!isNaN(parsed)) {
           const clamped = Math.min(Math.max(parsed, this.min), this.max);
@@ -214,8 +218,20 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, 
       });
   }
 
-  onInputFocus(): void { this.focused.emit(new FocusEvent('focus')); }
-  onInputBlur(): void { this.onTouched(); this.blurred.emit(new FocusEvent('blur')); }
+  onInputFocus(): void { this.isInputFocused = true; this.focused.emit(new FocusEvent('focus')); }
+  onInputBlur(): void {
+    this.isInputFocused = false;
+    const parsed = parseInt((this.inputControl.value || '').toString().replace(/[^0-9]/g, ''), 10);
+    if (!isNaN(parsed)) {
+      const clamped = Math.min(Math.max(parsed, this.min), this.max);
+      this.inputControl.setValue(String(clamped), { emitEvent: false });
+      this.sliderControl.setValue(clamped, { emitEvent: false });
+      this.valueChange.emit(clamped);
+      this.onChange(clamped);
+    }
+    this.onTouched();
+    this.blurred.emit(new FocusEvent('blur'));
+  }
 
   onSliderTouchStart(event: TouchEvent): void { event.stopPropagation(); }
   onSliderTouchMove(event: TouchEvent): void { event.stopPropagation(); }

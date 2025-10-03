@@ -103,7 +103,7 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
   @Input() label?: string;
   @Input() helperText?: string;
   @Input() placeholder: string = '0';
-  @Input() currency: string = 'RON';
+  @Input() currency: string = 'Lei';
   @Input() min: number = 100000;
   @Input() max: number = 1000000;
   @Input() step: number = 5000;

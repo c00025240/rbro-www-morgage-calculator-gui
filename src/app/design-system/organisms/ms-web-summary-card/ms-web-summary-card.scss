@@ -44,6 +44,19 @@
 	&__offer-col { display: flex; flex-direction: column; gap: var(--space-2, 8px); width: 100%; }
 	&__offer-title { font-weight: 600; font-size: var(--font-size-base, 1rem); color: var(--color-text-primary); margin-bottom: var(--space-1, 0.5rem); }
 	&__offer-heading { font-weight: 600; font-size: var(--font-size-base, 1rem); color: var(--color-text-primary); margin: var(--space-2, 8px) 0; }
+	&__personalized-title {
+		font-weight: 700;
+		font-size: var(--font-size-base, 1rem);
+		color: var(--rbro-white);
+		background: var(--bg-accent);
+		border-top-left-radius: var(--radius-lg);
+		border-top-right-radius: var(--radius-lg);
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		padding: 8px 12px;
+		margin: 0 calc(var(--space-2, 16px) * -1) var(--space-2, 8px);
+		display: block;
+	}
 	&__kpi { margin: var(--space-2, 8px) 0; }
 	&__kpi-label { font-size: var(--font-size-lg, 1.125rem); color: var(--color-text-secondary); margin-bottom: var(--space-1, 4px); }
 	&__kpi-amount { display: flex; align-items: baseline; gap: 8px; }
@@ -64,6 +77,7 @@
 		padding: 2px var(--space-2, 16px) var(--space-2, 16px);
 		box-sizing: border-box;
 		color: var(--color-text-secondary);
+		overflow: hidden;
 
 		/* Reduce space beneath amounts inside this combined box */
 		ms-amount-combo { margin-bottom: 2px; }

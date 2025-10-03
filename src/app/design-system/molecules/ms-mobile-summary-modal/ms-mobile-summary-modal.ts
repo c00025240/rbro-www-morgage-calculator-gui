@@ -53,15 +53,15 @@ export class MsMobileSummaryModalComponent {
   getDefaultOffer() {
     return {
       title: 'Cea mai mica rata',
-      monthlyInstallment: '3.598 RON',
+      monthlyInstallment: '3.598 Lei',
       fixedRate: '5,69%',
       variableRate: '6,78%',
-      variableInstallment: '5.171 RON',
+      variableInstallment: '5.171 Lei',
       dae: '7,73%',
       installmentType: 'Rate egale',
-      downPayment: '200.342 RON (30%)',
-      loanAmount: '661.453 RON',
-      totalAmount: '1.835.632 RON'
+      downPayment: '200.342 Lei (30%)',
+      loanAmount: '661.453 Lei',
+      totalAmount: '1.835.632 Lei'
     };
   }
 

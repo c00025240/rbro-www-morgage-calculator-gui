@@ -96,7 +96,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() propertyLabel: string = 'Valoarea proprietății';
   @Input() propertyHelperText: string = 'Introduceți valoarea totală a proprietății pe care doriți să o achiziționați';
   @Input() propertyPlaceholder: string = '355000';
-  @Input() propertyCurrency: string = 'RON';
+  @Input() propertyCurrency: string = 'Lei';
   @Input() propertyMin: number = 100000;
   @Input() propertyMax: number = 1000000;
   @Input() propertyStep: number = 5000;
@@ -738,22 +738,22 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       const noDoc = (r.resp?.noDocAmount) as number | undefined;
       const housePrice = (r.resp?.housePrice?.amount ?? r.resp?.housePrice) as number | undefined;
       if (this.selectedProductType === 'constructie-renovare') {
-        if (typeof noDoc === 'number') noDocStr = (noDoc || 0).toFixed(0) + ' RON';
-        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' RON';
+        if (typeof noDoc === 'number') noDocStr = (noDoc || 0).toFixed(0) + ' Lei';
+        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' Lei';
       } else if (this.selectedProductType === 'refinantare') {
-        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' RON';
+        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' Lei';
       }
       out.push({
         title: r.title,
-        monthlyInstallment: ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' RON',
+        monthlyInstallment: ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei',
         fixedRate: (r.resp.nominalInterestRate || 0).toFixed(2) + '%',
         variableRate: ((r.resp.interestRateFormula?.bankMarginRate || 0) + (r.resp.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
-        variableInstallment: ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' RON',
+        variableInstallment: ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei',
         dae: (r.resp.annualPercentageRate || 0).toFixed(2) + '%',
         installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
-        downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(0) + ' RON (30%)',
-        loanAmount: ((r.resp.loanAmount?.amount) || 0).toFixed(0) + ' RON',
-        totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(0) + ' RON',
+        downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(0) + ' Lei (30%)',
+        loanAmount: ((r.resp.loanAmount?.amount) || 0).toFixed(0) + ' Lei',
+        totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei',
         noDocAmount: noDocStr,
         housePriceMin: housePriceStr
       });
@@ -1003,14 +1003,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
     variants.forEach((resp, idx) => {
       if (!resp) { return; }
+      const variableRate = ((resp?.interestRateFormula?.bankMarginRate || 0) + (resp?.interestRateFormula?.irccRate || 0));
       const extraDetails: Array<{ label: string; value: string }> = [
-        { label: 'Suma credit (comision inclus)', value: ((resp?.loanAmountWithFee?.amount) || 0).toFixed(0) + ' Lei' },
-        { label: 'Comision analiza', value: ((resp?.loanCosts?.fees?.fee?.fixedAmount?.amount) || 0).toFixed(0) + ' Lei' },
-        { label: 'Perioada de creditare', value: (resp?.tenor || 0).toString() + ' ani' },
-        { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
-        { label: 'Rata lunara (dobanda fixa)', value: ((resp?.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei' },
-        { label: 'Rata lunara (dobanda variabila)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
+        { label: 'Dobanda fixa', value: (resp?.nominalInterestRate || 0).toFixed(2) + ' %' },
+        { label: 'Dobanda variabila', value: (variableRate || 0).toFixed(2) + ' %' },
+        { label: 'Rata lunara (dupa trecerea anilor cu dobanda fixa)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
         { label: 'DAE', value: (resp?.annualPercentageRate || 0).toFixed(2) + ' %' },
+        { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
+        { label: 'Avans', value: ((resp?.downPayment?.amount) || 0).toFixed(0) + ' Lei' },
+        { label: 'Suma solicitata', value: ((resp?.loanAmount?.amount) || 0).toFixed(0) + ' Lei' },
         { label: 'Valoarea totala platibila', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei' }
       ];
 
@@ -1043,16 +1044,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           amount: (resp?.monthlyInstallment?.amountFixedInterest || 0).toFixed(0),
           currency: 'Lei/luna'
         },
-        leftBottom: {
-          label: 'Suma solicitata',
-          amount: (resp?.loanAmount?.amount || 0).toFixed(0),
-          currency: 'Lei'
-        },
-        rightBottom: {
-          label: 'Suma maxima pe care o poti solicita',
-          amount: (resp?.maxAmount?.amount || 0).toFixed(0),
-          currency: 'Lei'
-        },
+        leftBottom: undefined,
+        rightBottom: undefined,
         extraDetails
       });
     });

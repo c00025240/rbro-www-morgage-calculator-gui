@@ -16,7 +16,7 @@ export class MsDownpaymentComponent implements OnChanges {
   constructor(private cdr: ChangeDetectorRef) {}
   @Input() label: string = 'Avans';
   @Input() helperText: string = 'Introduceți avansul pe care doriți să îl plătiți';
-  @Input() currency: string = 'RON';
+  @Input() currency: string = 'Lei';
   @Input() min: number = 0;
   @Input() max: number = 500000;
   @Input() step: number = 1000;

@@ -73,12 +73,12 @@ export class MsDownPaymentSection {
 
   // Radio button options
   guaranteeOption1: RadioOption = {
-    label: '200.456 RON',
+    label: '200.456 Lei',
     value: '200456'
   };
 
   guaranteeOption2: RadioOption = {
-    label: '240.567 RON', 
+    label: '240.567 Lei', 
     value: '240567'
   };
 
