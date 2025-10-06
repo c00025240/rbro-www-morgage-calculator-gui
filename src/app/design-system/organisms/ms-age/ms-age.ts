@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, Validators } from '@angular/forms';
 import { Subject, takeUntil, filter } from 'rxjs';
 import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-text-field-custom';
+import { MsHelperComponent } from '../../atoms/ms-helper/ms-helper';
 import { MsCard } from '../../molecules/ms-card/ms-card';
 import { MsCardOutsideTitleComponent } from '../../molecules/ms-card-outside-title/ms-card-outside-title';
 
@@ -28,7 +29,7 @@ const AGE_VALUE_ACCESSOR = {
 @Component({
   selector: 'ms-age',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MsTextFieldCustomComponent, MsCard, MsCardOutsideTitleComponent],
+  imports: [CommonModule, ReactiveFormsModule, MsTextFieldCustomComponent, MsCard, MsCardOutsideTitleComponent, MsHelperComponent],
   providers: [AGE_VALUE_ACCESSOR],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -46,13 +47,16 @@ const AGE_VALUE_ACCESSOR = {
               #textField
               [placeholder]="placeholder"
               [error]="hasInputError"
-              [helperText]="currentHelperText"
+              [helperText]="hasInputError ? '' : currentHelperText"
               [suffixText]="suffix"
               [type]="'text'"
               [formControl]="inputControl"
               (focus)="onInputFocus()"
               (blur)="onInputBlur()">
             </ms-text-field-custom>
+            <ms-helper *ngIf="hasInputError" state="error">
+              {{ currentHelperText }}
+            </ms-helper>
           </div>
 
           <div class="ms-age__slider-section">
@@ -84,8 +88,8 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, 
   @Input() label: string = 'Spune-mi cati ani ai';
   @Input() placeholder: string = '30';
   @Input() suffix: string = 'ani';
-  @Input() min: number = 18;
-  @Input() max: number = 70;
+  @Input() min: number = 21;
+  @Input() max: number = 65;
   @Input() step: number = 1;
   @Input() disabled = false;
   @Input() surface: 'default' | 'light' | 'dark' = 'default';

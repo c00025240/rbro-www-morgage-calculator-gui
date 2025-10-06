@@ -116,8 +116,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   
   // Age input configuration
   @Input() ageValue: number = 30; // Default age
-  @Input() ageMin: number = 18;
-  @Input() ageMax: number = 70;
+  @Input() ageMin: number = 21;
+  @Input() ageMax: number = 65;
   @Input() ageStep: number = 1;
   @Input() ageSuffix: string = 'ani';
   @Input() ageDisabled: boolean = false;

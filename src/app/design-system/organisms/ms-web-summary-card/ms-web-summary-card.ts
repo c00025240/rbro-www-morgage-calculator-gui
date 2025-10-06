@@ -27,6 +27,7 @@ export class MsWebSummaryCard {
     leftBottom?: AmountData;
     rightBottom?: AmountData;
     title?: string;
+    type?: string; // semantic type for styling per offer
     extraDetails?: Array<{ label: string; value: string }>;
   }>;
   @Input() primaryButtonLabel: string = '';
@@ -56,6 +57,13 @@ export class MsWebSummaryCard {
   isExpandedAll = false;
   isExpandedIndex(index: number): boolean { return this.isExpandedAll; }
   toggleDetailsIndex(index: number): void { this.isExpandedAll = !this.isExpandedAll; }
+
+  getOfferHeadingClass(col: { title?: string; type?: string }): string {
+    const rawType = (col.type || '').toLowerCase().trim();
+    const title = (col.title || '').toLowerCase();
+    const isPersonalized = rawType === 'personalized' || rawType === 'personalizata' || rawType === 'personalizată' || title.includes('personal');
+    return isPersonalized ? 'ms-web-summary-card__offer-heading--primary' : 'ms-web-summary-card__offer-heading--neutral';
+  }
 
   onPrimaryClick(): void { this.primaryClicked.emit(); }
   onSecondaryClick(): void { this.secondaryClicked.emit(); }

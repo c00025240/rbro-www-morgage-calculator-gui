@@ -23,6 +23,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Subject, takeUntil, filter } from 'rxjs';
 import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-text-field-custom';
+import { MsHelperComponent } from '../../atoms/ms-helper/ms-helper';
 import { MsCard } from '../../molecules/ms-card/ms-card';
 import { MsCardOutsideTitleComponent } from '../../molecules/ms-card-outside-title/ms-card-outside-title';
 
@@ -36,7 +37,7 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
 @Component({
   selector: 'ms-loan-duration',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MsTextFieldCustomComponent, MsCard, MsCardOutsideTitleComponent],
+  imports: [CommonModule, ReactiveFormsModule, MsTextFieldCustomComponent, MsCard, MsCardOutsideTitleComponent, MsHelperComponent],
   providers: [LOAN_DURATION_VALUE_ACCESSOR],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -45,8 +46,8 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
       <ms-card-outside-title
         *ngIf="label"
         [title]="label"
-        [helperText]="currentHelperText"
-        [hasHelper]="true">
+        [helperText]="hasInputError ? '' : currentHelperText"
+        [hasHelper]="!hasInputError">
       </ms-card-outside-title>
 
       <!-- Card wrapper for content -->
@@ -64,6 +65,10 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
               (focus)="onInputFocus()"
               (blur)="onInputBlur()">
             </ms-text-field-custom>
+            <!-- Error helper under input -->
+            <ms-helper *ngIf="hasInputError" state="error">
+              Perioada trebuie sa fie intre {{min}} si {{max}} ani
+            </ms-helper>
           </div>
 
           <!-- Slider Section -->
@@ -90,6 +95,7 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
                 (touchmove)="onSliderInputTouchMove($event)">
             </div>
           </div>
+
         </div>
       </ms-card>
     </div>

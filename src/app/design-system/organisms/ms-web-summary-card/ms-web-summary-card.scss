@@ -44,6 +44,8 @@
 	&__offer-col { display: flex; flex-direction: column; gap: var(--space-2, 8px); width: 100%; }
 	&__offer-title { font-weight: 600; font-size: var(--font-size-base, 1rem); color: var(--color-text-primary); margin-bottom: var(--space-1, 0.5rem); }
 	&__offer-heading { font-weight: 600; font-size: var(--font-size-base, 1rem); color: var(--color-text-primary); margin: var(--space-2, 8px) 0; }
+	&__offer-heading--primary { background: var(--bg-accent); color: var(--rbro-white); border-radius: var(--radius-lg); padding: 4px 8px; display: inline-block; }
+	&__offer-heading--neutral { color: var(--color-text-primary); }
 	&__personalized-title {
 		font-weight: 700;
 		font-size: var(--font-size-base, 1rem);

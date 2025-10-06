@@ -3,6 +3,22 @@ import { CommonModule } from '@angular/common';
 import { MsButtonPrimary } from '../../atoms/ms-button-primary/ms-button-primary';
 import { MsButtonSecondary } from '../../atoms/ms-button-secondary/ms-button-secondary';
 
+interface Offer {
+  title: string;
+  type?: string; // semantic offer type for styling
+  monthlyInstallment: string;
+  fixedRate: string;
+  variableRate: string;
+  variableInstallment: string;
+  dae: string;
+  installmentType: string;
+  downPayment: string;
+  loanAmount: string;
+  totalAmount: string;
+  noDocAmount?: string;
+  housePriceMin?: string;
+}
+
 @Component({
   selector: 'ms-mobile-summary-modal',
   standalone: true,
@@ -12,20 +28,7 @@ import { MsButtonSecondary } from '../../atoms/ms-button-secondary/ms-button-sec
   encapsulation: ViewEncapsulation.None
 })
 export class MsMobileSummaryModalComponent {
-  @Input() offers: Array<{
-    title: string;
-    monthlyInstallment: string;
-    fixedRate: string;
-    variableRate: string;
-    variableInstallment: string;
-    dae: string;
-    installmentType: string;
-    downPayment: string;
-    loanAmount: string;
-    totalAmount: string;
-    noDocAmount?: string;
-    housePriceMin?: string;
-  }> = [];
+  @Input() offers: Offer[] = [];
   @Output() closed = new EventEmitter<void>();
 
   currentOfferIndex: number = 0;
@@ -46,13 +49,14 @@ export class MsMobileSummaryModalComponent {
   onBackdropClick(): void { this.closed.emit(); }
   onCloseClick(): void { this.closed.emit(); }
 
-  getCurrentOffer() {
+  getCurrentOffer(): Offer {
     return this.offers[this.currentOfferIndex] || this.getDefaultOffer();
   }
 
-  getDefaultOffer() {
+  getDefaultOffer(): Offer {
     return {
       title: 'Cea mai mica rata',
+      type: 'best-rate',
       monthlyInstallment: '3.598 Lei',
       fixedRate: '5,69%',
       variableRate: '6,78%',
@@ -106,8 +110,23 @@ export class MsMobileSummaryModalComponent {
   }
 
   getBadgeClass(): string {
-    // Use the same visual style for all offers as the personalized offer
-    return 'ms-badge--primary';
+    // Only personalized keeps colored badge; others use neutral with black text
+    const current = this.getCurrentOffer();
+    const rawType = (current.type || '').toLowerCase().trim();
+    const title = (current.title || '').toLowerCase();
+
+    const typeFromTitle = title.includes('personal') ? 'personalized'
+      : title.includes('cea mai mica') || title.includes('cea mai mică') ? 'best-rate'
+      : title.includes('economii') || title.includes('reduc') ? 'savings'
+      : title.includes('info') ? 'info'
+      : '';
+
+    const offerType = rawType || typeFromTitle;
+
+    if (offerType === 'personalized' || offerType === 'personalizata' || offerType === 'personalizată') {
+      return 'ms-badge--primary';
+    }
+    return 'ms-badge--neutral';
   }
 
   onPreviousOffer(): void {

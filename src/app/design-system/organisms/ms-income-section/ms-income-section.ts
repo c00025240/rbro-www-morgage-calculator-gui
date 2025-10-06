@@ -28,6 +28,8 @@ import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-
             [value]="monthlyIncome.toString()"
             suffixText="Lei"
             type="number"
+            [error]="incomeTooLow"
+            [helperText]="incomeTooLow ? 'Venitul tau este mai mic decat suma minima eligibila' : undefined"
             [disabled]="disabled"
             (valueChange)="onMonthlyIncomeChange($event)">
           </ms-text-field-custom>
@@ -59,6 +61,11 @@ export class MsIncomeSection {
 
   get cardSurface(): 'light' | 'dark' {
     return this.surface === 'dark' ? 'dark' : 'light';
+  }
+
+  private readonly MIN_INCOME = 2600;
+  get incomeTooLow(): boolean {
+    return (Number(this.monthlyIncome) || 0) < this.MIN_INCOME;
   }
 
   onMonthlyIncomeChange(value: string): void {

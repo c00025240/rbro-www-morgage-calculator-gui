@@ -164,17 +164,12 @@ export class MortgageCalculationService {
    * @returns Observable of districts list
    */
   getDistricts(): Observable<District[]> {
-    // TEMP: Hardcoded fallback while districts service is down
-    // ORIGINAL IMPLEMENTATION (restore when service is available):
-    // const headers = this.getCustomHeaders();
-    // console.log('🚀 Making districts request with headers:', {
-    //   url: this.districtsUrl,
-    //   headers: Object.fromEntries(headers.keys().map(key => [key, headers.get(key)]))
-    // });
-    // return this.http.get<District[]>(this.districtsUrl, { headers })
-    //   .pipe(
-    //     catchError((error) => this.handleError(error))
-    //   );
+    const headers = this.getCustomHeaders();
+
+    return this.http.get<District[]>(this.districtsUrl, { headers })
+      .pipe(
+        catchError((error) => this.handleError(error))
+      );
 
     const hardcoded: District[] = [
       { city: 'BUCURESTI', county: 'BUCURESTI' },

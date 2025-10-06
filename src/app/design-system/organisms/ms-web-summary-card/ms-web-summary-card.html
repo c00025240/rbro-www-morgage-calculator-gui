@@ -21,9 +21,9 @@
 				<div class="ms-web-summary-card__offer-col" *ngFor="let col of columns; let i = index">
 						<div class="ms-web-summary-card__combined-box">
 							<!-- Personalized offer title gets a distinct blue background -->
-							<div *ngIf="i === 0 && col.title; else regularTitle" class="ms-web-summary-card__personalized-title">{{ col.title }}</div>
+                            <div *ngIf="i === 0 && col.title; else regularTitle" class="ms-web-summary-card__personalized-title">{{ col.title }}</div>
 							<ng-template #regularTitle>
-								<div class="ms-web-summary-card__offer-heading" *ngIf="col.title">{{ col.title }}</div>
+                                <div class="ms-web-summary-card__offer-heading" *ngIf="col.title" [ngClass]="getOfferHeadingClass(col)">{{ col.title }}</div>
 							</ng-template>
 						<div class="ms-web-summary-card__kpi">
 							<div class="ms-web-summary-card__kpi-label">Rata lunară</div>
