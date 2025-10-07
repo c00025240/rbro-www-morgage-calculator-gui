@@ -11,6 +11,7 @@ export class MortgageCalculationResponse {
     loanAmount: Amount; 
     maxAmount: Amount; 
     downPayment: Amount;
+    downPaymentDiscountGap: number;
     loanAmountWithFee: Amount;
     housePrice: Amount;
     totalPaymentAmount: Amount;

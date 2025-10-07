@@ -60,6 +60,12 @@
             <span class="ms-mobile-summary-modal__credit-label">Avans</span>
             <span class="ms-mobile-summary-modal__credit-value">{{ getDownPayment() }}</span>
           </div>
+          <div class="ms-mobile-summary-modal__info-note" *ngIf="getCurrentOffer()?.downPaymentInfoNote" role="note" aria-live="polite">
+            <span class="ms-mobile-summary-modal__info-note-icon" aria-hidden="true">
+              <img src="/assets/icons/info-outlined.svg" alt="" width="18" height="18" />
+            </span>
+            <span class="ms-mobile-summary-modal__info-note-text">{{ getCurrentOffer()?.downPaymentInfoNote }}</span>
+          </div>
           <div class="ms-mobile-summary-modal__credit-row">
             <span class="ms-mobile-summary-modal__credit-label">Valoare imprumutata</span>
             <span class="ms-mobile-summary-modal__credit-value">{{ getLoanAmount() }}</span>

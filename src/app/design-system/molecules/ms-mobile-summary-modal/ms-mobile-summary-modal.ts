@@ -17,6 +17,7 @@ interface Offer {
   totalAmount: string;
   noDocAmount?: string;
   housePriceMin?: string;
+  downPaymentInfoNote?: string; // construction note when gap > 0
 }
 
 @Component({

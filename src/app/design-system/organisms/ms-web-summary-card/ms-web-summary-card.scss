@@ -68,6 +68,11 @@
 	&__secondary-info .label { color: var(--color-text-secondary); }
 	&__secondary-info .value { font-weight: var(--font-weight-semibold, 600); color: var(--color-text-primary); }
 
+	/* Info note under extra details */
+	&__info-note { display: flex; align-items: flex-start; gap: 6px; margin-top: 4px; margin-bottom: 8px; color: var(--color-text-primary); font-size: var(--font-size-sm, 0.875rem); line-height: 1.3; }
+	&__info-note-icon { display: inline-flex; width: 18px; height: 18px; flex: 0 0 18px; margin-top: 0; }
+	&__info-note-text { display: inline; }
+
 	/* Expandable details styles */
 	/* Summary box aligned to amount combos appearance */
 	&__extra { display: flex; flex-direction: column; gap: 8px; padding-top: 0; margin: 0; }

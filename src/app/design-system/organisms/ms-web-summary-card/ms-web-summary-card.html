@@ -58,6 +58,13 @@
 											<div *ngIf="row.label" class="ms-web-summary-card__extra-label">{{ row.label }}</div>
 											<div class="ms-web-summary-card__extra-value">{{ row.value }}</div>
 										</div>
+										<!-- Info note placed directly under the Avans row -->
+										<div *ngIf="row.label === 'Avans' && col.infoNote" class="ms-web-summary-card__info-note" role="note" aria-live="polite">
+											<span class="ms-web-summary-card__info-note-icon" aria-hidden="true">
+												<img src="/assets/icons/info-outlined.svg" alt="" width="18" height="18" />
+											</span>
+											<span class="ms-web-summary-card__info-note-text">{{ col.infoNote }}</span>
+										</div>
 									</ng-container>
 								</ng-container>
 								<ng-template #spacerTpl>

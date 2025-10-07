@@ -505,12 +505,20 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     reqAll.specialOfferRequirements = reqAll.specialOfferRequirements || new SpecialOfferRequirements();
     reqAll.specialOfferRequirements.hasSalaryInTheBank = true;
     reqAll.specialOfferRequirements.casaVerde = true;
-    // For the "all discounts" offer, set down payment to 20% of property value,
-    // except for refinancing, where it remains 0
+    // For the "all discounts" offer down payment logic:
+    // - Refinantare: avans 0
+    // - Constructie/renovare: foloseste avansul introdus de client
+    // - Alte produse: daca userul a interactionat si avansul introdus > 20%, foloseste avansul introdus; altfel 20%
     if (this.selectedProductType === 'refinantare') {
       reqAll.downPayment = 0;
+    } else if (this.selectedProductType === 'constructie-renovare') {
+      reqAll.downPayment = this.downPaymentAmount || 0;
     } else {
-      reqAll.downPayment = Math.round((this.propertyValue || 0) * 0.20);
+      const twentyPercent = Math.round((this.propertyValue || 0) * 0.20);
+      const userDownPayment = this.downPaymentAmount || 0;
+      reqAll.downPayment = (this.hasUserInteracted && userDownPayment > twentyPercent)
+        ? userDownPayment
+        : twentyPercent;
     }
     this.mortgageService.calculateMortgage(reqAll)
       .pipe(takeUntil(this.destroy$))
@@ -718,8 +726,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     totalAmount: string;
     noDocAmount?: string;
     housePriceMin?: string;
+    downPaymentInfoNote?: string;
   }> {
-    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; }> = [];
+    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; downPaymentInfoNote?: string; }> = [];
 
     const responses = [
       { resp: this.calculationResponse, title: 'Oferta ta personalizata' },
@@ -737,11 +746,19 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       let housePriceStr: string | undefined;
       const noDoc = (r.resp?.noDocAmount) as number | undefined;
       const housePrice = (r.resp?.housePrice?.amount ?? r.resp?.housePrice) as number | undefined;
+      const gapRaw = (r.resp as any)?.downPaymentDiscountGap;
+      const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
+      let downPaymentInfoNote: string | undefined;
       if (this.selectedProductType === 'constructie-renovare') {
         if (typeof noDoc === 'number') noDocStr = (noDoc || 0).toFixed(0) + ' Lei';
         if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' Lei';
       } else if (this.selectedProductType === 'refinantare') {
         if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' Lei';
+      }
+      // Show note for the "all discounts" variant when backend provides a positive gap, regardless of product type
+      if (i === 1 && gap !== undefined && gap > 0) {
+        const gapStr = gap.toFixed(0) + ' Lei';
+        downPaymentInfoNote = `Pentru ${gapStr} in plus la avans vei beneficia de o reducere de 0,2%`;
       }
       out.push({
         title: r.title,
@@ -751,11 +768,12 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         variableInstallment: ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei',
         dae: (r.resp.annualPercentageRate || 0).toFixed(2) + '%',
         installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
-        downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(0) + ' Lei (30%)',
+        downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(0) + ' Lei',
         loanAmount: ((r.resp.loanAmount?.amount) || 0).toFixed(0) + ' Lei',
         totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei',
         noDocAmount: noDocStr,
-        housePriceMin: housePriceStr
+        housePriceMin: housePriceStr,
+        downPaymentInfoNote
       });
     }
 
@@ -1004,6 +1022,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     variants.forEach((resp, idx) => {
       if (!resp) { return; }
       const variableRate = ((resp?.interestRateFormula?.bankMarginRate || 0) + (resp?.interestRateFormula?.irccRate || 0));
+      let infoNote: string | undefined;
       const extraDetails: Array<{ label: string; value: string }> = [
         { label: 'Dobanda fixa', value: (resp?.nominalInterestRate || 0).toFixed(2) + ' %' },
         { label: 'Dobanda variabila', value: (variableRate || 0).toFixed(2) + ' %' },
@@ -1032,6 +1051,16 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         }
       }
 
+      // Show the info note for the "all discounts" card (index 1) whenever backend provides a positive gap, regardless of product type
+      if (idx === 1) {
+        const gapRaw = (resp as any)?.downPaymentDiscountGap;
+        const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
+        if (gap !== undefined && gap > 0) {
+          const gapStr = gap.toFixed(0) + ' Lei';
+          infoNote = `Pentru ${gapStr} in plus la avans vei beneficia de o reducere de 0,2%`;
+        }
+      }
+
       columns.push({
         title: titles[idx] || '',
         leftTop: {
@@ -1046,7 +1075,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         },
         leftBottom: undefined,
         rightBottom: undefined,
-        extraDetails
+        extraDetails,
+        infoNote
       });
     });
 

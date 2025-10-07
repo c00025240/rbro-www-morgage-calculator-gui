@@ -29,6 +29,7 @@ export class MsWebSummaryCard {
     title?: string;
     type?: string; // semantic type for styling per offer
     extraDetails?: Array<{ label: string; value: string }>;
+    infoNote?: string; // optional informational note rendered below details
   }>;
   @Input() primaryButtonLabel: string = '';
   @Input() secondaryButtonLabel: string = '';
