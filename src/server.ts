@@ -8,6 +8,7 @@ import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { serverConfig } from './environments/server.config.js';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -15,12 +16,49 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-// Proxy /api to backend (dev)
+// Use centralized server configuration
+console.log('🚀 Server configuration loaded:', {
+  environment: serverConfig.environment,
+  backendUrl: serverConfig.backend.url,
+  adminServiceUrl: serverConfig.adminService.url,
+  port: serverConfig.server.port,
+  logLevel: serverConfig.server.logLevel
+});
+
+// Backend API proxy
 app.use('/api', createProxyMiddleware({
-  target: 'http://localhost:8080',
+  target: serverConfig.backend.url,
   changeOrigin: true,
-  logLevel: 'debug',
+  logLevel: serverConfig.server.logLevel as any,
   pathRewrite: { '^/api': '' },
+  timeout: serverConfig.backend.timeout,
+  onError: (err, req, res) => {
+    console.error('❌ Backend proxy error:', err.message);
+    res.status(500).json({ error: 'Backend service unavailable' });
+  },
+  onProxyReq: (proxyReq, req, res) => {
+    if (serverConfig.server.logLevel === 'debug') {
+      console.log(`→ Proxying: ${req.method} ${req.url} → ${serverConfig.backend.url}${req.url.replace('/api', '')}`);
+    }
+  }
+}));
+
+// Districts/Admin service proxy
+app.use('/districts', createProxyMiddleware({
+  target: serverConfig.adminService.url,
+  changeOrigin: true,
+  logLevel: serverConfig.server.logLevel as any,
+  pathRewrite: { '^/districts': '/app/loan-admin/v1/districts' },
+  timeout: serverConfig.adminService.timeout,
+  onError: (err, req, res) => {
+    console.error('❌ Admin service proxy error:', err.message);
+    res.status(500).json({ error: 'Admin service unavailable' });
+  },
+  onProxyReq: (proxyReq, req, res) => {
+    if (serverConfig.server.logLevel === 'debug') {
+      console.log(`→ Proxying: ${req.method} ${req.url} → ${serverConfig.adminService.url}/app/loan-admin/v1/districts`);
+    }
+  }
 }));
 
 /**
@@ -48,12 +86,12 @@ app.use((req, res, next) => {
 
 /**
  * Start the server if this module is the main entry point.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
+ * The server listens on the port defined in serverConfig.
  */
 if (isMainModule(import.meta.url)) {
-  const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+  app.listen(serverConfig.server.port, () => {
+    console.log(`✅ Node Express server listening on http://localhost:${serverConfig.server.port}`);
+    console.log(`📊 Environment: ${serverConfig.environment}`);
   });
 }
 

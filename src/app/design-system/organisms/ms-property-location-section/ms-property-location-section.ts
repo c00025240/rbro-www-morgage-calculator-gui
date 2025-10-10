@@ -116,13 +116,6 @@ export class MsPropertyLocationSection implements OnChanges, OnInit {
       this.selectedCity = cityValues.includes('BUCURESTI') ? 'BUCURESTI' : cityValues[0];
     }
 
-    // Force change detection when input properties change
-    console.log('🔄 MsPropertyLocationSection - Changes detected:', {
-      countyOptions: this.countyOptions,
-      cityOptions: this.cityOptions,
-      selectedCounty: this.selectedCounty,
-      selectedCity: this.selectedCity
-    });
     this.cdr.markForCheck();
   }
 

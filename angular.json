@@ -48,6 +48,16 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/environments/server.config.ts",
+                  "with": "src/environments/server.config.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -61,6 +71,38 @@
                 }
               ],
               "outputHashing": "all"
+            },
+            "prelive": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prelive.ts"
+                },
+                {
+                  "replace": "src/environments/server.config.ts",
+                  "with": "src/environments/server.config.prelive.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractLicenses": true
+            },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                },
+                {
+                  "replace": "src/environments/server.config.ts",
+                  "with": "src/environments/server.config.test.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractLicenses": true
             },
             "development": {
               "optimization": false,

@@ -31,6 +31,7 @@ interface Offer {
 export class MsMobileSummaryModalComponent {
   @Input() offers: Offer[] = [];
   @Output() closed = new EventEmitter<void>();
+  @Output() applyClicked = new EventEmitter<void>();
 
   currentOfferIndex: number = 0;
   private lastDirection: 'next' | 'prev' | 'none' = 'none';
@@ -161,7 +162,9 @@ export class MsMobileSummaryModalComponent {
   }
 
   onApplyClick(): void {
-    // Emit event for parent component to handle
+    // Emit specific apply event for tracking
+    this.applyClicked.emit();
+    // Also close the modal
     this.closed.emit();
   }
 

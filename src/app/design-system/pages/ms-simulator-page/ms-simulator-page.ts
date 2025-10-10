@@ -696,11 +696,18 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onAgeValueChange(value: number): void {
     this.markInteracted();
     this.ageValue = value;
+    
+    // Track age change
+    this.trackEvent('Varsta Modificata', `${value} ani`, value);
+    
     this.ageValueChange.emit(value);
     this.cdr.markForCheck();
     this.triggerFormValidation();
   }
   onFooterDetailsClick(event: MouseEvent): void {
+    // Track "Detalii ofertă" button click
+    this.trackEvent('Buton Detalii Click', 'Detalii oferta', this.requestedAmount);
+    
     this.footerDetailsClicked.emit(event);
     const isMobileOrTablet = typeof window !== 'undefined' && window.matchMedia('(max-width: 1239px)').matches;
     if (isMobileOrTablet) {
@@ -711,6 +718,11 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onMobileSummaryClosed(): void {
     this.isMobileSummaryVisible = false;
     this.cdr.markForCheck();
+  }
+
+  onMobileApplyClick(): void {
+    // Track "Aplică" button click from mobile modal
+    this.trackEvent('Buton Aplica Mobile Click', 'Aplica din modal', this.requestedAmount);
   }
 
   getMobileOffers(): Array<{
@@ -779,7 +791,11 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
     return out;
   }
-  onFooterPrimaryClick(event: MouseEvent): void { this.footerPrimaryClicked.emit(event); }
+  onFooterPrimaryClick(event: MouseEvent): void { 
+    // Track "Aplică" button click
+    this.trackEvent('Buton Aplica Click', 'Aplica in doar 2 minute', this.requestedAmount);
+    this.footerPrimaryClicked.emit(event); 
+  }
   onFooterShareClick(event: MouseEvent): void { this.footerShareClicked.emit(event); }
   // Income Section event handlers
   onMonthlyIncomeChange(value: number): void { 
@@ -800,6 +816,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onGuaranteePropertyChange(value: boolean): void { 
     this.markInteracted();
     this.hasGuaranteeProperty = value;
+    
+    // Track owner/guarantee property change
+    this.trackEvent('Owner Status Modificat', value ? 'Cu garantie imobil' : 'Fara garantie imobil', value ? 1 : 0);
+    
     this.guaranteePropertyChange.emit(value);
     this.cdr.markForCheck();
     this.triggerFormValidation();
@@ -826,6 +846,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.selectedCounty = value;
     this.updateCitiesForCounty(value);
     
+    // Track county selection
+    this.trackEvent('Judet Selectat', value);
+    
     // Reset city selection if current city is not available in new county
     const previousCity = this.selectedCity;
     if (!this.cities.includes(this.selectedCity)) {
@@ -843,6 +866,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onCityChange(value: string): void { 
     this.markInteracted();
     this.selectedCity = value;
+    
+    // Track city selection
+    this.trackEvent('Oras Selectat', `${this.selectedCounty} - ${value}`);
+    
     this.cityChange.emit(value);
     this.cdr.markForCheck();
     this.triggerFormValidation();
@@ -873,6 +900,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onSalaryTransferChange(value: boolean): void { 
     this.markInteracted();
     this.salaryTransfer = value;
+    
+    // Track salary transfer (client type indicator)
+    this.trackEvent('Tip Client - Incasare Salariu', value ? 'Client cu salariu la Raiffeisen' : 'Client fara salariu la Raiffeisen', value ? 1 : 0);
+    
     this.salaryTransferChange.emit(value);
     this.cdr.markForCheck();
     this.triggerFormValidation();
@@ -898,6 +929,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Update the selected product type (do not persist state on switch)
     const previousProductType = this.selectedProductType;
     this.applyProductType(optionId, false);
+    
+    // Track product type selection
+    this.trackEvent('Tip Credit Selectat', this.heroChipLabel, optionId);
     
     // Keep for logging purposes
     const previousChipLabel = this.heroChipLabel;
@@ -1096,5 +1130,42 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   private coerceNumber(value: any, fallback: number): number {
     const n = Number(value);
     return Number.isFinite(n) ? n : fallback;
+  }
+
+  // Jentis tracking helper with duplicate prevention
+  private lastTrackedEvent: string = '';
+  private lastTrackedTime: number = 0;
+  private readonly TRACK_DEBOUNCE_MS = 500; // Prevent duplicates within 500ms
+
+  private trackEvent(action: string, label: string, value?: string | number): void {
+    if (typeof window !== 'undefined' && (window as any)._jts) {
+      try {
+        // Create a unique key for this event
+        const eventKey = `${action}:${label}:${value}`;
+        const now = Date.now();
+        
+        // Skip if this is a duplicate event within the debounce window
+        if (eventKey === this.lastTrackedEvent && (now - this.lastTrackedTime) < this.TRACK_DEBOUNCE_MS) {
+          console.log('🚫 Duplicate event prevented:', { action, label, value });
+          return;
+        }
+        
+        // Update tracking state
+        this.lastTrackedEvent = eventKey;
+        this.lastTrackedTime = now;
+        
+        // Send event to Jentis
+        (window as any)._jts.push({
+          track: 'event',
+          category: 'Calculator Ipotecar',
+          action: action,
+          label: label,
+          value: value
+        });
+        console.log('📊 Jentis event tracked:', { action, label, value });
+      } catch (error) {
+        console.error('Jentis tracking error:', error);
+      }
+    }
   }
 }

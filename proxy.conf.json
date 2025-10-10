@@ -7,5 +7,14 @@
     "pathRewrite": {
       "^/api": ""
     }
+  },
+  "/districts": {
+    "target": "https://rbro-loan-calculation-admin-service-www.apps.ocp4-test.rbro.rbg.cc",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/districts": "/app/loan-admin/v1/districts"
+    }
   }
 }

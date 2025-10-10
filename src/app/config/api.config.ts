@@ -1,12 +1,14 @@
+import { environment } from '../../environments/environment';
+
 export const API_CONFIG = {
-  // Base URL for the backend API - using proxy in development
-  BASE_URL: '/api', // Route through Angular dev proxy
+  // Base URL for the backend API - routed through proxy
+  BASE_URL: environment.apiUrl, // '/api' - routed through proxy
   
   // Mortgage calculation endpoint - backend expects /calculator/mortgage-calculator
   MORTGAGE_CALCULATOR: '/calculator/mortgage-calculator',
   
-  // Districts endpoint - direct URL to admin service (bypasses proxy)
-  DISTRICTS_URL: 'https://rbro-loan-calculation-admin-service-www.apps.ocp4-test.rbro.rbg.cc/app/loan-admin/v1/districts',
+  // Districts endpoint - routed through proxy
+  DISTRICTS_URL: environment.districtsUrl, // '/districts' - routed through proxy
 
   // Other potential endpoints
   // PRODUCTS: '/api/products',

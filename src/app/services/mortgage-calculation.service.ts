@@ -146,12 +146,6 @@ export class MortgageCalculationService {
    */
   calculateMortgage(request: MortgageCalculationRequest): Observable<MortgageCalculationResponse> {
     const headers = this.getCustomHeaders();
-    
-    console.log('🚀 Making mortgage calculation request with headers:', {
-      url: this.apiUrl,
-      headers: Object.fromEntries(headers.keys().map(key => [key, headers.get(key)])),
-      request: request
-    });
 
     return this.http.post<MortgageCalculationResponse>(this.apiUrl, request, { headers })
       .pipe(

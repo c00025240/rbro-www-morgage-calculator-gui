@@ -361,7 +361,8 @@
   <ms-mobile-summary-modal
     *ngIf="isMobileSummaryVisible && calculationResponse"
     [offers]="getMobileOffers()"
-    (closed)="onMobileSummaryClosed()">
+    (closed)="onMobileSummaryClosed()"
+    (applyClicked)="onMobileApplyClick()">
   </ms-mobile-summary-modal>
 
   <!-- Simulator Option Modal -->
