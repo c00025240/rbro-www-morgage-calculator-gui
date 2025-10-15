@@ -31,11 +31,10 @@
     "lint": "ng lint",
     "dev": "ng serve --proxy-config proxy.conf.json",
     "dev:no-proxy": "ng serve",
-    "start": "node dist/rbro-www-mortgage-calculator-gui/server/server.mjs",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "build:test": "ng build --configuration=test",
-        "ci:build:prelive": "node node_modules/@angular/cli/bin/ng.js build --configuration=prelive",
-    "debug:test": "echo 'Building with test configuration...' && node node_modules/@angular/cli/bin/ng.js build --configuration=test --verbose",
+    "build:prelive": "ng build --configuration=prelive",
     "build:prod": "ng build --configuration=production",
     "serve:ssr": "node dist/rbro-www-mortgage-calculator-gui/server/server.mjs"
   }

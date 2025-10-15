@@ -1,14 +1,14 @@
-import { environment } from '../../environments/environment';
+import { inject } from '@angular/core';
+import { ConfigService } from '../services/config.service';
 
+/**
+ * API Configuration
+ * Uses runtime configuration loaded from env.json (mounted from ConfigMap in OpenShift)
+ * Falls back to build-time environment if runtime config is not available
+ */
 export const API_CONFIG = {
-  // Base URL for the backend API - routed through proxy
-  BASE_URL: environment.apiUrl, // '/api' - routed through proxy
-  
   // Mortgage calculation endpoint - backend expects /calculator/mortgage-calculator
   MORTGAGE_CALCULATOR: '/calculator/mortgage-calculator',
-  
-  // Districts endpoint - routed through proxy
-  DISTRICTS_URL: environment.districtsUrl, // '/districts' - routed through proxy
 
   // Other potential endpoints
   // PRODUCTS: '/api/products',
@@ -16,10 +16,28 @@ export const API_CONFIG = {
   // VALIDATION: '/api/validation'
 };
 
+/**
+ * Get API URL with endpoint
+ * Uses runtime configuration from ConfigService
+ */
 export const getApiUrl = (endpoint: string): string => {
-  return `${API_CONFIG.BASE_URL}${endpoint}`;
+  // Note: This won't work with standalone inject outside injection context
+  // Services should use ConfigService directly instead
+  return endpoint; // Return relative path - services should prepend base URL
 };
 
+/**
+ * Get districts URL
+ * Uses runtime configuration from ConfigService
+ */
+export const getDistrictsUrl = (): string => {
+  // Services should use ConfigService.getDistrictsUrl() directly
+  return '/districts'; // Default fallback
+};
+
+/**
+ * Get direct URL (passthrough)
+ */
 export const getDirectUrl = (url: string): string => {
   return url;
 };

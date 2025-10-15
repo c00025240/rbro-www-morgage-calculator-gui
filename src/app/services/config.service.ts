@@ -8,11 +8,9 @@ export interface RuntimeConfig {
   environmentName: string;
   apiUrl: string;
   districtsUrl: string;
-  backendUrl: string;
-  adminServiceUrl: string;
   enableLogging: boolean;
   jentisWorkspace: string;
-  location: string;
+  location?: string;
   features?: {
     mortgageCalculation: boolean;
     districtSelection: boolean;
@@ -32,8 +30,6 @@ export class ConfigService {
     environmentName: 'development',
     apiUrl: '/api',
     districtsUrl: '/districts',
-    backendUrl: 'http://localhost:8080',
-    adminServiceUrl: 'https://rbro-loan-calculation-admin-service-www.apps.ocp4-test.rbro.rbg.cc',
     enableLogging: true,
     jentisWorkspace: 'preview',
     location: 'development'
@@ -84,13 +80,6 @@ export class ConfigService {
     return config?.districtsUrl || this.defaultConfig.districtsUrl;
   }
 
-  /**
-   * Get backend URL from current config
-   */
-  getBackendUrl(): string {
-    const config = this.getConfig();
-    return config?.backendUrl || this.defaultConfig.backendUrl;
-  }
 
   /**
    * Check if logging is enabled
