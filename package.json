@@ -15,6 +15,7 @@
     "@angular/cdk": "^20.2.0",
     "@angular/common": "^20.2.1",
     "@angular/core": "^20.2.1",
+    "@angular/compiler": "^20.2.1",
     "@angular/forms": "^20.0.0 || ^21.0.0",
     "@angular/material": "^20.2.0",
     "@angular/platform-browser": "^20.2.1",
@@ -28,11 +29,13 @@
   },
   "scripts": {
     "lint": "ng lint",
-    "start": "ng serve --proxy-config proxy.conf.json",
-    "start:no-proxy": "ng serve",
+    "dev": "ng serve --proxy-config proxy.conf.json",
+    "dev:no-proxy": "ng serve",
+    "start": "node dist/rbro-www-mortgage-calculator-gui/server/server.mjs",
     "build": "ng build",
     "build:test": "ng build --configuration=test",
-    "build:prelive": "ng build --configuration=prelive",
+        "ci:build:prelive": "node node_modules/@angular/cli/bin/ng.js build --configuration=prelive",
+    "debug:test": "echo 'Building with test configuration...' && node node_modules/@angular/cli/bin/ng.js build --configuration=test --verbose",
     "build:prod": "ng build --configuration=production",
     "serve:ssr": "node dist/rbro-www-mortgage-calculator-gui/server/server.mjs"
   }

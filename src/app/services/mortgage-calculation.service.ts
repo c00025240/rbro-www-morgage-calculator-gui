@@ -4,19 +4,20 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MortgageCalculationRequest } from '../../model/MortgageCalculationRequest';
 import { MortgageCalculationResponse } from '../../model/MortgageCalculationResponse';
-import { getApiUrl, getDirectUrl, API_CONFIG } from '../config/api.config';
+import { getApiUrl, getDistrictsUrl, API_CONFIG } from '../config/api.config';
 import { CustomHeaders, DEFAULT_HEADERS, AUTH_HEADERS, TRACKING_HEADERS, BUSINESS_HEADERS } from '../config/headers.config';
 import { District } from '../../model/District';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MortgageCalculationService {
-  private readonly apiUrl = getApiUrl(API_CONFIG.MORTGAGE_CALCULATOR); // Real backend endpoint
-  private readonly districtsUrl = getDirectUrl(API_CONFIG.DISTRICTS_URL); // Direct URL to admin service
-
-
-  constructor(private http: HttpClient) {}
+  
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {}
 
   /**
    * Get custom headers for mortgage calculation requests
@@ -146,8 +147,13 @@ export class MortgageCalculationService {
    */
   calculateMortgage(request: MortgageCalculationRequest): Observable<MortgageCalculationResponse> {
     const headers = this.getCustomHeaders();
+    const apiUrl = getApiUrl(API_CONFIG.MORTGAGE_CALCULATOR, this.configService);
 
-    return this.http.post<MortgageCalculationResponse>(this.apiUrl, request, { headers })
+    if (this.configService.isLoggingEnabled()) {
+      console.log('🚀 Mortgage calculation request to:', apiUrl);
+    }
+
+    return this.http.post<MortgageCalculationResponse>(apiUrl, request, { headers })
       .pipe(
         catchError((error) => this.handleError(error))
       );
@@ -159,8 +165,13 @@ export class MortgageCalculationService {
    */
   getDistricts(): Observable<District[]> {
     const headers = this.getCustomHeaders();
+    const districtsUrl = getDistrictsUrl(this.configService);
 
-    return this.http.get<District[]>(this.districtsUrl, { headers })
+    if (this.configService.isLoggingEnabled()) {
+      console.log('🌍 Districts request to:', districtsUrl);
+    }
+
+    return this.http.get<District[]>(districtsUrl, { headers })
       .pipe(
         catchError((error) => this.handleError(error))
       );

@@ -52,10 +52,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/environments/server.config.ts",
-                  "with": "src/environments/server.config.prod.ts"
                 }
               ],
               "budgets": [
@@ -66,8 +62,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "50kB",
+                  "maximumError": "100kB"
                 }
               ],
               "outputHashing": "all"
@@ -77,10 +73,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prelive.ts"
-                },
-                {
-                  "replace": "src/environments/server.config.ts",
-                  "with": "src/environments/server.config.prelive.ts"
                 }
               ],
               "optimization": true,
@@ -93,10 +85,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.test.ts"
-                },
-                {
-                  "replace": "src/environments/server.config.ts",
-                  "with": "src/environments/server.config.test.ts"
                 }
               ],
               "optimization": true,
