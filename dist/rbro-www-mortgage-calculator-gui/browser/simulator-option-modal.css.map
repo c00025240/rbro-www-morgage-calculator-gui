@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/design-system/organisms/simulator-option-modal/simulator-option-modal.scss"],
-  "sourcesContent": ["// Simulator Option Modal Styles\n\n// Hide the placeholder content from the base ms-modal component\n:host ::ng-deep .ms-modal__placeholder-content {\n  display: none !important;\n}\n\n.simulator-option-modal {\n  \n  // Content container for the option cells\n  &__content {\n    display: flex;\n    flex-direction: column;\n    gap: var(--space-2, 1rem); // 16px gap between option cells\n    width: 100%;\n    \n    // Ensure consistent width for all option cells\n    .simulator-option-modal__option {\n      width: 100%;\n      flex-shrink: 0;\n    }\n  }\n  \n  // Responsive adjustments\n  @media (min-width: 1024px) {\n    &__content {\n      gap: var(--space-3, 1.5rem); // Slightly larger gap on desktop\n      min-width: 400px; // Ensure minimum width on desktop\n      max-width: 600px; // Maximum width for readability\n    }\n  }\n  \n  // Surface-specific adjustments if needed\n  &--surface-light {\n    .simulator-option-modal__content {\n      // Light surface specific styles if needed\n    }\n  }\n  \n  &--surface-dark {\n    .simulator-option-modal__content {\n      // Dark surface specific styles if needed\n    }\n  }\n} "],
-  "mappings": ";AAGA,MAAA,UAAA,CAAA;AACE,WAAA;;AAMA,CAAA;AACE,WAAA;AACA,kBAAA;AACA,OAAA,IAAA,SAAA,EAAA;AACA,SAAA;;AAGA,CAPF,gCAOE,CAAA;AACE,SAAA;AACA,eAAA;;AAKJ,OAAA,CAAA,SAAA,EAAA;AACE,GAfF;AAgBI,SAAA,IAAA,SAAA,EAAA;AACA,eAAA;AACA,eAAA;;;",
-  "names": []
-}

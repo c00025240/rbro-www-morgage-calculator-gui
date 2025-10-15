@@ -2,7 +2,7 @@
 export const serverConfig = {
   environment: 'test',
   backend: {
-    url: process.env['BACKEND_URL'] || 'https://rbro-mortgage-calculator-backend-test.apps.ocp4-test.rbro.rbg.cc',
+    url: process.env['BACKEND_URL'] || 'https://mtg-calculator-orchestrator-www.apps.ocp4-test.rbro.rbg.cc',
     timeout: 30000
   },
   adminService: {
