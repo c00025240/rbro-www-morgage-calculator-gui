@@ -25,10 +25,18 @@ console.log('🚀 Server configuration loaded:', {
   logLevel: serverConfig.server.logLevel
 });
 
+// Allow self-signed certificates in development/test environments
+// In production, certificates will be properly managed by the platform
+const isDevelopment = serverConfig.environment === 'development' || serverConfig.environment === 'test';
+if (isDevelopment) {
+  console.log('⚠️  SSL certificate verification disabled for development');
+}
+
 // Backend API proxy
 app.use('/api', createProxyMiddleware({
   target: serverConfig.backend.url,
   changeOrigin: true,
+  secure: !isDevelopment, // Disable SSL verification in dev/test, enable in production
   logLevel: serverConfig.server.logLevel as any,
   pathRewrite: { '^/api': '' },
   timeout: serverConfig.backend.timeout,
@@ -47,6 +55,7 @@ app.use('/api', createProxyMiddleware({
 app.use('/districts', createProxyMiddleware({
   target: serverConfig.adminService.url,
   changeOrigin: true,
+  secure: !isDevelopment, // Disable SSL verification in dev/test, enable in production
   logLevel: serverConfig.server.logLevel as any,
   pathRewrite: { '^/districts': '/app/loan-admin/v1/districts' },
   timeout: serverConfig.adminService.timeout,
