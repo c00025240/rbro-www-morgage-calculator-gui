@@ -11,8 +11,8 @@
   line-height: var(--text-caption-line-height, 1.33) !important;
   letter-spacing: var(--text-caption-spacing, 0) !important;
 
-  background-color: var(--color-notifications-bg-success);
-  color: var(--color-notifications-text-success);
+  background-color: var(--success-10);
+  color: var(--success-dark);
 
   &--size-s { height: 32px; border-radius: 8px; }
   &--size-m { height: 40px; border-radius: 4px; }

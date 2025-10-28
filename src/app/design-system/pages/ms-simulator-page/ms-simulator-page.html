@@ -5,15 +5,18 @@
   
   <!-- Sticky Header (Desktop & Mobile) -->
   <ms-header
-    [title]="headerTitle"
+    [title]="''"
+    [logoSrc]="'assets/logos/long-logo-light.svg'"
+    [logoAlt]="'Raiffeisen Bank'"
     [backLabel]="headerBackLabel"
     [surface]="surface"
     [primaryAction]="headerPrimaryAction"
     [secondaryAction]="headerSecondaryAction"
-    [showBackButton]="showHeaderBackButton"
+    [showBackButton]="false"
     (backClicked)="onHeaderBackClick($event)"
     (primaryActionClicked)="onHeaderPrimaryActionClick($event)"
-    (secondaryActionClicked)="onHeaderSecondaryActionClick($event)">
+    (secondaryActionClicked)="onHeaderSecondaryActionClick($event)"
+    (logoClicked)="onHeaderLogoClick($event)">
   </ms-header>
 
   <!-- Desktop Split-Screen Layout (≥1024px) -->
@@ -119,13 +122,15 @@
 				[label]="selectedProductType === 'constructie-renovare' ? 'Contributie proprie' : 'Avans'"
 				[valueProp]="downPaymentAmount"
 				[disabledProp]="downPaymentDisabled"
+				[infoNote]="downPaymentInfoNote"
+				[infoNoteType]="downPaymentInfoType"
 				(valueChange)="onDownPaymentAmountChange($event)">
 			</ms-downpayment>
  
  			<!-- Info Cell -->
  			<ms-info-contained-cell
  				type="info"
- 				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString() + ' Lei'">
+ 				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
  			</ms-info-contained-cell>
  			
  			<!-- Interest Preferences Section -->
@@ -304,13 +309,15 @@
 				[label]="selectedProductType === 'constructie-renovare' ? 'Contributie proprie' : 'Avans'"
 				[valueProp]="downPaymentAmount"
 				[disabledProp]="downPaymentDisabled"
+				[infoNote]="downPaymentInfoNote"
+				[infoNoteType]="downPaymentInfoType"
 				(valueChange)="onDownPaymentAmountChange($event)">
 			</ms-downpayment>
  			
  			<!-- Info Cell -->
  			<ms-info-contained-cell
  				type="info"
- 				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString() + ' Lei'">
+ 				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
  			</ms-info-contained-cell>
  			
  			<!-- Interest Preferences Section -->

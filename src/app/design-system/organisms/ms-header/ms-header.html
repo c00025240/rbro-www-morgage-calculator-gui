@@ -4,8 +4,15 @@
         [class.ms-header--surface-dark]="surface === 'dark'"
         [attr.aria-label]="ariaLabel || 'Navigation header'">
 	<div class="ms-header__container">
-		<!-- Left Area: Back button and Title -->
+		<!-- Left Area: Logo, Back button and Title -->
 		<div class="ms-header__left">
+			<!-- Logo -->
+			<img *ngIf="logoSrc" 
+			     [src]="logoSrc" 
+			     [alt]="logoAlt"
+			     class="ms-header__logo"
+			     (click)="onLogoClick($event)">
+			
 			<ms-button-secondary
 				*ngIf="showBackButton"
 				[label]="backLabel"

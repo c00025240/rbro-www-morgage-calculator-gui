@@ -26,6 +26,7 @@ import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-
           <ms-text-field-custom
             label="Venitul tau lunar"
             [value]="monthlyIncome.toString()"
+            placeholder="0"
             suffixText="Lei"
             type="number"
             [error]="incomeTooLow"
@@ -37,6 +38,7 @@ import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-
           <ms-text-field-custom
             label="Suma totala a ratelor bancare, pe luna"
             [value]="monthlyInstallments.toString()"
+            placeholder="0"
             suffixText="Lei"
             type="number"
             [disabled]="disabled"

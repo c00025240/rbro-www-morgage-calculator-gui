@@ -11,6 +11,7 @@
         [label]="''"
         type="number"
         [value]="value()"
+        placeholder="0"
         [suffixText]="currency"
         [disabled]="disabled()"
         (valueChange)="onValueChange($event)">
@@ -36,6 +37,22 @@
           (input)="onSliderChange($event)"
           (touchstart)="onSliderInputTouchStart($event)"
           (touchmove)="onSliderInputTouchMove($event)">
+      </div>
+    </div>
+
+    <!-- Info note about additional amount for discount -->
+    <div class="ms-downpayment__info-note" 
+         [class.ms-downpayment__info-note--success]="infoNoteType === 'success'"
+         *ngIf="infoNote" 
+         role="note" 
+         aria-live="polite">
+      <div class="ms-downpayment__info-note-content">
+        <img [src]="infoNoteType === 'success' ? 'assets/icons/checkmark-ring Style=outlined.svg' : 'assets/icons/info-outlined.svg'" 
+             [alt]="infoNoteType === 'success' ? 'Succes' : 'Informație'" 
+             class="ms-downpayment__info-note-icon"
+             width="20" 
+             height="20">
+        <span class="ms-downpayment__info-note-text">{{ infoNote }}</span>
       </div>
     </div>
   </div>

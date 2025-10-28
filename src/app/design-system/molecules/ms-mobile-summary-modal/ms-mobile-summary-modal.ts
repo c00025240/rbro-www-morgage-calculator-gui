@@ -18,6 +18,7 @@ interface Offer {
   noDocAmount?: string;
   housePriceMin?: string;
   downPaymentInfoNote?: string; // construction note when gap > 0
+  interestType?: string; // 'fixa_3', 'fixa_5', 'variabila'
 }
 
 @Component({
@@ -67,16 +68,27 @@ export class MsMobileSummaryModalComponent {
       installmentType: 'Rate egale',
       downPayment: '200.342 Lei (30%)',
       loanAmount: '661.453 Lei',
-      totalAmount: '1.835.632 Lei'
+      totalAmount: '1.835.632 Lei',
+      interestType: 'fixa_3'
     };
   }
 
   getMonthlyInstallment(): string {
-    return this.getCurrentOffer().monthlyInstallment;
+    const offer = this.getCurrentOffer();
+    // Pentru dobânda variabilă, afișează variableInstallment în loc de monthlyInstallment
+    if (offer.interestType === 'variabila') {
+      return offer.variableInstallment;
+    }
+    return offer.monthlyInstallment;
   }
 
   getFixedRate(): string {
-    return this.getCurrentOffer().fixedRate;
+    const offer = this.getCurrentOffer();
+    // Pentru dobânda variabilă, inhibă câmpul dobânzii fixe
+    if (offer.interestType === 'variabila') {
+      return '—'; // sau poate fi string gol sau alt simbol
+    }
+    return offer.fixedRate;
   }
 
   getVariableRate(): string {
@@ -84,7 +96,33 @@ export class MsMobileSummaryModalComponent {
   }
 
   getVariableInstallment(): string {
-    return this.getCurrentOffer().variableInstallment;
+    const offer = this.getCurrentOffer();
+    // Pentru dobânda variabilă, inhibă câmpul ratei lunare după trecerea anilor
+    if (offer.interestType === 'variabila') {
+      return '—'; // sau poate fi string gol sau alt simbol
+    }
+    return offer.variableInstallment;
+  }
+
+  getMonthlyInstallmentLabel(): string {
+    const offer = this.getCurrentOffer();
+    // Pentru dobânda variabilă, schimbă label-ul
+    if (offer.interestType === 'variabila') {
+      return 'Rata lunara variabila';
+    }
+    return 'Rata lunara';
+  }
+
+  shouldShowFixedRate(): boolean {
+    const offer = this.getCurrentOffer();
+    // Pentru dobânda variabilă, nu afișa câmpul dobânzii fixe
+    return offer.interestType !== 'variabila';
+  }
+
+  shouldShowVariableInstallment(): boolean {
+    const offer = this.getCurrentOffer();
+    // Pentru dobânda variabilă, nu afișa câmpul ratei lunare după trecerea anilor
+    return offer.interestType !== 'variabila';
   }
 
   getDAE(): string {

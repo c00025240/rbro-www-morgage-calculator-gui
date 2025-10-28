@@ -16,6 +16,8 @@ export class MsDownpaymentComponent implements OnChanges {
   constructor(private cdr: ChangeDetectorRef) {}
   @Input() label: string = 'Avans';
   @Input() helperText: string = 'Introduceți avansul pe care doriți să îl plătiți';
+  @Input() infoNote?: string; // Note about additional amount needed for discount
+  @Input() infoNoteType?: 'info' | 'success'; // Type of info note for styling
   @Input() currency: string = 'Lei';
   @Input() min: number = 0;
   @Input() max: number = 500000;
@@ -28,23 +30,20 @@ export class MsDownpaymentComponent implements OnChanges {
 
   value = signal<string>('');
   currentValue = signal<number>(0);
-  // Disabled by default so undefined/empty is treated as disabled
-  disabled = signal<boolean>(true);
+  // Never disabled - always allow user input
+  disabled = signal<boolean>(false);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['valueProp']) {
       const v = changes['valueProp'].currentValue;
       if (v !== undefined && v !== null && !Number.isNaN(v)) {
-        this.value.set(String(v));
-        this.currentValue.set(v);
+        const rounded = Math.round(v);
+        this.value.set(String(rounded));
+        this.currentValue.set(rounded);
       }
     }
-    if (changes['disabledProp']) {
-      const d = changes['disabledProp'].currentValue;
-      if (typeof d === 'boolean') {
-        this.disabled.set(d);
-      }
-    }
+    // Ignore disabledProp - this component should never be disabled
+    // Users should always be able to input the down payment amount
   }
 
   get progressPercentage(): number {
@@ -59,11 +58,11 @@ export class MsDownpaymentComponent implements OnChanges {
   onValueChange(next: string): void {
     this.value.set(next);
     const numeric = Number(next);
-    const shouldDisable = next.trim() === '' || Number.isNaN(numeric) || numeric <= 0;
-    this.disabled.set(shouldDisable);
+    // Never disable the input - always allow user to type
     if (!Number.isNaN(numeric)) {
-      this.currentValue.set(numeric);
-      this.valueChange.emit(numeric);
+      const rounded = Math.round(numeric);
+      this.currentValue.set(rounded);
+      this.valueChange.emit(rounded);
       this.cdr.markForCheck();
     }
   }
@@ -72,9 +71,10 @@ export class MsDownpaymentComponent implements OnChanges {
     const target = event.target as HTMLInputElement;
     const numeric = Number(target.value);
     if (!Number.isNaN(numeric)) {
-      this.currentValue.set(numeric);
-      this.value.set(String(numeric));
-      this.valueChange.emit(numeric);
+      const rounded = Math.round(numeric);
+      this.currentValue.set(rounded);
+      this.value.set(String(rounded));
+      this.valueChange.emit(rounded);
       this.cdr.markForCheck();
     }
   }

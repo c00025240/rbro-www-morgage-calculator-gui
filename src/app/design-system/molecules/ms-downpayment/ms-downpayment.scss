@@ -95,6 +95,49 @@
     }
   }
 
+  &__info-note {
+    margin-top: var(--space-2, 8px);
+    padding: var(--space-2, 8px) var(--space-3, 12px);
+    background: var(--color-bg-secondary, #F3F4F6);
+    border: 1px solid var(--color-border, #E5E7EB);
+    border-radius: var(--radius-md, 6px);
+    
+    &-content {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2, 8px);
+    }
+    
+    &-icon {
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+    
+    &-text {
+      font-size: var(--font-size-sm, 0.875rem);
+      line-height: var(--line-height-relaxed, 1.5);
+      color: var(--color-text-secondary, #55575C);
+      font-weight: var(--font-weight-normal, 400);
+      flex: 1;
+    }
+    
+    // Success variant
+    &--success {
+      background: var(--success-10);
+      border: 1px solid var(--success-10);
+      
+      .ms-downpayment__info-note-icon {
+        opacity: 1; // Full opacity for success icon
+        filter: brightness(0) saturate(100%) invert(27%) sepia(100%) saturate(1000%) hue-rotate(115deg) brightness(0.6);
+      }
+      
+      .ms-downpayment__info-note-text {
+        color: var(--success-dark);
+        font-weight: var(--font-weight-medium, 500);
+      }
+    }
+  }
+
   &__slider-input {
     -webkit-appearance: none;
     appearance: none;

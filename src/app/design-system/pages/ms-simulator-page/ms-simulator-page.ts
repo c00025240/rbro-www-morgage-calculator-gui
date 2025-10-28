@@ -131,6 +131,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() selectedGuaranteeValue: string = '240567';
   @Input() downPaymentAmount: number = 0;
   @Input() downPaymentDisabled: boolean = false; // Enabled by default
+  downPaymentInfoNote?: string; // Note about additional amount needed for discount
+  downPaymentInfoType?: 'info' | 'success'; // Type of info note for styling
   
   // Property Location Section configuration
   @Input() selectedCounty: string = 'BUCURESTI';
@@ -270,6 +272,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Output() headerBackClicked = new EventEmitter<MouseEvent>();
   @Output() headerPrimaryActionClicked = new EventEmitter<MouseEvent>();
   @Output() headerSecondaryActionClicked = new EventEmitter<MouseEvent>();
+  @Output() headerLogoClicked = new EventEmitter<MouseEvent>();
   
   @Output() heroChipClicked = new EventEmitter<void>();
   @Output() heroCloseClicked = new EventEmitter<void>();
@@ -465,12 +468,12 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           // Populate sticky footer (tablet) amounts and actions
           this.footerLeftAmount = {
             label: 'Prima rata fixa',
-            amount: (response.monthlyInstallment?.amountFixedInterest || 0).toFixed(0),
+            amount: (response.monthlyInstallment?.amountFixedInterest || 0).toFixed(2),
             currency: 'Lei/luna'
           };
           this.footerRightAmount = {
             label: 'Suma totala',
-            amount: (response.totalPaymentAmount?.amount || 0).toFixed(0),
+            amount: (response.totalPaymentAmount?.amount || 0).toFixed(2),
             currency: 'Lei'
           };
           this.footerActions = {
@@ -479,6 +482,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
             share: { ariaLabel: 'Distribuie oferta' }
           };
           
+          // Update down payment info note from backend response
+          this.updateDownPaymentInfoNote(response);
+
           this.isLoading = false;
           this.errorMessage = undefined; // clear any previous error (e.g., 422)
           this.showOffersErrorBanner = false;
@@ -650,6 +656,11 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onHeaderBackClick(event: MouseEvent): void { this.headerBackClicked.emit(event); }
   onHeaderPrimaryActionClick(event: MouseEvent): void { this.headerPrimaryActionClicked.emit(event); }
   onHeaderSecondaryActionClick(event: MouseEvent): void { this.headerSecondaryActionClicked.emit(event); }
+  onHeaderLogoClick(event: MouseEvent): void { 
+    // Track logo click for analytics
+    this.trackEvent('Logo Click', 'Raiffeisen Bank Logo');
+    this.headerLogoClicked.emit(event); 
+  }
   onHeroChipClick(): void { 
     console.log('🎯 Hero chip clicked! Opening simulator modal...');
     this.isSimulatorModalVisible = true;
@@ -740,7 +751,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     housePriceMin?: string;
     downPaymentInfoNote?: string;
   }> {
-    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; downPaymentInfoNote?: string; }> = [];
+    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; downPaymentInfoNote?: string; interestType?: string; }> = [];
 
     const responses = [
       { resp: this.calculationResponse, title: 'Oferta ta personalizata' },
@@ -762,30 +773,27 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
       let downPaymentInfoNote: string | undefined;
       if (this.selectedProductType === 'constructie-renovare') {
-        if (typeof noDoc === 'number') noDocStr = (noDoc || 0).toFixed(0) + ' Lei';
-        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' Lei';
+        if (typeof noDoc === 'number') noDocStr = (noDoc || 0).toFixed(2) + ' Lei';
+        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(2) + ' Lei';
       } else if (this.selectedProductType === 'refinantare') {
-        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(0) + ' Lei';
+        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(2) + ' Lei';
       }
-      // Show note for the "all discounts" variant when backend provides a positive gap, regardless of product type
-      if (i === 1 && gap !== undefined && gap > 0) {
-        const gapStr = gap.toFixed(0) + ' Lei';
-        downPaymentInfoNote = `Pentru ${gapStr} in plus la avans vei beneficia de o reducere de 0,2%`;
-      }
+      // Note: downPaymentInfoNote is now displayed in the down payment input component
+      // No longer needed in summary cards
       out.push({
         title: r.title,
-        monthlyInstallment: ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(0) + ' Lei',
+        monthlyInstallment: ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(2) + ' Lei',
         fixedRate: (r.resp.nominalInterestRate || 0).toFixed(2) + '%',
         variableRate: ((r.resp.interestRateFormula?.bankMarginRate || 0) + (r.resp.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
-        variableInstallment: ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei',
+        variableInstallment: ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei',
         dae: (r.resp.annualPercentageRate || 0).toFixed(2) + '%',
         installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
-        downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(0) + ' Lei',
-        loanAmount: ((r.resp.loanAmount?.amount) || 0).toFixed(0) + ' Lei',
-        totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei',
+        downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(2) + ' Lei',
+        loanAmount: ((r.resp.loanAmount?.amount) || 0).toFixed(2) + ' Lei',
+        totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(2) + ' Lei',
         noDocAmount: noDocStr,
         housePriceMin: housePriceStr,
-        downPaymentInfoNote
+        interestType: this.interestType
       });
     }
 
@@ -1031,6 +1039,46 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     return Math.round(base * 0.15);
   }
 
+  private updateDownPaymentInfoNote(response: MortgageCalculationResponse): void {
+    if (this.selectedProductType === 'constructie-renovare') {
+      // For construction/renovation - check for gap
+      const gapRaw = (response as any)?.downPaymentDiscountGap;
+      const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
+      
+      if (gap !== undefined && gap > 0) {
+        const gapStr = gap.toFixed(2) + ' Lei';
+        this.downPaymentInfoNote = `Pentru ${gapStr} in plus la avans vei beneficia de o reducere de 0,2%`;
+        this.downPaymentInfoType = 'info';
+      } else {
+        // If gap is <= 0, show message about property in guarantee
+        this.downPaymentInfoNote = 'Imobilul adus in garantie iti aduce de o reducere a ratei lunare de 0,2% din dobanda standard.';
+        this.downPaymentInfoType = 'success';
+      }
+    } else if (this.selectedProductType === 'achizitie-imobil' || this.selectedProductType === 'credit-venit') {
+      // For purchase and income-based credit - check if down payment is at least 20%
+      const propertyValue = this.propertyValue || 0;
+      const downPayment = this.downPaymentAmount || 0;
+      const twentyPercent = propertyValue * 0.20;
+      
+      if (downPayment >= twentyPercent) {
+        // Success case - down payment is at least 20%
+        // Calculate the discount amount from the response
+        const discountAmount = response?.loanCosts?.discounts?.discountAmountDownPayment || 0;
+        const discountStr = discountAmount > 0 ? discountAmount.toFixed(2) : '0.00';
+        this.downPaymentInfoNote = `Deoarece avansul tau reprezinta cel putin 20% din pretul locuintei, beneficiezi de o reducere a ratei lunare in valoare de ${discountStr} Lei adica 0,2% din dobanda standard.`;
+        this.downPaymentInfoType = 'success';
+      } else {
+        // Info case - down payment is less than 20%
+        this.downPaymentInfoNote = 'Daca avansul tau reprezinta cel putin 20% din pretul locuintei, beneficiezi de o reducere a ratei lunare de 0,2% din dobanda standard.';
+        this.downPaymentInfoType = 'info';
+      }
+    } else {
+      // For other product types (refinantare) - no note
+      this.downPaymentInfoNote = undefined;
+      this.downPaymentInfoType = undefined;
+    }
+  }
+
   // Build columns for desktop web summary card (three offers in one card)
   getWebSummaryColumns(): Array<{
     leftTop: any;
@@ -1039,6 +1087,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     rightBottom?: any;
     extraDetails?: Array<{ label: string; value: string }>;
     title?: string;
+    interestType?: string;
   }> {
     const columns: Array<any> = [];
 
@@ -1057,43 +1106,45 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       if (!resp) { return; }
       const variableRate = ((resp?.interestRateFormula?.bankMarginRate || 0) + (resp?.interestRateFormula?.irccRate || 0));
       let infoNote: string | undefined;
-      const extraDetails: Array<{ label: string; value: string }> = [
-        { label: 'Dobanda fixa', value: (resp?.nominalInterestRate || 0).toFixed(2) + ' %' },
-        { label: 'Dobanda variabila', value: (variableRate || 0).toFixed(2) + ' %' },
-        { label: 'Rata lunara (dupa trecerea anilor cu dobanda fixa)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(0) + ' Lei' },
+      const extraDetails: Array<{ label: string; value: string }> = [];
+      
+      // Pentru dobânda variabilă, inhibă câmpurile dobânzii fixe și ratei lunare după trecerea anilor
+      if (this.interestType !== 'variabila') {
+        extraDetails.push({ label: 'Dobanda fixa', value: (resp?.nominalInterestRate || 0).toFixed(2) + ' %' });
+        extraDetails.push({ label: 'Rata lunara (dupa trecerea anilor cu dobanda fixa)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei' });
+      }
+      
+      // Dobânda variabilă se afișează întotdeauna
+      extraDetails.push({ label: 'Dobanda variabila', value: (variableRate || 0).toFixed(2) + ' %' });
+      
+      // Câmpurile comune
+      extraDetails.push(
         { label: 'DAE', value: (resp?.annualPercentageRate || 0).toFixed(2) + ' %' },
         { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
-        { label: 'Avans', value: ((resp?.downPayment?.amount) || 0).toFixed(0) + ' Lei' },
-        { label: 'Suma solicitata', value: ((resp?.loanAmount?.amount) || 0).toFixed(0) + ' Lei' },
-        { label: 'Valoarea totala platibila', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(0) + ' Lei' }
-      ];
+        { label: 'Avans', value: ((resp?.downPayment?.amount) || 0).toFixed(2) + ' Lei' },
+        { label: 'Suma solicitata', value: ((resp?.loanAmount?.amount) || 0).toFixed(2) + ' Lei' },
+        { label: 'Valoarea totala platibila', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(2) + ' Lei' }
+      );
 
       // Product-specific extra details
       if (this.selectedProductType === 'constructie-renovare') {
         const noDoc = (resp?.noDocAmount) as number | undefined;
         const housePrice = (resp?.housePrice?.amount ?? resp?.housePrice) as number | undefined;
         if (typeof noDoc === 'number') {
-          extraDetails.push({ label: 'Sume fara justificare', value: (noDoc || 0).toFixed(0) + ' Lei' });
+          extraDetails.push({ label: 'Sume fara justificare', value: (noDoc || 0).toFixed(2) + ' Lei' });
         }
         if (typeof housePrice === 'number') {
-          extraDetails.push({ label: 'Valoare minima a garantiei', value: (housePrice || 0).toFixed(0) + ' Lei' });
+          extraDetails.push({ label: 'Valoare minima a garantiei', value: (housePrice || 0).toFixed(2) + ' Lei' });
         }
       } else if (this.selectedProductType === 'refinantare') {
         const housePrice = (resp?.housePrice?.amount ?? resp?.housePrice) as number | undefined;
         if (typeof housePrice === 'number') {
-          extraDetails.push({ label: 'Valoare minima a garantiei', value: (housePrice || 0).toFixed(0) + ' Lei' });
+          extraDetails.push({ label: 'Valoare minima a garantiei', value: (housePrice || 0).toFixed(2) + ' Lei' });
         }
       }
 
-      // Show the info note for the "all discounts" card (index 1) whenever backend provides a positive gap, regardless of product type
-      if (idx === 1) {
-        const gapRaw = (resp as any)?.downPaymentDiscountGap;
-        const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
-        if (gap !== undefined && gap > 0) {
-          const gapStr = gap.toFixed(0) + ' Lei';
-          infoNote = `Pentru ${gapStr} in plus la avans vei beneficia de o reducere de 0,2%`;
-        }
-      }
+      // Note: infoNote is now displayed in the down payment input component
+      // No longer needed in summary cards
 
       columns.push({
         title: titles[idx] || '',
@@ -1103,14 +1154,16 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           currency: '%'
         },
         rightTop: {
-          label: 'Rata lunara de plata',
-          amount: (resp?.monthlyInstallment?.amountFixedInterest || 0).toFixed(0),
+          label: this.interestType === 'variabila' ? 'Rata lunara variabila' : 'Rata lunara de plata',
+          amount: this.interestType === 'variabila' 
+            ? (resp?.monthlyInstallment?.amountVariableInterest || 0).toFixed(2)
+            : (resp?.monthlyInstallment?.amountFixedInterest || 0).toFixed(2),
           currency: 'Lei/luna'
         },
         leftBottom: undefined,
         rightBottom: undefined,
         extraDetails,
-        infoNote
+        interestType: this.interestType
       });
     });
 

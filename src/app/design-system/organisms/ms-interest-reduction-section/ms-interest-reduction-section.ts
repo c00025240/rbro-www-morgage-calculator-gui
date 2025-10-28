@@ -112,7 +112,7 @@ export class MsInterestReductionSection {
 
   formatSavings(value: number): string {
     const v = Math.abs(value || 0);
-    return `${v.toFixed(0)} Lei economisiti`;
+    return `${v.toFixed(2)} Lei economisiti`;
   }
 
   get totalSavings(): string {

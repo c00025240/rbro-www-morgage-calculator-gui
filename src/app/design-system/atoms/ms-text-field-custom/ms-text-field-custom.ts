@@ -340,7 +340,18 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
   // Event handlers
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement | HTMLTextAreaElement;
-    const newValue = target.value;
+    let newValue = target.value;
+    
+    // Additional filtering for number inputs (handles paste events)
+    if (this.type === 'number') {
+      // Remove all non-digit characters
+      newValue = newValue.replace(/[^0-9]/g, '');
+      // Update the input element value if it was filtered
+      if (target.value !== newValue) {
+        target.value = newValue;
+      }
+    }
+    
     this.value = newValue;
     this.onChange(newValue);
     this.valueChange.emit(newValue);
@@ -362,7 +373,31 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
   }
 
   onKeydown(event: KeyboardEvent): void {
-    // Handle specific keyboard interactions if needed
+    // Block non-numeric characters for number inputs
+    if (this.type === 'number') {
+      const allowedKeys = [
+        'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+        'Home', 'End', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'
+      ];
+      
+      // Allow: Ctrl/Cmd + A, C, V, X
+      if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
+        return;
+      }
+      
+      // Allow navigation and editing keys
+      if (allowedKeys.includes(event.key)) {
+        return;
+      }
+      
+      // Block everything except digits (0-9)
+      if (!/^[0-9]$/.test(event.key)) {
+        event.preventDefault();
+        return;
+      }
+    }
+    
+    // Handle Enter key behavior for textarea
     if (event.key === 'Enter' && this.isTextarea && !event.shiftKey) {
       // Optional: Handle Enter key behavior for textarea
     }

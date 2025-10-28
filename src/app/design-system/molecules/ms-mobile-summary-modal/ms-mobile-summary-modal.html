@@ -13,7 +13,7 @@
       <div class="ms-mobile-summary-modal__card-content" [ngClass]="getTransitionClass()">
         <!-- Monthly installment section -->
         <div class="ms-mobile-summary-modal__installment-section">
-          <div class="ms-mobile-summary-modal__installment-label">Rata lunara fixa (3 ani)</div>
+          <div class="ms-mobile-summary-modal__installment-label">{{ getMonthlyInstallmentLabel() }}</div>
           <div class="ms-mobile-summary-modal__installment-value">{{ getMonthlyInstallment() }}</div>
         </div>
 
@@ -22,19 +22,19 @@
 
         <!-- Interest rates section -->
         <div class="ms-mobile-summary-modal__rates-section">
-          <div class="ms-mobile-summary-modal__rate-row">
+          <div class="ms-mobile-summary-modal__rate-row" *ngIf="shouldShowFixedRate()">
             <span class="ms-mobile-summary-modal__rate-label">Dobanda fixa (3 ani)</span>
             <span class="ms-mobile-summary-modal__rate-value">{{ getFixedRate() }}</span>
           </div>
           <div class="ms-mobile-summary-modal__rate-row">
-            <span class="ms-mobile-summary-modal__rate-label">Dobanda variabila (din anul 4)</span>
+            <span class="ms-mobile-summary-modal__rate-label">Dobanda variabila (dupa trecerea anilor cu dobanda fixa)</span>
             <span class="ms-mobile-summary-modal__rate-value">{{ getVariableRate() }}</span>
           </div>
         </div>
 
         <!-- Variable installment section -->
-        <div class="ms-mobile-summary-modal__variable-section">
-          <div class="ms-mobile-summary-modal__variable-label">Prima rata lunara (anul 4)</div>
+        <div class="ms-mobile-summary-modal__variable-section" *ngIf="shouldShowVariableInstallment()">
+          <div class="ms-mobile-summary-modal__variable-label">Prima rata lunara (dupa trecerea anilor cu dobanda fixa)</div>
           <div class="ms-mobile-summary-modal__variable-value">{{ getVariableInstallment() }}</div>
         </div>
 

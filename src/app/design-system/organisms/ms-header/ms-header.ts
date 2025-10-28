@@ -57,6 +57,12 @@ export class MsHeader {
 	/** Main heading text (H2 on desktop, hidden on mobile) */
 	@Input() title: string = '';
 	
+	/** Logo image source (optional) */
+	@Input() logoSrc?: string;
+	
+	/** Logo alt text for accessibility */
+	@Input() logoAlt: string = 'Raiffeisen Bank';
+	
 	/** Label for the back button */
 	@Input() backLabel: string = 'Înapoi';
 	
@@ -83,6 +89,9 @@ export class MsHeader {
 	
 	/** Emitted when secondary action button is clicked */
 	@Output() secondaryActionClicked = new EventEmitter<MouseEvent>();
+	
+	/** Emitted when logo is clicked */
+	@Output() logoClicked = new EventEmitter<MouseEvent>();
 
 	/**
 	 * Handles back button click events
@@ -118,5 +127,17 @@ export class MsHeader {
 			event.stopPropagation();
 		}
 		this.secondaryActionClicked.emit(event);
+	}
+
+	/**
+	 * Handles logo click events
+	 * @param event - Mouse click event
+	 */
+	onLogoClick(event: MouseEvent): void {
+		if (event) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
+		this.logoClicked.emit(event);
 	}
 } 

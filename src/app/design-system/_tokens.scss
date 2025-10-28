@@ -3,100 +3,160 @@
 // =============================================================================
 
 // -----------------------------------------------------------------------------
-// Color Tokens
+// Color Tokens - Official Raiffeisen Brand Colors
 // -----------------------------------------------------------------------------
 
 :root {
-  // Raiffeisen Brand Colors
-  --rbro-yellow-primary: #FFD700;
-  --rbro-yellow-light: #FFF4C4;
-  --rbro-yellow-dark: #B8860B;
-  --rbro-black: #1A1A1A;
-  --rbro-white: #FFFFFF;
-  
-  // Mortgage Context Colors
-  --mortgage-success: #10B981;
-  --mortgage-success-light: #D1FAE5;
-  --mortgage-success-dark: #047857;
-  
-  --mortgage-warning: #F59E0B;
-  --mortgage-warning-light: #FEF3C7;
-  --mortgage-warning-dark: #D97706;
-  
-  --mortgage-error: #EF4444;
-  --mortgage-error-light: #FEE2E2;
-  --mortgage-error-dark: #DC2626;
-  
-  --mortgage-info: #3B82F6;
-  --mortgage-info-light: #DBEAFE;
-  --mortgage-info-dark: #1D4ED8;
+  // Official Raiffeisen Brand Colors
+  --rbro-yellow-primary: #fee600;        // brandLightDigiYellow
+  --rbro-yellow-hover: #e5d119;          // bgPrimaryHover
+  --rbro-yellow-surface: #fff0a6;        // surfaceYellow1
+  --rbro-yellow-alt: #ffd403;            // surfaceYellow2
+  --rbro-off-black: #2b2d33;             // brandLightOffBlack
+  --rbro-white: #ffffff;                 // brandLightWhite
 
-  // Modern Color Palette (from existing tokens)
-  --bright-blue: oklch(51.01% 0.274 263.83);
-  --electric-violet: oklch(53.18% 0.28 296.97);
-  --french-violet: oklch(47.66% 0.246 305.88);
-  --vivid-pink: oklch(69.02% 0.277 332.77);
-  --hot-red: oklch(61.42% 0.238 15.34);
-  --orange-red: oklch(63.32% 0.24 31.68);
+  // Accent Colors (Teal Family)
+  --accent-dark: #004454;                // accentLightDark
+  --accent-default: #037080;             // accentLightDefault
+  --accent-60: #68a9b3;                  // accentLight60
+  --accent-30: #b3d4d8;                  // accentLight30
+  --accent-20: #e5f0f2;                  // accentLight20
 
-  // Grayscale System
-  --gray-50: #F9FAFB;
-  --gray-100: #F3F4F6;
-  --gray-200: #E5E7EB;
-  --gray-300: #D1D5DB;
-  --gray-400: oklch(70.9% 0.015 304.04);
-  --gray-500: #6B7280;
-  --gray-600: #4B5563;
-  --gray-700: oklch(36.98% 0.014 302.71);
-  --gray-800: #1F2937;
-  --gray-900: oklch(19.37% 0.006 300.98);
+  // Utilitarian Colors - Error (Red)
+  --error-dark: #cf030a;                 // utilitarianRedLightDark
+  --error-default: #e61e33;              // utilitarianRedLightDefault
+  --error-60: #f07885;                   // utilitarianRedLight60
+  --error-30: #f7bbc1;                   // utilitarianRedLight30
+  --error-10: #fce8ea;                   // utilitarianRedLight10
 
-  // Semantic Color Mappings
+  // Utilitarian Colors - Warning (Orange)
+  --warning-dark: #ff1e03;               // utilitarianOrangeLightDark
+  --warning-default: #ff581e;            // utilitarianOrangeLightDefault
+  --warning-60: #ff9b78;                 // utilitarianOrangeLight60
+  --warning-30: #ffccbb;                 // utilitarianOrangeLight30
+  --warning-10: #ffeee8;                 // utilitarianOrangeLight10
+
+  // Utilitarian Colors - Success (Green)
+  --success-dark: #0b7d3e;               // utilitarianGreenLightDark
+  --success-default: #35b37e;            // utilitarianGreenLightDefault
+  --success-60: #86d1b2;                 // utilitarianGreenLight60
+  --success-30: #c2e8d8;                 // utilitarianGreenLight30
+  --success-10: #eaf7f2;                 // utilitarianGreenLight10
+
+  // Utilitarian Colors - Info (Blue)
+  --info-dark: #0093ff;                  // utilitarianBlueLightDark
+  --info-default: #00c2ff;               // utilitarianBlueLightDefault
+  --info-60: #7fe0ff;                    // utilitarianBlueLight60
+  --info-30: #b2ecff;                    // utilitarianBlueLight30
+  --info-10: #e5f8ff;                    // utilitarianBlueLight10
+
+  // Surface Colors
+  --surface-white: #ffffff;              // surfaceWhite
+  --surface-warm-grey: #f1ede6;          // surfaceWarmGrey
+  --surface-warm-grey-50: #f8f6f2;       // surfaceWarmGrey50
+  --surface-grey: #f4f4f4;               // bgGrey
+  --surface-disabled: #d5d5d6;           // bgDisabled
+
+  // Text Colors
+  --text-default: #2b2d33;               // textDefault
+  --text-secondary: #55575c;             // textSecondary
+  --text-accent: #037080;                // textAccent
+  --text-accent-secondary: #68a9b3;      // textAccentSecondary
+  --text-disabled: #aaabad;              // textDisabled
+  --text-on-surface-disabled: #808185;   // textOnSurfaceDisabled
+  --text-on-surface-alternative: #737888; // textOnSurfaceAlternative
+  --text-grey: #e9eaea;                  // textGrey
+  --text-invert: #ffffff;                // textInvert
+  --text-success: #0b7d3e;               // textSuccess
+  --text-warning: #e54f1b;               // textWarning
+  --text-error: #cf030a;                 // textError
+  --text-info: #0076cc;                  // textInfo
+
+  // Background Colors
+  --bg-primary: #fee600;                 // bgPrimary
+  --bg-primary-hover: #e5d119;           // bgPrimaryHover
+  --bg-white: #ffffff;                   // bgWhite
+  --bg-black: #2b2d33;                   // bgBlack
+  --bg-grey: #f4f4f4;                    // bgGrey
+  --bg-grey-secondary: #808185;          // bgGreySecondary
+  --bg-disabled: #d5d5d6;                // bgDisabled
+  --bg-low-emphasis: #2b2d33;            // bgLowEmphasis
+  --bg-accent: #037080;                  // bgAccent
+  --bg-accent-60: #68a9b3;               // bgAccent60
+  --bg-accent-30: #b3d4d8;               // bgAccent30
+  --bg-accent-20: #e5f0f2;               // bgAccent20
+  --bg-success: #0b7d3e;                 // bgSuccess
+  --bg-error: #e61e33;                   // bgError / bgDanger
+  --bg-warning: #ff581e;                 // bgWarning
+  --bg-info: #0093ff;                    // bgInfo
+
+  // Border Colors
+  --border-high-emphasis: #2b2d33;       // borderHighEmphasis
+  --border-medium-emphasis: #2b2d33;     // borderMediumEmphasis
+  --border-low-emphasis: #2b2d33;        // borderLowEmphasis
+
+  // Dark Mode Colors (for future use)
+  --text-dark-default: #ffffff;          // textDarkDefault
+  --text-dark-accent: #d5d5d6;           // textDarkAccent
+  --text-dark-secondary: #d5d5d6;        // textDarkSecondary
+  --text-dark-disabled: #aaabad;         // textDarkDisabled
+  --text-dark-success: #c2e8d8;          // textDarkSuccess
+  --text-dark-error: #f7bbc1;            // textDarkError
+  --text-dark-warning: #ffccbb;          // textDarkWarning
+  --text-dark-info: #b2ecff;             // textDarkInfo
+
+  --bg-dark-black: #2b2d33;              // bgDarkBlack
+  --bg-dark-low-emphasis: #ffffff;       // bgDarkLowEmphasis
+  --bg-dark-primary: #fee600;            // bgDarkPrimary
+  --bg-dark-accent: #d5d5d6;             // bgDarkAccent
+  --bg-dark-success: #c2e8d8;            // bgDarkSuccess
+  --bg-dark-error: #f7bbc1;              // bgDarkError
+  --bg-dark-warning: #ffccbb;            // bgDarkWarning
+  --bg-dark-info: #b2ecff;               // bgDarkInfo
+
+  --border-dark-high-emphasis: #ffffff;  // borderDarkHighEmphasis
+  --border-dark-medium-emphasis: #ffffff; // borderDarkMediumEmphasis
+  --border-dark-low-emphasis: #ffffff;   // borderDarkLowEmphasis
+
+  // Semantic Color Mappings (using official tokens)
   --color-primary: var(--rbro-yellow-primary);
-  --color-primary-light: var(--rbro-yellow-light);
-  --color-primary-dark: var(--rbro-yellow-dark);
+  --color-primary-hover: var(--rbro-yellow-hover);
+  --color-primary-surface: var(--rbro-yellow-surface);
   
-  --color-secondary: var(--mortgage-info);
-  --color-secondary-light: var(--mortgage-info-light);
-  --color-secondary-dark: var(--mortgage-info-dark);
+  --color-secondary: var(--accent-default);
+  --color-secondary-light: var(--accent-20);
+  --color-secondary-dark: var(--accent-dark);
   
-  --color-text-primary: var(--rbro-black);
-  --color-text-secondary: var(--gray-600);
-  --color-text-tertiary: var(--gray-500);
+  --color-text-primary: var(--text-default);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-accent-secondary);
+  --color-text-disabled: var(--text-disabled);
   
-  --color-surface: var(--rbro-white);
-  --color-surface-secondary: var(--gray-50);
-  --color-surface-tertiary: var(--gray-100);
+  --color-surface: var(--surface-white);
+  --color-surface-secondary: var(--surface-warm-grey-50);
+  --color-surface-tertiary: var(--surface-grey);
   
-  --color-border: var(--gray-200);
-  --color-border-strong: var(--gray-300);
-  --color-border-subtle: var(--gray-100);
+  --color-border: var(--surface-warm-grey);
+  --color-border-strong: var(--border-medium-emphasis);
+  --color-border-subtle: var(--surface-warm-grey-50);
 
   // Interactive States
-  --color-hover: rgba(255, 215, 0, 0.1); // rbro-yellow with opacity
-  --color-active: rgba(255, 215, 0, 0.2);
+  --color-hover: rgba(254, 230, 0, 0.1);  // rbro-yellow with opacity
+  --color-active: rgba(254, 230, 0, 0.2);
   --color-focus: var(--rbro-yellow-primary);
-  --color-disabled: var(--gray-300);
-  --color-disabled-text: var(--gray-400);
+  --color-disabled: var(--bg-disabled);
+  --color-disabled-text: var(--text-disabled);
 
   // Gradients
-  --gradient-primary: linear-gradient(135deg, var(--rbro-yellow-primary), var(--rbro-yellow-dark));
-  --gradient-secondary: linear-gradient(135deg, var(--mortgage-info), var(--mortgage-info-dark));
-  --gradient-brand: linear-gradient(135deg, var(--rbro-yellow-primary) 0%, var(--mortgage-info) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--rbro-yellow-primary), var(--rbro-yellow-alt));
+  --gradient-secondary: linear-gradient(135deg, var(--accent-default), var(--accent-dark));
+  --gradient-brand: linear-gradient(135deg, var(--rbro-yellow-primary) 0%, var(--accent-default) 100%);
   
-  // Modern gradients (from existing)
-  --red-to-pink-to-purple-vertical-gradient: linear-gradient(
-    180deg,
-    var(--orange-red) 0%,
-    var(--vivid-pink) 50%,
-    var(--electric-violet) 100%
-  );
-  --red-to-pink-to-purple-horizontal-gradient: linear-gradient(
-    90deg,
-    var(--orange-red) 0%,
-    var(--vivid-pink) 50%,
-    var(--electric-violet) 100%
-  );
+  // Accent gradients
+  --gradient-accent: linear-gradient(135deg, var(--accent-default), var(--accent-60));
+  --gradient-success: linear-gradient(135deg, var(--success-default), var(--success-dark));
+  --gradient-warning: linear-gradient(135deg, var(--warning-default), var(--warning-dark));
+  --gradient-error: linear-gradient(135deg, var(--error-default), var(--error-dark));
 }
 
 // -----------------------------------------------------------------------------
@@ -124,12 +184,12 @@
 // -----------------------------------------------------------------------------
 
 :root {
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 1px 2px 0 rgba(43, 45, 51, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(43, 45, 51, 0.1), 0 1px 2px 0 rgba(43, 45, 51, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(43, 45, 51, 0.1), 0 2px 4px -1px rgba(43, 45, 51, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(43, 45, 51, 0.1), 0 4px 6px -2px rgba(43, 45, 51, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(43, 45, 51, 0.1), 0 10px 10px -5px rgba(43, 45, 51, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(43, 45, 51, 0.25);
 }
 
 // -----------------------------------------------------------------------------
@@ -199,10 +259,10 @@
 $color-map: (
   'primary': var(--color-primary),
   'secondary': var(--color-secondary),
-  'success': var(--mortgage-success),
-  'warning': var(--mortgage-warning),
-  'error': var(--mortgage-error),
-  'info': var(--mortgage-info)
+  'success': var(--success-default),
+  'warning': var(--warning-default),
+  'error': var(--error-default),
+  'info': var(--info-default)
 );
 
 $spacing-map: (
@@ -215,277 +275,4 @@ $spacing-map: (
   6: var(--space-6),
   7: var(--space-7),
   8: var(--space-8)
-);
-
-// -----------------------------------------------------------------------------
-// Checkbox Design Tokens (Updated to ds_checkbox_specs.md Convention)
-// -----------------------------------------------------------------------------
-
-:root {
-  // DEFAULT SURFACE - Background Tokens
-  --chk-primary-bg-default: #FFFFFF;
-  
-  // DEFAULT SURFACE - Text Color Tokens
-  --chk-primary-text-default: #55575C;
-  --chk-primary-text-selected: #2B2D33;
-  --chk-primary-text-disabled: #AAABAD;
-  --chk-primary-text-error: #CF030A;
-  
-  // LIGHT SURFACE CONTEXT - Background Tokens
-  --chk-primary-bg-default-surface-light: #FFFFFF;
-  
-  // LIGHT SURFACE CONTEXT - Text Color Tokens
-  --chk-primary-text-default-surface-light: #55575C;
-  --chk-primary-text-selected-surface-light: #2B2D33;
-  --chk-primary-text-disabled-surface-light: #808185;
-  --chk-primary-text-error-surface-light: #CF030A;
-  
-  // LIGHT SURFACE CONTEXT - Border Tokens
-  --chk-primary-border-selected-surface-light: #2B2D33;
-  
-  // DARK SURFACE CONTEXT - Background Tokens
-  --chk-primary-bg-default-surface-dark: #FFFFFF;
-  --chk-primary-bg-error-surface-dark: #F7BBC1;
-  
-  // DARK SURFACE CONTEXT - Text Color Tokens
-  --chk-primary-text-default-surface-dark: #D5D5D6;
-  --chk-primary-text-selected-surface-dark: #FFFFFF;
-  --chk-primary-text-disabled-surface-dark: #AAABAD;
-  --chk-primary-text-error-surface-dark: #F7BBC1;
-  
-  // DARK SURFACE CONTEXT - Border Tokens
-  --chk-primary-border-selected-surface-dark: #FFFFFF;
-  
-  // Legacy Support - Keep existing tokens for backward compatibility
-  // TODO: Remove these after component migration is complete
-  --checkbox-fill-default: var(--chk-primary-bg-default);
-  --checkbox-fill-selected: #2B2D33;
-  --checkbox-fill-error: #F7BBC1;
-  --checkbox-fill-default-surface-light: var(--chk-primary-bg-default-surface-light);
-  --checkbox-fill-default-surface-dark: var(--chk-primary-bg-default-surface-dark);
-  --checkbox-fill-selected-surface-light: #2B2D33;
-  --checkbox-fill-selected-surface-dark: #FFFFFF;
-  --checkbox-fill-error-surface-dark: var(--chk-primary-bg-error-surface-dark);
-  
-  --checkbox-border-default: var(--chk-primary-text-default);
-  --checkbox-border-selected: var(--chk-primary-text-selected);
-  --checkbox-border-hover: var(--chk-primary-text-selected);
-  --checkbox-border-focus: var(--chk-primary-text-selected);
-  --checkbox-border-disabled: var(--chk-primary-text-disabled);
-  --checkbox-border-default-surface-light: var(--chk-primary-text-default-surface-light);
-  --checkbox-border-default-surface-dark: var(--chk-primary-text-default-surface-dark);
-  --checkbox-border-selected-surface-light: var(--chk-primary-border-selected-surface-light);
-  --checkbox-border-selected-surface-dark: var(--chk-primary-border-selected-surface-dark);
-  --checkbox-border-hover-surface-light: var(--chk-primary-border-selected-surface-light);
-  --checkbox-border-hover-surface-dark: var(--chk-primary-border-selected-surface-dark);
-  --checkbox-border-focus-surface-light: var(--chk-primary-border-selected-surface-light);
-  --checkbox-border-focus-surface-dark: var(--chk-primary-border-selected-surface-dark);
-  --checkbox-border-disabled-surface-light: var(--chk-primary-text-disabled-surface-light);
-  --checkbox-border-disabled-surface-dark: var(--chk-primary-text-disabled-surface-dark);
-  
-  --checkbox-text-enabled: var(--chk-primary-text-default);
-  --checkbox-text-selected: var(--chk-primary-text-selected);
-  --checkbox-text-hover: var(--chk-primary-text-selected);
-  --checkbox-text-focus: var(--chk-primary-text-selected);
-  --checkbox-text-disabled: var(--chk-primary-text-disabled);
-  --checkbox-text-error: var(--chk-primary-text-error);
-  --checkbox-text-enabled-surface-light: var(--chk-primary-text-default-surface-light);
-  --checkbox-text-enabled-surface-dark: var(--chk-primary-text-default-surface-dark);
-  --checkbox-text-selected-surface-light: var(--chk-primary-text-selected-surface-light);
-  --checkbox-text-selected-surface-dark: var(--chk-primary-text-selected-surface-dark);
-  --checkbox-text-hover-surface-light: var(--chk-primary-text-selected-surface-light);
-  --checkbox-text-hover-surface-dark: var(--chk-primary-text-selected-surface-dark);
-  --checkbox-text-focus-surface-light: var(--chk-primary-text-selected-surface-light);
-  --checkbox-text-focus-surface-dark: var(--chk-primary-text-selected-surface-dark);
-  --checkbox-text-disabled-surface-light: var(--chk-primary-text-disabled-surface-light);
-  --checkbox-text-disabled-surface-dark: var(--chk-primary-text-disabled-surface-dark);
-  --checkbox-text-error-surface-light: var(--chk-primary-text-error-surface-light);
-  --checkbox-text-error-surface-dark: var(--chk-primary-text-error-surface-dark);
-  
-  // Checkbox Typography Tokens (From Figma)
-  --checkbox-font-family: "Amalia", var(--font-family-primary);
-  --checkbox-font-size: 16px;
-  --checkbox-font-weight: 400;
-  --checkbox-line-height: 24px;
-  
-  // Checkbox Spacing and Sizing Tokens
-  --checkbox-size: 20px;
-  --checkbox-touch-target: 44px;
-  --checkbox-label-spacing: 8px;
-  --checkbox-border-width: 2px;
-  --checkbox-border-radius: 4px;
-  
-  // Checkbox Checkmark Color
-  --checkbox-checkmark-color: #FFFFFF;
-  --checkbox-checkmark-color-surface-dark: #2B2D33;
-  
-
-} 
-
-// -----------------------------------------------------------------------------
-// Radio Button Design Tokens (Similar pattern to checkbox)
-// -----------------------------------------------------------------------------
-
-:root {
-  // DEFAULT SURFACE – Icon
-  --rad-primary-icon-default: #55575C;
-  --rad-primary-icon-selected: #2B2D33;
-  --rad-primary-icon-disabled: #AAABAD;
-
-  // DEFAULT SURFACE – Label text
-  --rad-primary-text-default: #55575C;
-  --rad-primary-text-disabled: #AAABAD;
-
-  // Radio Typography Tokens
-  --radio-font-family: "Amalia", var(--font-family-primary);
-  --radio-font-size: 16px;
-  --radio-font-weight: 400;
-  --radio-line-height: 24px;
-
-  // -----------------------------------------------------------------------------
-  // Slider Component Design Tokens
-  // -----------------------------------------------------------------------------
-  
-  // Slider Track Tokens
-  --slider-track-height: 4px;
-  --slider-track-border-radius: 2px;
-  --slider-track-bg-default: #2B2D33;
-  --slider-track-bg-light: #2B2D33;
-  --slider-track-bg-dark: #FFFFFF;
-  
-  // Slider Progress (Fill) Tokens
-  --slider-progress-bg-default: #68A9B3;
-  --slider-progress-bg-light: #55575C;
-  --slider-progress-bg-dark: #D5D5D6;
-  
-  // Slider Thumb Tokens
-  --slider-thumb-size: 20px;
-  --slider-thumb-border-width: 0px;
-  --slider-thumb-bg-default: #037080;
-  --slider-thumb-bg-light: #2B2D33;
-  --slider-thumb-bg-dark: #FFFFFF;
-  --slider-thumb-border-default: transparent;
-  --slider-thumb-border-light: transparent;
-  --slider-thumb-border-dark: transparent;
-  --slider-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
-  // Slider Hover States
-  --slider-thumb-bg-hover-default: #68A9B3;
-  --slider-thumb-bg-hover-light: #55575C;
-  --slider-thumb-bg-hover-dark: #D5D5D6;
-  --slider-thumb-border-hover-default: transparent;
-  --slider-thumb-border-hover-light: transparent;
-  --slider-thumb-border-hover-dark: transparent;
-  
-  // Slider Shadow Variants
-  --slider-thumb-shadow-default: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --slider-thumb-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);  
-  --slider-thumb-shadow-dark: 0 2px 4px rgba(0, 0, 0, 0.3);
-  
-  // Slider Disabled States
-  --slider-track-bg-disabled: #D5D5D6;
-  --slider-progress-bg-disabled: #D5D5D6;
-  --slider-thumb-bg-disabled: #AAABAD;
-  --slider-thumb-border-disabled: transparent;
-  
-  // Slider Focus States
-  --slider-focus-ring-color-default: #037080;
-  --slider-focus-ring-color-light: #2B2D33;
-  --slider-focus-ring-color-dark: #FFFFFF;
-  --slider-focus-ring-width: 2px;
-  --slider-focus-ring-offset: 2px;
-  
-  // Slider Value Display Tokens
-  --slider-value-font-family: "Amalia", var(--font-family-primary);
-  --slider-value-font-size: 12px;
-  --slider-value-font-weight: 400;
-  --slider-value-line-height: 16px;
-  --slider-value-bg-default: #2B2D33;
-  --slider-value-bg-light: #2B2D33;
-  --slider-value-bg-dark: #FFFFFF;
-  --slider-value-text-default: #FFFFFF;
-  --slider-value-text-light: #FFFFFF;
-  --slider-value-text-dark: #2B2D33;
-  --slider-value-padding: 4px 8px;
-  --slider-value-border-radius: 4px;
-  --slider-value-offset: 8px; // Distance from thumb
-  
-  // Slider Typography Tokens
-  --slider-label-font-family: "Amalia", var(--font-family-primary);
-  --slider-label-font-size: 16px;
-  --slider-label-font-weight: 400;
-  --slider-label-line-height: 24px;
-  --slider-label-color-default: #55575C;
-  --slider-label-color-light: #404247;
-  --slider-label-color-dark: #D5D5D6;
-  --slider-label-color-disabled: #AAABAD;
-  
-  // Slider Layout Tokens
-  --slider-height: 44px; // Total interactive height
-  --slider-spacing: 8px; // Gap between elements
-  --slider-min-width: 120px; // Minimum slider width
-
-  // -----------------------------------------------------------------------------
-  // Text Field Tokens
-  // -----------------------------------------------------------------------------
-  
-  // Text Field Typography
-  --text-field-font-family: "Amalia", var(--font-family-primary);
-  --text-field-font-size: 16px;
-  --text-field-font-weight: 400;
-  --text-field-input-font-weight: 500;
-  --text-field-line-height: 24px;
-  
-  // Text Field Layout
-  --text-field-border-radius: 8px;
-  --text-field-padding: 12px;
-  --text-field-label-spacing: 2px;
-  --text-field-suffix-spacing: 4px;
-  --text-field-helper-spacing: 2px;
-  
-  // Text Field Colors - Default Surface
-  --text-field-label-default: #55575C;
-  --text-field-label-disabled: #AAABAD;
-  --text-field-label-error: #CF030A;
-  --text-field-text-default: #2B2D33;
-  --text-field-text-disabled: #AAABAD;
-  --text-field-placeholder: #55575C;
-  --text-field-bg-default: rgba(255,255,255,0.7);
-  --text-field-border-default: rgba(43,45,51,0.54);
-  --text-field-border-focus: #2B2D33;
-  --text-field-border-error: #CF030A;
-  --text-field-border-disabled: #AAABAD;
-  --text-field-suffix-default: #2B2D33;
-  --text-field-divider: rgba(43,45,51,0.16);
-  
-  // Text Field Colors - Light Surface
-  --text-field-label-default-light: #404247;
-  --text-field-label-disabled-light: #808185;
-  --text-field-label-error-light: #CF030A;
-  --text-field-text-default-light: #2B2D33;
-  --text-field-text-disabled-light: #808185;
-  --text-field-placeholder-light: #404247;
-  --text-field-bg-default-light: #FFFFFF;
-  --text-field-border-default-light: rgba(43,45,51,0.54);
-  --text-field-border-focus-light: #2B2D33;
-  --text-field-border-error-light: #CF030A;
-  --text-field-border-disabled-light: #808185;
-  --text-field-suffix-default-light: #2B2D33;
-  --text-field-divider-light: rgba(43,45,51,0.16);
-  
-  // Text Field Colors - Dark Surface
-  --text-field-label-default-dark: #D5D5D6;
-  --text-field-label-disabled-dark: #AAABAD;
-  --text-field-label-error-dark: #F7BBC1;
-  --text-field-text-default-dark: #FFFFFF;
-  --text-field-text-disabled-dark: #AAABAD;
-  --text-field-placeholder-dark: #D5D5D6;
-  --text-field-bg-default-dark: #FFFFFF;
-  --text-field-border-default-dark: rgba(213,213,214,0.54);
-  --text-field-border-focus-dark: #FFFFFF;
-  --text-field-border-error-dark: #F7BBC1;
-  --text-field-border-disabled-dark: #AAABAD;
-  --text-field-suffix-default-dark: #FFFFFF;
-  --text-field-divider-dark: rgba(255,255,255,0.16);
- 
-} 
+); 
