@@ -23,11 +23,11 @@
         <!-- Interest rates section -->
         <div class="ms-mobile-summary-modal__rates-section">
           <div class="ms-mobile-summary-modal__rate-row" *ngIf="shouldShowFixedRate()">
-            <span class="ms-mobile-summary-modal__rate-label">Dobanda fixa (3 ani)</span>
+            <span class="ms-mobile-summary-modal__rate-label">Dobanda fixa</span>
             <span class="ms-mobile-summary-modal__rate-value">{{ getFixedRate() }}</span>
           </div>
           <div class="ms-mobile-summary-modal__rate-row">
-            <span class="ms-mobile-summary-modal__rate-label">Dobanda variabila (dupa trecerea anilor cu dobanda fixa)</span>
+            <span class="ms-mobile-summary-modal__rate-label">{{ getVariableRateLabel() }}</span>
             <span class="ms-mobile-summary-modal__rate-value">{{ getVariableRate() }}</span>
           </div>
         </div>
@@ -56,7 +56,7 @@
         <!-- Credit details section -->
         <div class="ms-mobile-summary-modal__credit-section">
           <div class="ms-mobile-summary-modal__credit-header">Detalii credit</div>
-          <div class="ms-mobile-summary-modal__credit-row">
+          <div class="ms-mobile-summary-modal__credit-row" *ngIf="shouldShowDownPayment()">
             <span class="ms-mobile-summary-modal__credit-label">Avans</span>
             <span class="ms-mobile-summary-modal__credit-value">{{ getDownPayment() }}</span>
           </div>

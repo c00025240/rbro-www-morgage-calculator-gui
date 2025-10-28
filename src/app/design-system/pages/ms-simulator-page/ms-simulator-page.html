@@ -133,31 +133,32 @@
  				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
  			</ms-info-contained-cell>
  			
- 			<!-- Interest Preferences Section -->
- 			<ms-interest-preferences-section
- 				[rateType]="rateType"
- 				[interestType]="interestType"
- 				[surface]="surface"
- 				(rateTypeChange)="onRateTypeChange($event)"
- 				(interestTypeChange)="onInterestTypeChange($event)">
- 			</ms-interest-preferences-section>
- 			
- 			<!-- Interest Reduction Section (owner toggle removed) -->
- 			<ms-interest-reduction-section
- 				[lifeInsurance]="lifeInsurance"
- 				[salaryTransfer]="salaryTransfer"
- 				[greenCertificate]="greenCertificate"
- 				[surface]="surface"
- 				[savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
- 				[savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
- 				[savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
- 				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountInstallment"
- 				(lifeInsuranceChange)="onLifeInsuranceChange($event)"
- 				(salaryTransferChange)="onSalaryTransferChange($event)"
- 				(greenCertificateChange)="onGreenCertificateChange($event)">
- 			</ms-interest-reduction-section>
- 			
- 			<!-- Future input components can be added here with automatic 24px gaps -->
+			<!-- Interest Preferences Section -->
+			<ms-interest-preferences-section
+				[rateType]="rateType"
+				[interestType]="interestType"
+				[surface]="surface"
+				(rateTypeChange)="onRateTypeChange($event)"
+				(interestTypeChange)="onInterestTypeChange($event)">
+			</ms-interest-preferences-section>
+			
+			<!-- Interest Reduction Section (owner toggle removed) -->
+			<ms-interest-reduction-section
+				[lifeInsurance]="lifeInsurance"
+				[salaryTransfer]="salaryTransfer"
+				[greenCertificate]="greenCertificate"
+				[hideGreenCertificate]="selectedProductType === 'constructie-renovare'"
+				[surface]="surface"
+				[savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
+				[savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
+				[savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
+				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountInstallment"
+				(lifeInsuranceChange)="onLifeInsuranceChange($event)"
+				(salaryTransferChange)="onSalaryTransferChange($event)"
+				(greenCertificateChange)="onGreenCertificateChange($event)">
+			</ms-interest-reduction-section>
+			
+			<!-- Future input components can be added here with automatic 24px gaps -->
  		</div>
 
       </div>
@@ -320,31 +321,32 @@
  				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
  			</ms-info-contained-cell>
  			
- 			<!-- Interest Preferences Section -->
- 			<ms-interest-preferences-section
- 				[rateType]="rateType"
- 				[interestType]="interestType"
- 				[surface]="surface"
- 				(rateTypeChange)="onRateTypeChange($event)"
- 				(interestTypeChange)="onInterestTypeChange($event)">
- 			</ms-interest-preferences-section>
- 			
- 			<!-- Interest Reduction Section (owner toggle removed) -->
- 			<ms-interest-reduction-section
- 				[lifeInsurance]="lifeInsurance"
- 				[salaryTransfer]="salaryTransfer"
- 				[greenCertificate]="greenCertificate"
- 				[surface]="surface"
- 				[savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
- 				[savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
- 				[savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
- 				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountInstallment"
- 				(lifeInsuranceChange)="onLifeInsuranceChange($event)"
- 				(salaryTransferChange)="onSalaryTransferChange($event)"
- 				(greenCertificateChange)="onGreenCertificateChange($event)">
- 			</ms-interest-reduction-section>
- 			
- 			<!-- Future input components can be added here with automatic 24px gaps -->
+			<!-- Interest Preferences Section -->
+			<ms-interest-preferences-section
+				[rateType]="rateType"
+				[interestType]="interestType"
+				[surface]="surface"
+				(rateTypeChange)="onRateTypeChange($event)"
+				(interestTypeChange)="onInterestTypeChange($event)">
+			</ms-interest-preferences-section>
+			
+			<!-- Interest Reduction Section (owner toggle removed) -->
+			<ms-interest-reduction-section
+				[lifeInsurance]="lifeInsurance"
+				[salaryTransfer]="salaryTransfer"
+				[greenCertificate]="greenCertificate"
+				[hideGreenCertificate]="selectedProductType === 'constructie-renovare'"
+				[surface]="surface"
+				[savingsInsurance]="calculationResponse?.loanCosts?.discounts?.discountAmountInsurance"
+				[savingsSalary]="calculationResponse?.loanCosts?.discounts?.discountAmountHasSalaryInTheBank"
+				[savingsGreen]="calculationResponse?.loanCosts?.discounts?.discountAmountCasaVerde"
+				[totalSavingsAmount]="calculationResponse?.loanCosts?.totalDiscountsValues?.totalDiscountInstallment"
+				(lifeInsuranceChange)="onLifeInsuranceChange($event)"
+				(salaryTransferChange)="onSalaryTransferChange($event)"
+				(greenCertificateChange)="onGreenCertificateChange($event)">
+			</ms-interest-reduction-section>
+			
+			<!-- Future input components can be added here with automatic 24px gaps -->
  		</div>
       
     </main>

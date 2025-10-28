@@ -19,6 +19,7 @@ interface Offer {
   housePriceMin?: string;
   downPaymentInfoNote?: string; // construction note when gap > 0
   interestType?: string; // 'fixa_3', 'fixa_5', 'variabila'
+  productType?: string; // 'achizitie-imobil', 'refinantare', 'constructie-renovare', 'credit-venit'
 }
 
 @Component({
@@ -113,6 +114,15 @@ export class MsMobileSummaryModalComponent {
     return 'Rata lunara';
   }
 
+  getVariableRateLabel(): string {
+    const offer = this.getCurrentOffer();
+    // Pentru dobânda variabilă, elimină textul "(dupa trecerea anilor cu dobanda fixa)"
+    if (offer.interestType === 'variabila') {
+      return 'Dobanda variabila';
+    }
+    return 'Dobanda variabila (dupa trecerea anilor cu dobanda fixa)';
+  }
+
   shouldShowFixedRate(): boolean {
     const offer = this.getCurrentOffer();
     // Pentru dobânda variabilă, nu afișa câmpul dobânzii fixe
@@ -123,6 +133,12 @@ export class MsMobileSummaryModalComponent {
     const offer = this.getCurrentOffer();
     // Pentru dobânda variabilă, nu afișa câmpul ratei lunare după trecerea anilor
     return offer.interestType !== 'variabila';
+  }
+
+  shouldShowDownPayment(): boolean {
+    const offer = this.getCurrentOffer();
+    // Pentru refinanțare, nu afișa avansul
+    return offer.productType !== 'refinantare';
   }
 
   getDAE(): string {

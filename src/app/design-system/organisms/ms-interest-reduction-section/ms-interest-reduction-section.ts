@@ -53,8 +53,9 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
             (change)="onSalaryTransferChange($event)">
           </ms-switch-form>
           
-          <!-- Green Certificate Switch -->
+          <!-- Green Certificate Switch - Hidden for construction -->
             <ms-switch-form 
+            *ngIf="!hideGreenCertificate"
             [surface]="effectiveSurface"
             [labelText]="greenLabel"
               [rightText]="savingsGreen > 0 ? formatSavings(savingsGreen) : ''"
@@ -93,6 +94,7 @@ export class MsInterestReductionSection {
   @Input() greenCertificate: boolean = true;
   @Input() disabled: boolean = false;
   @Input() surface: 'default' | 'light' | 'dark' = 'default';
+  @Input() hideGreenCertificate: boolean = false; // Hide green certificate option for construction
 
   // Savings amounts fed from backend response (loanCosts.discounts)
   @Input() savingsInsurance: number = 0;

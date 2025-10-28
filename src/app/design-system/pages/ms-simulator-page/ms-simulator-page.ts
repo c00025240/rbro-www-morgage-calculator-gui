@@ -381,7 +381,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Special offer requirements
     request.specialOfferRequirements = new SpecialOfferRequirements();
     request.specialOfferRequirements.hasSalaryInTheBank = this.salaryTransfer;
-    request.specialOfferRequirements.casaVerde = this.greenCertificate;
+    // Casa Verde discount is not available for construction/renovation
+    request.specialOfferRequirements.casaVerde = this.selectedProductType === 'constructie-renovare' ? false : this.greenCertificate;
     
     return request;
   }
@@ -466,9 +467,14 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           }
 
           // Populate sticky footer (tablet) amounts and actions
+          // Use correct installment amount based on interest type
+          const installmentAmount = this.interestType === 'variabila' 
+            ? (response.monthlyInstallment?.amountVariableInterest || 0)
+            : (response.monthlyInstallment?.amountFixedInterest || 0);
+          
           this.footerLeftAmount = {
-            label: 'Prima rata fixa',
-            amount: (response.monthlyInstallment?.amountFixedInterest || 0).toFixed(2),
+            label: this.interestType === 'variabila' ? 'Rata lunara variabila' : 'Prima rata fixa',
+            amount: installmentAmount.toFixed(2),
             currency: 'Lei/luna'
           };
           this.footerRightAmount = {
@@ -510,7 +516,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     reqAll.hasInsurance = true;
     reqAll.specialOfferRequirements = reqAll.specialOfferRequirements || new SpecialOfferRequirements();
     reqAll.specialOfferRequirements.hasSalaryInTheBank = true;
-    reqAll.specialOfferRequirements.casaVerde = true;
+    // Casa Verde discount is not available for construction/renovation
+    reqAll.specialOfferRequirements.casaVerde = this.selectedProductType === 'constructie-renovare' ? false : true;
     // For the "all discounts" offer down payment logic:
     // - Refinantare: avans 0
     // - Constructie/renovare: foloseste avansul introdus de client
@@ -750,8 +757,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     noDocAmount?: string;
     housePriceMin?: string;
     downPaymentInfoNote?: string;
+    interestType?: string;
+    productType?: string;
   }> {
-    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; downPaymentInfoNote?: string; interestType?: string; }> = [];
+    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; downPaymentInfoNote?: string; interestType?: string; productType?: string; }> = [];
 
     const responses = [
       { resp: this.calculationResponse, title: 'Oferta ta personalizata' },
@@ -782,7 +791,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       // No longer needed in summary cards
       out.push({
         title: r.title,
-        monthlyInstallment: ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(2) + ' Lei',
+        // Use correct installment amount based on interest type
+        monthlyInstallment: this.interestType === 'variabila'
+          ? ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei'
+          : ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(2) + ' Lei',
         fixedRate: (r.resp.nominalInterestRate || 0).toFixed(2) + '%',
         variableRate: ((r.resp.interestRateFormula?.bankMarginRate || 0) + (r.resp.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
         variableInstallment: ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei',
@@ -793,7 +805,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(2) + ' Lei',
         noDocAmount: noDocStr,
         housePriceMin: housePriceStr,
-        interestType: this.interestType
+        interestType: this.interestType,
+        productType: this.selectedProductType
       });
     }
 
@@ -1041,18 +1054,19 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
   private updateDownPaymentInfoNote(response: MortgageCalculationResponse): void {
     if (this.selectedProductType === 'constructie-renovare') {
-      // For construction/renovation - check for gap
-      const gapRaw = (response as any)?.downPaymentDiscountGap;
-      const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
+      // For construction/renovation - show message with housePrice and discount amount
+      const housePrice = (response?.housePrice?.amount ?? response?.housePrice) as number | undefined;
+      const discountAmount = response?.loanCosts?.discounts?.discountAmountDownPayment || 0;
       
-      if (gap !== undefined && gap > 0) {
-        const gapStr = gap.toFixed(2) + ' Lei';
-        this.downPaymentInfoNote = `Pentru ${gapStr} in plus la avans vei beneficia de o reducere de 0,2%`;
+      if (housePrice !== undefined && housePrice > 0) {
+        const housePriceStr = housePrice.toFixed(2);
+        const discountStr = discountAmount.toFixed(2);
+        this.downPaymentInfoNote = `Daca imobilul adus in garantie va fi evaluat la minim ${housePriceStr} Lei vei beneficia de o reducere a ratei in valoare de ${discountStr} Lei, adica 0,2% din dobanda standard.`;
         this.downPaymentInfoType = 'info';
       } else {
-        // If gap is <= 0, show message about property in guarantee
-        this.downPaymentInfoNote = 'Imobilul adus in garantie iti aduce de o reducere a ratei lunare de 0,2% din dobanda standard.';
-        this.downPaymentInfoType = 'success';
+        // Fallback message if housePrice is not available
+        this.downPaymentInfoNote = 'Imobilul adus in garantie iti aduce o reducere a ratei lunare de 0,2% din dobanda standard.';
+        this.downPaymentInfoType = 'info';
       }
     } else if (this.selectedProductType === 'achizitie-imobil' || this.selectedProductType === 'credit-venit') {
       // For purchase and income-based credit - check if down payment is at least 20%
@@ -1120,8 +1134,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       // Câmpurile comune
       extraDetails.push(
         { label: 'DAE', value: (resp?.annualPercentageRate || 0).toFixed(2) + ' %' },
-        { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') },
-        { label: 'Avans', value: ((resp?.downPayment?.amount) || 0).toFixed(2) + ' Lei' },
+        { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') }
+      );
+      
+      // Avans - ascuns pentru refinanțare
+      if (this.selectedProductType !== 'refinantare') {
+        extraDetails.push({ label: 'Avans', value: ((resp?.downPayment?.amount) || 0).toFixed(2) + ' Lei' });
+      }
+      
+      extraDetails.push(
         { label: 'Suma solicitata', value: ((resp?.loanAmount?.amount) || 0).toFixed(2) + ' Lei' },
         { label: 'Valoarea totala platibila', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(2) + ' Lei' }
       );
