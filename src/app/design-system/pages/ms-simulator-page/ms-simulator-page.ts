@@ -1054,19 +1054,27 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
   private updateDownPaymentInfoNote(response: MortgageCalculationResponse): void {
     if (this.selectedProductType === 'constructie-renovare') {
-      // For construction/renovation - show message with housePrice and discount amount
+      // For construction/renovation - check gap to determine message type
+      const gapRaw = (response as any)?.downPaymentDiscountGap;
+      const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
       const housePrice = (response?.housePrice?.amount ?? response?.housePrice) as number | undefined;
       const discountAmount = response?.loanCosts?.discounts?.discountAmountDownPayment || 0;
       
-      if (housePrice !== undefined && housePrice > 0) {
-        const housePriceStr = housePrice.toFixed(2);
-        const discountStr = discountAmount.toFixed(2);
-        this.downPaymentInfoNote = `Daca imobilul adus in garantie va fi evaluat la minim ${housePriceStr} Lei vei beneficia de o reducere a ratei in valoare de ${discountStr} Lei, adica 0,2% din dobanda standard.`;
-        this.downPaymentInfoType = 'info';
-      } else {
-        // Fallback message if housePrice is not available
+      if (gap !== undefined && gap < 0) {
+        // Success message when gap is negative - user already has the discount
         this.downPaymentInfoNote = 'Imobilul adus in garantie iti aduce o reducere a ratei lunare de 0,2% din dobanda standard.';
-        this.downPaymentInfoType = 'info';
+        this.downPaymentInfoType = 'success';
+      } else {
+        // Info message when gap is 0 or positive - show details about housePrice and discount
+        if (housePrice !== undefined && housePrice > 0) {
+          const housePriceStr = housePrice.toFixed(2);
+          const discountStr = discountAmount.toFixed(2);
+          this.downPaymentInfoNote = `Daca imobilul adus in garantie va fi evaluat la minim ${housePriceStr} Lei vei beneficia de o reducere a ratei in valoare de ${discountStr} Lei, adica 0,2% din dobanda standard.`;
+          this.downPaymentInfoType = 'info';
+        } else {
+          this.downPaymentInfoNote = 'Imobilul adus in garantie iti aduce o reducere a ratei lunare de 0,2% din dobanda standard.';
+          this.downPaymentInfoType = 'info';
+        }
       }
     } else if (this.selectedProductType === 'achizitie-imobil' || this.selectedProductType === 'credit-venit') {
       // For purchase and income-based credit - check if down payment is at least 20%
