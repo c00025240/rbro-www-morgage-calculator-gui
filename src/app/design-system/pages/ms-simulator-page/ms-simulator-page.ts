@@ -777,15 +777,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       let noDocStr: string | undefined;
       let housePriceStr: string | undefined;
       const noDoc = (r.resp?.noDocAmount) as number | undefined;
-      const housePrice = (r.resp?.housePrice?.amount ?? r.resp?.housePrice) as number | undefined;
+      const minGuarantee = r.resp?.minGuaranteeAmount as number | undefined;
       const gapRaw = (r.resp as any)?.downPaymentDiscountGap;
       const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
       let downPaymentInfoNote: string | undefined;
       if (this.selectedProductType === 'constructie-renovare') {
         if (typeof noDoc === 'number') noDocStr = (noDoc || 0).toFixed(2) + ' Lei';
-        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(2) + ' Lei';
+        if (typeof minGuarantee === 'number') housePriceStr = (minGuarantee || 0).toFixed(2) + ' Lei';
       } else if (this.selectedProductType === 'refinantare') {
-        if (typeof housePrice === 'number') housePriceStr = (housePrice || 0).toFixed(2) + ' Lei';
+        if (typeof minGuarantee === 'number') housePriceStr = (minGuarantee || 0).toFixed(2) + ' Lei';
       }
       // Note: downPaymentInfoNote is now displayed in the down payment input component
       // No longer needed in summary cards
@@ -1150,17 +1150,17 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       // Product-specific extra details
       if (this.selectedProductType === 'constructie-renovare') {
         const noDoc = (resp?.noDocAmount) as number | undefined;
-        const housePrice = (resp?.housePrice?.amount ?? resp?.housePrice) as number | undefined;
+        const minGuarantee = resp?.minGuaranteeAmount as number | undefined;
         if (typeof noDoc === 'number') {
           extraDetails.push({ label: 'Sume fara justificare', value: (noDoc || 0).toFixed(2) + ' Lei' });
         }
-        if (typeof housePrice === 'number') {
-          extraDetails.push({ label: 'Valoare minima a garantiei', value: (housePrice || 0).toFixed(2) + ' Lei' });
+        if (typeof minGuarantee === 'number') {
+          extraDetails.push({ label: 'Valoare minima a garantiei', value: (minGuarantee || 0).toFixed(2) + ' Lei' });
         }
       } else if (this.selectedProductType === 'refinantare') {
-        const housePrice = (resp?.housePrice?.amount ?? resp?.housePrice) as number | undefined;
-        if (typeof housePrice === 'number') {
-          extraDetails.push({ label: 'Valoare minima a garantiei', value: (housePrice || 0).toFixed(2) + ' Lei' });
+        const minGuarantee = resp?.minGuaranteeAmount as number | undefined;
+        if (typeof minGuarantee === 'number') {
+          extraDetails.push({ label: 'Valoare minima a garantiei', value: (minGuarantee || 0).toFixed(2) + ' Lei' });
         }
       }
 
