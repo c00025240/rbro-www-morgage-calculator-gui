@@ -133,6 +133,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() downPaymentDisabled: boolean = false; // Enabled by default
   downPaymentInfoNote?: string; // Note about additional amount needed for discount
   downPaymentInfoType?: 'info' | 'success'; // Type of info note for styling
+  downPaymentTooLow: boolean = false; // Error state for down payment validation
+  downPaymentErrorMessage?: string; // Error message for down payment validation
   
   // Property Location Section configuration
   @Input() selectedCounty: string = 'BUCURESTI';
@@ -553,6 +555,18 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     reqNone.specialOfferRequirements = reqNone.specialOfferRequirements || new SpecialOfferRequirements();
     reqNone.specialOfferRequirements.hasSalaryInTheBank = false;
     reqNone.specialOfferRequirements.casaVerde = false;
+    // For the "no discounts" offer down payment logic (fixed per product type):
+    // - Refinantare: 0
+    // - Constructie/renovare: 500
+    // - Casa ta (achizitie-imobil) si Credit in functie de venit: 15% din valoarea proprietatii
+    if (this.selectedProductType === 'refinantare') {
+      reqNone.downPayment = 0;
+    } else if (this.selectedProductType === 'constructie-renovare') {
+      reqNone.downPayment = 500;
+    } else {
+      // For 'achizitie-imobil' and 'credit-venit': 15% of property value
+      reqNone.downPayment = Math.round((this.propertyValue || 0) * 0.15);
+    }
     if (this.hasUserInteracted) {
       this.mortgageService.calculateMortgage(reqNone)
         .pipe(takeUntil(this.destroy$))
@@ -682,6 +696,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onPropertyValueChange(value: number): void { 
     this.markInteracted();
     this.propertyValue = value;
+    
+    // Re-validate down payment when property value changes
+    this.validateDownPayment();
+    
     this.propertyValueChange.emit(value);
     this.cdr.markForCheck();
     this.triggerFormValidation();
@@ -855,9 +873,41 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onDownPaymentAmountChange(value: number): void { 
     this.markInteracted();
     this.downPaymentAmount = value;
+    
+    // Validate down payment
+    this.validateDownPayment();
+    
     this.downPaymentAmountChange.emit(value);
     this.cdr.markForCheck();
     this.triggerFormValidation();
+  }
+  
+  private validateDownPayment(): void {
+    // Validate down payment for Casa Ta and Credit in functie de venit
+    if (this.selectedProductType === 'achizitie-imobil' || this.selectedProductType === 'credit-venit') {
+      const minDownPayment = Math.round((this.propertyValue || 0) * 0.15);
+      if (this.downPaymentAmount > 0 && this.downPaymentAmount < minDownPayment) {
+        this.downPaymentTooLow = true;
+        this.downPaymentErrorMessage = `Avansul completat este prea mic. Pentru acest credit iti recomandam un avans de minim ${minDownPayment.toLocaleString('ro-RO')} Lei`;
+      } else {
+        this.downPaymentTooLow = false;
+        this.downPaymentErrorMessage = undefined;
+      }
+    } else if (this.selectedProductType === 'constructie-renovare') {
+      // Validate contribution for construction/renovation
+      const minContribution = 500;
+      if (this.downPaymentAmount > 0 && this.downPaymentAmount < minContribution) {
+        this.downPaymentTooLow = true;
+        this.downPaymentErrorMessage = `Contributia proprie este prea mica. Pentru acest credit, iti recomandam o contributie proprie de minim ${minContribution.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Lei.`;
+      } else {
+        this.downPaymentTooLow = false;
+        this.downPaymentErrorMessage = undefined;
+      }
+    } else {
+      // No validation for other product types
+      this.downPaymentTooLow = false;
+      this.downPaymentErrorMessage = undefined;
+    }
   }
   // Property Location Section event handlers
   onCountyChange(value: string): void { 
@@ -1015,6 +1065,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
     // Set default down payment per product type
     this.downPaymentAmount = this.computeDefaultDownPaymentAmount();
+    
+    // Validate down payment for new product type
+    this.validateDownPayment();
 
     // Show only two offers until user interacts
     this.hasUserInteracted = false;

@@ -122,9 +122,11 @@
 				[label]="selectedProductType === 'constructie-renovare' ? 'Contributie proprie' : 'Avans'"
 				[valueProp]="downPaymentAmount"
 				[disabledProp]="downPaymentDisabled"
-				[infoNote]="downPaymentInfoNote"
-				[infoNoteType]="downPaymentInfoType"
-				(valueChange)="onDownPaymentAmountChange($event)">
+			[infoNote]="downPaymentInfoNote"
+			[infoNoteType]="downPaymentInfoType"
+			[error]="downPaymentTooLow"
+			[errorMessage]="downPaymentErrorMessage"
+			(valueChange)="onDownPaymentAmountChange($event)">
 			</ms-downpayment>
  
  			<!-- Info Cell -->
@@ -310,9 +312,11 @@
 				[label]="selectedProductType === 'constructie-renovare' ? 'Contributie proprie' : 'Avans'"
 				[valueProp]="downPaymentAmount"
 				[disabledProp]="downPaymentDisabled"
-				[infoNote]="downPaymentInfoNote"
-				[infoNoteType]="downPaymentInfoType"
-				(valueChange)="onDownPaymentAmountChange($event)">
+			[infoNote]="downPaymentInfoNote"
+			[infoNoteType]="downPaymentInfoType"
+			[error]="downPaymentTooLow"
+			[errorMessage]="downPaymentErrorMessage"
+			(valueChange)="onDownPaymentAmountChange($event)">
 			</ms-downpayment>
  			
  			<!-- Info Cell -->

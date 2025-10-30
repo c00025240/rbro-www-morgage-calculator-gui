@@ -136,6 +136,33 @@
         font-weight: var(--font-weight-medium, 500);
       }
     }
+    
+    // Error variant
+    &--error {
+      background: var(--error-10);
+      border: 1px solid var(--error-10);
+      
+      .ms-downpayment__info-note-icon {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        // Use mask to apply the exact same color as the text
+        mask-image: url('/assets/icons/warning-tr Style=outlined.svg');
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        -webkit-mask-image: url('/assets/icons/warning-tr Style=outlined.svg');
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        background-color: var(--error-default);
+      }
+      
+      .ms-downpayment__info-note-text {
+        color: var(--error-default);
+        font-weight: var(--font-weight-medium, 500);
+      }
+    }
   }
 
   &__slider-input {

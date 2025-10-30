@@ -25,6 +25,9 @@ export class MsDownpaymentComponent implements OnChanges {
   // External bindings
   @Input() valueProp?: number;
   @Input() disabledProp?: boolean;
+  // Validation
+  @Input() error?: boolean; // Error state for validation
+  @Input() errorMessage?: string; // Error message to display
 
   @Output() valueChange = new EventEmitter<number>();
 
