@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -47,11 +47,12 @@ export class MsButtonLink {
 			if (response.ok) {
 				const svgContent = await response.text();
 				const processedSvg = this.processSvgContent(svgContent);
+				const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);
 				
 				if (position === 'left') {
-					this.leftIconContent = this.sanitizer.bypassSecurityTrustHtml(processedSvg);
+					this.leftIconContent = sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : undefined;
 				} else {
-					this.rightIconContent = this.sanitizer.bypassSecurityTrustHtml(processedSvg);
+					this.rightIconContent = sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : undefined;
 				}
 			}
 		} catch (error) {

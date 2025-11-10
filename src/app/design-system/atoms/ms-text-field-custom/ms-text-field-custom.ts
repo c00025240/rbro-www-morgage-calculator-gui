@@ -14,6 +14,7 @@ import {
   ViewChild,
   AfterViewInit,
   signal,
+  SecurityContext,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -242,7 +243,8 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
       console.warn(`❌ Could not load icon: ${this.suffixIcon}. Tried all patterns.`);
       const fallbackSvg = this.getFallbackIconSvg();
       const processedFallback = this.processSvgContent(fallbackSvg);
-      this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processedFallback));
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedFallback);
+      this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       return;
     }
 
@@ -267,7 +269,8 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
           console.log(`✅ Successfully loaded: ${url}`);
           // Process SVG to remove hardcoded fills before injection
           const processedSvg = this.processSvgContent(svgContent);
-          this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processedSvg));
+          const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);
+          this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
           this.cdr.markForCheck();
         }
       });
@@ -308,8 +311,9 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
       console.log(`🔍 Text field initializing with icon: ${this.suffixIcon}`);
       this.loadIcon(this.suffixIcon);
     } else if (this.suffixIcon) {
-      // If it contains SVG markup, use it directly
-      this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(this.suffixIcon));
+      // If it contains SVG markup, use it directly (sanitize first)
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, this.suffixIcon);
+      this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
     }
   }
 
@@ -320,8 +324,9 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
         console.log(`🔄 Text field icon changed to: ${this.suffixIcon}`);
         this.loadIcon(this.suffixIcon);
       } else {
-        // If it contains SVG markup, use it directly
-        this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(this.suffixIcon));
+        // If it contains SVG markup, use it directly (sanitize first)
+        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, this.suffixIcon);
+        this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       }
     }
   }

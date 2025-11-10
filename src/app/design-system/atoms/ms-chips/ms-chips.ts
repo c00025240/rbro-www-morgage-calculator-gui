@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, OnInit, OnDestroy, signal, computed } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, OnInit, OnDestroy, signal, computed, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
@@ -97,7 +97,8 @@ export class MsChips implements OnInit, OnDestroy {
     if (index >= filenames.length) {
       const fallback = this.getFallbackIconSvg();
       const processed = this.processSvgContent(fallback);
-      iconSignal.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+      iconSignal.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       return;
     }
     const url = `/assets/icons/${encodeURIComponent(filenames[index])}`;
@@ -112,7 +113,8 @@ export class MsChips implements OnInit, OnDestroy {
       .subscribe((svg: string | null) => {
         if (!svg) return;
         const processed = this.processSvgContent(svg);
-        iconSignal.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+        iconSignal.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       });
   }
 

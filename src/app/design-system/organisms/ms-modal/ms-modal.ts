@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener, OnInit, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MsCardOutsideTitleComponent } from '../../molecules/ms-card-outside-title/ms-card-outside-title';
 import { MsButtonSecondary } from '../../atoms/ms-button-secondary/ms-button-secondary';
@@ -42,7 +42,8 @@ export class MsModal implements OnInit {
       .subscribe(svg => {
         // Ensure SVG uses currentColor for theming
         const themedSvg = svg.replace(/fill="[^"]*"/g, 'fill="currentColor"');
-        this.closeIconHtml = this.sanitizer.bypassSecurityTrustHtml(themedSvg);
+        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, themedSvg);
+        this.closeIconHtml = sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null;
       });
   }
 

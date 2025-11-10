@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, signal } from '@angular/core';
+import { Component, SecurityContext, Input, Output, EventEmitter, ViewEncapsulation, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -92,7 +92,8 @@ export class MsSwitchCell {
     if (index >= filenames.length) {
       const fallback = this.getFallbackInfoIcon();
       const processed = this.processSvgContent(fallback);
-      this.infoIconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+      this.infoIconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       return;
     }
 
@@ -108,7 +109,8 @@ export class MsSwitchCell {
       .subscribe((svg: string | null) => {
         if (!svg) return;
         const processed = this.processSvgContent(svg);
-        this.infoIconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+      this.infoIconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       });
   }
 

@@ -15,6 +15,7 @@ import {
   AfterViewInit,
   signal,
   HostListener,
+  SecurityContext,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -264,7 +265,8 @@ export class MsSelect implements ControlValueAccessor, OnInit, OnChanges, OnDest
       console.warn(`❌ Could not load select icon. Tried all patterns.`);
       const fallbackSvg = this.getFallbackIconSvg();
       const processedFallback = this.processSvgContent(fallbackSvg);
-      this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processedFallback));
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedFallback);
+      this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       return;
     }
 
@@ -286,7 +288,8 @@ export class MsSelect implements ControlValueAccessor, OnInit, OnChanges, OnDest
         if (svgContent) {
           console.log(`✅ Successfully loaded: ${url}`);
           const processedSvg = this.processSvgContent(svgContent);
-          this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processedSvg));
+          const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);
+          this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
           this.cdr.markForCheck();
         }
       });

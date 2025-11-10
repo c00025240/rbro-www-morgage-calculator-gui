@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
@@ -857,17 +857,20 @@ export class MsIcons implements OnInit {
         try {
           const svgContent = await this.http.get(`icons/${filename}`, { responseType: 'text' }).toPromise();
           if (svgContent) {
-            icon.content[style] = this.sanitizer.bypassSecurityTrustHtml(svgContent);
+            // Sanitize SVG content to prevent XSS attacks
+            const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, svgContent);
+            icon.content[style] = sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null;
             console.log(`✅ Loaded ${icon.name} ${style}`);
           }
         } catch (error) {
           console.warn(`❌ Failed to load ${icon.name} ${style}:`, error);
-          // Provide fallback SVG
+          // Provide fallback SVG (pre-sanitized, static content)
           const fallbackSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
             <text x="12" y="16" text-anchor="middle" font-size="10" fill="currentColor">${icon.name.charAt(0).toUpperCase()}</text>
           </svg>`;
-          icon.content[style] = this.sanitizer.bypassSecurityTrustHtml(fallbackSvg);
+          const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, fallbackSvg);
+          icon.content[style] = sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null;
         }
       }
     });

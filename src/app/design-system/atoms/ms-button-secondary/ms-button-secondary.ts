@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostBinding, HostListener, Input, OnDestroy, OnInit, Output, computed, signal, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, HostBinding, HostListener, Input, OnDestroy, OnInit, Output, computed, signal, ViewEncapsulation, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { Subject, catchError, of, takeUntil } from 'rxjs';
@@ -102,7 +102,8 @@ export class MsButtonSecondary implements OnInit, OnDestroy {
 		if (index >= filenames.length) {
 			const fallback = this.getFallbackIconSvg();
 			const processed = this.processSvgContent(fallback);
-			(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(this.sanitizer.bypassSecurityTrustHtml(processed));
+			const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+			(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
 			return;
 		}
 		const url = `/assets/icons/${encodeURIComponent(filenames[index])}`;
@@ -111,7 +112,8 @@ export class MsButtonSecondary implements OnInit, OnDestroy {
 			.subscribe((svg: string | null) => {
 				if (!svg) return;
 				const processed = this.processSvgContent(svg);
-				(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(this.sanitizer.bypassSecurityTrustHtml(processed));
+				const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+				(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
 			});
 	}
 

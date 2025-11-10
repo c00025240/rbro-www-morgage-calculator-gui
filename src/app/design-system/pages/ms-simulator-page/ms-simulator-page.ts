@@ -893,16 +893,6 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         this.downPaymentTooLow = false;
         this.downPaymentErrorMessage = undefined;
       }
-    } else if (this.selectedProductType === 'constructie-renovare') {
-      // Validate contribution for construction/renovation
-      const minContribution = 500;
-      if (this.downPaymentAmount > 0 && this.downPaymentAmount < minContribution) {
-        this.downPaymentTooLow = true;
-        this.downPaymentErrorMessage = `Contributia proprie este prea mica. Pentru acest credit, iti recomandam o contributie proprie de minim ${minContribution.toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Lei.`;
-      } else {
-        this.downPaymentTooLow = false;
-        this.downPaymentErrorMessage = undefined;
-      }
     } else {
       // No validation for other product types
       this.downPaymentTooLow = false;

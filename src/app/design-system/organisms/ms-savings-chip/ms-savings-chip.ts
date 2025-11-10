@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, Input, ViewEncapsulation, OnInit, OnDestroy, signal, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -81,7 +81,8 @@ export class MsSavingsChip implements OnInit, OnDestroy {
     if (index >= filenames.length) {
       const fallback = this.getFallbackIconSvg();
       const processed = this.processSvgContent(fallback);
-      (side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(this.sanitizer.bypassSecurityTrustHtml(processed));
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+      (side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       return;
     }
     const url = `/assets/icons/${encodeURIComponent(filenames[index])}`;
@@ -96,7 +97,8 @@ export class MsSavingsChip implements OnInit, OnDestroy {
       .subscribe((svg: string | null) => {
         if (!svg) return;
         const processed = this.processSvgContent(svg);
-        (side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(this.sanitizer.bypassSecurityTrustHtml(processed));
+        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+        (side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       });
   }
 

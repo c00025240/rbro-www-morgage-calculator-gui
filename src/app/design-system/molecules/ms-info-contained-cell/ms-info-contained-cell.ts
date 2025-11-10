@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, signal, OnInit, OnDestroy, computed } from '@angular/core';
+import { Component, SecurityContext, Input, Output, EventEmitter, ViewEncapsulation, signal, OnInit, OnDestroy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -72,7 +72,8 @@ export class MsInfoContainedCell implements OnInit, OnDestroy {
     if (index >= filenames.length) {
       const fallback = this.getFallbackIconSvg();
       const processed = this.processSvgContent(fallback);
-      this.leftIconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+      this.leftIconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       return;
     }
     const url = `/assets/icons/${encodeURIComponent(filenames[index])}`;
@@ -87,7 +88,8 @@ export class MsInfoContainedCell implements OnInit, OnDestroy {
       .subscribe((svg: string | null) => {
         if (!svg) return;
         const processed = this.processSvgContent(svg);
-        this.leftIconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+      this.leftIconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       });
   }
 

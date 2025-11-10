@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, SecurityContext, Input, Output, EventEmitter, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
@@ -112,7 +112,8 @@ export class MsOptionCell implements OnInit, OnDestroy {
       console.log('OptionCell: All icon files failed, using fallback for:', iconName);
       const fallback = this.getFallbackIconSvg();
       const processed = this.processSvgContent(fallback);
-      this.iconContent.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+      this.iconContent.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       return;
     }
 
@@ -131,7 +132,8 @@ export class MsOptionCell implements OnInit, OnDestroy {
         if (!svg) return;
         console.log('OptionCell: Successfully loaded icon:', url, svg.substring(0, 100) + '...');
         const processed = this.processSvgContent(svg);
-        this.iconContent.set(this.sanitizer.bypassSecurityTrustHtml(processed));
+        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+      this.iconContent.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       });
   }
 

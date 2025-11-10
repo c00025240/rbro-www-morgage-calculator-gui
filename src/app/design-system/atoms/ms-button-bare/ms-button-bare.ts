@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostBinding, HostListener, computed, signal, OnInit, OnDestroy, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostBinding, HostListener, computed, signal, OnInit, OnDestroy, OnChanges, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -163,7 +163,8 @@ export class MsButtonBare implements OnInit, OnChanges, OnDestroy {
       console.warn(`❌ Could not load icon: ${this.icon?.name}. Tried all patterns.`);
       const fallbackSvg = this.getFallbackIconSvg();
       const processedFallback = this.processSvgContent(fallbackSvg);
-      this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processedFallback));
+      const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedFallback);
+      this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
       return;
     }
 
@@ -188,7 +189,8 @@ export class MsButtonBare implements OnInit, OnChanges, OnDestroy {
           console.log(`✅ Successfully loaded: ${url}`);
           // Process SVG to remove hardcoded fills before injection
           const processedSvg = this.processSvgContent(svgContent);
-          this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(processedSvg));
+          const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);
+          this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
         }
       });
   }
