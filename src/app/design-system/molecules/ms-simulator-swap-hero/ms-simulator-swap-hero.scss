@@ -5,39 +5,20 @@
   position: relative;
   width: 100%;
   
-  // Mobile/Tablet: Basic variant styles
+  // Mobile/Tablet: Basic variant styles - transparent like desktop
   &--variant-basic {
-    background: var(--color-bg);
-    box-shadow: var(--shadow-xl);
-    
-    // Desktop: NO background, NO elevation
-    @media (min-width: 1024px) {
-      background: transparent;
-      box-shadow: none;
-    }
+    background: transparent;
+    box-shadow: none;
   }
   
-  // Mobile/Tablet: Epic variant styles  
+  // Mobile/Tablet: Epic variant styles - transparent like desktop
   &--variant-epic {
-    background: var(--btn-primary-bg);
-    box-shadow: var(--shadow-xl);
-    
-    // Desktop: NO background, NO elevation
-    @media (min-width: 1024px) {
-      background: transparent;
-      box-shadow: none;
-    }
+    background: transparent;
+    box-shadow: none;
   }
   
   // Surface adaptations
   &--surface-dark {
-    // Mobile/Tablet: Dark surface background
-    @media (max-width: 1023px) {
-      &.ms-simulator-swap-hero--variant-basic {
-        background: var(--color-bg);
-      }
-    }
-    
     .ms-simulator-swap-hero__label {
       color: var(--color-text);
     }
@@ -151,14 +132,14 @@
     // Desktop: allow full width so page controls alignment
     max-width: none;
     margin: 0;
-    
-    // Content area: NO background, NO elevation on desktop
-    .ms-simulator-swap-hero__content {
-      border-radius: 0; // Remove border radius
-      box-shadow: none; // Remove elevation
-      background: transparent; // Ensure no background
-    }
   }
+}
+
+// Content area: always transparent, no elevation
+.ms-simulator-swap-hero__content {
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 // Ensure chips component integration

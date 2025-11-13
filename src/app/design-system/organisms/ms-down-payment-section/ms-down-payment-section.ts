@@ -20,7 +20,7 @@ import { RadioOption } from '../../atoms/ms-radio-custom/ms-radio-custom';
     <div [class]="getDownPaymentSectionClasses().join(' ')">
       <ms-card-outside-title
         title="Avansul pentru imobil"
-        helperText="Raiffeisen accepta Avans 0, daca aduci un alt imobil in garantie"
+        helperText="Raiffeisen acceptă Avans 0, dacă aduci un alt imobil în garanție"
         [hasHelper]="true">
       </ms-card-outside-title>
 
@@ -36,7 +36,7 @@ import { RadioOption } from '../../atoms/ms-radio-custom/ms-radio-custom';
           
           <!-- Radio forms for guarantee values -->
           <ms-radio-form 
-            labelText="Valoare minima a garantiei"
+            labelText="Valoare minimă a garanției"
             [radioOption]="guaranteeOption1"
             [radioValue]="selectedGuaranteeValue"
             radioName="garantie"
@@ -45,12 +45,12 @@ import { RadioOption } from '../../atoms/ms-radio-custom/ms-radio-custom';
           </ms-radio-form>
           
           <ms-radio-form 
-            labelText="Valoare minima pentru 0.2% reducere la dobanda"
+            labelText="Valoare minimă pentru 0.2% reducere la dobândă"
             [radioOption]="guaranteeOption2"
             [radioValue]="selectedGuaranteeValue"
             radioName="garantie"
             chipType="savings"
-            chipData="45,81 Lei economisiti"
+            chipData="45,81 Lei economisiți"
             [disabled]="disabled"
             (radioChange)="onGuaranteeValueChange($event)">
           </ms-radio-form>

@@ -311,6 +311,7 @@
   // Mobile and tablet: edge-to-edge, no gap from header
   @media (max-width: 1239px) {
     margin-top: 0;
+    margin-bottom: 0;
     width: 100%;
     max-width: 100%;
     // Match mobile inputs horizontal padding
@@ -321,7 +322,7 @@
   // Desktop: same centered behavior as mobile
   @media (min-width: 1240px) {
     margin-top: 0;
-    margin-bottom: var(--space-3, 1.5rem);
+    margin-bottom: 0;
     width: 100%;
     max-width: 100%;
     // Use container padding only (left-content has 0 24px)
@@ -333,6 +334,48 @@
     // Ensure inner component fills the available width
     > * { width: 100%; margin: 0; }
     .ms-simulator-swap-hero { width: 100%; margin: 0 !important; }
+  }
+}
+
+// ===================================
+// INFO BANNER (after hero, before inputs)
+// ===================================
+
+.ms-simulator-page__info-banner {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0; // No margin - gap from parent will handle spacing
+  padding: 0; // No padding - parent handles it
+  box-sizing: border-box;
+  
+  // Custom styling for info cell in this context
+  ms-info-contained-cell {
+    .ms-info-contained-cell {
+      background-color: var(--surface-white, #ffffff); // White background like cards
+      padding: 16px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--color-border, #f1ede6);
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 400;
+      cursor: default;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); // Same shadow as cards
+      
+      &:hover {
+        opacity: 1;
+      }
+      
+      .ms-info-contained-cell__icon {
+        color: var(--accent-default, #037080); // Accent color for icon
+        flex-shrink: 0;
+      }
+      
+      .ms-info-contained-cell__text {
+        color: var(--color-text-primary, #2B2D33);
+      }
+    }
   }
 }
 
@@ -350,9 +393,9 @@
   align-items: stretch; // Inputs align uniformly from the same start edge
   justify-content: flex-start;
   
-  // Mobile and tablet: 16px left/right padding, 24px top/bottom padding, 24px gaps
+  // Mobile and tablet: 16px left/right padding, 8px top padding, 24px bottom padding, 24px gaps
   @media (max-width: 1239px) {
-    padding: var(--space-3, 1.5rem) var(--space-3, 1.5rem);
+    padding: 8px var(--space-3, 1.5rem) var(--space-3, 1.5rem) var(--space-3, 1.5rem);
     gap: var(--space-3, 1.5rem);
     box-sizing: border-box;
     align-items: stretch;
@@ -550,11 +593,31 @@
 .ms-simulator-page__default-card {
   width: 100%;
   max-width: 100%;
-  margin: var(--space-4, 16px) 0;
+  margin: var(--spacing-4, 16px) 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  // Responsive pentru mobile
+  @media (max-width: 768px) {
+    margin: var(--spacing-3, 12px) 0;
+  }
+}
+
+// Stiluri specifice pentru loading card
+.ms-simulator-page__loading-card {
+  min-height: 300px;
+
+  @media (max-width: 768px) {
+    min-height: 260px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 220px;
+  }
 }
 
 .ms-simulator-page__loading-content,
@@ -564,11 +627,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-6, 24px);
+  padding: var(--spacing-8, 48px) var(--spacing-6, 32px);
   text-align: center;
-  gap: var(--space-3, 12px);
+  gap: var(--spacing-4, 16px);
   width: 100%;
   max-width: 100%;
+  min-height: 280px;
+  box-sizing: border-box;
   
   p {
     font-size: var(--font-size-body-m, 16px);
@@ -576,6 +641,24 @@
     line-height: var(--line-height-body-m, 1.5);
     color: var(--color-text-secondary);
     margin: 0;
+    max-width: 400px;
+  }
+
+  // Responsive pentru mobile
+  @media (max-width: 768px) {
+    padding: var(--spacing-6, 32px) var(--spacing-4, 24px);
+    min-height: 240px;
+    
+    p {
+      font-size: var(--font-size-body-s, 14px);
+      max-width: 100%;
+    }
+  }
+
+  // Responsive pentru tablete mici
+  @media (max-width: 480px) {
+    padding: var(--spacing-5, 24px) var(--spacing-3, 16px);
+    min-height: 200px;
   }
 }
 

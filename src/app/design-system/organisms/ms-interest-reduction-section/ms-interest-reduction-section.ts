@@ -18,8 +18,8 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
   template: `
     <div [class]="getInterestReductionSectionClasses().join(' ')">
       <ms-card-outside-title
-        title="Optiuni de reduceri de dobanda"
-        helperText="Scad rata lunara si gradul de indatorare"
+        title="Opțiuni de reduceri de dobândă"
+        helperText="Scad rata lunară și gradul de îndatorare"
         [hasHelper]="true">
       </ms-card-outside-title>
 
@@ -31,10 +31,10 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
             [labelText]="insuranceLabel"
               [rightText]="savingsInsurance > 0 ? formatSavings(savingsInsurance) : ''"
             [rightTextDisabled]="!lifeInsurance"
-            switchLabel="Asigurare de viata"
+            switchLabel="Asigurare de viață"
             [checked]="lifeInsurance"
             [showInfoIcon]="true"
-            infoTooltip="Asigurarea de viata va proteja familia in cazul unor evenimente neasteptate si va reduce dobanda cu 0.2%"
+            infoTooltip="Asigurarea de viață va proteja familia în cazul unor evenimente neașteptate și va reduce dobânda cu 0.2%"
             [disabled]="disabled"
             (change)="onLifeInsuranceChange($event)">
           </ms-switch-form>
@@ -45,10 +45,10 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
             [labelText]="salaryLabel"
               [rightText]="savingsSalary > 0 ? formatSavings(savingsSalary) : ''"
             [rightTextDisabled]="!salaryTransfer"
-            switchLabel="Incasare salariu la Raiffeisen"
+            switchLabel="Încasare salariu la Raiffeisen"
             [checked]="salaryTransfer"
             [showInfoIcon]="true"
-            infoTooltip="Prin transferul salariului la Raiffeisen beneficiezi de o reducere de 1% la dobanda"
+            infoTooltip="Prin transferul salariului la Raiffeisen beneficiezi de o reducere de 1% la dobândă"
             [disabled]="disabled"
             (change)="onSalaryTransferChange($event)">
           </ms-switch-form>
@@ -60,10 +60,10 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
             [labelText]="greenLabel"
               [rightText]="savingsGreen > 0 ? formatSavings(savingsGreen) : ''"
             [rightTextDisabled]="!greenCertificate"
-            switchLabel="Certificat de locuinta verde"
+            switchLabel="Certificat de locuință verde"
             [checked]="greenCertificate"
             [showInfoIcon]="true"
-            infoTooltip="Locuintele cu certificat verde beneficiaza de o reducere de 0.6% la dobanda"
+            infoTooltip="Locuințele cu certificat verde beneficiază de o reducere de 0.4% la dobândă"
             [disabled]="disabled"
             (change)="onGreenCertificateChange($event)">
           </ms-switch-form>
@@ -73,7 +73,7 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
           <!-- Savings Chip -->
           <div class="ms-interest-reduction-section__savings">
             <ms-savings-chip 
-              [text]="totalSavings + ' Lei economisiti'"
+              [text]="totalSavings + ' Lei economisiți'"
               size="m"
               [infoOnly]="true"
               iconLeft="checkmark-ring"
@@ -106,15 +106,15 @@ export class MsInterestReductionSection {
   @Output() salaryTransferChange = new EventEmitter<boolean>();
   @Output() greenCertificateChange = new EventEmitter<boolean>();
 
-  get insuranceLabel(): string { return 'Pentru 0.2% reducere la dobanda'; }
+  get insuranceLabel(): string { return 'Pentru 0.2% reducere la dobândă'; }
 
-  get salaryLabel(): string { return 'Pentru 1% reducere la dobanda'; }
+  get salaryLabel(): string { return 'Pentru 1% reducere la dobândă'; }
 
-  get greenLabel(): string { return 'Pentru 0.6% reducere la dobanda'; }
+  get greenLabel(): string { return 'Pentru 0.4% reducere la dobândă'; }
 
   formatSavings(value: number): string {
     const v = Math.abs(value || 0);
-    return `${v.toFixed(2)} Lei economisiti`;
+    return `${v.toFixed(2)} Lei economisiți`;
   }
 
   get totalSavings(): string {

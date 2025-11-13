@@ -67,7 +67,7 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
             </ms-text-field-custom>
             <!-- Error helper under input -->
             <ms-helper *ngIf="hasInputError" state="error">
-              Perioada trebuie sa fie intre {{min}} si {{max}} ani
+              Perioada trebuie să fie între {{min}} și {{max}} ani
             </ms-helper>
           </div>
 
@@ -104,7 +104,7 @@ const LOAN_DURATION_VALUE_ACCESSOR = {
 })
 export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, OnDestroy, OnChanges {
   
-  @Input() label?: string = 'Perioada imprumutului';
+  @Input() label?: string = 'Perioada împrumutului';
   @Input() placeholder: string = '30';
   @Input() suffix: string = 'ani';
   @Input() min: number = 1; // 1 an minimum
@@ -316,7 +316,7 @@ export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, On
     
     // Show the full helper text with calculated years/months
     const displayText = this.getDisplayText(currentValue);
-    return `${displayText}, insemnand ca ai maxim X ani in acest moment`;
+    return `${displayText}, însemnând că ai maxim X ani în acest moment`;
   }
 
   get hasInputError(): boolean {

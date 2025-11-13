@@ -25,10 +25,10 @@ export class SimulatorOptionModal implements OnInit {
 
   // Default options based on requirements
   options = signal<SimulatorOption[]>([
-    { id: 'achizitie-imobil', label: 'achizitie imobil', selected: true },
-    { id: 'refinantare', label: 'refinantare', selected: false },
-    { id: 'constructie-renovare', label: 'constructie/renovare sau investitie', selected: false },
-    { id: 'credit-venit', label: 'credit in functie de venit', selected: false }
+    { id: 'achizitie-imobil', label: 'achiziție imobil', selected: true },
+    { id: 'refinantare', label: 'refinanțare', selected: false },
+    { id: 'constructie-renovare', label: 'construcție/renovare sau investiție', selected: false },
+    { id: 'credit-venit', label: 'credit în funcție de venit', selected: false }
   ]);
 
   readonly modalTitle = 'Simulezi';

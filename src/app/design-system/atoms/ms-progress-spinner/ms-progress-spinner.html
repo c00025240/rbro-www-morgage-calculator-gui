@@ -1,13 +1,12 @@
 <div [class]="wrapperClasses">
   
-  <!-- Overlay backdrop -->
   <div *ngIf="overlay" class="ms-progress-spinner__backdrop"></div>
   
-  <!-- Spinner container -->
-  <div class="ms-progress-spinner__container">
+  <div class="ms-progress-spinner__content" [ngStyle]="contentStyles">
+    <div class="ms-progress-spinner__ring" *ngIf="showCircularBar" [ngClass]="circularRingClass" [ngStyle]="circularRingStyles" aria-hidden="true"></div>
     
-    <!-- Material progress spinner -->
     <mat-progress-spinner
+      class="ms-progress-spinner__core"
       [mode]="mode"
       [value]="normalizedValue"
       [diameter]="computedDiameter"
@@ -16,14 +15,11 @@
       [attr.aria-label]="ariaLabel || label || 'Loading'">
     </mat-progress-spinner>
     
-    <!-- Value display (for determinate mode) -->
     <div *ngIf="mode === 'determinate' && showValue" class="ms-progress-spinner__value">
       {{ displayValue }}
     </div>
-    
   </div>
   
-  <!-- Label -->
   <div *ngIf="label" class="ms-progress-spinner__label">
     {{ label }}
   </div>

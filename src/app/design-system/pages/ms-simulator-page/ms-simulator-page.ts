@@ -87,14 +87,14 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   // Simulator hero configuration
   @Input() heroVariant: 'basic' | 'epic' = 'basic';
   @Input() heroLabel: string = 'Selectează tipul creditului';
-  @Input() heroChipLabel: string = 'Achizitie imobil';
+  @Input() heroChipLabel: string = 'Achiziție imobil';
   @Input() heroHasClose: boolean = false;
   @Input() heroDisabled: boolean = false;
   @Input() selectedProductType: string = 'achizitie-imobil'; // Default product type
   
   // Property value input configuration
   @Input() propertyLabel: string = 'Valoarea proprietății';
-  @Input() propertyHelperText: string = 'Introduceți valoarea totală a proprietății pe care doriți să o achiziționați';
+  @Input() propertyHelperText: string = 'Valoarea totală a proprietății pe care doriți să o achiziționați';
   @Input() propertyPlaceholder: string = '355000';
   @Input() propertyCurrency: string = 'Lei';
   @Input() propertyMin: number = 100000;
@@ -105,7 +105,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() propertyValue: number = 330000; // Default property value per request
   
   // Loan duration input configuration
-  @Input() loanDurationLabel: string = 'Perioada imprumutului';
+  @Input() loanDurationLabel: string = 'Perioada împrumutului';
   @Input() loanDurationPlaceholder: string = '30';
   @Input() loanDurationSuffix: string = 'ani';
   @Input() loanDurationMin: number = 1; // 1 an minimum
@@ -117,7 +117,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   // Age input configuration
   @Input() ageValue: number = 30; // Default age
   @Input() ageMin: number = 21;
-  @Input() ageMax: number = 65;
+  @Input() ageMax: number = 64;
   @Input() ageStep: number = 1;
   @Input() ageSuffix: string = 'ani';
   @Input() ageDisabled: boolean = false;
@@ -184,7 +184,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   
   // Summary card outside title configuration
   @Input() summaryTitle: string = 'Oferta ta';
-  @Input() summaryHelperText: string = 'ofertă orientativă, calculată în baza datelor introduse de tine.';
+  @Input() summaryHelperText: string = 'ofertă orientativă, calculată în baza datelor introduse de tine';
   
   // Sticky footer configuration (mobile/tablet only)
   @Input() footerLeftAmount?: AmountData;
@@ -230,6 +230,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     
     // Initialize default down payment based on product type
     this.downPaymentAmount = this.computeDefaultDownPaymentAmount();
+    
+    // Initialize max loan duration based on default age
+    this.updateMaxLoanDurationBasedOnAge();
     
     // Set up form data change detection with smart debouncing to avoid multiple API calls
     this.formDataSubject
@@ -318,6 +321,26 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Output() simulatorOptionSelected = new EventEmitter<string>();
 
   // Form validation and calculation methods
+  private updateMaxLoanDurationBasedOnAge(): void {
+    const MAX_AGE_AT_LOAN_END = 65; // Varsta maxima pana la care pot avea credit
+    const ABSOLUTE_MAX_LOAN_DURATION = 30; // Perioada maxima absoluta in ani
+    
+    if (typeof this.ageValue === 'number' && this.ageValue > 0) {
+      // Calculeaza perioada maxima: min(30 ani, 65 - varsta_curenta)
+      const yearsUntilMaxAge = MAX_AGE_AT_LOAN_END - this.ageValue;
+      const calculatedMax = Math.max(1, Math.min(ABSOLUTE_MAX_LOAN_DURATION, yearsUntilMaxAge));
+      
+      this.loanDurationMax = calculatedMax;
+      
+      // Daca valoarea curenta depaseste noul maxim, ajusteaza-o
+      if (this.loanDurationValue > calculatedMax) {
+        this.loanDurationValue = calculatedMax;
+      }
+      
+      console.log(`📅 Varsta: ${this.ageValue} ani → Perioada max: ${calculatedMax} ani`);
+    }
+  }
+  
   private validateForm(): void {
     const isPropertyValid = typeof this.propertyValue === 'number'
       && this.propertyValue >= this.propertyMin
@@ -346,6 +369,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       // downPaymentAmount is not required for validation since it's disabled initially
     );
     
+    // Trigger change detection after validation
+    this.cdr.markForCheck();
   }
   
   private createMortgageRequest(): MortgageCalculationRequest {
@@ -441,10 +466,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = undefined;
     this.showOffersErrorBanner = false;
+    this.cdr.markForCheck(); // Trigger change detection to show loading spinner
 
-    const baseRequest = this.createMortgageRequest();
-    // Make all 3 calls in parallel
-    this.calculateAllVariants(baseRequest);
+    // Use setTimeout to ensure loading spinner is visible before starting API calls
+    // This allows the UI to update in the current change detection cycle
+    setTimeout(() => {
+      const baseRequest = this.createMortgageRequest();
+      // Make all 3 calls in parallel
+      this.calculateAllVariants(baseRequest);
+    }, 0);
   }
 
   private calculateAllVariants(baseRequest: MortgageCalculationRequest): void {
@@ -454,14 +484,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.calculationResponse = response;
-          const tenorRaw = Number(response?.tenor);
-          if (Number.isFinite(tenorRaw)) {
-            const allowedYears = Math.max(this.loanDurationMin, Math.min(this.loanDurationMax, tenorRaw));
-            // Update slider maximum and set value + placeholder to tenor in years
-            this.loanDurationMax = allowedYears;
-            this.loanDurationValue = allowedYears;
-            this.loanDurationPlaceholder = allowedYears.toString();
-          }
+          
+          // NOTE: Perioada maxima este acum calculata bazat pe varsta utilizatorului
+          // Nu mai actualizam loanDurationMax din raspunsul backend (tenor)
 
           // Update down payment amount from backend response
           if (response.downPayment && response.downPayment.amount) {
@@ -475,17 +500,17 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
             : (response.monthlyInstallment?.amountFixedInterest || 0);
           
           this.footerLeftAmount = {
-            label: this.interestType === 'variabila' ? 'Rata lunara variabila' : 'Prima rata fixa',
+            label: this.interestType === 'variabila' ? 'Rata lunară variabilă' : 'Prima rată fixă',
             amount: installmentAmount.toFixed(2),
-            currency: 'Lei/luna'
+            currency: 'Lei/lună'
           };
           this.footerRightAmount = {
-            label: 'Suma totala',
+            label: 'Suma totală',
             amount: (response.totalPaymentAmount?.amount || 0).toFixed(2),
             currency: 'Lei'
           };
           this.footerActions = {
-            primary: { label: 'Aplica' },
+            primary: { label: 'Aplică' },
             details: { label: 'Detalii' },
             share: { ariaLabel: 'Distribuie oferta' }
           };
@@ -501,7 +526,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         error: (error) => {
  					if (error?.status === 422) {
  						const msg = error?.error?.reasons?.[0]?.message ?? error?.error?.message ?? error?.message;
- 						this.errorMessage = msg || 'Ne pare rau! Cererea nu poate fi procesata.';
+ 						this.errorMessage = msg || 'Ne pare rău! Cererea nu poate fi procesată.';
  					} else {
  						this.errorMessage = error?.message || 'A apărut o eroare la calcularea creditului. Vă rugăm să încercați din nou.';
  					}
@@ -733,6 +758,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.markInteracted();
     this.ageValue = value;
     
+    // Update max loan duration based on age
+    this.updateMaxLoanDurationBasedOnAge();
+    
     // Track age change
     this.trackEvent('Varsta Modificata', `${value} ani`, value);
     
@@ -742,7 +770,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   }
   onFooterDetailsClick(event: MouseEvent): void {
     // Track "Detalii ofertă" button click
-    this.trackEvent('Buton Detalii Click', 'Detalii oferta', this.requestedAmount);
+    this.trackEvent('Buton Detalii Click', 'Detalii ofertă', this.requestedAmount);
     
     this.footerDetailsClicked.emit(event);
     const isMobileOrTablet = typeof window !== 'undefined' && window.matchMedia('(max-width: 1239px)').matches;
@@ -781,9 +809,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; downPaymentInfoNote?: string; interestType?: string; productType?: string; }> = [];
 
     const responses = [
-      { resp: this.calculationResponse, title: 'Oferta ta personalizata' },
+      { resp: this.calculationResponse, title: 'Oferta ta personalizată' },
       { resp: this.calculationResponseAllDiscounts, title: 'Cu toate reducerile' },
-      { resp: this.calculationResponseNoDiscounts, title: 'Fara reduceri' }
+      { resp: this.calculationResponseNoDiscounts, title: 'Fără reduceri' }
     ];
 
     // Initially: only first two offers (personalizata + all discounts)
@@ -832,7 +860,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   }
   onFooterPrimaryClick(event: MouseEvent): void { 
     // Track "Aplică" button click
-    this.trackEvent('Buton Aplica Click', 'Aplica in doar 2 minute', this.requestedAmount);
+    this.trackEvent('Buton Aplică Click', 'Aplică în doar 2 minute', this.requestedAmount);
     this.footerPrimaryClicked.emit(event); 
   }
   onFooterShareClick(event: MouseEvent): void { this.footerShareClicked.emit(event); }
@@ -888,7 +916,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       const minDownPayment = Math.round((this.propertyValue || 0) * 0.15);
       if (this.downPaymentAmount > 0 && this.downPaymentAmount < minDownPayment) {
         this.downPaymentTooLow = true;
-        this.downPaymentErrorMessage = `Avansul completat este prea mic. Pentru acest credit iti recomandam un avans de minim ${minDownPayment.toLocaleString('ro-RO')} Lei`;
+        this.downPaymentErrorMessage = `Avansul completat este prea mic. Pentru acest credit îți recomandăm un avans de minim ${minDownPayment.toLocaleString('ro-RO')} Lei`;
       } else {
         this.downPaymentTooLow = false;
         this.downPaymentErrorMessage = undefined;
@@ -1039,7 +1067,6 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Reset inputs to defaults for new credit type
     this.propertyValue = 330000;
     this.loanDurationValue = 30;
-    this.loanDurationMax = 30;
     this.ageValue = 30;
     this.monthlyIncome = 5500;
     this.monthlyInstallments = 0;
@@ -1052,6 +1079,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.lifeInsurance = true;
     this.salaryTransfer = true;
     this.greenCertificate = true;
+
+    // Recalculate max loan duration based on reset age
+    this.updateMaxLoanDurationBasedOnAge();
 
     // Set default down payment per product type
     this.downPaymentAmount = this.computeDefaultDownPaymentAmount();
@@ -1130,11 +1160,11 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         // Calculate the discount amount from the response
         const discountAmount = response?.loanCosts?.discounts?.discountAmountDownPayment || 0;
         const discountStr = discountAmount > 0 ? discountAmount.toFixed(2) : '0.00';
-        this.downPaymentInfoNote = `Deoarece avansul tau reprezinta cel putin 20% din pretul locuintei, beneficiezi de o reducere a ratei lunare in valoare de ${discountStr} Lei adica 0,2% din dobanda standard.`;
+        this.downPaymentInfoNote = `Deoarece avansul tău reprezintă cel puțin 20% din prețul locuinței, beneficiezi de o reducere a ratei lunare în valoare de ${discountStr} Lei adică 0,2% din dobânda standard.`;
         this.downPaymentInfoType = 'success';
       } else {
         // Info case - down payment is less than 20%
-        this.downPaymentInfoNote = 'Daca avansul tau reprezinta cel putin 20% din pretul locuintei, beneficiezi de o reducere a ratei lunare de 0,2% din dobanda standard.';
+        this.downPaymentInfoNote = 'Dacă avansul tău reprezintă cel puțin 20% din prețul locuinței, beneficiezi de o reducere a ratei lunare de 0,2% din dobânda standard.';
         this.downPaymentInfoType = 'info';
       }
     } else {
@@ -1175,17 +1205,17 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       
       // Pentru dobânda variabilă, inhibă câmpurile dobânzii fixe și ratei lunare după trecerea anilor
       if (this.interestType !== 'variabila') {
-        extraDetails.push({ label: 'Dobanda fixa', value: (resp?.nominalInterestRate || 0).toFixed(2) + ' %' });
-        extraDetails.push({ label: 'Rata lunara (dupa trecerea anilor cu dobanda fixa)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei' });
+        extraDetails.push({ label: 'Dobândă fixă', value: (resp?.nominalInterestRate || 0).toFixed(2) + ' %' });
+        extraDetails.push({ label: 'Rată lunară (după trecerea anilor cu dobândă fixă)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei' });
       }
       
       // Dobânda variabilă se afișează întotdeauna
-      extraDetails.push({ label: 'Dobanda variabila', value: (variableRate || 0).toFixed(2) + ' %' });
+      extraDetails.push({ label: 'Dobândă variabilă', value: (variableRate || 0).toFixed(2) + ' %' });
       
       // Câmpurile comune
       extraDetails.push(
         { label: 'DAE', value: (resp?.annualPercentageRate || 0).toFixed(2) + ' %' },
-        { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare') }
+        { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescătoare') }
       );
       
       // Avans - ascuns pentru refinanțare
@@ -1194,8 +1224,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       }
       
       extraDetails.push(
-        { label: 'Suma solicitata', value: ((resp?.loanAmount?.amount) || 0).toFixed(2) + ' Lei' },
-        { label: 'Valoarea totala platibila', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(2) + ' Lei' }
+        { label: 'Suma solicitată', value: ((resp?.loanAmount?.amount) || 0).toFixed(2) + ' Lei' },
+        { label: 'Valoarea totală plătibilă', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(2) + ' Lei' }
       );
 
       // Product-specific extra details
@@ -1203,15 +1233,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         const noDoc = (resp?.noDocAmount) as number | undefined;
         const minGuarantee = resp?.minGuaranteeAmount as number | undefined;
         if (typeof noDoc === 'number') {
-          extraDetails.push({ label: 'Sume fara justificare', value: (noDoc || 0).toFixed(2) + ' Lei' });
+          extraDetails.push({ label: 'Sume fără justificare', value: (noDoc || 0).toFixed(2) + ' Lei' });
         }
         if (typeof minGuarantee === 'number') {
-          extraDetails.push({ label: 'Valoare minima a garantiei', value: (minGuarantee || 0).toFixed(2) + ' Lei' });
+          extraDetails.push({ label: 'Valoare minimă a garanției', value: (minGuarantee || 0).toFixed(2) + ' Lei' });
         }
       } else if (this.selectedProductType === 'refinantare') {
         const minGuarantee = resp?.minGuaranteeAmount as number | undefined;
         if (typeof minGuarantee === 'number') {
-          extraDetails.push({ label: 'Valoare minima a garantiei', value: (minGuarantee || 0).toFixed(2) + ' Lei' });
+          extraDetails.push({ label: 'Valoare minimă a garanției', value: (minGuarantee || 0).toFixed(2) + ' Lei' });
         }
       }
 
@@ -1221,16 +1251,16 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       columns.push({
         title: titles[idx] || '',
         leftTop: {
-          label: 'Dobanda initiala',
+          label: 'Dobândă inițială',
           amount: (resp?.nominalInterestRate || 0).toFixed(2),
           currency: '%'
         },
         rightTop: {
-          label: this.interestType === 'variabila' ? 'Rata lunara variabila' : 'Rata lunara de plata',
+          label: this.interestType === 'variabila' ? 'Rată lunară variabilă' : 'Rată lunară de plată',
           amount: this.interestType === 'variabila' 
             ? (resp?.monthlyInstallment?.amountVariableInterest || 0).toFixed(2)
             : (resp?.monthlyInstallment?.amountFixedInterest || 0).toFixed(2),
-          currency: 'Lei/luna'
+          currency: 'Lei/lună'
         },
         leftBottom: undefined,
         rightBottom: undefined,

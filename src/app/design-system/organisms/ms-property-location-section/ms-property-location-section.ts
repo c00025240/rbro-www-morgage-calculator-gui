@@ -23,15 +23,15 @@ export interface LocationOption {
   template: `
     <div [class]="getPropertyLocationSectionClasses().join(' ')">
       <ms-card-outside-title
-        title="Zona imobilului adus in garantie"
-        helperText="Poate fi un imobil aflat în proprietatea ta sau a altcuiva."
+        title="Zona imobilului adus în garanție"
+        helperText="Imobil aflat în proprietatea ta sau a altcuiva"
         [hasHelper]="true">
       </ms-card-outside-title>
 
       <ms-card [allowOverflow]="true">
         <div class="ms-property-location-section__content">
           <ms-select
-            label="Judet"
+            label="Județ"
             [value]="selectedCounty"
             [options]="countyOptions"
             [disabled]="disabled"
@@ -42,7 +42,7 @@ export interface LocationOption {
             label="Localitate"
             [value]="selectedCity"
             [options]="cityOptions"
-            helperText="Pentru locuințe din sate, alege județul și apoi comuna de care aparține satul."
+            helperText="Pentru sate, selectează județul, apoi comuna aferentă."
             [disabled]="disabled"
             (valueChange)="onCityChange($event)">
           </ms-select>

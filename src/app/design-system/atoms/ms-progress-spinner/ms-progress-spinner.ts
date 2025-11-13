@@ -24,6 +24,12 @@ export class MsProgressSpinner {
   @Input() disabled: boolean = false;
   @Input() ariaLabel: string = '';
 
+  @Input() showCircularBar: boolean = true;
+  @Input() circularStrokeWidth: number = 3;
+  @Input() circularGap: number = 10;
+  @Input() circularColor: 'primary' | 'accent' | 'warn' = 'primary';
+  @Input() circularAnimationDuration: number = 2.4; // seconds
+
   get computedDiameter(): number {
     if (this.size === 'custom') return this.diameter;
     
@@ -66,5 +72,38 @@ export class MsProgressSpinner {
     if (this.disabled) classes.push('ms-progress-spinner--disabled');
     
     return classes.join(' ');
+  }
+
+  get circularDiameter(): number {
+    const gap = Math.max(0, this.circularGap);
+    return this.computedDiameter + gap * 2;
+  }
+
+  get circularRingClass(): string {
+    return `ms-progress-spinner__ring--${this.circularColor}`;
+  }
+
+  get circularRingStyles(): Record<string, string> {
+    const stroke = Math.max(1, this.circularStrokeWidth);
+    const diameter = Math.max(0, this.circularDiameter);
+    const duration = Math.max(0.5, this.circularAnimationDuration);
+
+    return {
+      width: `${diameter}px`,
+      height: `${diameter}px`,
+      borderWidth: `${stroke}px`,
+      animationDuration: `${duration}s`
+    };
+  }
+
+  get contentStyles(): Record<string, string> {
+    const coreSize = this.computedDiameter;
+    const ringSize = this.showCircularBar ? this.circularDiameter : coreSize;
+    const size = Math.max(coreSize, ringSize);
+
+    return {
+      width: `${size}px`,
+      height: `${size}px`
+    };
   }
 }

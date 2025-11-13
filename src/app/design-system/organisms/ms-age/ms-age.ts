@@ -85,7 +85,7 @@ const AGE_VALUE_ACCESSOR = {
   styleUrls: ['./ms-age.scss'],
 })
 export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, OnChanges {
-  @Input() label: string = 'Spune-mi cati ani ai';
+  @Input() label: string = 'Spune-mi câți ani ai';
   @Input() placeholder: string = '30';
   @Input() suffix: string = 'ani';
   @Input() min: number = 21;
@@ -248,9 +248,9 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, 
     const currentValue = parseInt(textValue, 10);
     if (isNaN(currentValue)) return '';
     if (currentValue < this.min || currentValue > this.max) {
-      return `Varsta trebuie sa fie intre ${this.min} si ${this.max} ani`;
+      return `Vârsta trebuie să fie între ${this.min} și ${this.max} ani`;
     }
-    return `Varsta selectata: ${currentValue} ani`;
+    return `Vârsta selectată: ${currentValue} ani`;
   }
 }
 

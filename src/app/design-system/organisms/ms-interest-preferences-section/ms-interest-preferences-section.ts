@@ -21,8 +21,8 @@ export interface PreferenceOption {
   template: `
     <div [class]="getInterestPreferencesSectionClasses().join(' ')">
       <ms-card-outside-title
-        title="Preferinte legate de dobanda"
-        helperText="Influenteaza suma pe care o vei achita lunar"
+        title="Preferințe legate de dobândă"
+        helperText="Influențează suma pe care o vei achita lunar"
         [hasHelper]="true">
       </ms-card-outside-title>
 
@@ -39,10 +39,10 @@ export interface PreferenceOption {
 			</ms-select>
 
           <ms-select
-            label="Tip dobanda"
+            label="Tip dobândă"
             [value]="interestType"
             [options]="interestTypeOptions"
-            helperText="Ai rate stabile in perioada fixa, apoi pot varia in functie de piata."
+            helperText="Rate stabile în perioada fixă, apoi variabile (în funcție de piață)."
             [disabled]="disabled"
             (valueChange)="onInterestTypeChange($event)">
           </ms-select>
@@ -59,12 +59,12 @@ export class MsInterestPreferencesSection {
   @Input() interestType: string = 'fixa_3';
   @Input() rateTypeOptions: PreferenceOption[] = [
     { value: 'egale', label: 'Rate egale' },
-    { value: 'descrescatoare', label: 'Rate descrescatoare' }
+    { value: 'descrescatoare', label: 'Rate descrescătoare' }
   ];
   @Input() interestTypeOptions: PreferenceOption[] = [
-    { value: 'fixa_3', label: 'Dobanda fixa primii 3 ani' },
-    { value: 'fixa_5', label: 'Dobanda fixa primii 5 ani' },
-    { value: 'variabila', label: 'Dobanda variabila' }
+    { value: 'fixa_3', label: 'Dobândă fixă primii 3 ani' },
+    { value: 'fixa_5', label: 'Dobândă fixă primii 5 ani' },
+    { value: 'variabila', label: 'Dobândă variabilă' }
   ];
   @Input() disabled: boolean = false;
   @Input() surface: 'default' | 'light' | 'dark' = 'default';

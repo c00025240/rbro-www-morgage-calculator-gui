@@ -15,7 +15,7 @@ import { MsCardOutsideTitleComponent } from '../ms-card-outside-title/ms-card-ou
 export class MsDownpaymentComponent implements OnChanges {
   constructor(private cdr: ChangeDetectorRef) {}
   @Input() label: string = 'Avans';
-  @Input() helperText: string = 'Introduceți avansul pe care doriți să îl plătiți';
+  @Input() helperText: string = 'Avansul pe care dorești să îl plătești';
   @Input() infoNote?: string; // Note about additional amount needed for discount
   @Input() infoNoteType?: 'info' | 'success'; // Type of info note for styling
   @Input() currency: string = 'Lei';

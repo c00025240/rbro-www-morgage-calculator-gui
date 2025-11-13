@@ -16,27 +16,27 @@ import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-
   template: `
     <div [class]="getIncomeSectionClasses().join(' ')">
       <ms-card-outside-title
-        title="Venitul tau"
-        helperText="Influenteaza suma maxima pe care o poti imprumuta"
+        title="Venitul tău"
+        helperText="Influențează suma maximă pe care o poți împrumuta"
         [hasHelper]="true">
       </ms-card-outside-title>
 
       <ms-card>
         <div class="ms-income-section__content">
           <ms-text-field-custom
-            label="Venitul tau lunar"
+            label="Venitul tău lunar"
             [value]="monthlyIncome.toString()"
             placeholder="0"
             suffixText="Lei"
             type="number"
             [error]="incomeTooLow"
-            [helperText]="incomeTooLow ? 'Venitul tau este mai mic decat suma minima eligibila' : undefined"
+            [helperText]="incomeTooLow ? 'Venitul tău este mai mic decât suma minimă eligibilă' : undefined"
             [disabled]="disabled"
             (valueChange)="onMonthlyIncomeChange($event)">
           </ms-text-field-custom>
 
           <ms-text-field-custom
-            label="Suma totala a ratelor bancare, pe luna"
+            label="Suma totală a ratelor bancare, pe lună"
             [value]="monthlyInstallments.toString()"
             placeholder="0"
             suffixText="Lei"

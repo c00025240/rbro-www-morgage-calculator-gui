@@ -4,8 +4,77 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-2);
-  
+  justify-content: center;
+  width: 100%;
+  gap: var(--spacing-3);
+  text-align: center;
+
+  &__content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  &__ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border-style: solid;
+    border-color: transparent;
+    border-top-color: color-mix(in srgb, var(--color-accent-primary) 80%, transparent);
+    border-right-color: color-mix(in srgb, var(--color-accent-primary) 12%, transparent);
+    opacity: 0.55;
+    pointer-events: none;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.1));
+    animation: ms-spinner-rotate 2.4s linear infinite;
+    transform-origin: center center;
+  }
+
+  &__ring--accent {
+    border-top-color: color-mix(in srgb, var(--color-secondary-primary) 80%, transparent);
+    border-right-color: color-mix(in srgb, var(--color-secondary-primary) 15%, transparent);
+  }
+
+  &__ring--warn {
+    border-top-color: color-mix(in srgb, var(--color-error-primary) 80%, transparent);
+    border-right-color: color-mix(in srgb, var(--color-error-primary) 18%, transparent);
+  }
+
+  &__core {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    pointer-events: none;
+  }
+
+  &__label {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-body-s);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+    margin: 0;
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+
   &__backdrop {
     position: fixed;
     top: 0;
@@ -19,153 +88,31 @@
     align-items: center;
     justify-content: center;
   }
-  
-  &__container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  &__value {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: var(--font-family-primary);
-    font-size: var(--font-size-body-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-primary);
-    text-align: center;
-    pointer-events: none;
-  }
-  
-  &__label {
-    font-family: var(--font-family-primary);
-    font-size: var(--font-size-body-s);
-    font-weight: var(--font-weight-regular);
-    color: var(--color-text-secondary);
-    text-align: center;
-    margin-top: var(--spacing-2);
-  }
-  
-  // Material spinner customization
-  ::ng-deep {
-    .mat-mdc-progress-spinner {
-      // Custom colors for different themes
-      &.mat-primary {
-        circle {
-          stroke: var(--color-accent-primary);
-        }
-      }
-      
-      &.mat-accent {
-        circle {
-          stroke: var(--color-secondary-primary);
-        }
-      }
-      
-      &.mat-warn {
-        circle {
-          stroke: var(--color-error-primary);
-        }
-      }
-      
-      // Enhanced animation
-      circle {
-        transition: stroke 0.3s ease-in-out;
-      }
-      
-      // Smooth rotation
-      svg {
-        animation: ms-spinner-rotate 2s linear infinite;
-      }
-    }
-  }
-  
-  // Size variations
-  &--small {
-    gap: var(--spacing-1);
-    
-    .ms-progress-spinner__value {
-      font-size: var(--font-size-body-xs);
-    }
-    
-    .ms-progress-spinner__label {
-      font-size: var(--font-size-body-xs);
-      margin-top: var(--spacing-1);
-    }
-  }
-  
-  &--medium {
-    // Default size already set above
-  }
-  
-  &--large {
-    gap: var(--spacing-3);
-    
-    .ms-progress-spinner__value {
-      font-size: var(--font-size-body-s);
-    }
-    
-    .ms-progress-spinner__label {
-      font-size: var(--font-size-body-m);
-      margin-top: var(--spacing-3);
-    }
-  }
-  
-  &--custom {
-    // Custom sizing handled by computed properties
-  }
-  
-  // Color variations
-  &--primary {
-    // Default primary colors already set above
-  }
-  
-  &--accent {
-    .ms-progress-spinner__label {
-      color: var(--color-secondary-primary);
-    }
-  }
-  
-  &--warn {
-    .ms-progress-spinner__label {
-      color: var(--color-error-primary);
-    }
-  }
-  
-  // Layout variations
+
   &--centered {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1001;
+    width: auto;
   }
-  
+
   &--inline {
-    display: inline-flex;
-    vertical-align: middle;
-    
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-2);
+
+    .ms-progress-spinner__content {
+      margin: 0;
+    }
+
     .ms-progress-spinner__label {
-      margin-top: 0;
-      margin-left: var(--spacing-2);
-    }
-    
-    &.ms-progress-spinner--small {
-      .ms-progress-spinner__label {
-        margin-left: var(--spacing-1);
-      }
-    }
-    
-    &.ms-progress-spinner--large {
-      .ms-progress-spinner__label {
-        margin-left: var(--spacing-3);
-      }
+      margin: 0 0 0 var(--spacing-2);
     }
   }
-  
+
   &--overlay {
     position: fixed;
     top: 0;
@@ -177,87 +124,24 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
-    .ms-progress-spinner__container {
+    gap: var(--spacing-3);
+
+    .ms-progress-spinner__backdrop {
+      position: fixed;
+    }
+
+    .ms-progress-spinner__content {
+      position: relative;
       background-color: var(--color-surface-primary);
       padding: var(--spacing-6);
       border-radius: var(--radius-l);
       box-shadow: var(--elevation-3);
+      margin: 0 auto;
     }
-    
+
     .ms-progress-spinner__label {
       color: var(--color-text-primary);
-      margin-top: var(--spacing-3);
-    }
-  }
-  
-  // Disabled state
-  &--disabled {
-    opacity: 0.6;
-    pointer-events: none;
-    
-    .ms-progress-spinner__label {
-      color: var(--color-text-disabled);
-    }
-    
-    ::ng-deep {
-      .mat-mdc-progress-spinner circle {
-        stroke: var(--color-surface-disabled) !important;
-      }
-    }
-  }
-  
-  // Responsive design
-  @media (max-width: 768px) {
-    .ms-progress-spinner__label {
-      font-size: var(--font-size-body-s);
-    }
-    
-    &--overlay {
-      .ms-progress-spinner__container {
-        padding: var(--spacing-4);
-        margin: var(--spacing-4);
-      }
-    }
-  }
-  
-  @media (max-width: 480px) {
-    &--overlay {
-      .ms-progress-spinner__container {
-        padding: var(--spacing-3);
-        margin: var(--spacing-2);
-      }
-    }
-  }
-  
-  // Surface theme support
-  &[data-surface="light"] {
-    .ms-progress-spinner__value,
-    .ms-progress-spinner__label {
-      color: var(--color-text-primary);
-    }
-    
-    &.ms-progress-spinner--overlay {
-      .ms-progress-spinner__container {
-        background-color: var(--color-surface-light);
-      }
-    }
-  }
-  
-  &[data-surface="dark"] {
-    .ms-progress-spinner__value,
-    .ms-progress-spinner__label {
-      color: var(--color-text-on-dark);
-    }
-    
-    &.ms-progress-spinner--overlay {
-      .ms-progress-spinner__container {
-        background-color: var(--color-surface-dark);
-      }
-      
-      .ms-progress-spinner__backdrop {
-        background-color: var(--backdrop-bg-strong);
-      }
+      margin: 0;
     }
   }
 }
@@ -284,10 +168,10 @@
 // Custom keyframes for spinner rotation
 @keyframes ms-spinner-rotate {
   0% {
-    transform: rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -303,7 +187,7 @@
 
 // Enhanced loading states
 .ms-progress-spinner--loading {
-  .ms-progress-spinner__container {
+  .ms-progress-spinner__content {
     animation: ms-spinner-pulse 2s ease-in-out infinite;
   }
 }

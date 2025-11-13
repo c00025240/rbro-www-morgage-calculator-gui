@@ -42,6 +42,15 @@
 
         <!-- Simulator User Inputs Container -->
         <div class="simulatorUserInputs">
+			<!-- Info banner explicativ -->
+			<div class="ms-simulator-page__info-banner">
+			  <ms-info-contained-cell
+				type="info"
+				[text]="'Folosește calculatorul nostru de credit ipotecar pentru a face prima ta simulare de rată lunară. Introdu suma, avansul și perioada, iar instrumentul îți arată imediat cât ai plăti. Află ușor cum influențează alegerea dintre dobânda fixă și cea variabilă (legată de indicele IRCC) rata lunară'">
+			  </ms-info-contained-cell>
+			</div>
+
+
 			<!-- 1) Venitul tau -->
 			<ms-income-section
 				[monthlyIncome]="monthlyIncome"
@@ -53,7 +62,7 @@
 
 			<!-- 2) Varsta -->
 			<ms-age
-				[label]="'Spune-mi cati ani ai'"
+				[label]="'Spune-mi câți ani ai'"
 				[placeholder]="ageValue.toString()"
 				[suffix]="ageSuffix"
 				[min]="ageMin"
@@ -65,7 +74,7 @@
 				(valueChange)="onAgeValueChange($event)">
 			</ms-age>
 
-			<!-- 7) Perioada imprumutului -->
+			<!-- 7) Perioada împrumutului -->
 			<ms-loan-duration
 					[label]="loanDurationLabel"
 					[placeholder]="loanDurationPlaceholder"
@@ -132,7 +141,7 @@
  			<!-- Info Cell -->
  			<ms-info-contained-cell
  				type="info"
- 				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
+ 				[text]="'Suma solicitată: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
  			</ms-info-contained-cell>
  			
 			<!-- Interest Preferences Section -->
@@ -176,18 +185,19 @@
         <div *ngIf="(calculationResponse || calculationResponseAllDiscounts || calculationResponseNoDiscounts) && !isLoading" class="ms-simulator-page__summary-card-wrapper">
           <ms-card-outside-title
             title="Ofertele tale"
-            helperText="Comparatie intre variante"
+            helperText="Comparație între variante"
             [hasHelper]="true"
             [surface]="surface">
           </ms-card-outside-title>
+          
           <ms-web-summary-card
             [columns]="getWebSummaryColumns()"
-            [primaryButtonLabel]="'Aplica in doar 2 minute'"
-            [secondaryButtonLabel]="'Detalii oferta'"
-            [topInfoText]="'Informatiile prezentate sunt pur orientative si nu antreneaza banca in angajamente contractuale. Suma maxima ce ti-ar putea fi oferita a fost calculata pe baza informatiilor furnizate. Pentru a afla informatii personalizate, suma exacta si perioada creditului solicita Scrisoarea de avizare financiara GRATUIT si FARA OBLIGATIA DE A CONTRACTA CREDITUL.'"
+            [primaryButtonLabel]="'Aplică în doar 2 minute'"
+            [secondaryButtonLabel]="'Detalii ofertă'"
+            [topInfoText]="'Informațiile prezentate sunt pur orientative și nu antrenează banca în angajamente contractuale. Suma maximă ce ți-ar putea fi oferită a fost calculată pe baza informațiilor furnizate. Pentru a afla informații personalizate, suma exactă și perioada creditului solicită Scrisoarea de avizare financiară GRATUIT și FĂRĂ OBLIGAȚIA DE A CONTRACTA CREDITUL.'"
             [bottomInfoText]="''"
             [showErrorBanner]="showOffersErrorBanner"
-            [errorText]="errorMessage || 'Ne pare rau! Cererea nu poate fi procesata.'"
+            [errorText]="errorMessage || 'Ne pare rău! Cererea nu poate fi procesată.'"
             (primaryClicked)="onFooterPrimaryClick($event)"
             (secondaryClicked)="onFooterDetailsClick($event)">
           </ms-web-summary-card>
@@ -198,8 +208,10 @@
         <!-- Loading State -->
         <ms-card *ngIf="isLoading" class="ms-simulator-page__loading-card">
           <div class="ms-simulator-page__loading-content">
-            <ms-progress-spinner></ms-progress-spinner>
-            <p>Se calculează oferta...</p>
+            <ms-progress-spinner
+              [label]="'Se calculează oferta...'"
+              [showValue]="false">
+            </ms-progress-spinner>
           </div>
         </ms-card>
         
@@ -232,6 +244,15 @@
 
       <!-- Simulator User Inputs Container -->
       <div class="simulatorUserInputs">
+			<!-- Info banner explicativ -->
+			<div class="ms-simulator-page__info-banner">
+			  <ms-info-contained-cell
+				type="info"
+				[text]="'Folosește calculatorul nostru de credit ipotecar pentru a face prima ta simulare de rată lunară. Introdu suma, avansul și perioada, iar instrumentul îți arată imediat cât ai plăti. Află ușor cum influențează alegerea dintre dobânda fixă și cea variabilă (legată de indicele IRCC) rata lunară'">
+			  </ms-info-contained-cell>
+			</div>
+
+
 			<!-- 1) Venitul tau -->
 			<ms-income-section
 				[monthlyIncome]="monthlyIncome"
@@ -243,7 +264,7 @@
 
 			<!-- 2) Varsta -->
             <ms-age
-				[label]="'Spune-mi cati ani ai'"
+				[label]="'Spune-mi câți ani ai'"
 				[placeholder]="ageValue.toString()"
 				[suffix]="ageSuffix"
 				[min]="ageMin"
@@ -255,7 +276,7 @@
 				(valueChange)="onAgeValueChange($event)">
 			</ms-age>
 
-		  <!-- 7) Perioada imprumutului -->
+		  <!-- 7) Perioada împrumutului -->
 		  <ms-loan-duration
 				  [label]="loanDurationLabel"
 				  [placeholder]="loanDurationPlaceholder"
@@ -322,7 +343,7 @@
  			<!-- Info Cell -->
  			<ms-info-contained-cell
  				type="info"
- 				[text]="'Suma solicitata: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
+ 				[text]="'Suma solicitată: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
  			</ms-info-contained-cell>
  			
 			<!-- Interest Preferences Section -->
@@ -364,7 +385,7 @@
     [rightAmount]="footerRightAmount"
     [actions]="footerActions"
     [surface]="surface"
-    [errorBannerText]="showOffersErrorBanner ? (errorMessage || 'Ne pare rau! Cererea nu poate fi procesata.') : undefined"
+    [errorBannerText]="showOffersErrorBanner ? (errorMessage || 'Ne pare rău! Cererea nu poate fi procesată.') : undefined"
     (detailsClicked)="onFooterDetailsClick($event)"
     (primaryClicked)="onFooterPrimaryClick($event)"
     (shareClicked)="onFooterShareClick($event)">

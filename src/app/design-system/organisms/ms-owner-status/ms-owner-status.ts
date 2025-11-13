@@ -11,19 +11,19 @@ import { MsSwitchForm } from '../../molecules/ms-switch-form/ms-switch-form';
   template: `
     <div class="ms-owner-status">
       <ms-card-outside-title
-        [title]="'Status locuinta'"
+        [title]="'Status locuință'"
         [hasHelper]="true"
-        [helperText]="'Aceasta informatie poate influenta eligibilitatea sau conditiile creditului.'">
+        [helperText]="'Poate influența eligibilitatea sau condițiile creditului'">
       </ms-card-outside-title>
 
       <ms-card>
         <ms-switch-form 
           [surface]="surface"
-          labelText="Detii sau ai detinut in trecut o locuinta?"
+          labelText="Deții sau ai deținut în trecut o locuință?"
           switchLabel="Proprietar"
           [checked]="owner"
           [showInfoIcon]="true"
-          infoTooltip="Selecteaza daca detii sau ai detinut o locuinta in trecut. Se mapeaza pe campul 'owner'."
+          infoTooltip="Selectează dacă deții sau ai deținut o locuință în trecut. Se mapează pe câmpul 'owner'."
           [disabled]="disabled"
           (change)="onOwnerToggle($event)">
         </ms-switch-form>
