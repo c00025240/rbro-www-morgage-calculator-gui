@@ -49,17 +49,16 @@
   }
   
   @media (min-width: 1240px) {
-    display: block; // Changed from flex to block since panels are now individually positioned
+    display: flex;
     width: 100vw !important;
-    height: 100vh;
-    position: fixed;
+    min-height: 100vh;
+    position: relative;
     top: 0;
     left: 0;
-    overflow: hidden;
     max-width: none !important; // Ensure no max-width constraints
     margin: 0 !important;
     padding: 0 !important;
-    z-index: 0; // Ensure it's behind the header
+    padding-top: 120px; // Account for fixed header
   }
 }
 
@@ -74,21 +73,14 @@
     display: flex;
     flex-direction: column;
     width: 35%;
-    height: calc(100vh - 120px); // Subtract header height
+    min-height: calc(100vh - 120px);
     box-sizing: border-box; // Include padding in panel width
-    overflow-y: auto; // Restore scrolling on panel
     overflow-x: hidden;
-    position: fixed;
-    top: 120px; // Start below header
-    left: 0;
+    position: relative;
     background-color: var(--sim-left-panel-bg);
     align-items: center; // Center the content within the panel
     justify-content: flex-start;
-    z-index: 1; // Ensure left panel is above right panel
     padding-right: 0; // No panel padding; spacing handled by content
-    scrollbar-gutter: stable; // Reserve space for scrollbar
-    
-    // Use default theme scrollbars (revert to original color)
   }
 }
 
@@ -130,20 +122,14 @@
     display: flex;
     flex-direction: column;
     width: 65%;
-    height: calc(100vh - 120px); // Subtract header height
+    min-height: calc(100vh - 120px);
     box-sizing: border-box; // Include padding in panel width
-    overflow-y: hidden; // Scroll moved to content to avoid overlaying content
     overflow-x: hidden;
-    position: fixed;
-    top: 120px; // Start below header
-    right: 0;
+    position: relative;
     background-color: var(--sim-right-panel-bg);
     align-items: center; // Center the content within the panel
     justify-content: flex-start;
-    z-index: 0; // Ensure right panel is below left panel
     padding-right: 0; // No panel padding; gutter handled in content container
-    scrollbar-gutter: stable; // Content container will reserve gutter
-    // Use default theme scrollbars (revert to original color)
   }
 }
 
@@ -159,11 +145,10 @@
     max-width: 100%; // Remove fixed max-width to make grid fully responsive
     margin: 0 auto; // Center the content container
     padding: 0 var(--space-3, 1.5rem); // symmetric padding for centered elements
-    min-height: calc(100vh - 120px);
-    height: calc(100vh - 120px);
-    overflow-y: auto; // Make content the scroll container
+    height: calc(100vh - 120px); // Match left panel: fixed height for scroll container
+    overflow-y: auto; // Enable vertical scrolling like left panel
     overflow-x: hidden;
-    scrollbar-gutter: stable both-edges; // Reserve scrollbar space inside content
+    scrollbar-gutter: stable both-edges; // Reserve scrollbar space
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin; // Firefox
     box-sizing: border-box;
@@ -709,4 +694,164 @@
 
 .ms-simulator-page__right-spacer {
   height: 24px;
+}
+
+// ===================================
+// FAQ FOOTER
+// ===================================
+
+.ms-simulator-page__faq-footer {
+  width: 100%;
+  background-color: var(--surface-warm-grey-50, #f8f6f2);
+  padding: var(--space-8, 4rem) var(--space-3, 1.5rem);
+  box-sizing: border-box;
+  
+  // Dark mode
+  :root[data-theme='dark'] & {
+    background-color: var(--bg-black, #1a1a1a);
+  }
+  
+  // Desktop variant - in normal flow below desktop layout
+  &--desktop {
+    @media (max-width: 1239px) {
+      display: none; // Hide on mobile
+    }
+    
+    @media (min-width: 1240px) {
+      position: relative;
+      margin-top: 0;
+      padding: var(--space-6, 3rem) var(--space-8, 4rem);
+    }
+  }
+  
+  // Mobile variant - below sticky footer
+  &--mobile {
+    @media (min-width: 1240px) {
+      display: none; // Hide on desktop
+    }
+    
+    @media (max-width: 1239px) {
+      margin-top: 0;
+      padding-bottom: calc(
+        var(--ms-sticky-footer-height, 88px) +
+        var(--space-6, 3rem) +
+        max(env(safe-area-inset-bottom), 0px)
+      );
+    }
+  }
+}
+
+.ms-simulator-page__faq-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.ms-simulator-page__faq-title {
+  font-family: var(--font-family-primary, 'Amalia'), sans-serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text);
+  margin: 0 0 var(--space-6, 3rem) 0;
+  text-align: left;
+  
+  @media (max-width: 767px) {
+    font-size: 28px;
+    margin-bottom: var(--space-4, 2rem);
+  }
+}
+
+.ms-simulator-page__faq-accordion {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.ms-simulator-page__faq-item {
+  border-bottom: 1px solid var(--color-border, #d1d1d1);
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.ms-simulator-page__faq-question {
+  font-family: var(--font-family-primary, 'Amalia'), sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-text);
+  padding: var(--space-4, 1.5rem) 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  
+  &::-webkit-details-marker {
+    display: none;
+  }
+  
+  @media (max-width: 767px) {
+    font-size: 18px;
+    padding: var(--space-3, 1rem) 0;
+  }
+}
+
+.ms-simulator-page__faq-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  position: relative;
+  transition: transform 0.3s ease;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: var(--color-text);
+    transition: transform 0.3s ease;
+  }
+  
+  // Vertical line
+  &::before {
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 12px;
+    transform: translate(-50%, -50%);
+  }
+  
+  // Horizontal line
+  &::after {
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 2px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+details[open] .ms-simulator-page__faq-icon {
+  &::before {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}
+
+.ms-simulator-page__faq-answer {
+  padding: 0 0 var(--space-4, 1.5rem) 0;
+  
+  p {
+    font-family: var(--font-family-primary, 'Amalia'), sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--color-text);
+    margin: 0;
+    
+    @media (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
 } 

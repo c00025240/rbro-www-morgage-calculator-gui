@@ -214,13 +214,76 @@
             </ms-progress-spinner>
           </div>
         </ms-card>
-        
-        
 
       </div>
     </div>
 
   </div>
+
+  <!-- FAQ Footer Section (Desktop) -->
+  <footer class="ms-simulator-page__faq-footer ms-simulator-page__faq-footer--desktop">
+    <div class="ms-simulator-page__faq-container">
+      <h2 class="ms-simulator-page__faq-title">Întrebări frecvente</h2>
+      
+      <div class="ms-simulator-page__faq-accordion">
+        <details class="ms-simulator-page__faq-item" open>
+          <summary class="ms-simulator-page__faq-question">
+            <span>Cum calculez rata lunară pentru creditul ipotecar?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p>Rata lunară este calculată pe baza formulei de amortizare, care ia în considerare suma împrumutată, perioada (numărul de luni) și rata dobânzii (fixă sau variabilă). O parte din rata ta acoperă dobânda, iar cealaltă parte (principalul) reduce efectiv soldul creditului. Calculatorul nostru folosește acești parametri pentru a-ți oferi o estimare precisă a costului lunar.</p>
+          </div>
+        </details>
+
+        <details class="ms-simulator-page__faq-item">
+          <summary class="ms-simulator-page__faq-question">
+            <span>Ce este DAE (Dobânda Anuală Efectivă) și de ce este importantă?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p>DAE este cel mai important indicator al costului total al creditului. Aceasta include nu doar rata dobânzii, ci și toate costurile, comisioanele și asigurările obligatorii percepute de bancă. DAE te ajută să compari corect ofertele de credit de la instituții diferite, deoarece arată costul real anual, exprimat procentual.</p>
+          </div>
+        </details>
+
+        <details class="ms-simulator-page__faq-item">
+          <summary class="ms-simulator-page__faq-question">
+            <span>Care este diferența dintre dobânda fixă și cea variabilă?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p><strong>Dobânda fixă</strong> îți oferă stabilitate și predictibilitate. Rata dobânzii rămâne neschimbată pe o perioadă stabilită contractual (de obicei 3, 5 sau 10 ani), protejându-te de creșterile pieței.</p>
+            <p><strong>Dobânda variabilă</strong> se modifică periodic (trimestrial sau semestrial) în funcție de evoluția indicelui de referință (în prezent, IRCC). Rata ta lunară poate crește sau scădea, urmând tendințele pieței monetare.</p>
+          </div>
+        </details>
+
+        <details class="ms-simulator-page__faq-item">
+          <summary class="ms-simulator-page__faq-question">
+            <span>Ce influențează suma maximă pe care o pot împrumuta?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p>Suma maximă pe care o poți accesa depinde în principal de:</p>
+            <ul>
+              <li><strong>Venitul tău net lunar:</strong> Banca aplică un grad de îndatorare, care limitează rata lunară maximă la un anumit procent din venitul tău.</li>
+              <li><strong>Perioada de creditare:</strong> O perioadă mai lungă îți permite o sumă mai mare, deoarece rata lunară scade.</li>
+              <li><strong>Avansul oferit:</strong> Un avans mai mare reduce suma împrumutată și, implicit, riscul băncii.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="ms-simulator-page__faq-item">
+          <summary class="ms-simulator-page__faq-question">
+            <span>Care este avansul minim obligatoriu pentru un credit imobiliar?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p>Conform reglementărilor Băncii Naționale (BNR), avansul minim variază, dar în general se situează între 15% și 25% din valoarea proprietății, în funcție de tipul de credit, moneda acestuia și politica internă a băncii. Verifică în simulatorul nostru opțiunile de avans pentru a vedea cum îți influențează rata.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </footer>
 
   <!-- Mobile Layout (<1024px) - Current behavior maintained -->
   <div class="ms-simulator-page__mobile-layout">
@@ -390,6 +453,71 @@
     (primaryClicked)="onFooterPrimaryClick($event)"
     (shareClicked)="onFooterShareClick($event)">
   </ms-sticky-footer>
+
+  <!-- FAQ Footer Section (Mobile) -->
+  <footer class="ms-simulator-page__faq-footer ms-simulator-page__faq-footer--mobile">
+    <div class="ms-simulator-page__faq-container">
+      <h2 class="ms-simulator-page__faq-title">Întrebări frecvente</h2>
+      
+      <div class="ms-simulator-page__faq-accordion">
+        <details class="ms-simulator-page__faq-item" open>
+          <summary class="ms-simulator-page__faq-question">
+            <span>Cum calculez rata lunară pentru creditul ipotecar?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p>Rata lunară este calculată pe baza formulei de amortizare, care ia în considerare suma împrumutată, perioada (numărul de luni) și rata dobânzii (fixă sau variabilă). O parte din rata ta acoperă dobânda, iar cealaltă parte (principalul) reduce efectiv soldul creditului. Calculatorul nostru folosește acești parametri pentru a-ți oferi o estimare precisă a costului lunar.</p>
+          </div>
+        </details>
+
+        <details class="ms-simulator-page__faq-item">
+          <summary class="ms-simulator-page__faq-question">
+            <span>Ce este DAE (Dobânda Anuală Efectivă) și de ce este importantă?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p>DAE este cel mai important indicator al costului total al creditului. Aceasta include nu doar rata dobânzii, ci și toate costurile, comisioanele și asigurările obligatorii percepute de bancă. DAE te ajută să compari corect ofertele de credit de la instituții diferite, deoarece arată costul real anual, exprimat procentual.</p>
+          </div>
+        </details>
+
+        <details class="ms-simulator-page__faq-item">
+          <summary class="ms-simulator-page__faq-question">
+            <span>Care este diferența dintre dobânda fixă și cea variabilă?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p><strong>Dobânda fixă</strong> îți oferă stabilitate și predictibilitate. Rata dobânzii rămâne neschimbată pe o perioadă stabilită contractual (de obicei 3, 5 sau 10 ani), protejându-te de creșterile pieței.</p>
+            <p><strong>Dobânda variabilă</strong> se modifică periodic (trimestrial sau semestrial) în funcție de evoluția indicelui de referință (în prezent, IRCC). Rata ta lunară poate crește sau scădea, urmând tendințele pieței monetare.</p>
+          </div>
+        </details>
+
+        <details class="ms-simulator-page__faq-item">
+          <summary class="ms-simulator-page__faq-question">
+            <span>Ce influențează suma maximă pe care o pot împrumuta?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p>Suma maximă pe care o poți accesa depinde în principal de:</p>
+            <ul>
+              <li><strong>Venitul tău net lunar:</strong> Banca aplică un grad de îndatorare, care limitează rata lunară maximă la un anumit procent din venitul tău.</li>
+              <li><strong>Perioada de creditare:</strong> O perioadă mai lungă îți permite o sumă mai mare, deoarece rata lunară scade.</li>
+              <li><strong>Avansul oferit:</strong> Un avans mai mare reduce suma împrumutată și, implicit, riscul băncii.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="ms-simulator-page__faq-item">
+          <summary class="ms-simulator-page__faq-question">
+            <span>Care este avansul minim obligatoriu pentru un credit imobiliar?</span>
+            <span class="ms-simulator-page__faq-icon"></span>
+          </summary>
+          <div class="ms-simulator-page__faq-answer">
+            <p>Conform reglementărilor Băncii Naționale (BNR), avansul minim variază, dar în general se situează între 15% și 25% din valoarea proprietății, în funcție de tipul de credit, moneda acestuia și politica internă a băncii. Verifică în simulatorul nostru opțiunile de avans pentru a vedea cum îți influențează rata.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </footer>
 
   <!-- Mobile/Tablet Summary Modal (shown only when pressing Detalii) -->
   <ms-mobile-summary-modal
