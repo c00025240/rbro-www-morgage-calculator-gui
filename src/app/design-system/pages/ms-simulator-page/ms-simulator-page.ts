@@ -94,7 +94,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   
   // Property value input configuration
   @Input() propertyLabel: string = 'Valoarea proprietății';
-  @Input() propertyHelperText: string = 'Valoarea totală a proprietății pe care doriți să o achiziționați';
+  @Input() propertyHelperText: string = 'Valoarea totală a proprietății pe care dorești să o achiziționezi';
   @Input() propertyPlaceholder: string = '355000';
   @Input() propertyCurrency: string = 'Lei';
   @Input() propertyMin: number = 100000;

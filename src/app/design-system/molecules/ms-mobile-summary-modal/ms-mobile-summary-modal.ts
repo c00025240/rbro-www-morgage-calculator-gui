@@ -47,6 +47,7 @@ export class MsMobileSummaryModalComponent {
   private readonly minSwipeDistance: number = 50;
   private readonly maxVerticalDistance: number = 100;
   private isMouseDown: boolean = false;
+  readonly infoIconPath = this.resolveAssetPath('assets/icons/info-outlined.svg');
 
   constructor(private elementRef: ElementRef, private cdr: ChangeDetectorRef) {}
 
@@ -288,6 +289,17 @@ export class MsMobileSummaryModalComponent {
     if (this.lastDirection === 'next') return `slide-in-left${alt}`;
     if (this.lastDirection === 'prev') return `slide-in-right${alt}`;
     return '';
+  }
+
+  private resolveAssetPath(relativePath: string): string {
+    const doc = typeof document !== 'undefined' ? document : null;
+    const baseHref = doc?.querySelector('base')?.getAttribute('href') || '/';
+    if (!baseHref || baseHref === '/') {
+      return `/${relativePath.replace(/^\/+/, '')}`;
+    }
+    const normalizedBase = baseHref.endsWith('/') ? baseHref.slice(0, -1) : baseHref;
+    const normalizedPath = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
+    return `${normalizedBase}${normalizedPath}`;
   }
 }
 

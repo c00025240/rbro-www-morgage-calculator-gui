@@ -103,7 +103,10 @@ export class MsButtonSecondary implements OnInit, OnDestroy {
 			const fallback = this.getFallbackIconSvg();
 			const processed = this.processSvgContent(fallback);
 			const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
-			(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
+			const safeHtml = sanitized
+				? this.sanitizer.bypassSecurityTrustHtml(sanitized)
+				: this.sanitizer.bypassSecurityTrustHtml(processed);
+			(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(safeHtml);
 			return;
 		}
 		const url = `/assets/icons/${encodeURIComponent(filenames[index])}`;
@@ -113,7 +116,10 @@ export class MsButtonSecondary implements OnInit, OnDestroy {
 				if (!svg) return;
 				const processed = this.processSvgContent(svg);
 				const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
-				(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
+				const safeHtml = sanitized
+					? this.sanitizer.bypassSecurityTrustHtml(sanitized)
+					: this.sanitizer.bypassSecurityTrustHtml(processed);
+				(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(safeHtml);
 			});
 	}
 

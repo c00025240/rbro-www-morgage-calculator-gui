@@ -100,21 +100,43 @@ export class MsButtonPrimary implements OnInit, OnDestroy {
 
 	private tryLoadIconFiles(filenames: string[], index: number, side: 'left' | 'right', iconName: string): void {
 		if (index >= filenames.length) {
-			const fallback = this.getFallbackIconSvg();
-			const processed = this.processSvgContent(fallback);
-			const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
-			(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
+			this.storeIconSvg(side, this.getFallbackIconSvg());
 			return;
 		}
-		const url = `/assets/icons/${encodeURIComponent(filenames[index])}`;
+
+		const url = this.buildAssetUrl(`assets/icons/${encodeURIComponent(filenames[index])}`);
 		this.http.get(url, { responseType: 'text' })
-			.pipe(catchError(() => { this.tryLoadIconFiles(filenames, index + 1, side, iconName); return of(null); }), takeUntil(this.destroy$))
+			.pipe(
+				catchError(() => {
+					this.tryLoadIconFiles(filenames, index + 1, side, iconName);
+					return of(null);
+				}),
+				takeUntil(this.destroy$)
+			)
 			.subscribe((svg: string | null) => {
-				if (!svg) return;
-				const processed = this.processSvgContent(svg);
-				const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
-				(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
+				if (!svg) {
+					return;
+				}
+				this.storeIconSvg(side, svg);
 			});
+	}
+
+	private buildAssetUrl(path: string): string {
+		const doc = typeof document !== 'undefined' ? document : null;
+		const baseHref = doc?.querySelector('base')?.getAttribute('href') || '/';
+		if (!baseHref || baseHref === '/') {
+			return `/${path.replace(/^\/+/, '')}`;
+		}
+		const normalizedBase = baseHref.endsWith('/') ? baseHref.slice(0, -1) : baseHref;
+		const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+		return `${normalizedBase}${normalizedPath}`;
+	}
+
+	private storeIconSvg(side: 'left' | 'right', svg: string): void {
+		const processed = this.processSvgContent(svg);
+		const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
+		(side === 'left' ? this.leftIconHtml : this.rightIconHtml)
+			.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
 	}
 
 	private processSvgContent(svgContent: string): string {

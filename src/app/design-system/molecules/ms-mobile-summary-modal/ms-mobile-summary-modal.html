@@ -96,24 +96,30 @@
 
     <!-- Footer with navigation buttons -->
     <div class="ms-mobile-summary-modal__footer">
-      <ms-button-secondary
-        [iconLeft]="'go-left'"
-        [label]="''"
+      <button
+        class="ms-mobile-summary-modal__nav-btn"
+        type="button"
         [disabled]="!canGoPrevious()"
-        (clicked)="onPreviousOffer()">
-      </ms-button-secondary>
+        (click)="onPreviousOffer()"
+        aria-label="Oferta anterioară"
+        title="Oferta anterioară">
+        <span class="ms-mobile-summary-modal__nav-icon ms-mobile-summary-modal__nav-icon--left" aria-hidden="true"></span>
+      </button>
 
       <ms-button-primary
         [label]="'Aplică'"
         (clicked)="onApplyClick()">
       </ms-button-primary>
 
-      <ms-button-secondary
-        [iconRight]="'go-right'"
-        [label]="''"
+      <button
+        class="ms-mobile-summary-modal__nav-btn"
+        type="button"
         [disabled]="!canGoNext()"
-        (clicked)="onNextOffer()">
-      </ms-button-secondary>
+        (click)="onNextOffer()"
+        aria-label="Următoarea ofertă"
+        title="Următoarea ofertă">
+        <span class="ms-mobile-summary-modal__nav-icon ms-mobile-summary-modal__nav-icon--right" aria-hidden="true"></span>
+      </button>
     </div>
   </div>
 </div>
