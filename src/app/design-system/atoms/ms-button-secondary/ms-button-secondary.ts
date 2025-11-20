@@ -102,11 +102,17 @@ export class MsButtonSecondary implements OnInit, OnDestroy {
 		if (index >= filenames.length) {
 			const fallback = this.getFallbackIconSvg();
 			const processed = this.processSvgContent(fallback);
+			// Only trust processed SVG if sanitization passes
 			const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
-			const safeHtml = sanitized
-				? this.sanitizer.bypassSecurityTrustHtml(sanitized)
-				: this.sanitizer.bypassSecurityTrustHtml(processed);
-			(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(safeHtml);
+			if (sanitized) {
+				(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(this.sanitizer.bypassSecurityTrustHtml(sanitized));
+			} else {
+				// If sanitization fails, use a safe fallback instead of trusting processed content
+				const safeFallback = this.getFallbackIconSvg();
+				const safeProcessed = this.processSvgContent(safeFallback);
+				const safeSanitized = this.sanitizer.sanitize(SecurityContext.HTML, safeProcessed);
+				(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(safeSanitized ? this.sanitizer.bypassSecurityTrustHtml(safeSanitized) : null);
+			}
 			return;
 		}
 		const url = `/assets/icons/${encodeURIComponent(filenames[index])}`;
@@ -115,18 +121,30 @@ export class MsButtonSecondary implements OnInit, OnDestroy {
 			.subscribe((svg: string | null) => {
 				if (!svg) return;
 				const processed = this.processSvgContent(svg);
+				// Only trust processed SVG if sanitization passes
 				const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
-				const safeHtml = sanitized
-					? this.sanitizer.bypassSecurityTrustHtml(sanitized)
-					: this.sanitizer.bypassSecurityTrustHtml(processed);
-				(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(safeHtml);
+				if (sanitized) {
+					(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(this.sanitizer.bypassSecurityTrustHtml(sanitized));
+				} else {
+					// If sanitization fails, don't render the icon (security: don't trust unsafe content)
+					(side === 'left' ? this.leftIconHtml : this.rightIconHtml).set(null);
+				}
 			});
 	}
 
 	private processSvgContent(svgContent: string): string {
 		let processedSvg = svgContent;
+		
+		// Remove any script tags and event handlers for security
+		processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+		processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+		processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+		processedSvg = processedSvg.replace(/javascript:/gi, '');
+		
+		// Replace fill and stroke attributes with currentColor
 		processedSvg = processedSvg.replace(/fill="(?!none)[^"]*"/g, 'fill="currentColor"');
 		processedSvg = processedSvg.replace(/stroke="(?!none)[^"]*"/g, 'stroke="currentColor"');
+		
 		return processedSvg;
 	}
 

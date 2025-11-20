@@ -115,30 +115,60 @@
     }
   }
 
-  // Dropdown icon
+  // Dropdown icon - make it more visible to indicate it's clickable
   &__icon {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     width: 24px;
     height: 24px;
     margin-left: var(--space-2, 8px);
-    color: var(--text-field-suffix-default);
-    transition: transform 0.2s ease-in-out;
+    color: var(--text-field-suffix-default, var(--color-text-secondary, #2B2D34));
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
     flex-shrink: 0;
+    opacity: 1;
+    visibility: visible;
+
+    // Fallback arrow if SVG doesn't load
+    &::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid currentColor;
+      position: absolute;
+    }
 
     &--open {
       transform: rotate(180deg);
+      opacity: 1;
     }
 
     svg {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
+      width: 24px !important;
+      height: 24px !important;
+      fill: currentColor !important;
+      stroke: none;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    // Hide fallback if SVG is present
+    &:has(svg)::before {
+      display: none;
+    }
+
+    .ms-select__container:hover:not(.ms-select__container--disabled) & {
+      opacity: 1;
+      color: var(--color-text-primary, var(--text-field-suffix-default, #2B2D34));
     }
 
     .ms-select__container--disabled & {
       color: var(--color-text-disabled);
+      opacity: 0.5;
     }
   }
 

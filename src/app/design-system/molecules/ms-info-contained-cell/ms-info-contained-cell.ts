@@ -95,8 +95,17 @@ export class MsInfoContainedCell implements OnInit, OnDestroy {
 
   private processSvgContent(svgContent: string): string {
     let processedSvg = svgContent;
+    
+    // Remove any script tags and event handlers for security
+    processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+    processedSvg = processedSvg.replace(/javascript:/gi, '');
+    
+    // Replace fill and stroke attributes with currentColor
     processedSvg = processedSvg.replace(/fill="(?!none)[^"]*"/g, 'fill="currentColor"');
     processedSvg = processedSvg.replace(/stroke="(?!none)[^"]*"/g, 'stroke="currentColor"');
+    
     return processedSvg;
   }
 

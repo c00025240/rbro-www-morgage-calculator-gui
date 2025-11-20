@@ -42,7 +42,7 @@ export interface PreferenceOption {
             label="Tip dobândă"
             [value]="interestType"
             [options]="interestTypeOptions"
-            helperText="Rate stabile în perioada fixă, apoi variabile (în funcție de piață)."
+            helperText="Rate stabile în perioada fixă, apoi variabile."
             [disabled]="disabled"
             (valueChange)="onInterestTypeChange($event)">
           </ms-select>

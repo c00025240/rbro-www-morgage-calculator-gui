@@ -262,11 +262,21 @@ export class MsSelect implements ControlValueAccessor, OnInit, OnChanges, OnDest
 
   private tryLoadIconFiles(filenames: string[], index: number): void {
     if (index >= filenames.length) {
-      console.warn(`❌ Could not load select icon. Tried all patterns.`);
+      console.warn(`❌ Could not load select icon. Tried all patterns. Using fallback.`);
       const fallbackSvg = this.getFallbackIconSvg();
       const processedFallback = this.processSvgContent(fallbackSvg);
+      // Only trust processed SVG if sanitization passes
       const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedFallback);
-      this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
+      if (sanitized) {
+        this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(sanitized));
+      } else {
+        // If sanitization fails, use a safe fallback instead of trusting processed content
+        const safeFallback = this.getFallbackIconSvg();
+        const safeProcessed = this.processSvgContent(safeFallback);
+        const safeSanitized = this.sanitizer.sanitize(SecurityContext.HTML, safeProcessed);
+        this._iconHtml.set(safeSanitized ? this.sanitizer.bypassSecurityTrustHtml(safeSanitized) : null);
+      }
+      this.cdr.markForCheck();
       return;
     }
 
@@ -288,8 +298,14 @@ export class MsSelect implements ControlValueAccessor, OnInit, OnChanges, OnDest
         if (svgContent) {
           console.log(`✅ Successfully loaded: ${url}`);
           const processedSvg = this.processSvgContent(svgContent);
+          // Only trust processed SVG if sanitization passes
           const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);
-          this._iconHtml.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
+          if (sanitized) {
+            this._iconHtml.set(this.sanitizer.bypassSecurityTrustHtml(sanitized));
+          } else {
+            // If sanitization fails, don't render the icon (security: don't trust unsafe content)
+            this._iconHtml.set(null);
+          }
           this.cdr.markForCheck();
         }
       });
@@ -298,9 +314,19 @@ export class MsSelect implements ControlValueAccessor, OnInit, OnChanges, OnDest
   private processSvgContent(svgContent: string): string {
     let processedSvg = svgContent;
     
+    // Remove any script tags and event handlers for security
+    processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+    processedSvg = processedSvg.replace(/javascript:/gi, '');
+    
     // Replace hardcoded fill attributes with currentColor
     processedSvg = processedSvg.replace(/fill=["']#[a-fA-F0-9]{3,8}["']/g, 'fill="currentColor"');
     processedSvg = processedSvg.replace(/fill=["']((?!none|currentColor|inherit)[a-zA-Z]+)["']/g, 'fill="currentColor"');
+    // Also replace any fill in path elements
+    processedSvg = processedSvg.replace(/<path([^>]*?)fill="[^"]*"([^>]*?)>/g, (match, before, after) => {
+      return `<path${before}${after} fill="currentColor">`;
+    });
     processedSvg = processedSvg.replace(/\s+/g, ' ');
     
     return processedSvg;
@@ -308,7 +334,7 @@ export class MsSelect implements ControlValueAccessor, OnInit, OnChanges, OnDest
 
   private getFallbackIconSvg(): string {
     return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+      <path d="M11.9999 14.4393L19.2928 7.14641L20.707 8.56062L12.707 16.5606C12.3165 16.9511 11.6833 16.9511 11.2928 16.5606L3.29282 8.56062L4.70703 7.14641L11.9999 14.4393Z" fill="currentColor"/>
     </svg>`;
   }
 

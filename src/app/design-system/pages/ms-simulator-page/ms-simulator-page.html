@@ -111,7 +111,7 @@
 			<!-- 5) Valoarea proprietatii -->
 			<ms-property-value-input
 				[label]="propertyLabel"
-				[helperText]="propertyHelperText"
+				[helperText]="currentPropertyHelperText"
 				[placeholder]="propertyPlaceholder"
 				[currency]="propertyCurrency"
 				[min]="propertyMin"
@@ -138,11 +138,12 @@
 			(valueChange)="onDownPaymentAmountChange($event)">
 			</ms-downpayment>
  
- 			<!-- Info Cell -->
- 			<ms-info-contained-cell
- 				type="info"
- 				[text]="'Suma solicitată: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
- 			</ms-info-contained-cell>
+			<!-- Info Cell -->
+			<ms-info-contained-cell
+				*ngIf="selectedProductType !== 'refinantare'"
+				type="info"
+				[text]="'Suma solicitată: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
+			</ms-info-contained-cell>
  			
 			<!-- Interest Preferences Section -->
 			<ms-interest-preferences-section
@@ -376,7 +377,7 @@
 			<!-- 5) Valoarea proprietatii -->
 			<ms-property-value-input
 				[label]="propertyLabel"
-				[helperText]="propertyHelperText"
+				[helperText]="currentPropertyHelperText"
 				[placeholder]="propertyPlaceholder"
 				[currency]="propertyCurrency"
 				[min]="propertyMin"
@@ -403,11 +404,12 @@
 			(valueChange)="onDownPaymentAmountChange($event)">
 			</ms-downpayment>
  			
- 			<!-- Info Cell -->
- 			<ms-info-contained-cell
- 				type="info"
- 				[text]="'Suma solicitată: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
- 			</ms-info-contained-cell>
+			<!-- Info Cell -->
+			<ms-info-contained-cell
+				*ngIf="selectedProductType !== 'refinantare'"
+				type="info"
+				[text]="'Suma solicitată: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
+			</ms-info-contained-cell>
  			
 			<!-- Interest Preferences Section -->
 			<ms-interest-preferences-section

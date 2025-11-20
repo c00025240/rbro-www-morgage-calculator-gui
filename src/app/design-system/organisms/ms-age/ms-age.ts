@@ -37,7 +37,8 @@ const AGE_VALUE_ACCESSOR = {
       <ms-card-outside-title
         *ngIf="label"
         [title]="label"
-        [hasHelper]="false">
+        [helperText]="hasInputError ? '' : currentHelperText"
+        [hasHelper]="!hasInputError">
       </ms-card-outside-title>
 
       <ms-card>
@@ -47,7 +48,6 @@ const AGE_VALUE_ACCESSOR = {
               #textField
               [placeholder]="placeholder"
               [error]="hasInputError"
-              [helperText]="hasInputError ? '' : currentHelperText"
               [suffixText]="suffix"
               [type]="'number'"
               [formControl]="inputControl"
@@ -250,7 +250,7 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, 
     if (currentValue < this.min || currentValue > this.max) {
       return `Vârsta trebuie să fie între ${this.min} și ${this.max} ani`;
     }
-    return `Vârsta selectată: ${currentValue} ani`;
+    return `Pentru a afla durata maximă pe care o poți alege pentru creditul tău`;
   }
 }
 

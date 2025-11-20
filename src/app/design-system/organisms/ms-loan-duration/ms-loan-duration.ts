@@ -314,9 +314,8 @@ export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, On
       return `Durata trebuie să fie între ${this.min} și ${this.max} ani`;
     }
     
-    // Show the full helper text with calculated years/months
-    const displayText = this.getDisplayText(currentValue);
-    return `${displayText}, însemnând că ai maxim X ani în acest moment`;
+    // Show the full helper text
+    return `Durata maximă pentru creditul tău`;
   }
 
   get hasInputError(): boolean {

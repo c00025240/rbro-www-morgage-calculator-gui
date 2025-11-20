@@ -19,7 +19,7 @@ import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
     <div [class]="getInterestReductionSectionClasses().join(' ')">
       <ms-card-outside-title
         title="Opțiuni de reduceri de dobândă"
-        helperText="Scad rata lunară și gradul de îndatorare"
+        helperText="Scad rata lunară și valoarea totală plătibilă"
         [hasHelper]="true">
       </ms-card-outside-title>
 

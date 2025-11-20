@@ -95,10 +95,18 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   // Property value input configuration
   @Input() propertyLabel: string = 'Valoarea proprietății';
   @Input() propertyHelperText: string = 'Valoarea totală a proprietății pe care dorești să o achiziționezi';
+  
+  // Dynamic helper text based on product type
+  get currentPropertyHelperText(): string {
+    if (this.selectedProductType === 'refinantare') {
+      return 'Valoarea proprietății pe care dorești să o aduci în garanție';
+    }
+    return 'Valoarea totală a proprietății pe care dorești să o achiziționezi';
+  }
   @Input() propertyPlaceholder: string = '355000';
   @Input() propertyCurrency: string = 'Lei';
-  @Input() propertyMin: number = 100000;
-  @Input() propertyMax: number = 1000000;
+  @Input() propertyMin: number = 25000;
+  @Input() propertyMax: number = 2200000;
   @Input() propertyStep: number = 5000;
   @Input() propertyEurConversionRate: number = 5.0;
   @Input() propertyDisabled: boolean = false;
@@ -705,7 +713,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onHeaderLogoClick(event: MouseEvent): void { 
     // Track logo click for analytics
     this.trackEvent('Logo Click', 'Raiffeisen Bank Logo');
-    this.headerLogoClicked.emit(event); 
+    // Redirect to credite imobiliare page
+    location.href = 'https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credite-imobiliare.html';
+    this.headerLogoClicked.emit(event);
   }
   onHeroChipClick(): void { 
     console.log('🎯 Hero chip clicked! Opening simulator modal...');
@@ -787,6 +797,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onMobileApplyClick(): void {
     // Track "Aplică" button click from mobile modal
     this.trackEvent('Buton Aplica Mobile Click', 'Aplica din modal', this.requestedAmount);
+    
+    // Redirect to application form based on product type
+    this.redirectToApplicationForm();
   }
 
   getMobileOffers(): Array<{
@@ -861,7 +874,27 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onFooterPrimaryClick(event: MouseEvent): void { 
     // Track "Aplică" button click
     this.trackEvent('Buton Aplică Click', 'Aplică în doar 2 minute', this.requestedAmount);
+    
+    // Redirect to application form based on product type
+    this.redirectToApplicationForm();
+    
     this.footerPrimaryClicked.emit(event); 
+  }
+
+  private redirectToApplicationForm(): void {
+    // Application form URLs based on product type
+    const applicationUrls: { [key: string]: string } = {
+      'refinantare': 'https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-de-refinantare-garantat-cu-ipoteca.html',
+      'achizitie-imobil': 'https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-imobiliar-casa-ta.html',
+      'constructie-renovare': 'https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-imobiliar-casa-ta.html',
+      'credit-venit': 'https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-imobiliar-casa-ta.html'
+    };
+    
+    // Get URL for current product type, default to achizitie-imobil
+    const applicationUrl = applicationUrls[this.selectedProductType] || applicationUrls['achizitie-imobil'];
+    
+    // Redirect to application form
+    window.location.href = applicationUrl;
   }
   onFooterShareClick(event: MouseEvent): void { this.footerShareClicked.emit(event); }
   // Income Section event handlers

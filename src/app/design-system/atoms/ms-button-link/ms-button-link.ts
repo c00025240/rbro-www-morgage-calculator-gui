@@ -61,9 +61,19 @@ export class MsButtonLink {
 	}
 
 	private processSvgContent(svgContent: string): string {
-		return svgContent
-			.replace(/fill="[^"]*"/g, 'fill="currentColor"')
-			.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
+		let processedSvg = svgContent;
+		
+		// Remove any script tags and event handlers for security
+		processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+		processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+		processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+		processedSvg = processedSvg.replace(/javascript:/gi, '');
+		
+		// Replace fill and stroke attributes with currentColor
+		processedSvg = processedSvg.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+		processedSvg = processedSvg.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
+		
+		return processedSvg;
 	}
 
 	onClick(event: Event) {

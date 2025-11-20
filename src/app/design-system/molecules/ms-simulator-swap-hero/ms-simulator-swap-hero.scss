@@ -177,6 +177,58 @@
         text-overflow: ellipsis;
         white-space: nowrap;
       }
+      
+      // Make the dropdown arrow icon white and visible
+      .ms-chips__icon--right {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+        min-height: 24px !important;
+        color: #ffffff !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        flex-shrink: 0;
+        margin-left: var(--space-1, 4px) !important;
+        
+        // Fallback arrow if SVG doesn't load
+        &::before {
+          content: '';
+          display: block;
+          width: 0;
+          height: 0;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-top: 8px solid #ffffff;
+          position: absolute;
+        }
+        
+        svg {
+          width: 24px !important;
+          height: 24px !important;
+          min-width: 24px !important;
+          min-height: 24px !important;
+          fill: #ffffff !important;
+          stroke: none !important;
+          display: block !important;
+          position: relative;
+          z-index: 1;
+          color: #ffffff !important;
+        }
+        
+        // Ensure path elements are white
+        svg path {
+          fill: #ffffff !important;
+          stroke: none !important;
+        }
+        
+        // Hide fallback if SVG is present
+        &:has(svg)::before {
+          display: none;
+        }
+      }
     }
   }
 } 

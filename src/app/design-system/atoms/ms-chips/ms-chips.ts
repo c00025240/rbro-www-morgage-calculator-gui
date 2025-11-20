@@ -97,8 +97,17 @@ export class MsChips implements OnInit, OnDestroy {
     if (index >= filenames.length) {
       const fallback = this.getFallbackIconSvg();
       const processed = this.processSvgContent(fallback);
+      // Only trust processed SVG if sanitization passes
       const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
-      iconSignal.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
+      if (sanitized) {
+        iconSignal.set(this.sanitizer.bypassSecurityTrustHtml(sanitized));
+      } else {
+        // If sanitization fails, use a safe fallback instead of trusting processed content
+        const safeFallback = this.getFallbackIconSvg();
+        const safeProcessed = this.processSvgContent(safeFallback);
+        const safeSanitized = this.sanitizer.sanitize(SecurityContext.HTML, safeProcessed);
+        iconSignal.set(safeSanitized ? this.sanitizer.bypassSecurityTrustHtml(safeSanitized) : null);
+      }
       return;
     }
     const url = `/assets/icons/${encodeURIComponent(filenames[index])}`;
@@ -113,20 +122,36 @@ export class MsChips implements OnInit, OnDestroy {
       .subscribe((svg: string | null) => {
         if (!svg) return;
         const processed = this.processSvgContent(svg);
+        // Only trust processed SVG if sanitization passes
         const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
-        iconSignal.set(sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null);
+        if (sanitized) {
+          iconSignal.set(this.sanitizer.bypassSecurityTrustHtml(sanitized));
+        } else {
+          // If sanitization fails, don't render the icon (security: don't trust unsafe content)
+          iconSignal.set(null);
+        }
       });
   }
 
   private processSvgContent(svgContent: string): string {
     let processedSvg = svgContent;
+    
+    // Remove any script tags and event handlers for security
+    processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+    processedSvg = processedSvg.replace(/javascript:/gi, '');
+    
+    // Replace fill and stroke attributes with currentColor
     processedSvg = processedSvg.replace(/fill="(?!none)[^"]*"/g, 'fill="currentColor"');
     processedSvg = processedSvg.replace(/stroke="(?!none)[^"]*"/g, 'stroke="currentColor"');
+    
     return processedSvg;
   }
 
   private getFallbackIconSvg(): string {
-    return '<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="20" rx="3" fill="currentColor"/></svg>';
+    // Fallback arrow down icon
+    return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.9999 14.4393L19.2928 7.14641L20.707 8.56062L12.707 16.5606C12.3165 16.9511 11.6833 16.9511 11.2928 16.5606L3.29282 8.56062L4.70703 7.14641L11.9999 14.4393Z" fill="currentColor"/></svg>';
   }
 
   onChipClick(chip: ChipItem) {

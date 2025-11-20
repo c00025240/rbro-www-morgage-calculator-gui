@@ -70,6 +70,90 @@ app.use('/districts', createProxyMiddleware({
   }
 }));
 
+// Serve robots.txt and sitemap.xml dynamically from environment variables
+// Files are copied to browser dist during build, so we read from there
+app.get('/robots.txt', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  // Try browser dist first (after build), then public folder (for development)
+  const robotsPaths = [
+    path.join(browserDistFolder, 'robots.txt'),
+    path.join(__dirname, '..', '..', 'public', 'robots.txt')
+  ];
+  
+  let robotsContent = null;
+  for (const robotsPath of robotsPaths) {
+    try {
+      if (fs.existsSync(robotsPath)) {
+        robotsContent = fs.readFileSync(robotsPath, 'utf8');
+        break;
+      }
+    } catch (error) {
+      continue;
+    }
+  }
+  
+  if (!robotsContent) {
+    console.error('robots.txt not found in any expected location');
+    res.status(404).send('robots.txt not found');
+    return;
+  }
+  
+  try {
+    const siteUrl = process.env['SITE_URL'] || 'https://calculator-casa.rbro.rbg.cc';
+    robotsContent = robotsContent.replace(/\{\{SITE_URL\}\}/g, siteUrl);
+    
+    res.setHeader('Content-Type', 'text/plain');
+    res.send(robotsContent);
+  } catch (error) {
+    console.error('Error serving robots.txt:', error);
+    res.status(500).send('Error loading robots.txt');
+  }
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  // Try browser dist first (after build), then public folder (for development)
+  const sitemapPaths = [
+    path.join(browserDistFolder, 'sitemap.xml'),
+    path.join(__dirname, '..', '..', 'public', 'sitemap.xml')
+  ];
+  
+  let sitemapContent = null;
+  for (const sitemapPath of sitemapPaths) {
+    try {
+      if (fs.existsSync(sitemapPath)) {
+        sitemapContent = fs.readFileSync(sitemapPath, 'utf8');
+        break;
+      }
+    } catch (error) {
+      continue;
+    }
+  }
+  
+  if (!sitemapContent) {
+    console.error('sitemap.xml not found in any expected location');
+    res.status(404).send('sitemap.xml not found');
+    return;
+  }
+  
+  try {
+    const siteUrl = process.env['SITE_URL'] || 'https://calculator-casa.rbro.rbg.cc';
+    const lastMod = new Date().toISOString().split('T')[0];
+    
+    sitemapContent = sitemapContent
+      .replace(/\{\{SITE_URL\}\}/g, siteUrl)
+      .replace(/\{\{LAST_MOD\}\}/g, lastMod);
+    
+    res.setHeader('Content-Type', 'application/xml');
+    res.send(sitemapContent);
+  } catch (error) {
+    console.error('Error serving sitemap.xml:', error);
+    res.status(500).send('Error loading sitemap.xml');
+  }
+});
+
 /**
  * Serve static files from /browser
  */

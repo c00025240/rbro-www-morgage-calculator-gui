@@ -40,9 +40,20 @@ export class MsModal implements OnInit {
         catchError(() => of('<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12.0001 13.4142L4.70718 20.7071L3.29297 19.2928L10.5859 12L3.29297 4.70706L4.70718 3.29285L12.0001 10.5857L19.293 3.29285L20.7072 4.70706L13.4143 12L20.7072 19.2928L19.293 20.7071L12.0001 13.4142Z" fill="currentColor"/></svg>'))
       )
       .subscribe(svg => {
+        // Process SVG for security and theming
+        let processedSvg = svg;
+        
+        // Remove any script tags and event handlers for security
+        processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+        processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+        processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+        processedSvg = processedSvg.replace(/javascript:/gi, '');
+        
         // Ensure SVG uses currentColor for theming
-        const themedSvg = svg.replace(/fill="[^"]*"/g, 'fill="currentColor"');
-        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, themedSvg);
+        processedSvg = processedSvg.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+        
+        // Only trust processed SVG if sanitization passes
+        const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);
         this.closeIconHtml = sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null;
       });
   }

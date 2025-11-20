@@ -116,10 +116,18 @@ export class MsSwitchCell {
 
   private processSvgContent(svgContent: string): string {
     let processedSvg = svgContent;
+    
+    // Remove any script tags and event handlers for security
+    processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+    processedSvg = processedSvg.replace(/javascript:/gi, '');
+    
     // Only replace fill colors, but preserve stroke="none" and don't add strokes where they don't exist
     processedSvg = processedSvg.replace(/fill="(?!none|white)[^"]*"/g, 'fill="currentColor"');
     // Only replace existing stroke colors, don't add strokes
     processedSvg = processedSvg.replace(/stroke="(?!none|white)[^"]*"/g, 'stroke="currentColor"');
+    
     return processedSvg;
   }
 

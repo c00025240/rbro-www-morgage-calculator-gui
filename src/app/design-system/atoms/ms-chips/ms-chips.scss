@@ -48,7 +48,61 @@
   }
 
   &__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; line-height: 1; }
-  &__icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0; svg { width: 1em; height: 1em; * { fill: currentColor !important; } path, rect, circle, ellipse, polygon, use { fill: currentColor !important; stroke: none !important; } } &--left { margin-right: var(--space-1, 4px); } &--right { margin-left: var(--space-1, 4px); } }
+  &__icon { 
+    display: flex !important; 
+    align-items: center; 
+    justify-content: center; 
+    width: 20px; 
+    height: 20px; 
+    min-width: 20px;
+    min-height: 20px;
+    flex-shrink: 0; 
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: relative;
+    
+    // Fallback arrow if no SVG or empty content
+    &::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid currentColor;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+    }
+    
+    // Show fallback if empty or has no SVG
+    &:empty::before,
+    &:not(:has(svg))::before {
+      display: block;
+    }
+    
+    svg { 
+      width: 1em !important; 
+      height: 1em !important; 
+      min-width: 20px;
+      min-height: 20px;
+      display: block !important;
+      position: relative;
+      z-index: 1;
+      * { fill: currentColor !important; } 
+      path, rect, circle, ellipse, polygon, use { fill: currentColor !important; stroke: none !important; } 
+    }
+    
+    // Hide fallback if SVG present
+    &:has(svg)::before {
+      display: none;
+    }
+    
+    &--left { margin-right: var(--space-1, 4px); } 
+    &--right { margin-left: var(--space-1, 4px); } 
+  }
 
   &--disabled { pointer-events: none; .ms-chips__chip { opacity: 0.5; cursor: not-allowed; } }
 

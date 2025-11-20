@@ -6,8 +6,8 @@
 	width: 100%;
 	background: var(--color-bg);
 	border-bottom: 1px solid var(--color-border);
-	position: sticky;
-	top: 0;
+	position: fixed;
+	top: 0px;
 	z-index: 100;
 	height: 120px;
 	box-shadow: var(--shadow-lg);
@@ -155,6 +155,24 @@
 			white-space: nowrap; 
 		} 
 	}
+
+	// Desktop / large screens: show full title with bank name
+	&__page-title--desktop {
+		display: block;
+
+		@media (max-width: 1023px) {
+			display: none;
+		}
+	}
+
+	// Mobile / tablet: shorter title without bank name
+	&__page-title--mobile {
+		display: none;
+
+		@media (max-width: 1023px) {
+			display: block;
+		}
+	}
 	
 	&__subtitle { 
 		margin: 0; 
@@ -176,6 +194,11 @@
 			font-size: 14px; 
 			line-height: 1.2; 
 			margin-top: var(--space-0-5, 2px); 
+		} 
+
+		// Tablet: reduce gap between h1 and h2 to match mobile spacing
+		@media (min-width: 768px) and (max-width: 1239px) {
+			margin-top: var(--space-0-5, 2px);
 		} 
 		
 		@media (min-width: 1240px) { 

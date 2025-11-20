@@ -857,8 +857,10 @@ export class MsIcons implements OnInit {
         try {
           const svgContent = await this.http.get(`icons/${filename}`, { responseType: 'text' }).toPromise();
           if (svgContent) {
+            // Process SVG content to remove scripts and event handlers for security
+            const processed = this.processSvgContent(svgContent);
             // Sanitize SVG content to prevent XSS attacks
-            const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, svgContent);
+            const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
             icon.content[style] = sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null;
             console.log(`✅ Loaded ${icon.name} ${style}`);
           }
@@ -869,7 +871,8 @@ export class MsIcons implements OnInit {
             <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
             <text x="12" y="16" text-anchor="middle" font-size="10" fill="currentColor">${icon.name.charAt(0).toUpperCase()}</text>
           </svg>`;
-          const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, fallbackSvg);
+          const processed = this.processSvgContent(fallbackSvg);
+          const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processed);
           icon.content[style] = sanitized ? this.sanitizer.bypassSecurityTrustHtml(sanitized) : null;
         }
       }
@@ -894,6 +897,22 @@ export class MsIcons implements OnInit {
     }
     
     return `${iconName} Style=${style}.svg`;
+  }
+
+  private processSvgContent(svgContent: string): string {
+    let processedSvg = svgContent;
+    
+    // Remove any script tags and event handlers for security
+    processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+    processedSvg = processedSvg.replace(/javascript:/gi, '');
+    
+    // Replace fill attributes with currentColor for theming
+    processedSvg = processedSvg.replace(/fill="[^"]*"/g, 'fill="currentColor"');
+    processedSvg = processedSvg.replace(/stroke="[^"]*"/g, 'stroke="currentColor"');
+    
+    return processedSvg;
   }
 
   private getFileStyle(filename: string): IconStyle {

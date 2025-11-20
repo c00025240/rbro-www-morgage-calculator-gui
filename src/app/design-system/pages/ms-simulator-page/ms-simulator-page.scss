@@ -51,9 +51,9 @@
   @media (min-width: 1240px) {
     display: flex;
     width: 100vw !important;
-    min-height: 100vh;
+    min-height: 110vh;
     position: relative;
-    top: 0;
+    top: 120px;
     left: 0;
     max-width: none !important; // Ensure no max-width constraints
     margin: 0 !important;
@@ -243,8 +243,15 @@
   // Only show on mobile/tablet (completely replaces desktop split-screen)
   @media (min-width: 1240px) { display: none !important; visibility: hidden; }
   @media (max-width: 1239px) {
-    display: flex !important; visibility: visible; width: 100%; min-height: 100vh; flex-direction: column; overflow: hidden; touch-action: pan-y pinch-zoom; overscroll-behavior: contain;
-    padding-bottom: calc(var(--space-8, 4rem) + var(--space-3, 1.5rem)); // reserve space for fixed sticky footer (88px)
+    display: flex !important;
+    visibility: visible;
+    width: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+    overflow: hidden;
+    touch-action: pan-y pinch-zoom;
+    overscroll-behavior: contain;
+    padding-top: 80px; // Space for fixed header on mobile (~80px effective height)
     box-sizing: border-box;
     
     // Light mode background
@@ -288,13 +295,15 @@
 .ms-simulator-page__hero {
   width: 100%;
   max-width: 100%;
-  display: flex;
+  display: flex !important; // Ensure hero is always visible
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
   
   // Mobile and tablet: edge-to-edge, no gap from header
   @media (max-width: 1239px) {
+    display: flex !important; // Ensure hero is visible on mobile
+    visibility: visible !important;
     margin-top: 0;
     margin-bottom: 0;
     width: 100%;
@@ -302,6 +311,7 @@
     // Match mobile inputs horizontal padding
     padding: 0 var(--space-3, 1.5rem);
     box-sizing: border-box;
+    min-height: 64px; // Ensure hero has minimum height on mobile
   }
   
   // Desktop: same centered behavior as mobile
@@ -702,7 +712,7 @@
 
 .ms-simulator-page__faq-footer {
   width: 100%;
-  background-color: var(--surface-warm-grey-50, #f8f6f2);
+  background-color: var(--surface-warm-grey);
   padding: var(--space-8, 4rem) var(--space-3, 1.5rem);
   box-sizing: border-box;
   

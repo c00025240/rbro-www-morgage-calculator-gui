@@ -201,6 +201,12 @@ export class MsButtonBare implements OnInit, OnChanges, OnDestroy {
     const originalSvg = svgContent;
     let processedSvg = svgContent;
     
+    // Remove any script tags and event handlers for security
+    processedSvg = processedSvg.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*["'][^"']*["']/gi, '');
+    processedSvg = processedSvg.replace(/on\w+\s*=\s*{[^}]*}/gi, '');
+    processedSvg = processedSvg.replace(/javascript:/gi, '');
+    
     // Replace fill attributes with hex color values with currentColor (but keep fill="none")
     // This regex matches fill="#color" or fill='#color' patterns and replaces them
     processedSvg = processedSvg.replace(/fill=["']#[a-fA-F0-9]{3,8}["']/g, 'fill="currentColor"');
