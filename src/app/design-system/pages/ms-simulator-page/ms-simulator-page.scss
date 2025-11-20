@@ -126,7 +126,7 @@
     box-sizing: border-box; // Include padding in panel width
     overflow-x: hidden;
     position: relative;
-    background-color: var(--sim-right-panel-bg);
+    background-color: var(--sim-left-panel-bg); // Same color as left panel
     align-items: center; // Center the content within the panel
     justify-content: flex-start;
     padding-right: 0; // No panel padding; gutter handled in content container

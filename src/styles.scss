@@ -1,12 +1,215 @@
+@use '@angular/material' as mat;
+@use 'app/design-system/_tokens.scss' as *;
+
 /* Global styles and design tokens */
-@import 'assets/fonts/amalia-fonts.css';
 @import 'assets/tokens.css';
 
-html, body {
-  height: 100%;
+/*  Amalia regular  – global load  */
+@font-face {
+  font-family: "Amalia";
+  src: url("/assets/fonts/Amalia-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style : normal;
+  font-display: swap;      /* shows fallback text, swaps when font loads */
 }
 
-body {
-  margin: 0;
-  font-family: var(--font-family-primary, 'Amalia-Regular'), system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+/*  If you have bold / italic, add extra blocks with the right weights  */
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+
+// Define the main theme using Material v20 API
+$custom-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$yellow-palette,
+    tertiary: mat.$yellow-palette,
+  ),
+  typography: (
+    brand-family: 'Roboto',
+    plain-family: 'Roboto',
+  )
+));
+
+@include mat.all-component-themes($custom-theme);
+
+html {
+  // =============================================================================
+  // MDC token overrides after theme application
+  // =============================================================================
+  
+  // Checkbox - Global TOKENS OVERRIDES (correct --mat- prefix)
+  .mat-mdc-checkbox {
+    /* ===== Unselected (Default) ===== */
+    --mat-checkbox-unselected-icon-color: var(--chk-primary-text-default, #55575C);
+
+    /* Outline/border width */
+    --mat-checkbox-unselected-focus-state-layer-color: var(--chk-primary-text-selected, #2B2D33);
+    --mat-checkbox-unselected-hover-icon-color: var(--chk-primary-text-selected, #2B2D33);
+
+    /* ===== Selected (Checked) ===== */
+    --mat-checkbox-selected-icon-color: var(--chk-primary-text-selected, #2B2D33);
+    --mat-checkbox-selected-checkmark-color: var(--checkbox-checkmark-color, #FFFFFF);
+    --mat-checkbox-selected-focus-icon-color: var(--chk-primary-text-selected, #2B2D33);
+    --mat-checkbox-selected-hover-icon-color: var(--chk-primary-text-selected, #2B2D33);
+
+    /* ===== State Layer Opacities */
+    --mat-checkbox-selected-hover-state-layer-opacity: 0.08;
+    --mat-checkbox-selected-focus-state-layer-opacity: 0.24;
+    --mat-checkbox-selected-pressed-state-layer-opacity: 0.24;
+    --mat-checkbox-unselected-hover-state-layer-opacity: 0.08;
+    --mat-checkbox-unselected-focus-state-layer-opacity: 0.24;
+    --mat-checkbox-unselected-pressed-state-layer-opacity: 0.24;
+
+    /* ===== Typography ===== */
+    font-family: var(--checkbox-font-family, "Amalia");
+    font-size: var(--checkbox-font-size, 16px);
+    font-weight: var(--checkbox-font-weight, 400);
+    line-height: var(--checkbox-line-height, 24px);
+
+    /* ===== Label (Typography & Color) ===== */
+    --mat-checkbox-label-text-color: var(--chk-primary-text-default, #55575C);
+    --mat-checkbox-label-text-font: var(--checkbox-font-family, "Amalia");
+    --mat-checkbox-label-text-size: var(--checkbox-font-size, 16px);
+    --mat-checkbox-label-text-line-height: var(--checkbox-line-height, 24px);
+    --mat-checkbox-label-text-weight: var(--checkbox-font-weight, 400);
+  }
+
+  /* Label text styles */
+  .mat-mdc-checkbox .mdc-form-field {
+    font-family: var(--checkbox-font-family, "Amalia");
+    font-size: var(--checkbox-font-size, 16px);
+    font-weight: var(--checkbox-font-weight, 400);
+    line-height: var(--checkbox-line-height, 24px);
+    color: var(--chk-primary-text-default, #55575C);
+  }
+
+  .mat-mdc-checkbox.mat-mdc-checkbox-disabled .mdc-form-field {
+    color: var(--chk-primary-text-disabled, #AAABAD);
+  }
+
+// ===== RADIO BUTTON GLOBAL OVERRIDES =====
+  .mat-mdc-radio-button,
+  .mat-mdc-radio-button.mat-primary,
+  .mat-mdc-radio-button.mat-accent,
+  .mat-mdc-radio-button.mat-warn {
+    --mat-radio-unselected-icon-color: var(--rad-primary-icon-default, #55575C);
+    --mat-radio-selected-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+    --mat-radio-unselected-hover-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+    --mat-radio-unselected-focus-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+
+    --mat-radio-disabled-unselected-icon-color: var(--rad-primary-icon-disabled, #AAABAD);
+    --mat-radio-disabled-selected-icon-color: var(--rad-primary-icon-disabled, #AAABAD);
+    --mat-radio-disabled-label-color: var(--rad-primary-text-disabled, #AAABAD);
+
+    /* Label */
+    --mat-radio-label-text-color: var(--rad-primary-text-default, #55575C);
+    --mat-radio-label-text-font: var(--radio-font-family, "Amalia");
+    --mat-radio-label-text-size: var(--radio-font-size, 16px);
+    --mat-radio-label-text-line-height: var(--radio-line-height, 24px);
+    --mat-radio-label-text-weight: var(--radio-font-weight, 400);
+
+    /* Duplicate with MDC-prefixed names (Angular Material 17+ maps MDC -> Mat tokens) */
+    --mdc-radio-unselected-icon-color: var(--rad-primary-icon-default, #55575C);
+    --mdc-radio-selected-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+    --mdc-radio-unselected-hover-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+    --mdc-radio-unselected-focus-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+
+    --mdc-radio-disabled-unselected-icon-color: var(--rad-primary-icon-disabled, #AAABAD);
+    --mdc-radio-disabled-selected-icon-color: var(--rad-primary-icon-disabled, #AAABAD);
+    --mdc-radio-disabled-label-color: var(--rad-primary-text-disabled, #AAABAD);
+
+    /* Label */
+    --mdc-radio-label-text-color: var(--rad-primary-text-default, #55575C);
+    --mdc-radio-label-text-font: var(--radio-font-family, "Amalia");
+    --mdc-radio-label-text-size: var(--radio-font-size, 16px);
+    --mdc-radio-label-text-line-height: var(--radio-line-height, 24px);
+    --mdc-radio-label-text-weight: var(--radio-font-weight, 400);
+
+    /* === Fallback: directly style the circles in case token propagation fails === */
+    .mdc-radio__outer-circle {
+      border-color: var(--rad-primary-icon-default, #55575C) !important;
+    }
+    .mdc-radio__inner-circle {
+      border-color: var(--rad-primary-icon-selected, #2B2D33) !important;
+      background-color: var(--rad-primary-icon-selected, #2B2D33) !important;
+    }
+  }
+
+  /* Ensure label block picks up our typography everywhere */
+  .mat-mdc-radio-button .mdc-form-field {
+    font-family   : var(--radio-font-family, "Amalia");
+    font-size     : var(--radio-font-size, 16px);
+    line-height   : var(--radio-line-height, 24px);
+    font-weight   : var(--radio-font-weight, 400);
+    color         : var(--rad-primary-text-default, #55575C);
+  }
+}
+
+/* =======================================================
+   Global Material Checkbox token overrides at :root level
+   Ensures the variables exist everywhere (Storybook iframe, etc.)
+   =======================================================*/
+:root {
+  --mat-checkbox-unselected-icon-color: var(--chk-primary-text-default, #55575C);
+  --mat-checkbox-unselected-hover-icon-color: var(--chk-primary-text-selected, #2B2D33);
+  --mat-checkbox-unselected-focus-state-layer-color: var(--chk-primary-text-selected, #2B2D33);
+
+  --mat-checkbox-selected-icon-color: var(--chk-primary-text-selected, #2B2D33);
+  --mat-checkbox-selected-checkmark-color: var(--checkbox-checkmark-color, #FFFFFF);
+  --mat-checkbox-selected-hover-icon-color: var(--chk-primary-text-selected, #2B2D33);
+  --mat-checkbox-selected-focus-icon-color: var(--chk-primary-text-selected, #2B2D33);
+
+  --mat-checkbox-disabled-unselected-icon-color: var(--chk-primary-text-disabled, #AAABAD);
+  --mat-checkbox-disabled-selected-icon-color: var(--chk-primary-text-disabled, #AAABAD);
+  --mat-checkbox-disabled-label-color: var(--chk-primary-text-disabled, #AAABAD);
+
+  /* Label typography */
+  --mat-checkbox-label-text-color: var(--chk-primary-text-default, #55575C);
+  --mat-checkbox-label-text-font: var(--checkbox-font-family, "Amalia");
+  --mat-checkbox-label-text-size: var(--checkbox-font-size, 16px);
+  --mat-checkbox-label-text-line-height: var(--checkbox-line-height, 24px);
+  --mat-checkbox-label-text-weight: var(--checkbox-font-weight, 400);
+
+  /* Duplicate at root for iframe / scope safety */
+  --mat-radio-unselected-icon-color: var(--rad-primary-icon-default, #55575C);
+  --mat-radio-selected-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+  --mat-radio-unselected-hover-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+  --mat-radio-unselected-focus-icon-color: var(--rad-primary-icon-selected, #2B2D33);
+  --mat-radio-disabled-unselected-icon-color: var(--rad-primary-icon-disabled, #AAABAD);
+  --mat-radio-disabled-selected-icon-color: var(--rad-primary-icon-disabled, #AAABAD);
+  --mat-radio-disabled-label-color: var(--rad-primary-text-disabled, #AAABAD);
+  --mat-radio-label-text-color: var(--rad-primary-text-default, #55575C);
+  --mat-radio-label-text-font: var(--radio-font-family, "Amalia");
+  --mat-radio-label-text-size: var(--radio-font-size, 16px);
+  --mat-radio-label-text-line-height: var(--radio-line-height, 24px);
+  --mat-radio-label-text-weight: var(--radio-font-weight, 400);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Radio label typography */
+.mat-mdc-radio-button .mdc-form-field {
+  font-family  : var(--radio-font-family, "Amalia");
+  font-size    : var(--radio-font-size, 16px);
+  line-height  : var(--radio-line-height, 24px);
+  font-weight  : var(--radio-font-weight, 400);
+  color        : var(--rad-primary-text-default, #55575C);
+}
+
+.ms-radio-material .mdc-form-field {
+  font-family : var(--radio-font-family, "Amalia") !important;
+  font-size   : var(--radio-font-size, 16px) !important;
+  line-height : var(--radio-line-height, 24px) !important;
+  font-weight : var(--radio-font-weight, 400) !important;
+  color       : var(--rad-primary-text-default, #55575C) !important;
+}
+
+.ms-radio-material {
+  --mat-radio-label-text-font        : "Amalia";
+  --mat-radio-label-text-size        : 16px;
+  --mat-radio-label-text-line-height : 24px;
+  --mat-radio-label-text-weight      : 400;
+  --mat-radio-label-text-color       : #55575C;
 }
