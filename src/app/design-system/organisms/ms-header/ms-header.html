@@ -28,7 +28,8 @@
 			    [attr.id]="'ms-header-title'"
 			    [attr.aria-level]="2">{{ title }}</h2>
 			
-			<div class="ms-header__title-container">
+			<!-- Title Container: Mobile/Tablet version (inside __left) -->
+			<div class="ms-header__title-container ms-header__title-container--mobile">
 				<!-- Desktop / large viewports: full title with bank name -->
 				<h1 class="ms-header__page-title ms-header__page-title--desktop">
 					Calculator credite ipotecare Raiffeisen Bank
@@ -41,6 +42,16 @@
 
 				<h2 class="ms-header__subtitle">Simuleaza rata lunara si dobanda (IRCC)</h2>
 			</div>
+		</div>
+
+		<!-- Title Container: Desktop version (absolutely positioned relative to __container) -->
+		<div class="ms-header__title-container ms-header__title-container--desktop">
+			<!-- Desktop / large viewports: full title with bank name -->
+			<h1 class="ms-header__page-title ms-header__page-title--desktop">
+				Calculator credite ipotecare Raiffeisen Bank
+			</h1>
+
+			<h2 class="ms-header__subtitle">Simuleaza rata lunara si dobanda (IRCC)</h2>
 		</div>
 
 		<!-- Right Area: Action buttons -->

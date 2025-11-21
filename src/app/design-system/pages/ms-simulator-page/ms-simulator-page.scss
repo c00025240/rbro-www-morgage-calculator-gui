@@ -32,8 +32,11 @@
     ::ng-deep .ms-page-shell {
       max-width: none !important;
       width: 100vw !important;
+      min-height: calc(100vh + 160px);
+      background-color: var(--sim-left-panel-bg, #f3ede5);
       margin: 0 !important;
       padding: 0 !important;
+      padding-top: 120px; // ensure content clears sticky header while background fills the gap
     }
   }
 }
@@ -51,14 +54,18 @@
   @media (min-width: 1240px) {
     display: flex;
     width: 100vw !important;
-    min-height: 110vh;
+    box-sizing: border-box;
+    min-height: calc(100vh + 120px);
     position: relative;
-    top: 120px;
+    top: 0;
     left: 0;
     max-width: none !important; // Ensure no max-width constraints
     margin: 0 !important;
-    padding: 0 !important;
-    padding-top: 120px; // Account for fixed header
+    background-color: var(--sim-left-panel-bg, #f3ede5);
+    padding-top: 120px;
+    padding-bottom: 120px;
+    padding-left: 24px; // Match header container padding
+    padding-right: 24px; // Match header container padding
   }
 }
 
@@ -95,7 +102,7 @@
     width: 100%;
     max-width: 800px; // Restore centered content width
     margin: 0 auto; // Center the content container
-    padding: 0 var(--space-3, 1.5rem); // content padding only; inner gaps handled below
+    padding: 0 var(--space-4, 2rem) 0 var(--space-4, 2rem); // Increased left and right padding
     height: calc(100vh - 120px); // Make content the scroll container
     overflow-y: auto; // Scrollbar on content
     overflow-x: hidden;
@@ -103,7 +110,7 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin; // Firefox
     box-sizing: border-box;
-    align-items: center; // Center all child elements
+    align-items: flex-start; // Align to left to match logo
     justify-content: flex-start;
     overflow-x: hidden; // Prevent horizontal overflow
     
@@ -144,7 +151,7 @@
     width: 100%;
     max-width: 100%; // Remove fixed max-width to make grid fully responsive
     margin: 0 auto; // Center the content container
-    padding: 0 var(--space-3, 1.5rem); // symmetric padding for centered elements
+    padding: 0 var(--space-4, 2rem) 0 var(--space-4, 2rem); // Increased left and right padding
     height: calc(100vh - 120px); // Match left panel: fixed height for scroll container
     overflow-y: auto; // Enable vertical scrolling like left panel
     overflow-x: hidden;
@@ -152,7 +159,7 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin; // Firefox
     box-sizing: border-box;
-    align-items: center; // Center all child elements
+    align-items: flex-start; // Align to left to match title
     justify-content: flex-start;
     
     // Match left panel: no top spacer, large bottom spacer for scroll completion

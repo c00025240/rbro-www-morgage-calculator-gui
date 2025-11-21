@@ -40,10 +40,9 @@
 		@media (min-width: 1240px) { 
 			max-width: none; 
 			margin: 0; 
-			padding: 0 24px; 
-			width: 50%; 
+			padding: 0; 
+			width: 100%; 
 			position: relative; 
-			left: 0; 
 		} 
 	}
 	
@@ -58,7 +57,16 @@
 			gap: var(--space-2, 12px); 
 			flex: 1 1 auto; 
 			flex-wrap: wrap; 
-		} 
+		}
+		
+		@media (min-width: 1240px) {
+			position: absolute;
+			// Align with left panel content start: layout padding + centering offset + content padding
+			left: calc(24px + max(0px, (35vw - 800px) / 2) + var(--space-4, 2rem));
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 1;
+		}
 	}
 	
 	&__logo { 
@@ -115,22 +123,41 @@
 		flex-direction: column; 
 		gap: 0; 
 		
-		@media (max-width: 1239px) { 
-			flex: 1 1 auto; 
-			min-width: 0; 
-		} 
+		// Mobile/Tablet version: inside __left
+		&--mobile {
+			@media (max-width: 1239px) { 
+				flex: 1 1 auto; 
+				min-width: 0; 
+			}
+			
+			@media (min-width: 1240px) {
+				display: none; // Hide on desktop
+			}
+		}
 		
-		@media (min-width: 1240px) { 
-			position: absolute; 
-			top: 50%; 
-			left: calc(35vw + var(--space-3, 1.5rem)); 
-			transform: translateY(-50%); 
-			max-width: calc(65vw - (var(--space-3, 1.5rem) * 2)); 
-		} 
+		// Desktop version: absolutely positioned relative to __container
+		&--desktop {
+			@media (max-width: 1239px) {
+				display: none; // Hide on mobile/tablet
+			}
+			
+			@media (min-width: 1240px) { 
+				position: absolute; 
+				top: 50%; 
+				// Align with right panel content start: layout padding (24px) + left panel width (35vw) + right content left padding (32px) - slight adjustment to move left
+				left: calc(24px + 35vw + var(--space-4, 2rem) - 16px);
+				transform: translateY(-50%); 
+				max-width: none; 
+				z-index: 1;
+				margin: 0;
+				padding: 0;
+			} 
+		}
 	}
 	
 	&__page-title { 
 		margin: 0; 
+		padding: 0;
 		font-family: var(--font-family-primary, "Amalia"), sans-serif; 
 		font-weight: var(--font-weight-medium, 500); 
 		letter-spacing: -0.01em; 

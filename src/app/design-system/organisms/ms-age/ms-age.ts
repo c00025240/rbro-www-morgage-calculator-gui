@@ -250,7 +250,7 @@ export class MsAgeComponent implements ControlValueAccessor, OnInit, OnDestroy, 
     if (currentValue < this.min || currentValue > this.max) {
       return `Vârsta trebuie să fie între ${this.min} și ${this.max} ani`;
     }
-    return `Pentru a afla durata maximă pe care o poți alege pentru creditul tău`;
+    return `Pentru a afla durata maximă pe care o poți alege pentru credit`;
   }
 }
 
