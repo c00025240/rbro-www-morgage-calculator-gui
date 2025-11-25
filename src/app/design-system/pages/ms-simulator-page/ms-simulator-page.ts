@@ -186,6 +186,17 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   get requestedAmount(): number {
     return this.calculateLoanAmount();
   }
+
+  // Helper function to format numbers with Romanian format (punct for thousands, virgulă for decimals)
+  formatNumber(value: number, decimals: number = 2): string {
+    if (value === null || value === undefined || isNaN(value)) {
+      return '0' + (decimals > 0 ? ',' + '0'.repeat(decimals) : '');
+    }
+    return new Intl.NumberFormat('ro-RO', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    }).format(value);
+  }
   
   // Summary calculated values (for right panel display)
   @Input() estimatedMonthlyPayment: number = 2850;
@@ -509,12 +520,12 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
           
           this.footerLeftAmount = {
             label: this.interestType === 'variabila' ? 'Rata lunară variabilă' : 'Prima rată fixă',
-            amount: installmentAmount.toFixed(2),
+            amount: this.formatNumber(installmentAmount, 2),
             currency: 'Lei/lună'
           };
           this.footerRightAmount = {
             label: 'Suma totală',
-            amount: (response.totalPaymentAmount?.amount || 0).toFixed(2),
+            amount: this.formatNumber(response.totalPaymentAmount?.amount || 0, 2),
             currency: 'Lei'
           };
           this.footerActions = {
@@ -841,10 +852,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       const gap = typeof gapRaw === 'number' ? gapRaw as number : undefined;
       let downPaymentInfoNote: string | undefined;
       if (this.selectedProductType === 'constructie-renovare') {
-        if (typeof noDoc === 'number') noDocStr = (noDoc || 0).toFixed(2) + ' Lei';
-        if (typeof minGuarantee === 'number') housePriceStr = (minGuarantee || 0).toFixed(2) + ' Lei';
+        if (typeof noDoc === 'number') noDocStr = this.formatNumber(noDoc || 0, 2) + ' Lei';
+        if (typeof minGuarantee === 'number') housePriceStr = this.formatNumber(minGuarantee || 0, 2) + ' Lei';
       } else if (this.selectedProductType === 'refinantare') {
-        if (typeof minGuarantee === 'number') housePriceStr = (minGuarantee || 0).toFixed(2) + ' Lei';
+        if (typeof minGuarantee === 'number') housePriceStr = this.formatNumber(minGuarantee || 0, 2) + ' Lei';
       }
       // Note: downPaymentInfoNote is now displayed in the down payment input component
       // No longer needed in summary cards
@@ -852,16 +863,16 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         title: r.title,
         // Use correct installment amount based on interest type
         monthlyInstallment: this.interestType === 'variabila'
-          ? ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei'
-          : ((r.resp.monthlyInstallment?.amountFixedInterest) || 0).toFixed(2) + ' Lei',
-        fixedRate: (r.resp.nominalInterestRate || 0).toFixed(2) + '%',
-        variableRate: ((r.resp.interestRateFormula?.bankMarginRate || 0) + (r.resp.interestRateFormula?.irccRate || 0)).toFixed(2) + '%',
-        variableInstallment: ((r.resp.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei',
-        dae: (r.resp.annualPercentageRate || 0).toFixed(2) + '%',
+          ? this.formatNumber((r.resp.monthlyInstallment?.amountVariableInterest) || 0, 2) + ' Lei'
+          : this.formatNumber((r.resp.monthlyInstallment?.amountFixedInterest) || 0, 2) + ' Lei',
+        fixedRate: this.formatNumber(r.resp.nominalInterestRate || 0, 2) + '%',
+        variableRate: this.formatNumber((r.resp.interestRateFormula?.bankMarginRate || 0) + (r.resp.interestRateFormula?.irccRate || 0), 2) + '%',
+        variableInstallment: this.formatNumber((r.resp.monthlyInstallment?.amountVariableInterest) || 0, 2) + ' Lei',
+        dae: this.formatNumber(r.resp.annualPercentageRate || 0, 2) + '%',
         installmentType: (this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescatoare',
-        downPayment: ((r.resp.downPayment?.amount) || 0).toFixed(2) + ' Lei',
-        loanAmount: ((r.resp.loanAmount?.amount) || 0).toFixed(2) + ' Lei',
-        totalAmount: ((r.resp.totalPaymentAmount?.amount) || 0).toFixed(2) + ' Lei',
+        downPayment: this.formatNumber((r.resp.downPayment?.amount) || 0, 2) + ' Lei',
+        loanAmount: this.formatNumber((r.resp.loanAmount?.amount) || 0, 2) + ' Lei',
+        totalAmount: this.formatNumber((r.resp.totalPaymentAmount?.amount) || 0, 2) + ' Lei',
         noDocAmount: noDocStr,
         housePriceMin: housePriceStr,
         interestType: this.interestType,
@@ -897,6 +908,12 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     window.location.href = applicationUrl;
   }
   onFooterShareClick(event: MouseEvent): void { this.footerShareClicked.emit(event); }
+  
+  onCookiePreferencesClick(event: MouseEvent): void {
+    event.preventDefault();
+    // OneTrust will handle the click via the ot-dsk-show-settings class
+    // No additional action needed as OneTrust will automatically show the settings
+  }
   // Income Section event handlers
   onMonthlyIncomeChange(value: number): void { 
     this.markInteracted();
@@ -949,7 +966,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       const minDownPayment = Math.round((this.propertyValue || 0) * 0.15);
       if (this.downPaymentAmount > 0 && this.downPaymentAmount < minDownPayment) {
         this.downPaymentTooLow = true;
-        this.downPaymentErrorMessage = `Avansul completat este prea mic. Pentru acest credit îți recomandăm un avans de minim ${minDownPayment.toLocaleString('ro-RO')} Lei`;
+        this.downPaymentErrorMessage = `Avansul completat este prea mic. Pentru acest credit îți recomandăm un avans de minim ${this.formatNumber(minDownPayment, 0)} Lei`;
       } else {
         this.downPaymentTooLow = false;
         this.downPaymentErrorMessage = undefined;
@@ -1173,8 +1190,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       } else {
         // Info message when gap is 0 or positive - show details about housePrice and discount
         if (housePrice !== undefined && housePrice > 0) {
-          const housePriceStr = housePrice.toFixed(2);
-          const discountStr = discountAmount.toFixed(2);
+          const housePriceStr = this.formatNumber(housePrice, 2);
+          const discountStr = this.formatNumber(discountAmount, 2);
           this.downPaymentInfoNote = `Daca imobilul adus in garantie va fi evaluat la minim ${housePriceStr} Lei vei beneficia de o reducere a ratei in valoare de ${discountStr} Lei, adica 0,2% din dobanda standard.`;
           this.downPaymentInfoType = 'info';
         } else {
@@ -1192,7 +1209,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         // Success case - down payment is at least 20%
         // Calculate the discount amount from the response
         const discountAmount = response?.loanCosts?.discounts?.discountAmountDownPayment || 0;
-        const discountStr = discountAmount > 0 ? discountAmount.toFixed(2) : '0.00';
+        const discountStr = discountAmount > 0 ? this.formatNumber(discountAmount, 2) : '0,00';
         this.downPaymentInfoNote = `Deoarece avansul tău reprezintă cel puțin 20% din prețul locuinței, beneficiezi de o reducere a ratei lunare în valoare de ${discountStr} Lei adică 0,2% din dobânda standard.`;
         this.downPaymentInfoType = 'success';
       } else {
@@ -1238,27 +1255,27 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       
       // Pentru dobânda variabilă, inhibă câmpurile dobânzii fixe și ratei lunare după trecerea anilor
       if (this.interestType !== 'variabila') {
-        extraDetails.push({ label: 'Dobândă fixă', value: (resp?.nominalInterestRate || 0).toFixed(2) + ' %' });
-        extraDetails.push({ label: 'Rată lunară (după trecerea anilor cu dobândă fixă)', value: ((resp?.monthlyInstallment?.amountVariableInterest) || 0).toFixed(2) + ' Lei' });
+        extraDetails.push({ label: 'Dobândă fixă', value: this.formatNumber(resp?.nominalInterestRate || 0, 2) + ' %' });
+        extraDetails.push({ label: 'Rată lunară (după trecerea anilor cu dobândă fixă)', value: this.formatNumber((resp?.monthlyInstallment?.amountVariableInterest) || 0, 2) + ' Lei' });
       }
       
       // Dobânda variabilă se afișează întotdeauna
-      extraDetails.push({ label: 'Dobândă variabilă', value: (variableRate || 0).toFixed(2) + ' %' });
+      extraDetails.push({ label: 'Dobândă variabilă', value: this.formatNumber(variableRate || 0, 2) + ' %' });
       
       // Câmpurile comune
       extraDetails.push(
-        { label: 'DAE', value: (resp?.annualPercentageRate || 0).toFixed(2) + ' %' },
+        { label: 'DAE', value: this.formatNumber(resp?.annualPercentageRate || 0, 2) + ' %' },
         { label: 'Tip rate', value: ((this.rateType === 'egale') ? 'Rate egale' : 'Rate descrescătoare') }
       );
       
       // Avans - ascuns pentru refinanțare
       if (this.selectedProductType !== 'refinantare') {
-        extraDetails.push({ label: 'Avans', value: ((resp?.downPayment?.amount) || 0).toFixed(2) + ' Lei' });
+        extraDetails.push({ label: 'Avans', value: this.formatNumber((resp?.downPayment?.amount) || 0, 2) + ' Lei' });
       }
       
       extraDetails.push(
-        { label: 'Suma solicitată', value: ((resp?.loanAmount?.amount) || 0).toFixed(2) + ' Lei' },
-        { label: 'Valoarea totală plătibilă', value: ((resp?.totalPaymentAmount?.amount) || 0).toFixed(2) + ' Lei' }
+        { label: 'Suma solicitată', value: this.formatNumber((resp?.loanAmount?.amount) || 0, 2) + ' Lei' },
+        { label: 'Valoarea totală plătibilă', value: this.formatNumber((resp?.totalPaymentAmount?.amount) || 0, 2) + ' Lei' }
       );
 
       // Product-specific extra details
@@ -1266,15 +1283,15 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         const noDoc = (resp?.noDocAmount) as number | undefined;
         const minGuarantee = resp?.minGuaranteeAmount as number | undefined;
         if (typeof noDoc === 'number') {
-          extraDetails.push({ label: 'Sume fără justificare', value: (noDoc || 0).toFixed(2) + ' Lei' });
+          extraDetails.push({ label: 'Sume fără justificare', value: this.formatNumber(noDoc || 0, 2) + ' Lei' });
         }
         if (typeof minGuarantee === 'number') {
-          extraDetails.push({ label: 'Valoare minimă a garanției', value: (minGuarantee || 0).toFixed(2) + ' Lei' });
+          extraDetails.push({ label: 'Valoare minimă a garanției', value: this.formatNumber(minGuarantee || 0, 2) + ' Lei' });
         }
       } else if (this.selectedProductType === 'refinantare') {
         const minGuarantee = resp?.minGuaranteeAmount as number | undefined;
         if (typeof minGuarantee === 'number') {
-          extraDetails.push({ label: 'Valoare minimă a garanției', value: (minGuarantee || 0).toFixed(2) + ' Lei' });
+          extraDetails.push({ label: 'Valoare minimă a garanției', value: this.formatNumber(minGuarantee || 0, 2) + ' Lei' });
         }
       }
 
@@ -1285,14 +1302,14 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         title: titles[idx] || '',
         leftTop: {
           label: 'Dobândă inițială',
-          amount: (resp?.nominalInterestRate || 0).toFixed(2),
+          amount: this.formatNumber(resp?.nominalInterestRate || 0, 2),
           currency: '%'
         },
         rightTop: {
           label: this.interestType === 'variabila' ? 'Rată lunară variabilă' : 'Rată lunară de plată',
           amount: this.interestType === 'variabila' 
-            ? (resp?.monthlyInstallment?.amountVariableInterest || 0).toFixed(2)
-            : (resp?.monthlyInstallment?.amountFixedInterest || 0).toFixed(2),
+            ? this.formatNumber(resp?.monthlyInstallment?.amountVariableInterest || 0, 2)
+            : this.formatNumber(resp?.monthlyInstallment?.amountFixedInterest || 0, 2),
           currency: 'Lei/lună'
         },
         leftBottom: undefined,

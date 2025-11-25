@@ -13,16 +13,21 @@
   &__label {
     display: block;
     margin-bottom: var(--text-field-label-spacing, 2px);
-    font-size: var(--text-field-font-size, 16px);
-    font-weight: var(--text-field-font-weight, 400);
-    line-height: var(--text-field-line-height, 24px);
-    color: var(--text-field-label-default);
+    font-family: inherit;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: 24px !important;
+    font-style: normal;
+    color: var(--label-muted, var(--color-text-secondary));
+    margin: 0;
+    padding: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
     user-select: none;
 
     &--required::after {
-      content: '*';
-      color: inherit;
-      margin-left: 2px;
+      content: ' *';
+      color: var(--color-error-primary);
     }
   }
 

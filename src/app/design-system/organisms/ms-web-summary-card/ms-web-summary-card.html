@@ -121,7 +121,11 @@
 
 			<!-- Actions area -->
 			<div class="ms-web-summary-card__stack-12">
-				<ms-button-primary [label]="primaryButtonLabel" (clicked)="onPrimaryClick()"></ms-button-primary>
+				<ms-button-primary 
+					[label]="primaryButtonLabel" 
+					[title]="'Apasă pentru a accesa formularul'"
+					(clicked)="onPrimaryClick()">
+				</ms-button-primary>
 				<div class="ms-web-summary-card__footnote">{{ footnoteText }}</div>
 			</div>
 		</div>

@@ -142,7 +142,7 @@
 			<ms-info-contained-cell
 				*ngIf="selectedProductType !== 'refinantare'"
 				type="info"
-				[text]="'Suma solicitată: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
+				[text]="'Suma solicitată: ' + formatNumber(requestedAmount, 2) + ' Lei'">
 			</ms-info-contained-cell>
  			
 			<!-- Interest Preferences Section -->
@@ -286,6 +286,25 @@
     </div>
   </footer>
 
+  <!-- Standard Footer Section (Desktop) -->
+  <footer class="ms-simulator-page__standard-footer ms-simulator-page__standard-footer--desktop">
+    <div class="ms-simulator-page__standard-footer-container">
+      <nav class="ms-simulator-page__standard-footer-nav">
+        <a href="https://www.raiffeisen.ro/ro/despre-noi.html" class="ms-simulator-page__standard-footer-link">Despre noi</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="https://www.raiffeisen.ro/ro/despre-noi/termeni-si-conditii.html" class="ms-simulator-page__standard-footer-link">Termeni si conditii</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="https://www.raiffeisen.ro/ro/despre-noi/politica-de-utilizare-cookies.html" class="ms-simulator-page__standard-footer-link">Politica de utilizare cookies</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="https://www.raiffeisen.ro/ro/despre-noi/politica-de-confidentialitate.html" class="ms-simulator-page__standard-footer-link">Politica de confidentialitate</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="https://www.raiffeisen.ro" class="ms-simulator-page__standard-footer-link">Raiffeisen.ro website</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="#" class="ms-simulator-page__standard-footer-link ot-sdk-show-settings" (click)="onCookiePreferencesClick($event)">Cookie Preferences</a>
+      </nav>
+    </div>
+  </footer>
+
   <!-- Mobile Layout (<1024px) - Current behavior maintained -->
   <div class="ms-simulator-page__mobile-layout">
     
@@ -408,7 +427,7 @@
 			<ms-info-contained-cell
 				*ngIf="selectedProductType !== 'refinantare'"
 				type="info"
-				[text]="'Suma solicitată: ' + requestedAmount.toLocaleString('ro-RO', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Lei'">
+				[text]="'Suma solicitată: ' + formatNumber(requestedAmount, 2) + ' Lei'">
 			</ms-info-contained-cell>
  			
 			<!-- Interest Preferences Section -->
@@ -518,6 +537,25 @@
           </div>
         </details>
       </div>
+    </div>
+  </footer>
+
+  <!-- Standard Footer Section (Mobile) -->
+  <footer class="ms-simulator-page__standard-footer ms-simulator-page__standard-footer--mobile">
+    <div class="ms-simulator-page__standard-footer-container">
+      <nav class="ms-simulator-page__standard-footer-nav">
+        <a href="https://www.raiffeisen.ro/ro/despre-noi.html" class="ms-simulator-page__standard-footer-link">Despre noi</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="https://www.raiffeisen.ro/ro/despre-noi/termeni-si-conditii.html" class="ms-simulator-page__standard-footer-link">Termeni si conditii</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="https://www.raiffeisen.ro/ro/despre-noi/politica-de-utilizare-cookies.html" class="ms-simulator-page__standard-footer-link">Politica de utilizare cookies</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="https://www.raiffeisen.ro/ro/despre-noi/politica-de-confidentialitate.html" class="ms-simulator-page__standard-footer-link">Politica de confidentialitate</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="https://www.raiffeisen.ro" class="ms-simulator-page__standard-footer-link">Raiffeisen.ro website</a>
+        <span class="ms-simulator-page__standard-footer-separator">></span>
+        <a href="#" class="ms-simulator-page__standard-footer-link ot-sdk-show-settings" (click)="onCookiePreferencesClick($event)">Cookie Preferences</a>
+      </nav>
     </div>
   </footer>
 

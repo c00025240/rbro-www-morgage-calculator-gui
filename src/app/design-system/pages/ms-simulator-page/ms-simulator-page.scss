@@ -66,6 +66,16 @@
     padding-bottom: 120px;
     padding-left: 24px; // Match header container padding
     padding-right: 24px; // Match header container padding
+
+    @media (max-width: 1440px) {
+      padding-left: var(--space-2, 1rem);
+      padding-right: var(--space-2, 1rem);
+    }
+
+    @media (max-width: 1360px) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 }
 
@@ -170,6 +180,22 @@
     // No extra bottom padding; keep content tight to the bottom
     padding-bottom: 0;
 
+    // Tighten horizontal padding on lower desktop resolutions so all cards fit
+    @media (max-width: 1440px) {
+      padding-left: var(--space-3, 1.5rem);
+      padding-right: var(--space-3, 1.5rem);
+    }
+
+    @media (max-width: 1360px) {
+      padding-left: var(--space-2, 1rem);
+      padding-right: var(--space-2, 1rem);
+    }
+
+    @media (max-width: 1280px) {
+      padding-left: 0;
+      padding-right: var(--space-1, 0.5rem); // keep tiny right gutter so card shadow is visible
+    }
+
     // Summary cards grid: responsive grid layout - moved out of inner container
     .ms-simulator-page__right-content-grid {
       display: flex;
@@ -186,6 +212,8 @@
       // Responsive adjustments for different desktop sizes
       @media (min-width: 1400px) { gap: var(--space-4, 2rem); } // 32px
       @media (min-width: 1600px) { gap: var(--space-5, 2.5rem); } // 40px
+      @media (max-width: 1360px) { gap: var(--space-2, 1rem); }
+      @media (max-width: 1280px) { gap: var(--space-1-5, 0.75rem); }
       
       // Force spacing between summary card wrappers
       > .ms-simulator-page__summary-card-wrapper {
@@ -870,5 +898,112 @@ details[open] .ms-simulator-page__faq-icon {
     @media (max-width: 767px) {
       font-size: 14px;
     }
+  }
+}
+
+// ===================================
+// STANDARD FOOTER
+// ===================================
+
+.ms-simulator-page__standard-footer {
+  width: 100%;
+  background-color: #ffffff; // White background
+  padding: var(--space-6, 3rem) var(--space-3, 1.5rem);
+  box-sizing: border-box;
+  position: relative;
+  
+  // Shadow at the top like header shadow to create a clear separator
+  box-shadow: 0 -10px 15px -3px rgba(43, 45, 51, 0.12), 0 -4px 6px -2px rgba(43, 45, 51, 0.08);
+  
+  // Dark mode
+  :root[data-theme='dark'] & {
+    background-color: var(--bg-black, #1a1a1a);
+    box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.35), 0 -4px 6px -2px rgba(0, 0, 0, 0.25);
+  }
+  
+  // Desktop variant - in normal flow below FAQ footer
+  &--desktop {
+    @media (max-width: 1239px) {
+      display: none; // Hide on mobile
+    }
+    
+    @media (min-width: 1240px) {
+      position: relative;
+      margin-top: 0;
+      padding: var(--space-6, 3rem) var(--space-8, 4rem);
+    }
+  }
+  
+  // Mobile variant - below FAQ footer
+  &--mobile {
+    @media (min-width: 1240px) {
+      display: none; // Hide on desktop
+    }
+    
+    @media (max-width: 1239px) {
+      margin-top: 0;
+      padding: var(--space-6, 3rem) var(--space-3, 1.5rem);
+      padding-top: 40px; // Minimal space for fixed header on mobile - reduced
+      padding-bottom: calc(
+        40px + // Space moved from top
+        var(--ms-sticky-footer-height, 88px) +
+        var(--space-6, 3rem) +
+        max(env(safe-area-inset-bottom), 0px)
+      );
+    }
+  }
+}
+
+.ms-simulator-page__standard-footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.ms-simulator-page__standard-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  @media (max-width: 767px) {
+    gap: var(--space-1, 0.25rem);
+    font-size: 14px;
+  }
+}
+
+.ms-simulator-page__standard-footer-link {
+  font-family: var(--font-family-primary, 'Amalia'), sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #808080; // Light grey text color
+  text-decoration: none;
+  transition: color 0.2s ease;
+  
+  &:hover,
+  &:focus {
+    color: var(--color-text, #2B2D33);
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 767px) {
+    font-size: 14px;
+  }
+}
+
+.ms-simulator-page__standard-footer-separator {
+  color: #808080; // Light grey separator color
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  
+  @media (max-width: 767px) {
+    font-size: 14px;
   }
 } 

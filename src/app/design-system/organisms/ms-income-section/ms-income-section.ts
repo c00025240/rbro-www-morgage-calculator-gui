@@ -18,10 +18,11 @@ import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-
       <ms-card-outside-title
         title="Venitul tău"
         helperText="Influențează suma maximă pe care o poți împrumuta"
-        [hasHelper]="true">
+        [hasHelper]="true"
+        [surface]="cardSurface">
       </ms-card-outside-title>
 
-      <ms-card>
+      <ms-card [surface]="cardSurface">
         <div class="ms-income-section__content">
           <ms-text-field-custom
             label="Venitul tău lunar"
@@ -32,6 +33,7 @@ import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-
             [error]="incomeTooLow"
             [helperText]="incomeTooLow ? 'Venitul tău este mai mic decât suma minimă eligibilă' : undefined"
             [disabled]="disabled"
+            [surface]="cardSurface"
             (valueChange)="onMonthlyIncomeChange($event)">
           </ms-text-field-custom>
 
@@ -42,6 +44,7 @@ import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-
             suffixText="Lei"
             type="number"
             [disabled]="disabled"
+            [surface]="cardSurface"
             (valueChange)="onMonthlyInstallmentsChange($event)">
           </ms-text-field-custom>
         </div>

@@ -114,11 +114,22 @@ export class MsInterestReductionSection {
 
   formatSavings(value: number): string {
     const v = Math.abs(value || 0);
-    return `${v.toFixed(2)} Lei economisiți`;
+    return `${this.formatNumber(v, 2)} Lei economisiți`;
   }
 
   get totalSavings(): string {
-    return (this.totalSavingsAmount || 0).toFixed(2);
+    return this.formatNumber(this.totalSavingsAmount || 0, 2);
+  }
+
+  // Helper function to format numbers with Romanian format (punct for thousands, virgulă for decimals)
+  private formatNumber(value: number, decimals: number = 2): string {
+    if (value === null || value === undefined || isNaN(value)) {
+      return '0' + (decimals > 0 ? ',' + '0'.repeat(decimals) : '');
+    }
+    return new Intl.NumberFormat('ro-RO', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    }).format(value);
   }
 
   get effectiveSurface(): 'light' | 'dark' {
