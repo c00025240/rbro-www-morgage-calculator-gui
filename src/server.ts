@@ -5,13 +5,15 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import { dirname, resolve } from 'node:path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { serverConfig } from './environments/server.config.js';
 
-const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-const browserDistFolder = resolve(serverDistFolder, '../browser');
+const serverDistFolder = path.dirname(fileURLToPath(import.meta.url));
+const browserDistFolder = path.resolve(serverDistFolder, '../browser');
+const publicFolder = path.resolve(serverDistFolder, '..', '..', 'public');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
@@ -73,12 +75,10 @@ app.use('/districts', createProxyMiddleware({
 // Serve robots.txt and sitemap.xml dynamically from environment variables
 // Files are copied to browser dist during build, so we read from there
 app.get('/robots.txt', (req, res) => {
-  const fs = require('fs');
-  const path = require('path');
   // Try browser dist first (after build), then public folder (for development)
   const robotsPaths = [
     path.join(browserDistFolder, 'robots.txt'),
-    path.join(__dirname, '..', '..', 'public', 'robots.txt')
+    path.join(publicFolder, 'robots.txt')
   ];
   
   let robotsContent = null;
@@ -112,12 +112,10 @@ app.get('/robots.txt', (req, res) => {
 });
 
 app.get('/sitemap.xml', (req, res) => {
-  const fs = require('fs');
-  const path = require('path');
   // Try browser dist first (after build), then public folder (for development)
   const sitemapPaths = [
     path.join(browserDistFolder, 'sitemap.xml'),
-    path.join(__dirname, '..', '..', 'public', 'sitemap.xml')
+    path.join(publicFolder, 'sitemap.xml')
   ];
   
   let sitemapContent = null;
