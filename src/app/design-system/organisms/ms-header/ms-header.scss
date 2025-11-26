@@ -178,14 +178,14 @@
 			@media (min-width: 1441px) {
 				// Layout padding: 24px, content padding: var(--space-4, 2rem) = 32px
 				// Total: 24px + 35vw + 32px
-				left: calc(24px + 35vw + var(--space-4, 2rem));
+				left: calc(5px + 35vw + var(--space-4, 2rem));
 			}
 			
 			// 1361px to 1440px: layout padding 1rem (16px), content padding 1.5rem (24px)
 			@media (min-width: 1361px) and (max-width: 1440px) {
 				// Layout padding: var(--space-2, 1rem) = 16px, content padding: var(--space-3, 1.5rem) = 24px
 				// Total: 16px + 35vw + 24px
-				left: calc(var(--space-2, 1rem) + 35vw + var(--space-3, 1.5rem));
+				left: calc(5px + 35vw + var(--space-3, 1.5rem));
 			}
 			
 			// 1281px to 1360px: layout padding 0, content padding 1rem (16px)

@@ -145,8 +145,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   downPaymentErrorMessage?: string; // Error message for down payment validation
   
   // Property Location Section configuration
-  @Input() selectedCounty: string = 'BUCURESTI';
-  @Input() selectedCity: string = 'BUCURESTI';
+  @Input() selectedCounty: string = 'București';
+  @Input() selectedCity: string = 'București';
   
   // Districts data for location dropdowns
   districts: District[] = [];
