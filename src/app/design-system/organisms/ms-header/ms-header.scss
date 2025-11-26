@@ -61,12 +61,28 @@
 		
 		@media (min-width: 1240px) {
 			position: absolute;
-			// Align with left panel content start: layout padding + centering offset + content padding
+			// Align exactly with left panel content start
+			// Formula: layout padding + centering offset (if content is narrower than panel) + content left padding
+			// Left content has: max-width 800px, margin 0 auto (centered), padding 0 var(--space-4, 2rem)
 			left: calc(24px + max(0px, (35vw - 800px) / 2) + var(--space-4, 2rem));
 			top: 50%;
 			transform: translateY(-50%);
 			z-index: 1;
 		}
+		
+		// Responsive adjustments - match exact layout padding from ms-simulator-page__desktop-layout
+		@media (min-width: 1240px) and (max-width: 1440px) {
+			// Layout padding: var(--space-2, 1rem), content padding: var(--space-4, 2rem)
+			left: calc(var(--space-2, 1rem) + max(0px, (35vw - 800px) / 2) + var(--space-4, 2rem));
+		}
+		
+		@media (min-width: 1240px) and (max-width: 1360px) {
+			// Layout padding: 0, content padding: var(--space-4, 2rem)
+			left: calc(max(0px, (35vw - 800px) / 2) + var(--space-4, 2rem));
+		}
+		
+		// Note: left-content padding stays var(--space-4, 2rem) at all desktop sizes
+		// Only layout padding changes, so no need for 1280px breakpoint adjustment
 	}
 	
 	&__logo { 
@@ -141,16 +157,49 @@
 				display: none; // Hide on mobile/tablet
 			}
 			
+			// Base positioning for all desktop sizes
 			@media (min-width: 1240px) { 
 				position: absolute; 
 				top: 50%; 
-				// Align with right panel content start: layout padding (24px) + left panel width (35vw) + right content left padding (32px) - slight adjustment to move left
-				left: calc(24px + 35vw + var(--space-4, 2rem) - 16px);
 				transform: translateY(-50%); 
 				max-width: none; 
 				z-index: 1;
 				margin: 0;
 				padding: 0;
+			}
+			
+			// Responsive left positioning - match exact layout and right-content padding
+			// Order matters: more specific (smaller ranges) must come AFTER less specific ones
+			// This ensures CSS cascade applies the correct value for each resolution
+			// Note: right-content has a 24px spacer before the grid, so we align with the actual content start
+			// Formula: layout padding + 35vw + content padding (spacer is inside content, so already accounted for)
+			
+			// Default for largest screens (>1440px)
+			@media (min-width: 1441px) {
+				// Layout padding: 24px, content padding: var(--space-4, 2rem) = 32px
+				// Total: 24px + 35vw + 32px
+				left: calc(24px + 35vw + var(--space-4, 2rem));
+			}
+			
+			// 1361px to 1440px: layout padding 1rem (16px), content padding 1.5rem (24px)
+			@media (min-width: 1361px) and (max-width: 1440px) {
+				// Layout padding: var(--space-2, 1rem) = 16px, content padding: var(--space-3, 1.5rem) = 24px
+				// Total: 16px + 35vw + 24px
+				left: calc(var(--space-2, 1rem) + 35vw + var(--space-3, 1.5rem));
+			}
+			
+			// 1281px to 1360px: layout padding 0, content padding 1rem (16px)
+			@media (min-width: 1281px) and (max-width: 1360px) {
+				// Layout padding: 0, content padding: var(--space-2, 1rem) = 16px
+				// Total: 35vw + 16px
+				left: calc(35vw + var(--space-2, 1rem));
+			}
+			
+			// 1240px to 1280px: layout padding 0, content padding 0
+			@media (min-width: 1240px) and (max-width: 1280px) {
+				// Layout padding: 0, content padding: 0
+				// Total: 35vw
+				left: calc(35vw);
 			} 
 		}
 	}

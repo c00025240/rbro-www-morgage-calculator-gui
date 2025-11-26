@@ -33,6 +33,13 @@
 	/* Remove reliance on :has() for browser support */
 	/* previous :has() variants removed in favor of explicit classes */
 
+	/* Base KPI styles - must come before media queries */
+	&__kpi { margin: var(--space-2, 8px) 0; }
+	&__kpi-label { font-size: var(--font-size-lg, 1.125rem); color: var(--color-text-secondary); margin-bottom: var(--space-1, 4px); }
+	&__kpi-amount { display: flex; align-items: baseline; gap: 8px; }
+	&__kpi-amount .value { font-size: 3rem; font-weight: var(--font-weight-bold, 700); color: var(--color-text-primary); letter-spacing: 0.5px; }
+	&__kpi-amount .currency { font-size: var(--font-size-base, 1rem); color: var(--color-text-primary); }
+
 	/* Responsive tweaks */
 	@media (max-width: 1024px) {
 		&__offers-grid.cols-2 { grid-template-columns: 1fr; }
@@ -82,11 +89,6 @@
 		margin: 0 calc(var(--space-2, 16px) * -1) var(--space-2, 8px);
 		display: block;
 	}
-	&__kpi { margin: var(--space-2, 8px) 0; }
-	&__kpi-label { font-size: var(--font-size-lg, 1.125rem); color: var(--color-text-secondary); margin-bottom: var(--space-1, 4px); }
-	&__kpi-amount { display: flex; align-items: baseline; gap: 8px; }
-	&__kpi-amount .value { font-size: 3rem; font-weight: var(--font-weight-bold, 700); color: var(--color-text-primary); letter-spacing: 0.5px; }
-	&__kpi-amount .currency { font-size: var(--font-size-base, 1rem); color: var(--color-text-primary); }
 	&__secondary-info { display: flex; gap: 8px; align-items: baseline; color: var(--color-text-secondary); font-size: var(--font-size-base, 1rem); margin-bottom: var(--space-2, 8px); }
 	&__secondary-info .label { color: var(--color-text-secondary); }
 	&__secondary-info .value { font-weight: var(--font-weight-semibold, 600); color: var(--color-text-primary); }
