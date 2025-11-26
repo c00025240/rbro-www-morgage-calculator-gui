@@ -64,6 +64,14 @@
 		&__secondary-info { font-size: 0.95rem; }
 		&__actions-row { gap: 8px; }
 	}
+	@media (min-width: 1281px) and (max-width: 1600px) {
+		&__content { padding: 14px; }
+		&__stack-12 { gap: 10px; }
+		&__offers-grid { gap: var(--space-1, 0.5rem); }
+		&__kpi-amount .currency { font-size: 0.875rem; }
+		&__secondary-info { font-size: 0.95rem; }
+		&__actions-row { gap: 8px; }
+	}
 	@media (max-width: 1220px) {
 		&__content { padding: 12px; }
 		&__stack-12 { gap: 8px; }
