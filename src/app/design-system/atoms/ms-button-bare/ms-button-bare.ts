@@ -154,7 +154,6 @@ export class MsButtonBare implements OnInit, OnChanges, OnDestroy {
       `${iconName} Style=outline.svg`       // e.g., bookmark Style=outline.svg (no d)
     ];
 
-    console.log(`🔍 Will try these filenames:`, possibleFilenames);
     this.tryLoadIconFiles(possibleFilenames, 0);
   }
 
@@ -171,8 +170,6 @@ export class MsButtonBare implements OnInit, OnChanges, OnDestroy {
     const filename = filenames[index];
     // Always use proper URL encoding - Angular HttpClient handles this correctly
     const url = `/assets/icons/${encodeURIComponent(filename)}`;
-    
-    console.log(`🌐 Trying to load: ${url}`);
 
     this.http.get(url, { responseType: 'text' })
       .pipe(
@@ -186,7 +183,6 @@ export class MsButtonBare implements OnInit, OnChanges, OnDestroy {
       )
       .subscribe((svgContent: string | null) => {
         if (svgContent) {
-          console.log(`✅ Successfully loaded: ${url}`);
           // Process SVG to remove hardcoded fills before injection
           const processedSvg = this.processSvgContent(svgContent);
           const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);
@@ -218,8 +214,7 @@ export class MsButtonBare implements OnInit, OnChanges, OnDestroy {
     processedSvg = processedSvg.replace(/\s+/g, ' ');
     
     const wasModified = originalSvg !== processedSvg;
-    console.log(`🎨 SVG Processing ${wasModified ? '✅ MODIFIED' : '⚪ UNCHANGED'} - replaced hardcoded fills with currentColor`);
-    
+
     if (wasModified) {
       console.log(`📝 Before: ${originalSvg.substring(0, 200)}...`);
       console.log(`📝 After:  ${processedSvg.substring(0, 200)}...`);

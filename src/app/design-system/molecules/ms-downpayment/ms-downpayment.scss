@@ -43,9 +43,12 @@
     display: flex;
     align-items: center;
     margin: 0; // Remove margin that was causing right shift
-    
-    // Prevent horizontal page scrolling during slider interaction
-    touch-action: pan-y pinch-zoom; // Allow vertical scrolling and zoom, prevent horizontal
+
+    // CRITICAL: Prevent browser from handling ANY touch gestures on the slider
+    // This allows smooth dragging without the browser trying to scroll/zoom
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
     overflow: visible; // Allow handle overflow to be visible
   }
 
@@ -88,7 +91,13 @@
     z-index: 3;
     pointer-events: none; // Let the input handle the interaction
     will-change: left, transform; // Optimize for animation
-    
+
+    // Mobile: Larger touch target (Apple recommends 44px minimum)
+    @media (max-width: 1023px) {
+      width: 36px;
+      height: 36px;
+    }
+
     &:hover {
       transform: translate(-50%, -50%) scale(1.1);
       background: var(--slider-thumb-bg-hover-default);
@@ -178,10 +187,12 @@
     cursor: pointer;
     z-index: 4;
     margin: 0;
-    
-    // Prevent horizontal page scrolling during slider interaction
-    touch-action: pan-y pinch-zoom; // Allow vertical scrolling and zoom, prevent horizontal
-    overscroll-behavior-x: none; // Prevent horizontal overscroll
+
+    // CRITICAL: Prevent browser from handling ANY touch gestures on the slider input
+    // This allows smooth dragging without lag from browser scroll detection
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
 
     // Hide all default styling
     &::-webkit-slider-thumb {
@@ -192,6 +203,12 @@
       background: transparent;
       cursor: pointer;
       border: none;
+
+      // Mobile: Larger touch target
+      @media (max-width: 1023px) {
+        width: 36px;
+        height: 36px;
+      }
     }
 
     &::-moz-range-thumb {
@@ -201,6 +218,12 @@
       cursor: pointer;
       border: none;
       border-radius: 0;
+
+      // Mobile: Larger touch target
+      @media (max-width: 1023px) {
+        width: 36px;
+        height: 36px;
+      }
     }
 
     &::-webkit-slider-runnable-track {

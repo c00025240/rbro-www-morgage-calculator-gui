@@ -1,10 +1,29 @@
 @use '../../tokens';
 
-// Prevent horizontal scrolling on the entire page
+// Define sticky footer height for consistent padding calculations
+:root {
+  --ms-sticky-footer-height: 140px; // Sticky footer height including padding and safe area
+}
+
+// Host element styles
 .ms-simulator-page {
-  overflow-x: hidden;
   touch-action: pan-y pinch-zoom;
   overscroll-behavior-x: none;
+
+  // Desktop: Can use overflow-x: hidden safely since sticky isn't needed here
+  @media (min-width: 1240px) {
+    overflow-x: hidden;
+  }
+
+  // Mobile: MUST use overflow: visible to allow sticky positioning to work
+  // Setting overflow-x: hidden would make overflow-y compute to 'auto', creating a scroll container
+  @media (max-width: 1239px) {
+    display: block;
+    width: 100%;
+    min-height: 100%;
+    height: auto;
+    overflow: visible !important; // CRITICAL for sticky to work
+  }
   
   // Unified spacing: ensure identical space between any ms-card-outside-title and the next block (card/component)
   ms-card-outside-title + * {
@@ -31,8 +50,8 @@
     ::ng-deep ms-page-shell,
     ::ng-deep .ms-page-shell {
       max-width: none !important;
-      width: 100vw !important;
-      min-height: calc(100vh + 160px);
+      width: 100% !important; // Use 100% instead of 100vw to avoid scrollbar width issues
+      min-height: 100vh;
       background-color: var(--sim-left-panel-bg, #f3ede5);
       margin: 0 !important;
       padding: 0 !important;
@@ -53,9 +72,9 @@
   
   @media (min-width: 1240px) {
     display: flex;
-    width: 100vw !important;
+    width: 100% !important; // Use 100% instead of 100vw to avoid scrollbar width issues
     box-sizing: border-box;
-    min-height: calc(100vh + 120px);
+    min-height: auto;
     position: relative;
     top: 0;
     left: 0;
@@ -90,7 +109,7 @@
     display: flex;
     flex-direction: column;
     width: 35%;
-    min-height: calc(100vh - 120px);
+    min-height: auto;
     box-sizing: border-box; // Include padding in panel width
     overflow-x: hidden;
     position: relative;
@@ -113,17 +132,12 @@
     max-width: 800px; // Restore centered content width
     margin: 0 auto; // Center the content container
     padding: 0 var(--space-4, 2rem) 0 var(--space-4, 2rem); // Increased left and right padding
-    height: calc(100vh - 120px); // Make content the scroll container
-    overflow-y: auto; // Scrollbar on content
-    overflow-x: hidden;
-    scrollbar-gutter: stable both-edges; // Reserve scrollbar space
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin; // Firefox
+    height: auto;
+    overflow: visible;
     box-sizing: border-box;
     align-items: flex-start; // Align to left to match logo
     justify-content: flex-start;
-    overflow-x: hidden; // Prevent horizontal overflow
-    
+
     // No top spacer needed - panels start below header
     // Remove bottom spacer
     &::after { content: none; display: none; height: 0; width: 0; }
@@ -139,7 +153,7 @@
     display: flex;
     flex-direction: column;
     width: 65%;
-    min-height: calc(100vh - 120px);
+    min-height: auto;
     box-sizing: border-box; // Include padding in panel width
     overflow-x: hidden;
     position: relative;
@@ -162,12 +176,8 @@
     max-width: 100%; // Remove fixed max-width to make grid fully responsive
     margin: 0 auto; // Center the content container
     padding: 0 var(--space-4, 2rem) 0 var(--space-4, 2rem); // Increased left and right padding
-    height: calc(100vh - 120px); // Match left panel: fixed height for scroll container
-    overflow-y: auto; // Enable vertical scrolling like left panel
-    overflow-x: hidden;
-    scrollbar-gutter: stable both-edges; // Reserve scrollbar space
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin; // Firefox
+    height: auto;
+    overflow: visible;
     box-sizing: border-box;
     align-items: flex-start; // Align to left to match title
     justify-content: flex-start;
@@ -278,20 +288,18 @@
   // Only show on mobile/tablet (completely replaces desktop split-screen)
   @media (min-width: 1240px) { display: none !important; visibility: hidden; }
   @media (max-width: 1239px) {
-    display: flex !important;
+    display: block !important; // Use block instead of flex - better for sticky positioning
     visibility: visible;
     width: 100%;
-    min-height: 100vh;
-    flex-direction: column;
-    overflow: hidden;
+    overflow: visible; // Let parent scroll, not this container
     touch-action: pan-y pinch-zoom;
     overscroll-behavior: contain;
-    padding-top: 80px; // Space for fixed header on mobile (~80px effective height)
+    padding-top: 0; // Header is no longer fixed, scrolls with content
     box-sizing: border-box;
-    
+
     // Light mode background
     background-color: var(--surface-warm-grey);
-    
+
     // Dark mode background
     :root[data-theme='dark'] & {
       background-color: var(--bg-black);
@@ -301,22 +309,18 @@
 
 .ms-simulator-page__content {
   @media (max-width: 1239px) {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
+    display: block; // Use block layout
     width: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: visible; // No nested scroll - let the page/body scroll
     touch-action: pan-y pinch-zoom;
-    overflow-x: hidden;
-    overscroll-behavior: contain;
-    padding: 0 0 calc(var(--space-8, 4rem) + var(--space-3, 1.5rem)) 0; // reserve space for sticky footer (88px)
+    // Reserve space for sticky footer (88px) + safe area for notched devices (iPhone X+)
+    padding: 0 0 calc(var(--space-8, 4rem) + var(--space-3, 1.5rem) + env(safe-area-inset-bottom, 0px)) 0;
     box-sizing: border-box;
-    
+
     // Light mode background
     background-color: var(--surface-warm-grey);
-    
-    // Dark mode background  
+
+    // Dark mode background
     :root[data-theme='dark'] & {
       background-color: var(--bg-black);
     }
@@ -334,22 +338,40 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  
-  // Mobile and tablet: edge-to-edge, no gap from header
-  @media (max-width: 1239px) {
-    display: flex !important; // Ensure hero is visible on mobile
-    visibility: visible !important;
-    margin-top: 0;
-    margin-bottom: 0;
-    width: 100%;
-    max-width: 100%;
-    // Match mobile inputs horizontal padding
-    padding: 0 var(--space-3, 1.5rem);
-    box-sizing: border-box;
-    min-height: 64px; // Ensure hero has minimum height on mobile
+
+  // Mobile-only hero variant (outside mobile-layout for sticky)
+  &--mobile-only {
+    // Hidden on desktop
+    @media (min-width: 1240px) {
+      display: none !important;
+    }
+
+    // Visible and STICKY on mobile
+    @media (max-width: 1239px) {
+      display: block !important;
+      visibility: visible !important;
+      margin-top: 0;
+      margin-bottom: 0;
+      width: 100%;
+      max-width: 100%;
+      padding: 8px var(--space-3, 1.5rem) 12px;
+      box-sizing: border-box;
+      min-height: 64px;
+
+      // STICKY behavior
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 50;
+      background-color: var(--surface-warm-grey);
+
+      :root[data-theme='dark'] & {
+        background-color: var(--bg-black);
+      }
+    }
   }
-  
-  // Desktop: same centered behavior as mobile
+
+  // Desktop: same centered behavior
   @media (min-width: 1240px) {
     margin-top: 0;
     margin-bottom: 0;
@@ -360,10 +382,40 @@
     box-sizing: border-box;
     align-items: stretch;
     justify-content: flex-start;
-    
+
     // Ensure inner component fills the available width
     > * { width: 100%; margin: 0; }
     .ms-simulator-swap-hero { width: 100%; margin: 0 !important; }
+  }
+}
+
+// Sticky hero shadow - only for mobile-only hero
+.ms-simulator-page__hero--mobile-only::after {
+  @media (max-width: 1239px) {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 16px;
+    background: linear-gradient(
+      to bottom,
+      rgba(43, 45, 51, 0.12) 0%,
+      rgba(43, 45, 51, 0.06) 30%,
+      rgba(43, 45, 51, 0) 100%
+    );
+    pointer-events: none;
+    transform: translateY(100%);
+
+    // Dark mode shadow
+    :root[data-theme='dark'] & {
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.25) 0%,
+        rgba(0, 0, 0, 0.12) 30%,
+        rgba(0, 0, 0, 0) 100%
+      );
+    }
   }
 }
 
@@ -422,6 +474,27 @@
   overscroll-behavior-x: none;
   align-items: stretch; // Inputs align uniformly from the same start edge
   justify-content: flex-start;
+  position: relative; // For loading overlay positioning
+
+  // Loading state - reduce opacity and block interactions
+  &--loading {
+    opacity: 0.6;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // Loading overlay - invisible blocker to prevent clicks
+  &__loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    cursor: wait;
+    // Transparent but blocks all interactions
+    background: transparent;
+  }
   
   // Mobile and tablet: 16px left/right padding, 8px top padding, 24px bottom padding, 24px gaps
   @media (max-width: 1239px) {
@@ -704,6 +777,31 @@
   }
 }
 
+// State icons for error and default states
+.ms-simulator-page__state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: var(--space-2, 8px);
+
+  &--error {
+    background-color: var(--error-10, #fce8ea);
+    color: var(--color-error, var(--error-default, #e61e33));
+    border: 2px solid var(--error-30, #f7bbc1);
+  }
+
+  &--default {
+    background-color: var(--accent-10, #e6f4f5);
+    color: var(--accent-default, #037080);
+    border: 2px solid var(--accent-30, #b3dde2);
+  }
+}
+
 // Error wrapper styling for 422 messages
 .ms-simulator-page__error-wrapper {
   margin-bottom: var(--space-4, 1.5rem);
@@ -774,8 +872,12 @@
     @media (min-width: 1240px) {
       display: none; // Hide on desktop
     }
-    
+
     @media (max-width: 1239px) {
+      display: block; // Explicitly ensure visibility
+      position: relative; // Ensure proper stacking context
+      z-index: 1; // Above any potential overlays but below sticky footer
+      flex-shrink: 0; // Prevent collapsing in flex container
       margin-top: 0;
       padding-bottom: calc(
         var(--ms-sticky-footer-height, 88px) +
@@ -939,8 +1041,12 @@ details[open] .ms-simulator-page__faq-icon {
     @media (min-width: 1240px) {
       display: none; // Hide on desktop
     }
-    
+
     @media (max-width: 1239px) {
+      display: block; // Explicitly ensure visibility
+      position: relative; // Ensure proper stacking context
+      z-index: 1; // Above any potential overlays but below sticky footer
+      flex-shrink: 0; // Prevent collapsing in flex container
       margin-top: 0;
       padding: var(--space-6, 3rem) var(--space-3, 1.5rem);
       padding-top: 40px; // Minimal space for fixed header on mobile - reduced

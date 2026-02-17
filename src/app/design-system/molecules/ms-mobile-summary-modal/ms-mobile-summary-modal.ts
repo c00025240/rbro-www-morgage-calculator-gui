@@ -3,6 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MsButtonPrimary } from '../../atoms/ms-button-primary/ms-button-primary';
 import { MsButtonSecondary } from '../../atoms/ms-button-secondary/ms-button-secondary';
 
+interface CostBreakdownItem {
+  label: string;
+  value: string;
+  frequency?: string;
+  type: 'fee' | 'insurance' | 'discount' | 'principal' | 'interest';
+}
+
 interface Offer {
   title: string;
   type?: string; // semantic offer type for styling
@@ -20,6 +27,8 @@ interface Offer {
   downPaymentInfoNote?: string; // construction note when gap > 0
   interestType?: string; // 'fixa_3', 'fixa_5', 'variabila'
   productType?: string; // 'achizitie-imobil', 'refinantare', 'constructie-renovare', 'credit-venit'
+  costBreakdown?: CostBreakdownItem[];
+  scheduleUrl?: string; // URL for payment schedule PDF download
 }
 
 @Component({
@@ -34,10 +43,14 @@ export class MsMobileSummaryModalComponent {
   @Input() offers: Offer[] = [];
   @Output() closed = new EventEmitter<void>();
   @Output() applyClicked = new EventEmitter<void>();
+  @Output() scheduleDownloadClicked = new EventEmitter<{ index: number; url: string }>();
 
   currentOfferIndex: number = 0;
   private lastDirection: 'next' | 'prev' | 'none' = 'none';
   private animationNonce: number = 0;
+
+  // Cost breakdown expand state
+  isCostBreakdownExpanded: boolean = false;
 
   // Swipe gesture properties
   private touchStartX: number = 0;
@@ -162,6 +175,35 @@ export class MsMobileSummaryModalComponent {
     return this.getCurrentOffer().totalAmount;
   }
 
+  getCostBreakdown(): CostBreakdownItem[] {
+    return this.getCurrentOffer().costBreakdown || [];
+  }
+
+  hasCostBreakdown(): boolean {
+    const breakdown = this.getCostBreakdown();
+    return breakdown.length > 0;
+  }
+
+  toggleCostBreakdown(): void {
+    this.isCostBreakdownExpanded = !this.isCostBreakdownExpanded;
+  }
+
+  getScheduleUrl(): string | undefined {
+    return this.getCurrentOffer().scheduleUrl;
+  }
+
+  hasScheduleUrl(): boolean {
+    return !!this.getScheduleUrl();
+  }
+
+  onScheduleDownload(): void {
+    const url = this.getScheduleUrl();
+    if (url) {
+      this.scheduleDownloadClicked.emit({ index: this.currentOfferIndex, url });
+      window.open(url, '_blank');
+    }
+  }
+
   getTitle(): string {
     return this.getCurrentOffer().title;
   }
@@ -194,6 +236,7 @@ export class MsMobileSummaryModalComponent {
     }
     this.lastDirection = 'prev';
     this.animationNonce++;
+    this.isCostBreakdownExpanded = false; // Reset cost breakdown on offer change
     this.cdr.markForCheck();
   }
 
@@ -205,6 +248,7 @@ export class MsMobileSummaryModalComponent {
     }
     this.lastDirection = 'next';
     this.animationNonce++;
+    this.isCostBreakdownExpanded = false; // Reset cost breakdown on offer change
     this.cdr.markForCheck();
   }
 

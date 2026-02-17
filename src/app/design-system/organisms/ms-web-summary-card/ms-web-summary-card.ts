@@ -30,6 +30,8 @@ export class MsWebSummaryCard {
     type?: string; // semantic type for styling per offer
     extraDetails?: Array<{ label: string; value: string }>;
     infoNote?: string; // optional informational note rendered below details
+    costBreakdown?: Array<{ label: string; value: string; frequency?: string; type: string }>;
+    scheduleUrl?: string; // URL for payment schedule PDF download
   }>;
   @Input() primaryButtonLabel: string = '';
   @Input() secondaryButtonLabel: string = '';
@@ -48,6 +50,7 @@ export class MsWebSummaryCard {
 
   @Output() primaryClicked = new EventEmitter<void>();
   @Output() secondaryClicked = new EventEmitter<void>();
+  @Output() scheduleDownloadClicked = new EventEmitter<{ index: number; url: string }>();
 
   // Optional expandable details area (legacy single-mode)
   @Input() extraDetails?: Array<{ label: string; value: string }>;
@@ -59,6 +62,11 @@ export class MsWebSummaryCard {
   isExpandedIndex(index: number): boolean { return this.isExpandedAll; }
   toggleDetailsIndex(index: number): void { this.isExpandedAll = !this.isExpandedAll; }
 
+  // Cost breakdown expand state (per column)
+  private costBreakdownExpandedMap: { [index: number]: boolean } = {};
+  isCostBreakdownExpanded(index: number): boolean { return this.costBreakdownExpandedMap[index] || false; }
+  toggleCostBreakdown(index: number): void { this.costBreakdownExpandedMap[index] = !this.costBreakdownExpandedMap[index]; }
+
   getOfferHeadingClass(col: { title?: string; type?: string }): string {
     const rawType = (col.type || '').toLowerCase().trim();
     const title = (col.title || '').toLowerCase();
@@ -68,4 +76,12 @@ export class MsWebSummaryCard {
 
   onPrimaryClick(): void { this.primaryClicked.emit(); }
   onSecondaryClick(): void { this.secondaryClicked.emit(); }
+
+  onScheduleDownload(index: number, url: string): void {
+    this.scheduleDownloadClicked.emit({ index, url });
+    // Default behavior: open PDF in new tab
+    if (url) {
+      window.open(url, '_blank');
+    }
+  }
 } 

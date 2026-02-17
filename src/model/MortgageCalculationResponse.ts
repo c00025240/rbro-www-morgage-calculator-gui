@@ -5,11 +5,11 @@ import { LoanCosts } from "./LoanCosts";
 import { MonthlyInstallment } from "./MonthlyInstallment";
 
 export class MortgageCalculationResponse {
-    interestRateType: InterestRateType; 
+    interestRateType: InterestRateType;
     nominalInterestRate: number;
-    interestRateFormula: InterestRateFormula; 
-    loanAmount: Amount; 
-    maxAmount: Amount; 
+    interestRateFormula: InterestRateFormula;
+    loanAmount: Amount;
+    maxAmount: Amount;
     downPayment: Amount;
     downPaymentDiscountGap: number;
     loanAmountWithFee: Amount;
@@ -21,4 +21,5 @@ export class MortgageCalculationResponse {
     annualPercentageRate: number;
     noDocAmount: number;
     minGuaranteeAmount: number;
+    scheduleUrl?: string; // URL for payment schedule PDF download (BE team will populate)
 }

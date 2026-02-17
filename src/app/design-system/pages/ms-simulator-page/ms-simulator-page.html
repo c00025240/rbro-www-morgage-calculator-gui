@@ -19,6 +19,20 @@
     (logoClicked)="onHeaderLogoClick($event)">
   </ms-header>
 
+  <!-- Mobile STICKY Hero - immediately after header for proper sticky behavior -->
+  <div class="ms-simulator-page__hero ms-simulator-page__hero--mobile-only">
+    <ms-simulator-swap-hero
+      [variant]="heroVariant"
+      [label]="heroLabel"
+      [chipLabel]="heroChipLabel"
+      [surface]="surface"
+      [hasClose]="heroHasClose"
+      [disabled]="heroDisabled"
+      (chipClicked)="onHeroChipClick()"
+      (closeClicked)="onHeroCloseClick()">
+    </ms-simulator-swap-hero>
+  </div>
+
   <!-- Desktop Split-Screen Layout (≥1024px) -->
   <div class="ms-simulator-page__desktop-layout">
     
@@ -41,7 +55,9 @@
         </div>
 
         <!-- Simulator User Inputs Container -->
-        <div class="simulatorUserInputs">
+        <div class="simulatorUserInputs" [class.simulatorUserInputs--loading]="isLoading">
+          <!-- Loading overlay to prevent interaction during calculation -->
+          <div *ngIf="isLoading" class="simulatorUserInputs__loading-overlay" aria-hidden="true"></div>
 			<!-- Info banner explicativ -->
 			<div class="ms-simulator-page__info-banner">
 			  <ms-info-contained-cell
@@ -216,6 +232,22 @@
           </div>
         </ms-card>
 
+        <!-- Error State - API Error -->
+        <ms-card *ngIf="!isLoading && !calculationResponse && !calculationResponseAllDiscounts && !calculationResponseNoDiscounts && errorMessage" class="ms-simulator-page__error-card">
+          <div class="ms-simulator-page__error-content">
+            <span class="ms-simulator-page__state-icon ms-simulator-page__state-icon--error">!</span>
+            <p>{{ errorMessage }}</p>
+          </div>
+        </ms-card>
+
+        <!-- Default State - No Data Yet -->
+        <ms-card *ngIf="!isLoading && !calculationResponse && !calculationResponseAllDiscounts && !calculationResponseNoDiscounts && !errorMessage" class="ms-simulator-page__default-card">
+          <div class="ms-simulator-page__default-content">
+            <span class="ms-simulator-page__state-icon ms-simulator-page__state-icon--default">₿</span>
+            <p>Completează datele din stânga pentru a vedea ofertele disponibile.</p>
+          </div>
+        </ms-card>
+
       </div>
     </div>
 
@@ -307,26 +339,14 @@
 
   <!-- Mobile Layout (<1024px) - Current behavior maintained -->
   <div class="ms-simulator-page__mobile-layout">
-    
+
     <!-- Main Content Area -->
     <main class="ms-simulator-page__content">
-      
-      <!-- Simulator Hero Section (Edge-to-Edge) -->
-      <div class="ms-simulator-page__hero">
-        <ms-simulator-swap-hero
-          [variant]="heroVariant"
-          [label]="heroLabel"
-          [chipLabel]="heroChipLabel"
-          [surface]="surface"
-          [hasClose]="heroHasClose"
-          [disabled]="heroDisabled"
-          (chipClicked)="onHeroChipClick()"
-          (closeClicked)="onHeroCloseClick()">
-        </ms-simulator-swap-hero>
-      </div>
 
       <!-- Simulator User Inputs Container -->
-      <div class="simulatorUserInputs">
+      <div class="simulatorUserInputs" [class.simulatorUserInputs--loading]="isLoading">
+        <!-- Loading overlay to prevent interaction during calculation -->
+        <div *ngIf="isLoading" class="simulatorUserInputs__loading-overlay" aria-hidden="true"></div>
 			<!-- Info banner explicativ -->
 			<div class="ms-simulator-page__info-banner">
 			  <ms-info-contained-cell

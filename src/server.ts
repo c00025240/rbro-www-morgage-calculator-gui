@@ -48,7 +48,7 @@ app.use('/api', createProxyMiddleware({
   },
   onProxyReq: (proxyReq, req, res) => {
     if (serverConfig.server.logLevel === 'debug') {
-      console.log(`→ Proxying: ${req.method} ${req.url} → ${serverConfig.backend.url}${req.url.replace('/api', '')}`);
+      // console.log(`→ Proxying: ${req.method} ${req.url} → ${serverConfig.backend.url}${req.url.replace('/api', '')}`);
     }
   }
 }));
@@ -67,7 +67,7 @@ app.use('/districts', createProxyMiddleware({
   },
   onProxyReq: (proxyReq, req, res) => {
     if (serverConfig.server.logLevel === 'debug') {
-      console.log(`→ Proxying: ${req.method} ${req.url} → ${serverConfig.adminService.url}/app/loan-admin/v1/districts`);
+      // console.log(`→ Proxying: ${req.method} ${req.url} → ${serverConfig.adminService.url}/app/loan-admin/v1/districts`);
     }
   }
 }));

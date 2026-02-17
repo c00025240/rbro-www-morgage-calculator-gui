@@ -4,6 +4,7 @@ import { MsCardOutsideTitleComponent } from '../../molecules/ms-card-outside-tit
 import { MsCard } from '../../molecules/ms-card/ms-card';
 import { MsSwitchForm } from '../../molecules/ms-switch-form/ms-switch-form';
 import { MsSavingsChip } from '../../organisms/ms-savings-chip/ms-savings-chip';
+import { formatRoNumber } from '../../../shared/utils/format-number.util';
 
 @Component({
   selector: 'ms-interest-reduction-section',
@@ -123,13 +124,7 @@ export class MsInterestReductionSection {
 
   // Helper function to format numbers with Romanian format (punct for thousands, virgulă for decimals)
   private formatNumber(value: number, decimals: number = 2): string {
-    if (value === null || value === undefined || isNaN(value)) {
-      return '0' + (decimals > 0 ? ',' + '0'.repeat(decimals) : '');
-    }
-    return new Intl.NumberFormat('ro-RO', {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals
-    }).format(value);
+    return formatRoNumber(value, decimals);
   }
 
   get effectiveSurface(): 'light' | 'dark' {

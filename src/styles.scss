@@ -26,8 +26,8 @@ $custom-theme: mat.define-theme((
     tertiary: mat.$yellow-palette,
   ),
   typography: (
-    brand-family: 'Roboto',
-    plain-family: 'Roboto',
+    brand-family: 'Amalia',
+    plain-family: 'Amalia',
   )
 ));
 
@@ -151,6 +151,16 @@ html {
    Ensures the variables exist everywhere (Storybook iframe, etc.)
    =======================================================*/
 :root {
+  /* MDC Text Field Font Overrides - Force Amalia on all input fields */
+  --mdc-filled-text-field-label-text-font: "Amalia", var(--font-family-primary);
+  --mdc-filled-text-field-input-text-font: "Amalia", var(--font-family-primary);
+  --mdc-outlined-text-field-label-text-font: "Amalia", var(--font-family-primary);
+  --mdc-outlined-text-field-input-text-font: "Amalia", var(--font-family-primary);
+  --mat-form-field-container-text-font: "Amalia", var(--font-family-primary);
+  --mat-form-field-subscript-text-font: "Amalia", var(--font-family-primary);
+  --mat-select-trigger-text-font: "Amalia", var(--font-family-primary);
+  --mat-option-label-text-font: "Amalia", var(--font-family-primary);
+
   --mat-checkbox-unselected-icon-color: var(--chk-primary-text-default, #55575C);
   --mat-checkbox-unselected-hover-icon-color: var(--chk-primary-text-selected, #2B2D33);
   --mat-checkbox-unselected-focus-state-layer-color: var(--chk-primary-text-selected, #2B2D33);
@@ -186,8 +196,86 @@ html {
   --mat-radio-label-text-weight: var(--radio-font-weight, 400);
 }
 
+/* Global box-sizing reset - prevents padding from adding to width */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html, body { height: 100%; }
-body { margin: 0; font-family: "Amalia", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body { margin: 0; font-family: "Amalia", "Helvetica Neue", sans-serif; }
+
+/* Prevent horizontal overflow from third-party scripts (OneTrust, etc.) */
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* =======================================================
+   OneTrust Cookie Consent - Width Fixes
+   Prevents the banner/modal from causing horizontal overflow
+   =======================================================*/
+#onetrust-banner-sdk,
+#onetrust-pc-sdk,
+#ot-sdk-cookie-policy,
+.onetrust-pc-dark-filter,
+#onetrust-consent-sdk {
+  max-width: 100vw !important;
+  max-width: 100dvw !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* OneTrust banner container - ensure it respects viewport */
+#onetrust-banner-sdk {
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* OneTrust preference center modal */
+#onetrust-pc-sdk {
+  max-width: calc(100vw - 32px) !important;
+  max-width: calc(100dvw - 32px) !important;
+  margin: 16px auto !important;
+}
+
+/* Prevent any OneTrust element from causing overflow */
+#onetrust-consent-sdk * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Mobile: Make body the scroll container so sticky elements work properly */
+@media (max-width: 1239px) {
+  html {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll; /* Body scrolls, not nested containers */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  /* Ensure Angular component host elements don't interfere with layout */
+  app-root,
+  ms-page-shell,
+  ms-simulator-page {
+    display: block;
+    width: 100%;
+    overflow: visible;
+  }
+}
 
 /* Radio label typography */
 .mat-mdc-radio-button .mdc-form-field {
@@ -212,6 +300,33 @@ body { margin: 0; font-family: "Amalia", -apple-system, BlinkMacSystemFont, "Seg
   --mat-radio-label-text-line-height : 24px;
   --mat-radio-label-text-weight      : 400;
   --mat-radio-label-text-color       : #55575C;
+}
+
+/* Global Mat Form Field Font Override - Force Amalia on ALL inputs */
+.mat-mdc-form-field,
+.mat-mdc-text-field-wrapper,
+.mat-mdc-form-field-infix,
+.mdc-text-field,
+.mdc-text-field__input,
+.mat-mdc-input-element,
+.mat-mdc-select,
+.mat-mdc-select-trigger,
+.mat-mdc-option {
+  font-family: "Amalia", var(--font-family-primary) !important;
+}
+
+/* Floating labels */
+.mat-mdc-form-field-label,
+.mdc-floating-label,
+.mat-mdc-floating-label {
+  font-family: "Amalia", var(--font-family-primary) !important;
+}
+
+/* Helper/error text */
+.mat-mdc-form-field-hint,
+.mat-mdc-form-field-error,
+.mat-mdc-form-field-subscript-wrapper {
+  font-family: "Amalia", var(--font-family-primary) !important;
 }
 
 /* Custom scrollbar styling - transparent/subtle scrollbars */

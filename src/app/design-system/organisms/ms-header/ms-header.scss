@@ -4,6 +4,7 @@
 	display: flex;
 	align-items: center;
 	width: 100%;
+	box-sizing: border-box; // Ensure padding doesn't add to width
 	background: var(--color-bg);
 	border-bottom: 1px solid var(--color-border);
 	position: fixed;
@@ -12,11 +13,15 @@
 	height: 120px;
 	box-shadow: var(--shadow-lg);
 	transition: box-shadow 0.2s ease, background-color 0.2s ease;
-	
-	@media (max-width: 1239px) { 
-		height: auto; 
-		padding: 12px var(--space-3, 16px); 
-		box-shadow: none; 
+
+	// Mobile: Header scrolls with content (not fixed)
+	@media (max-width: 1239px) {
+		position: relative;
+		top: auto;
+		height: auto;
+		padding: 12px var(--space-3, 16px);
+		box-shadow: none;
+		z-index: 10; // Lower z-index since it's not fixed anymore
 	}
 	
 	&__container { 
