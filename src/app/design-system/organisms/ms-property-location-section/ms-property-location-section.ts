@@ -146,6 +146,13 @@ export class MsPropertyLocationSection implements OnChanges, OnInit, OnDestroy {
         next: (districts) => {
           const uniqueCities = Array.from(new Set(districts.map(d => d.city))).sort();
           this.citySearchOptions = uniqueCities.map(c => ({ value: c, label: c }));
+
+          // Auto-select first city so the field is never left empty
+          if (uniqueCities.length > 0) {
+            this.selectedCity = uniqueCities[0];
+            this.cityChange.emit(this.selectedCity);
+          }
+
           this.cityLoading = false;
           this.cdr.markForCheck();
         },
@@ -190,8 +197,7 @@ export class MsPropertyLocationSection implements OnChanges, OnInit, OnDestroy {
     this.selectedCounty = value;
     this.countyChange.emit(value);
 
-    // Reset city and load cities for the new county
-    this.selectedCity = '';
+    // Load cities for the new county (auto-selects first city)
     this.citySearchOptions = [];
     this.loadCitiesForCounty(value);
   }
