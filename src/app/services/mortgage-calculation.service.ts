@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MortgageCalculationRequest } from '../../model/MortgageCalculationRequest';
@@ -188,6 +188,34 @@ export class MortgageCalculationService {
       subscriber.next(hardcoded);
       subscriber.complete();
     });
+  }
+
+  /**
+   * Search districts with optional county and city filters
+   * @param county Optional county search string
+   * @param city Optional city search string
+   * @returns Observable of filtered districts list
+   */
+  searchDistricts(county?: string, city?: string): Observable<District[]> {
+    const headers = this.getCustomHeaders();
+    const districtsUrl = this.configService.getDistrictsUrl();
+
+    let params = new HttpParams();
+    if (county) {
+      params = params.set('county', county);
+    }
+    if (city) {
+      params = params.set('city', city);
+    }
+
+    if (this.configService.isLoggingEnabled()) {
+      console.log('🔍 Districts search request to:', districtsUrl, 'params:', { county, city });
+    }
+
+    return this.http.get<District[]>(districtsUrl, { headers, params })
+      .pipe(
+        catchError((error) => this.handleError(error))
+      );
   }
 
   /**

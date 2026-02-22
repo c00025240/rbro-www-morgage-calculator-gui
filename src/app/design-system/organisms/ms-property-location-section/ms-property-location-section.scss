@@ -18,25 +18,25 @@
       box-sizing: border-box;
     }
     
-    // Specific handling for select components
-    ms-select {
+    // Specific handling for combobox components
+    ms-combobox {
       width: 100%;
       overflow: visible;
       
-      // Ensure select dropdowns can overflow
-      ::ng-deep .ms-select {
+      // Ensure combobox dropdowns can overflow
+      ::ng-deep .ms-combobox {
         width: 100%;
         overflow: visible;
         
-        .ms-select__trigger,
-        .ms-select__input {
+        .ms-combobox__trigger,
+        .ms-combobox__input {
           width: 100%;
           max-width: 100%;
           overflow: hidden;
           text-overflow: ellipsis;
         }
         
-        .ms-select__dropdown {
+        .ms-combobox__dropdown {
           width: 100%;
           max-width: 100%;
           overflow: auto;
@@ -59,4 +59,4 @@
       gap: 16px;
     }
   }
-} 
+}

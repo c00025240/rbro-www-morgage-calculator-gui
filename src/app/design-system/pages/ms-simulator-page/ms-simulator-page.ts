@@ -33,7 +33,7 @@ import { InstallmentType } from '../../../../model/InstallmentType';
 import { District } from '../../../../model/District';
 import { formatRoNumber } from '../../../shared/utils/format-number.util';
 
-// Location option interface for dropdown options
+// LocationOption kept for backward compatibility with other components
 export interface LocationOption {
   value: string;
   label: string;
@@ -157,30 +157,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() selectedCounty: string = 'București';
   @Input() selectedCity: string = 'București';
   
-  // Districts data for location dropdowns
-  districts: District[] = [];
-  counties: string[] = [];
-  cities: string[] = [];
-  isLoadingDistricts: boolean = false;
-
-  // Getters for location dropdown options
-  get countyOptions(): LocationOption[] {
-    const options = this.counties.map(county => ({
-      value: county,
-      label: county
-    }));
-
-    return options;
-  }
-
-  get cityOptions(): LocationOption[] {
-    const options = this.cities.map(city => ({
-      value: city,
-      label: city
-    }));
-
-    return options;
-  }
+  // Districts data is now managed inside ms-property-location-section via combobox + API search
   
   // Interest Preferences Section configuration
   @Input() rateType: string = 'egale';
@@ -396,8 +373,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Do not restore any state from localStorage; start with defaults
     
-    // Load districts data from API (will replace test data when successful)
-    this.loadDistricts();
+    // Districts data loading is now handled by ms-property-location-section internally
     
     // Initialize default down payment based on product type
     this.downPaymentAmount = this.computeDefaultDownPaymentAmount();
@@ -812,58 +788,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     return JSON.stringify(formData);
   }
 
-  // Districts and location methods
-  private loadDistricts(): void {
-    this.isLoadingDistricts = true;
-    
-    this.mortgageService.getDistricts()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (districts) => {
-          this.districts = districts;
-          this.updateLocationDropdowns();
-          this.isLoadingDistricts = false;
-        },
-        error: (error) => {
-          console.error('❌ Error loading districts:', error);
-          this.isLoadingDistricts = false;
-          
-          // Fallback to default values on error
-          this.districts = [
-            { city: 'BUCURESTI', county: 'BUCURESTI' }
-          ];
-          this.updateLocationDropdowns();
-        }
-      });
-  }
-  
-  private updateLocationDropdowns(): void {
-    // Extract unique counties from API data
-    this.counties = [...new Set(this.districts.map(d => d.county))].sort();
-
-    // Update cities based on selected county
-    this.updateCitiesForCounty(this.selectedCounty);
-
-    // Force change detection
-    this.cdr.markForCheck();
-  }
-  
-  private updateCitiesForCounty(county: string): void {
-    const filteredDistricts = this.districts.filter(d => d.county === county);
-    this.cities = filteredDistricts.map(d => d.city).sort();
-    
-    console.log(`🏙️ Updating cities for county "${county}":`, {
-      allDistricts: this.districts.length,
-      filteredDistricts: filteredDistricts.length,
-      cities: this.cities
-    });
-    
-    // If no cities found for selected county, use all available cities as fallback
-    if (this.cities.length === 0 && this.districts.length > 0) {
-      this.cities = [...new Set(this.districts.map(d => d.city))].sort();
-      console.log('⚠️ No cities found for county, using all cities as fallback:', this.cities);
-    }
-  }
+  // Districts and location methods are now handled by ms-property-location-section via combobox search
 
 
   // Event handlers
@@ -1136,21 +1061,11 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.markInteracted();
     
     this.selectedCounty = value;
-    this.updateCitiesForCounty(value);
+    // City reset is now handled by ms-property-location-section internally
     
     // Track county selection
     this.trackEvent('Judet Selectat', value);
-    
-    // Reset city selection if current city is not available in new county
-    const previousCity = this.selectedCity;
-    if (!this.cities.includes(this.selectedCity)) {
-      this.selectedCity = this.cities[0] || '';
-      console.log(`🔄 City reset from "${previousCity}" to "${this.selectedCity}" (cities available: ${this.cities.length})`);
-    }
-    
-    // Force change detection to update the UI
-    this.cdr.markForCheck();
-    
+
     this.countyChange.emit(value);
     this.cdr.markForCheck();
     this.triggerFormValidation();
@@ -1275,8 +1190,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.monthlyInstallments = 0;
     this.hasGuaranteeProperty = false;
     this.downPaymentAmount = 0;
-    this.selectedCounty = 'BUCURESTI';
-    this.selectedCity = 'BUCURESTI';
+    this.selectedCounty = 'București';
+    this.selectedCity = 'București';
     this.rateType = 'egale';
     this.interestType = 'fixa_3';
     this.lifeInsurance = true;
@@ -1296,12 +1211,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.hasUserInteracted = false;
     this.calculationResponseNoDiscounts = undefined;
 
-    // Reset location to Bucuresti if available in loaded districts; otherwise keep first
-    if (this.counties.length > 0) {
-      this.selectedCounty = this.counties.includes('BUCURESTI') ? 'BUCURESTI' : (this.counties[0] || this.selectedCounty);
-      this.updateCitiesForCounty(this.selectedCounty);
-      this.selectedCity = this.cities.includes('BUCURESTI') ? 'BUCURESTI' : (this.cities[0] || this.selectedCity);
-    }
+    // Reset location to Bucuresti defaults (ms-property-location-section handles the rest)
+    this.selectedCounty = 'București';
+    this.selectedCity = 'București';
 
     // Do not persist form or product type state when switching credit type
     // Clear any previously saved state to ensure defaults are used

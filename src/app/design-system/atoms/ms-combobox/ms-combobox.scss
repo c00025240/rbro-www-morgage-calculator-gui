@@ -1,0 +1,494 @@
+// ms-combobox component styles - based on ms-select design
+// Using design tokens and Amalia font family
+
+:host {
+  display: block;
+  width: 100%;
+  font-family: var(--font-family-primary, "Amalia");
+}
+
+.ms-combobox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+
+  // Label styling (align with ms-select / ms-cell-label__text)
+  &__label {
+    font-family: inherit;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: 24px !important;
+    font-style: normal;
+    color: var(--label-muted, var(--color-text-secondary));
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    user-select: none;
+
+    &--required::after {
+      content: ' *';
+      color: var(--color-error-primary);
+    }
+  }
+
+  // Main container (matching ms-select container)
+  &__container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--text-field-bg-default);
+    border: 1px solid var(--text-field-border-default);
+    border-radius: var(--border-radius-m, 8px);
+    transition: all 0.2s ease-in-out;
+    overflow: visible;
+    width: 100%;
+    min-height: 56px;
+
+    &:hover:not(&--disabled) {
+      border-color: var(--color-border-hover, var(--text-field-border-focus));
+    }
+
+    &--focused {
+      border-color: var(--text-field-border-focus);
+      box-shadow: 0 0 0 3px var(--focus-ring, transparent);
+    }
+
+    &--error {
+      border-color: var(--color-error-primary);
+      box-shadow: 0 0 0 3px var(--error-ring, transparent);
+    }
+
+    &--disabled {
+      background-color: var(--color-surface-disabled);
+      border-color: var(--color-border-disabled);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  // Trigger area containing input + icon
+  &__trigger {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 56px;
+    box-sizing: border-box;
+    padding: 0 16px 0 0;
+
+    .ms-combobox__container--disabled & {
+      cursor: not-allowed;
+    }
+  }
+
+  // Text input inside the combobox
+  &__input {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--text-field-text-default);
+    background: transparent;
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 16px 8px 16px 12px;
+    min-height: 56px;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    text-overflow: ellipsis;
+
+    &::placeholder {
+      color: var(--text-field-placeholder);
+      font-weight: 400;
+    }
+
+    &:disabled {
+      color: var(--color-text-disabled);
+      cursor: not-allowed;
+    }
+  }
+
+  // Clear button
+  &__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin: 0 4px;
+    border: none;
+    background: none;
+    color: var(--text-field-suffix-default, var(--color-text-secondary, #2B2D34));
+    cursor: pointer;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background-color: var(--color-surface-hover);
+      color: var(--color-text-primary);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+  }
+
+  // Dropdown icon (chevron)
+  &__icon {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-left: var(--space-2, 8px);
+    color: var(--text-field-suffix-default, var(--color-text-secondary, #2B2D34));
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+    flex-shrink: 0;
+    opacity: 1;
+    visibility: visible;
+    cursor: pointer;
+
+    // Fallback arrow if SVG doesn't load
+    &::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid currentColor;
+      position: absolute;
+    }
+
+    &--open {
+      transform: rotate(180deg);
+    }
+
+    svg {
+      width: 24px !important;
+      height: 24px !important;
+      fill: currentColor !important;
+      stroke: none;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    // Hide fallback if SVG is present
+    &:has(svg)::before {
+      display: none;
+    }
+
+    .ms-combobox__container:hover:not(.ms-combobox__container--disabled) & {
+      opacity: 1;
+      color: var(--color-text-primary, var(--text-field-suffix-default, #2B2D34));
+    }
+
+    .ms-combobox__container--disabled & {
+      color: var(--color-text-disabled);
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Dropdown panel
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    background-color: var(--overlay-bg);
+    border: 1px solid var(--overlay-border);
+    border-radius: var(--border-radius-m, 8px);
+    box-shadow: var(--overlay-shadow);
+    margin-top: var(--space-1, 4px);
+    max-height: 280px;
+    overflow: hidden;
+    animation: comboboxFadeIn 0.15s ease-out;
+  }
+
+  // Status messages (loading, no results, min chars hint)
+  &__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text-field-placeholder, var(--color-text-secondary));
+    user-select: none;
+  }
+
+  // Loading spinner
+  &__spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-border-primary, #ccc);
+    border-top-color: var(--color-accent-primary, #037080);
+    border-radius: 50%;
+    animation: comboboxSpin 0.6s linear infinite;
+  }
+
+  // Options container
+  &__options {
+    max-height: 280px;
+    overflow-y: auto;
+    padding: var(--space-1, 4px) 0;
+
+    // Custom scrollbar styling
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--color-surface-secondary);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-border-primary);
+      border-radius: 3px;
+
+      &:hover {
+        background: var(--color-border-hover);
+      }
+    }
+  }
+
+  // Individual option
+  &__option {
+    font-family: inherit;
+    font-size: var(--font-size-body-m, 16px);
+    font-weight: var(--font-weight-regular, 400);
+    line-height: 24px;
+    color: var(--text-field-text-default);
+    padding: 0 var(--space-4, 16px);
+    height: 48px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    user-select: none;
+    outline: none;
+
+    &:hover:not(&--disabled) {
+      background-color: var(--color-surface-hover);
+    }
+
+    &--highlighted {
+      background-color: var(--color-surface-hover);
+    }
+
+    &--selected {
+      background-color: var(--color-accent-surface);
+      color: var(--color-accent-primary);
+      font-weight: var(--font-weight-medium, 500);
+
+      &:hover {
+        background-color: var(--color-accent-surface-hover);
+      }
+    }
+
+    &--disabled {
+      color: var(--color-text-disabled);
+      cursor: not-allowed;
+      background-color: transparent;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+
+  // Helper text
+  &__helper {
+    margin-top: var(--space-1, 4px);
+  }
+}
+
+// Surface variants
+.ms-combobox-component {
+  // Light surface
+  &--surface-light {
+    .ms-combobox {
+      --text-field-label-default: var(--text-field-label-default-light);
+      --text-field-text-default: var(--text-field-text-default-light);
+      --text-field-placeholder: var(--text-field-placeholder-light);
+      --text-field-bg-default: var(--text-field-bg-default-light);
+      --text-field-border-default: var(--text-field-border-default-light);
+      --text-field-border-focus: var(--text-field-border-focus-light);
+      --text-field-suffix-default: var(--text-field-suffix-default-light);
+    }
+  }
+
+  // Default surface behaves like light
+  &--surface-default {
+    .ms-combobox {
+      --text-field-label-default: var(--text-field-label-default-light);
+      --text-field-text-default: var(--text-field-text-default-light);
+      --text-field-placeholder: var(--text-field-placeholder-light);
+      --text-field-bg-default: var(--text-field-bg-default-light);
+      --text-field-border-default: var(--text-field-border-default-light);
+      --text-field-border-focus: var(--text-field-border-focus-light);
+      --text-field-suffix-default: var(--text-field-suffix-default-light);
+    }
+  }
+
+  // Dark surface
+  &--surface-dark {
+    .ms-combobox {
+      --text-field-label-default: var(--text-field-label-default-dark);
+      --text-field-text-default: var(--text-field-text-default-dark);
+      --text-field-placeholder: var(--text-field-placeholder-dark);
+      --text-field-suffix-default: var(--text-field-suffix-default-dark);
+      --text-field-bg-default: var(--text-field-bg-default-dark, var(--text-field-bg-default));
+      --text-field-border-default: var(--text-field-border-default-dark, var(--text-field-border-default));
+      --text-field-border-focus: var(--text-field-border-focus-dark, var(--focus-border));
+    }
+
+    .ms-combobox__input {
+      padding: 12px 8px 12px 12px;
+    }
+
+    .ms-combobox__trigger {
+      padding-right: 16px;
+    }
+
+    .ms-combobox__input::placeholder {
+      font-weight: 400;
+    }
+
+    // Dark hover border refinement
+    .ms-combobox__container:hover:not(.ms-combobox__container--disabled) {
+      border-color: var(--text-field-border-hover-dark, var(--text-field-border-focus));
+    }
+
+    .ms-combobox__container.ms-combobox__container--focused {
+      box-shadow: 0 0 0 3px var(--focus-ring, transparent);
+    }
+
+    .ms-combobox__dropdown {
+      background-color: var(--overlay-bg);
+      border-color: var(--overlay-border);
+      box-shadow: var(--overlay-shadow);
+    }
+
+    .ms-combobox__options {
+      &::-webkit-scrollbar-track {
+        background: var(--overlay-scrollbar-track, transparent);
+      }
+      &::-webkit-scrollbar-thumb {
+        background: var(--overlay-scrollbar-thumb, var(--overlay-border));
+      }
+    }
+
+    .ms-combobox__option {
+      &:hover:not(&--disabled) {
+        background-color: var(--surface-hover-dark, var(--color-surface-hover));
+      }
+
+      &--selected {
+        background-color: var(--overlay-accent-selected, var(--color-accent-surface));
+        color: var(--overlay-accent-text, var(--color-accent-primary));
+      }
+    }
+  }
+}
+
+// Animation keyframes
+@keyframes comboboxFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes comboboxSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .ms-combobox {
+    &__container {
+      min-height: 56px;
+    }
+
+    &__trigger {
+      min-height: 56px;
+    }
+
+    &__input {
+      font-size: var(--font-size-body-m, 16px); // Prevent zoom on iOS
+      min-height: 56px;
+    }
+
+    &__dropdown {
+      max-height: 220px;
+    }
+
+    &__option {
+      height: 48px;
+      padding: 0 var(--space-3, 12px);
+      font-size: var(--font-size-body-m, 16px);
+    }
+  }
+
+  // Dark mode mobile adjustments
+  .ms-combobox-component--surface-dark {
+    .ms-combobox__input {
+      padding: 12px 8px 12px 12px;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .ms-combobox {
+    &__container {
+      border-width: 2px;
+    }
+
+    &__option--selected {
+      outline: 2px solid var(--focus-border);
+      outline-offset: -2px;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .ms-combobox {
+    &__icon {
+      transition: none;
+    }
+
+    &__dropdown {
+      animation: none;
+    }
+
+    &__option {
+      transition: none;
+    }
+
+    &__spinner {
+      animation-duration: 1.5s;
+    }
+  }
+}
