@@ -25,6 +25,7 @@ import { Subject, takeUntil, filter } from 'rxjs';
 import { MsTextFieldCustomComponent } from '../../atoms/ms-text-field-custom/ms-text-field-custom';
 import { MsCard } from '../ms-card/ms-card';
 import { MsCardOutsideTitleComponent } from '../ms-card-outside-title/ms-card-outside-title';
+import { formatRoNumber } from '../../../shared/utils/format-number.util';
 
 // Value accessor provider
 const PROPERTY_VALUE_INPUT_VALUE_ACCESSOR = {
@@ -253,31 +254,13 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
     this.cdr.markForCheck();
   }
 
-  // Slider touch event handlers to prevent horizontal page scrolling
-  onSliderTouchStart(event: TouchEvent): void {
-    // Allow the touch event to propagate normally for slider functionality
-    // but mark that we're in a slider interaction
-  }
-
-  onSliderTouchMove(event: TouchEvent): void {
-    // Prevent horizontal page scrolling during slider interaction
-    if (event.touches.length === 1) {
-      // Single finger - prevent default to stop page scrolling
-      event.preventDefault();
-    }
-  }
-
-  onSliderInputTouchStart(event: TouchEvent): void {
-    // Allow the touch event for slider functionality
-  }
-
-  onSliderInputTouchMove(event: TouchEvent): void {
-    // Prevent horizontal page scrolling during slider input interaction
-    if (event.touches.length === 1) {
-      // Single finger - prevent default to stop page scrolling
-      event.preventDefault();
-    }
-  }
+  // Slider touch event handlers - use stopPropagation instead of preventDefault
+  // to avoid blocking the browser's compositor thread (causes lag on mobile)
+  // Scroll prevention is handled via CSS touch-action: none
+  onSliderTouchStart(event: TouchEvent): void { event.stopPropagation(); }
+  onSliderTouchMove(event: TouchEvent): void { event.stopPropagation(); }
+  onSliderInputTouchStart(event: TouchEvent): void { event.stopPropagation(); }
+  onSliderInputTouchMove(event: TouchEvent): void { event.stopPropagation(); }
 
 
   // Computed properties
@@ -317,7 +300,7 @@ export class MsPropertyValueInputComponent implements ControlValueAccessor, OnIn
 
   // Utility methods
   private formatCurrency(value: number): string {
-    return new Intl.NumberFormat('ro-RO').format(value);
+    return formatRoNumber(value, 0);
   }
 
   // ControlValueAccessor implementation

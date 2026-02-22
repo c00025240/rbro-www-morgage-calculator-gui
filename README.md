@@ -3,7 +3,7 @@
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli)
 
 ## Development server
-############
+##############
 
 To start a local development server, run:
 
@@ -25,7 +25,7 @@ For a complete list of available schematics (such as `components`, `directives`,
 
 ```bash
 ng generate --help
-```
+``` 
 
 ## Building
 

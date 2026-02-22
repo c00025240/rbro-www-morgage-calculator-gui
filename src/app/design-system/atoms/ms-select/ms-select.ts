@@ -296,7 +296,6 @@ export class MsSelect implements ControlValueAccessor, OnInit, OnChanges, OnDest
       )
       .subscribe((svgContent: string | null) => {
         if (svgContent) {
-          console.log(`✅ Successfully loaded: ${url}`);
           const processedSvg = this.processSvgContent(svgContent);
           // Only trust processed SVG if sanitization passes
           const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);

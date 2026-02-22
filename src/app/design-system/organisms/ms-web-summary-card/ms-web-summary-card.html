@@ -65,11 +65,65 @@
 											</span>
 											<span class="ms-web-summary-card__info-note-text">{{ col.infoNote }}</span>
 										</div>
+										<!-- Cost breakdown expandable section for total amount row -->
+										<ng-container *ngIf="row.label === 'Valoarea totală plătibilă' && col.costBreakdown?.length">
+											<div class="ms-web-summary-card__cost-breakdown">
+												<button
+													type="button"
+													class="ms-web-summary-card__cost-breakdown-toggle"
+													(click)="toggleCostBreakdown(i)"
+													[attr.aria-expanded]="isCostBreakdownExpanded(i)"
+													aria-controls="cost-breakdown-list-{{i}}">
+													<span class="ms-web-summary-card__cost-breakdown-icon" aria-hidden="true">
+														<img src="/assets/icons/info-outlined.svg" alt="" width="16" height="16" />
+													</span>
+													<span class="ms-web-summary-card__cost-breakdown-label">
+														{{ isCostBreakdownExpanded(i) ? 'Ascunde detalii costuri' : 'Vezi detalii costuri' }}
+													</span>
+													<span class="ms-web-summary-card__cost-breakdown-caret" [class.expanded]="isCostBreakdownExpanded(i)">
+														<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+															<path d="M7 10l5 5 5-5H7z" fill="currentColor"/>
+														</svg>
+													</span>
+												</button>
+												<div
+													*ngIf="isCostBreakdownExpanded(i)"
+													class="ms-web-summary-card__cost-breakdown-list"
+													id="cost-breakdown-list-{{i}}"
+													role="region"
+													aria-label="Detalii costuri incluse în valoarea totală">
+													<div
+														*ngFor="let cost of col.costBreakdown"
+														class="ms-web-summary-card__cost-breakdown-item"
+														[class.ms-web-summary-card__cost-breakdown-item--discount]="cost.type === 'discount'"
+														[class.ms-web-summary-card__cost-breakdown-item--placeholder]="!cost.value">
+														<span class="ms-web-summary-card__cost-breakdown-item-label">{{ cost.label }}</span>
+														<span *ngIf="cost.value" class="ms-web-summary-card__cost-breakdown-item-value">{{ cost.value }}</span>
+													</div>
+												</div>
+											</div>
+										</ng-container>
 									</ng-container>
 								</ng-container>
 								<ng-template #spacerTpl>
 									<div class="ms-web-summary-card__extra-spacer"></div>
 								</ng-template>
+								<!-- Download schedule button -->
+								<div class="ms-web-summary-card__schedule-download" *ngIf="col.scheduleUrl">
+									<button
+										type="button"
+										class="ms-web-summary-card__schedule-btn"
+										(click)="onScheduleDownload(i, col.scheduleUrl)"
+										title="Descarcă scadențarul de plăți">
+										<span class="ms-web-summary-card__schedule-icon" aria-hidden="true">
+											<svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+												<path d="M12 16L12 8M12 16L8 12M12 16L16 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+												<path d="M4 17V19C4 20.1046 4.89543 21 6 21H18C19.1046 21 20 20.1046 20 19V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+											</svg>
+										</span>
+										<span class="ms-web-summary-card__schedule-label">Descarcă scadențar</span>
+									</button>
+								</div>
 							</div>
 						</div>
 				</div>

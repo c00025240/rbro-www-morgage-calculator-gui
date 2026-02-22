@@ -36,7 +36,11 @@
   border-radius: var(--slider-track-border-radius, 2px);
   cursor: pointer;
   outline: none;
-  
+  // CRITICAL: Prevent browser from hijacking touch for scroll/zoom
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+
   // Enhanced touch target for mobile
   &::before {
     content: '';
@@ -50,7 +54,7 @@
     // Better mobile touch response
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   // Mobile-specific enhancements
   @media (max-width: 768px) {
     &::before {
@@ -84,31 +88,34 @@
   transition: transform 0.08s ease-out, box-shadow 0.08s ease-out;
   box-shadow: var(--slider-thumb-shadow);
   z-index: 3;
-  
-  // Enhanced touch target for mobile
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 44px; // Minimum touch target size (44px recommended by Apple/Google)
-    height: 44px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    // Invisible larger touch area
-    background: transparent;
-    z-index: -1;
-  }
-  
-  // Mobile-first responsive sizing
+  // CRITICAL: Prevent browser from hijacking touch for scroll/zoom
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+
+  // Enhanced touch target for mobile - use padding instead of ::before
+  // This ensures the actual element receives touch events
   @media (max-width: 768px) {
-    width: 24px; // Slightly larger on mobile
-    height: 24px;
-    
-    &::before {
-      width: 48px; // Even larger touch target on mobile
+    // Make thumb itself larger on mobile for better touch
+    width: 28px;
+    height: 28px;
+    // Add invisible padding to increase touch area without visual change
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 48px;
       height: 48px;
+      transform: translate(-50%, -50%);
+      // This stays on top to catch touches
     }
+  }
+
+  // Desktop sizing
+  @media (min-width: 769px) {
+    width: var(--slider-thumb-size, 20px);
+    height: var(--slider-thumb-size, 20px);
   }
   
   // Focus state

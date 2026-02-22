@@ -63,8 +63,7 @@
   
   // Mobile styles
   @media (max-width: 1023px) {
-    padding: 0 16px;
-    padding-right: 0; // Remove right padding for close button positioning
+    padding: 0;
     height: 64px; // Ensure exact 64px height on mobile
   }
   
@@ -84,7 +83,8 @@
   gap: 6px;
   flex: 1;
   min-width: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; // Keep on same line
+  overflow: hidden; // Prevent overflow
 }
 
 // Label styles
@@ -95,7 +95,13 @@
   line-height: 24px;
   color: var(--color-text);
   white-space: nowrap;
-  flex-shrink: 0;
+  flex-shrink: 1; // Allow shrinking on small screens
+
+  // Mobile: smaller font to fit on one line
+  @media (max-width: 640px) {
+    font-size: 16px !important;
+    line-height: 22px !important;
+  }
 }
 
 // Close button positioning

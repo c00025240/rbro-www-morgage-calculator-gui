@@ -12,24 +12,44 @@ $breakpoint-l: 1440px;
 	width: 100%;
 	min-height: 100vh;
 	position: relative;
-	
+
 	// Default surface - Light background
 	background-color: var(--color-bg-secondary);
 	color: var(--color-text);
-	
+
 	// Smooth transitions for theme changes
 	transition: background-color 0.2s ease, color 0.2s ease;
+
+	// Mobile: Ensure no overflow restrictions that would break sticky positioning
+	@media (max-width: 1239px) {
+		overflow: visible;
+		// Ensure flex container includes all children for proper scrolling
+		flex-wrap: nowrap;
+		align-items: stretch;
+	}
 
 	// Full height variant
 	&--full-height {
 		height: 100vh;
 		min-height: 100vh;
+
+		// Mobile: Allow natural height so body can scroll and sticky works
+		@media (max-width: 1239px) {
+			height: auto !important;
+			min-height: auto !important; // Remove min-height constraint - let content determine height
+			overflow: visible !important; // Don't create scroll container here - let body scroll
+		}
 	}
 
 	// Scrollable variant
 	&--scrollable {
 		overflow-y: auto;
 		overflow-x: hidden;
+
+		// Mobile: Override to allow sticky positioning
+		@media (max-width: 1239px) {
+			overflow: visible !important;
+		}
 	}
 
 	// Light surface styling (same as default)

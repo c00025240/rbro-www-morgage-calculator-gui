@@ -31,11 +31,20 @@ import { Income } from '../../../../model/Income';
 import { SpecialOfferRequirements } from '../../../../model/SpecialOfferRequirements';
 import { InstallmentType } from '../../../../model/InstallmentType';
 import { District } from '../../../../model/District';
+import { formatRoNumber } from '../../../shared/utils/format-number.util';
 
 // Location option interface for dropdown options
 export interface LocationOption {
   value: string;
   label: string;
+}
+
+// Cost breakdown item for expandable total amount details
+export interface CostBreakdownItem {
+  label: string;
+  value: string;
+  frequency?: string;
+  type: 'fee' | 'insurance' | 'discount' | 'principal' | 'interest';
 }
 
 
@@ -189,13 +198,156 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
 
   // Helper function to format numbers with Romanian format (punct for thousands, virgulă for decimals)
   formatNumber(value: number, decimals: number = 2): string {
-    if (value === null || value === undefined || isNaN(value)) {
-      return '0' + (decimals > 0 ? ',' + '0'.repeat(decimals) : '');
+    return formatRoNumber(value, decimals);
+  }
+
+  // Romanian labels for fee types
+  private readonly feeTypeLabels: { [key: string]: string } = {
+    'LOAN_APPROVAL': 'Comision de aprobare',
+    'SUCCESSIVE_USAGE': 'Comision utilizare succesivă',
+    'UTILIZATION_PROLONGATION': 'Comision prelungire utilizare',
+    'PREMATURE_REPAYMENT': 'Comision rambursare anticipată',
+    'OTHER_CHANGES': 'Comision alte modificări',
+    'CANCELLATION': 'Comision anulare',
+    'UNUSED_LOAN_AMOUNT': 'Comision sumă neutilizată',
+    'REMINDER': 'Comision notificare',
+    'COMMISSION': 'Comision',
+    'ADMINISTRATION': 'Comision de administrare',
+    'ACCOUNT': 'Comision cont',
+    'MANAGEMENT': 'Comision gestiune',
+    'REPAYMENT_PROLONGATION': 'Comision prelungire rambursare',
+    'PENALTY': 'Penalități'
+  };
+
+  // Romanian labels for frequency
+  private readonly frequencyLabels: { [key: string]: string } = {
+    'ONE_TIME': 'unic',
+    'MONTHLY': '/lună',
+    'QUARTERLY': '/trimestru',
+    'SEMI_ANNUALLY': '/semestru',
+    'ANNUALLY': '/an'
+  };
+
+  // Build cost breakdown from API response
+  buildCostBreakdown(resp: MortgageCalculationResponse | undefined): CostBreakdownItem[] {
+    const items: CostBreakdownItem[] = [];
+
+    // If no response or no loanCosts, return placeholder text
+    if (!resp?.loanCosts) {
+      return [{
+        label: 'Valoarea totală include: suma creditului, dobânda pe toată perioada, comisioane (aprobare, administrare, cont), asigurări obligatorii, și alte taxe bancare.',
+        value: '',
+        type: 'fee'
+      }];
     }
-    return new Intl.NumberFormat('ro-RO', {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals
-    }).format(value);
+
+    const loanCosts = resp.loanCosts;
+
+    // Add principal amount
+    if (resp.loanAmount?.amount) {
+      items.push({
+        label: 'Suma împrumutată',
+        value: this.formatNumber(resp.loanAmount.amount, 2) + ' Lei',
+        type: 'principal'
+      });
+    }
+
+    // Calculate total interest (totalPayment - loanAmount - fees - insurance)
+    // This is an approximation since we don't have exact interest amount
+    const totalPayment = resp.totalPaymentAmount?.amount || 0;
+    const loanAmount = resp.loanAmount?.amount || 0;
+    let totalFees = 0;
+    let totalInsurance = 0;
+
+    // Add fees
+    if (loanCosts.fees?.length) {
+      loanCosts.fees.forEach(fee => {
+        if (fee.fixedAmount > 0) {
+          const frequencyLabel = this.frequencyLabels[fee.frequency] || '';
+          const feeLabel = this.feeTypeLabels[fee.type] || String(fee.type);
+          items.push({
+            label: feeLabel,
+            value: this.formatNumber(fee.fixedAmount, 2) + ' Lei' + (frequencyLabel ? ' ' + frequencyLabel : ''),
+            frequency: frequencyLabel,
+            type: 'fee'
+          });
+          // Estimate total fee for interest calculation
+          if (fee.frequency === 'ONE_TIME') {
+            totalFees += fee.fixedAmount;
+          } else if (fee.frequency === 'MONTHLY') {
+            totalFees += fee.fixedAmount * (resp.tenor || 30) * 12;
+          } else if (fee.frequency === 'ANNUALLY') {
+            totalFees += fee.fixedAmount * (resp.tenor || 30);
+          }
+        }
+      });
+    }
+
+    // Add life insurance
+    if (loanCosts.lifeInsurance?.length) {
+      loanCosts.lifeInsurance.forEach(insurance => {
+        if (insurance.value?.amount > 0) {
+          const frequencyLabel = this.frequencyLabels[insurance.paymentFrequency] || '';
+          items.push({
+            label: 'Asigurare de viață',
+            value: this.formatNumber(insurance.value.amount, 2) + ' Lei' + (frequencyLabel ? ' ' + frequencyLabel : ''),
+            frequency: frequencyLabel,
+            type: 'insurance'
+          });
+          // Estimate total insurance for interest calculation
+          if (insurance.paymentFrequency === 'MONTHLY') {
+            totalInsurance += insurance.value.amount * (resp.tenor || 30) * 12;
+          } else if (insurance.paymentFrequency === 'ANNUALLY') {
+            totalInsurance += insurance.value.amount * (resp.tenor || 30);
+          }
+        }
+      });
+    }
+
+    // Calculate and add interest (approximate)
+    const estimatedInterest = totalPayment - loanAmount - totalFees - totalInsurance;
+    if (estimatedInterest > 0) {
+      items.push({
+        label: 'Dobândă totală (estimată)',
+        value: this.formatNumber(estimatedInterest, 2) + ' Lei',
+        type: 'interest'
+      });
+    }
+
+    // Add discounts (as negative values / savings)
+    if (loanCosts.discounts) {
+      const discounts = loanCosts.discounts;
+      if (discounts.discountAmountHasSalaryInTheBank > 0) {
+        items.push({
+          label: 'Reducere încasare salariu',
+          value: '-' + this.formatNumber(discounts.discountAmountHasSalaryInTheBank, 2) + ' Lei',
+          type: 'discount'
+        });
+      }
+      if (discounts.discountAmountCasaVerde > 0) {
+        items.push({
+          label: 'Reducere Casa Verde',
+          value: '-' + this.formatNumber(discounts.discountAmountCasaVerde, 2) + ' Lei',
+          type: 'discount'
+        });
+      }
+      if (discounts.discountAmountInsurance > 0) {
+        items.push({
+          label: 'Reducere asigurare',
+          value: '-' + this.formatNumber(discounts.discountAmountInsurance, 2) + ' Lei',
+          type: 'discount'
+        });
+      }
+      if (discounts.discountAmountDownPayment > 0) {
+        items.push({
+          label: 'Reducere avans ≥20%',
+          value: '-' + this.formatNumber(discounts.discountAmountDownPayment, 2) + ' Lei',
+          type: 'discount'
+        });
+      }
+    }
+
+    return items;
   }
   
   // Summary calculated values (for right panel display)
@@ -668,7 +820,6 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (districts) => {
-          console.log('✅ Districts loaded successfully:', districts);
           this.districts = districts;
           this.updateLocationDropdowns();
           this.isLoadingDistricts = false;
@@ -689,12 +840,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   private updateLocationDropdowns(): void {
     // Extract unique counties from API data
     this.counties = [...new Set(this.districts.map(d => d.county))].sort();
-    console.log('📍 Counties updated from API:', this.counties);
-    
+
     // Update cities based on selected county
     this.updateCitiesForCounty(this.selectedCounty);
-    console.log('🏙️ Cities updated for county', this.selectedCounty, ':', this.cities);
-    
+
     // Force change detection
     this.cdr.markForCheck();
   }
@@ -829,8 +978,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     downPaymentInfoNote?: string;
     interestType?: string;
     productType?: string;
+    costBreakdown?: CostBreakdownItem[];
+    scheduleUrl?: string;
   }> {
-    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; downPaymentInfoNote?: string; interestType?: string; productType?: string; }> = [];
+    const out: Array<{ title: string; monthlyInstallment: string; fixedRate: string; variableRate: string; variableInstallment: string; dae: string; installmentType: string; downPayment: string; loanAmount: string; totalAmount: string; noDocAmount?: string; housePriceMin?: string; downPaymentInfoNote?: string; interestType?: string; productType?: string; costBreakdown?: CostBreakdownItem[]; scheduleUrl?: string; }> = [];
 
     const responses = [
       { resp: this.calculationResponse, title: 'Oferta ta personalizată' },
@@ -876,7 +1027,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         noDocAmount: noDocStr,
         housePriceMin: housePriceStr,
         interestType: this.interestType,
-        productType: this.selectedProductType
+        productType: this.selectedProductType,
+        costBreakdown: this.buildCostBreakdown(r.resp),
+        scheduleUrl: r.resp.scheduleUrl
       });
     }
 
@@ -1233,6 +1386,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     extraDetails?: Array<{ label: string; value: string }>;
     title?: string;
     interestType?: string;
+    costBreakdown?: CostBreakdownItem[];
+    scheduleUrl?: string;
   }> {
     const columns: Array<any> = [];
 
@@ -1307,7 +1462,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         },
         rightTop: {
           label: this.interestType === 'variabila' ? 'Rată lunară variabilă' : 'Rată lunară de plată',
-          amount: this.interestType === 'variabila' 
+          amount: this.interestType === 'variabila'
             ? this.formatNumber(resp?.monthlyInstallment?.amountVariableInterest || 0, 2)
             : this.formatNumber(resp?.monthlyInstallment?.amountFixedInterest || 0, 2),
           currency: 'Lei/lună'
@@ -1315,7 +1470,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
         leftBottom: undefined,
         rightBottom: undefined,
         extraDetails,
-        interestType: this.interestType
+        interestType: this.interestType,
+        costBreakdown: this.buildCostBreakdown(resp),
+        scheduleUrl: resp?.scheduleUrl
       });
     });
 

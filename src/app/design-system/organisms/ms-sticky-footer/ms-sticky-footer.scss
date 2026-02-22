@@ -19,7 +19,7 @@
 	box-shadow: var(--shadow-md);
 	padding: 12px 12px calc(24px + env(safe-area-inset-bottom)) 12px;
 	gap: var(--space-1, 8px);
-	width: 100vw;
+	width: 100%; // Use 100% instead of 100vw to avoid scrollbar width issues
 	max-width: 100%;
 	box-sizing: border-box;
 	margin: 0;

@@ -25,6 +25,7 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { catchError, of, Subject, takeUntil } from 'rxjs';
 import { MsHelperComponent } from '../ms-helper/ms-helper';
+import { formatRoNumber } from '../../../shared/utils/format-number.util';
 
 // Value accessor provider
 const TEXT_FIELD_VALUE_ACCESSOR = {
@@ -63,8 +64,8 @@ const TEXT_FIELD_VALUE_ACCESSOR = {
           #inputElement
           class="ms-text-field__input"
           [id]="inputId"
-          [type]="type"
-          [value]="value"
+          [type]="effectiveType"
+          [value]="displayValue"
           [placeholder]="placeholder"
           [disabled]="disabled"
           [readonly]="readonly"
@@ -72,6 +73,7 @@ const TEXT_FIELD_VALUE_ACCESSOR = {
           [maxLength]="maxLength"
           [attr.aria-label]="ariaLabel"
           [attr.aria-describedby]="ariaDescribedby"
+          [attr.inputmode]="type === 'number' ? 'numeric' : undefined"
           (input)="onInput($event)"
           (focus)="onFocus($event)"
           (blur)="onBlur($event)"
@@ -210,6 +212,22 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
     return this.inputElement?.nativeElement || this.textareaElement?.nativeElement!;
   }
 
+  // For number inputs, use text type to allow thousand separators display
+  public get effectiveType(): string {
+    return this.type === 'number' ? 'text' : this.type;
+  }
+
+  // Display formatted value when not focused, raw value when focused
+  public get displayValue(): string {
+    if (this.type === 'number' && !this.isFocused && this.value) {
+      const numValue = parseFloat(this.value.replace(/\./g, '').replace(',', '.'));
+      if (!isNaN(numValue)) {
+        return formatRoNumber(numValue, 0);
+      }
+    }
+    return this.value;
+  }
+
   private _inputId = `ms-text-field-${nextUniqueId++}`;
 
   // Form control methods
@@ -266,7 +284,6 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
       )
       .subscribe((svgContent: string | null) => {
         if (svgContent) {
-          console.log(`✅ Successfully loaded: ${url}`);
           // Process SVG to remove hardcoded fills before injection
           const processedSvg = this.processSvgContent(svgContent);
           const sanitized = this.sanitizer.sanitize(SecurityContext.HTML, processedSvg);
@@ -374,11 +391,18 @@ export class MsTextFieldCustomComponent implements ControlValueAccessor, OnInit,
 
   onFocus(event: FocusEvent): void {
     this.isFocused = true;
+    // For number inputs, ensure the raw value is shown and update the input element
+    if (this.type === 'number' && this.inputElement?.nativeElement) {
+      this.inputElement.nativeElement.value = this.value;
+    }
+    this.cdr.markForCheck();
     this.focus.emit(event);
   }
 
   onBlur(event: FocusEvent): void {
     this.isFocused = false;
+    // Trigger change detection to show formatted value
+    this.cdr.markForCheck();
     this.onTouched();
     this.blur.emit(event);
   }

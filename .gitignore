@@ -357,3 +357,9 @@ tramp
 
 # Project specific
 # Uncomment and add any project-specific files/folders to ignore
+node_modules
+
+# Documentation files (keep only README.md)
+*.md
+!README.md
+!**/README.md

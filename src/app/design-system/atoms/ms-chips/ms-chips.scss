@@ -24,6 +24,11 @@
     white-space: nowrap;
     max-height: 32px;
 
+    @media (max-width: 640px) {
+      font-size: 14px !important;
+      line-height: 20px !important;
+    }
+
     @media (max-width: 1023px) { max-height: 32px; }
     @media (min-width: 1024px) { max-height: 40px; }
 

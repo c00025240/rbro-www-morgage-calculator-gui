@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(curl:*)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(ng build:*)",
+      "Bash(npx sass:*)"
+    ]
+  }
+}

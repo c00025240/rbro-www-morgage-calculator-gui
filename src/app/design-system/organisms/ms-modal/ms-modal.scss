@@ -3,8 +3,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0; // Use left: 0 + right: 0 instead of width: 100vw to avoid scrollbar width issues
+  bottom: 0; // Use top: 0 + bottom: 0 instead of height: 100vh for consistency
+  width: 100%;
+  height: 100%;
   background-color: var(--backdrop-bg); // 60% opacity black backdrop
   z-index: var(--z-modal, 50);
   

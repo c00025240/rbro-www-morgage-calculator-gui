@@ -151,11 +151,6 @@ export class MortgageCalculationService {
     const baseUrl = this.configService.getApiUrl();
     const apiUrl = `${baseUrl}${API_CONFIG.MORTGAGE_CALCULATOR}`;
 
-    if (this.configService.isLoggingEnabled()) {
-      console.log('🚀 Mortgage calculation request to:', apiUrl);
-      console.log('📋 Using base URL from config:', baseUrl);
-    }
-
     return this.http.post<MortgageCalculationResponse>(apiUrl, request, { headers })
       .pipe(
         catchError((error) => this.handleError(error))
@@ -170,10 +165,6 @@ export class MortgageCalculationService {
     const headers = this.getCustomHeaders();
     // Use runtime configuration for districts URL
     const districtsUrl = this.configService.getDistrictsUrl();
-
-    if (this.configService.isLoggingEnabled()) {
-      console.log('🌍 Districts request to:', districtsUrl);
-    }
 
     return this.http.get<District[]>(districtsUrl, { headers })
       .pipe(

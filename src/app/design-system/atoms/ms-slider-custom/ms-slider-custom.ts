@@ -11,7 +11,6 @@ import {
   OnDestroy,
   ElementRef,
   ViewChild,
-  HostListener,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -173,6 +172,12 @@ export class MsSliderCustomComponent implements ControlValueAccessor, OnInit, On
 
   constructor(private cdr: ChangeDetectorRef, private elementRef: ElementRef) {}
 
+  // Bound handlers for proper removal
+  private boundTouchMove = this.handleTouchMove.bind(this);
+  private boundTouchEnd = this.handleTouchEnd.bind(this);
+  private boundMouseMove = this.handleMouseMove.bind(this);
+  private boundMouseUp = this.handleMouseUp.bind(this);
+
   ngOnInit() {
     this.validateInputs();
   }
@@ -270,40 +275,38 @@ export class MsSliderCustomComponent implements ControlValueAccessor, OnInit, On
     }
   }
 
-  @HostListener('document:mousemove', ['$event'])
-  onGlobalMouseMove(event: MouseEvent): void {
+  // Touch/mouse move handlers - attached manually with { passive: false }
+  private handleMouseMove(event: MouseEvent): void {
     if (this.isDragging && !this.disabled) {
       const newValue = this.getValueFromMouseEvent(event);
       this.value = newValue;
     }
   }
 
-  @HostListener('document:mouseup')
-  onGlobalMouseUp(): void {
+  private handleMouseUp(): void {
     if (this.isDragging) {
       this.stopDragging();
       this.removeGlobalListeners();
     }
   }
 
-  @HostListener('document:touchmove', ['$event'])
-  onGlobalTouchMove(event: TouchEvent): void {
+  private handleTouchMove(event: TouchEvent): void {
     if (this.isDragging && !this.disabled) {
-      event.preventDefault(); // Prevent page scrolling during drag
+      event.preventDefault(); // Prevent page scrolling during drag - works because passive: false
+      event.stopPropagation();
       const newValue = this.getValueFromTouchEvent(event);
       this.value = newValue;
     }
   }
 
-  @HostListener('document:touchend')
-  onGlobalTouchEnd(): void {
+  private handleTouchEnd(): void {
     if (this.isDragging) {
       this.stopDragging();
       this.removeGlobalListeners();
-      
+
       // Add subtle haptic feedback on release
       if ('vibrate' in navigator) {
-        navigator.vibrate(5); // Very short vibration for release feedback
+        navigator.vibrate(5);
       }
     }
   }
@@ -414,15 +417,24 @@ export class MsSliderCustomComponent implements ControlValueAccessor, OnInit, On
   }
 
   private addGlobalMouseListeners(): void {
-    // Event listeners are added via HostListener decorators
+    document.addEventListener('mousemove', this.boundMouseMove);
+    document.addEventListener('mouseup', this.boundMouseUp);
   }
 
   private addGlobalTouchListeners(): void {
-    // Event listeners are added via HostListener decorators
+    // CRITICAL: { passive: false } allows preventDefault() to work
+    // This prevents the page from scrolling while dragging the slider
+    document.addEventListener('touchmove', this.boundTouchMove, { passive: false });
+    document.addEventListener('touchend', this.boundTouchEnd);
+    document.addEventListener('touchcancel', this.boundTouchEnd);
   }
 
   private removeGlobalListeners(): void {
-    // HostListener automatically removes listeners
+    document.removeEventListener('mousemove', this.boundMouseMove);
+    document.removeEventListener('mouseup', this.boundMouseUp);
+    document.removeEventListener('touchmove', this.boundTouchMove);
+    document.removeEventListener('touchend', this.boundTouchEnd);
+    document.removeEventListener('touchcancel', this.boundTouchEnd);
   }
 
   private markAsTouched(): void {
