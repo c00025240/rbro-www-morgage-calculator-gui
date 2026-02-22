@@ -129,6 +129,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   @Input() loanDurationStep: number = 1; // 1 an increment
   @Input() loanDurationDisabled: boolean = false;
   @Input() loanDurationValue: number = 30; // Default loan duration (30 ani)
+  private userDesiredLoanDuration: number = 30; // Tracks user's intended duration before age-based clamping
   
   // Age input configuration
   @Input() ageValue: number = 30; // Default age
@@ -478,12 +479,10 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
       
       this.loanDurationMax = calculatedMax;
       
-      // Daca valoarea curenta depaseste noul maxim, ajusteaza-o
-      if (this.loanDurationValue > calculatedMax) {
-        this.loanDurationValue = calculatedMax;
-      }
+      // Ajusteaza valoarea efectiva: min(durata dorita de user, maximul calculat)
+      this.loanDurationValue = Math.min(this.userDesiredLoanDuration, calculatedMax);
       
-      console.log(`📅 Varsta: ${this.ageValue} ani → Perioada max: ${calculatedMax} ani`);
+      console.log(`📅 Varsta: ${this.ageValue} ani → Perioada max: ${calculatedMax} ani, durata dorita: ${this.userDesiredLoanDuration}, durata efectiva: ${this.loanDurationValue}`);
     }
   }
   
@@ -679,6 +678,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
  					this.isLoading = false;
           // In any error case for personalized offer, flip the banner flag on
           this.showOffersErrorBanner = true;
+          // Clear down payment info note on error
+          this.downPaymentInfoNote = undefined;
+          this.downPaymentInfoType = undefined;
  					console.error('Mortgage calculation error:', error);
  					this.cdr.markForCheck();
  				}
@@ -835,6 +837,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   onLoanDurationValueChange(value: number): void { 
     this.markInteracted();
     this.loanDurationValue = value;
+    this.userDesiredLoanDuration = value; // Memoreaza durata dorita de utilizator
     this.loanDurationValueChange.emit(value);
     this.cdr.markForCheck();
     this.triggerFormValidation();
@@ -1040,10 +1043,9 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   private validateDownPayment(): void {
     // Validate down payment for Casa Ta and Credit in functie de venit
     if (this.selectedProductType === 'achizitie-imobil' || this.selectedProductType === 'credit-venit') {
-      const minDownPayment = Math.round((this.propertyValue || 0) * 0.15);
-      if (this.downPaymentAmount > 0 && this.downPaymentAmount < minDownPayment) {
+      if (this.downPaymentAmount === 0) {
         this.downPaymentTooLow = true;
-        this.downPaymentErrorMessage = `Avansul completat este prea mic. Pentru acest credit îți recomandăm un avans de minim ${this.formatNumber(minDownPayment, 0)} Lei`;
+        this.downPaymentErrorMessage = `Avansul nu poate fi 0`;
       } else {
         this.downPaymentTooLow = false;
         this.downPaymentErrorMessage = undefined;
@@ -1184,6 +1186,7 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     // Reset inputs to defaults for new credit type
     this.propertyValue = 330000;
     this.loanDurationValue = 30;
+    this.userDesiredLoanDuration = 30;
     this.ageValue = 30;
     this.monthlyIncome = 5500;
     this.monthlyInstallments = 0;

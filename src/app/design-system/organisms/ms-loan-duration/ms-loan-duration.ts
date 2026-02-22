@@ -169,6 +169,13 @@ export class MsLoanDurationComponent implements ControlValueAccessor, OnInit, On
         Validators.min(this.min),
         Validators.max(this.max)
       ]);
+      // Re-clamp internal controls to new [min, max] range
+      const currentVal = this.sliderControl.value ?? this.min;
+      const clamped = Math.max(this.min, Math.min(this.max, currentVal));
+      if (clamped !== currentVal) {
+        this.inputControl.setValue(clamped.toString(), { emitEvent: false });
+        this.sliderControl.setValue(clamped, { emitEvent: false });
+      }
     }
     if (changes['value'] && changes['value'].currentValue !== undefined && changes['value'].currentValue !== null) {
       const v = Number(changes['value'].currentValue);

@@ -88,10 +88,12 @@ export class MsPropertyLocationSection implements OnChanges, OnInit, OnDestroy {
 
   constructor(private cdr: ChangeDetectorRef, private mortgageService: MortgageCalculationService) {}
 
+  private isInitializing = true;
+
   ngOnInit(): void {
     // Load initial options for the default selected values
     this.loadInitialCountyOptions();
-    this.loadCitiesForCounty(this.selectedCounty);
+    this.loadCitiesForCounty(this.selectedCounty, true);
   }
 
   ngOnChanges(): void {
@@ -133,8 +135,9 @@ export class MsPropertyLocationSection implements OnChanges, OnInit, OnDestroy {
 
   /**
    * Load cities for a given county
+   * @param skipEmit If true, don't emit cityChange (used during initialization)
    */
-  private loadCitiesForCounty(county: string): void {
+  private loadCitiesForCounty(county: string, skipEmit = false): void {
     if (!county) return;
 
     this.cityLoading = true;
@@ -150,7 +153,10 @@ export class MsPropertyLocationSection implements OnChanges, OnInit, OnDestroy {
           // Auto-select first city so the field is never left empty
           if (uniqueCities.length > 0) {
             this.selectedCity = uniqueCities[0];
-            this.cityChange.emit(this.selectedCity);
+            // Only emit change if not during initialization (to avoid triggering markInteracted)
+            if (!skipEmit) {
+              this.cityChange.emit(this.selectedCity);
+            }
           }
 
           this.cityLoading = false;
@@ -197,9 +203,9 @@ export class MsPropertyLocationSection implements OnChanges, OnInit, OnDestroy {
     this.selectedCounty = value;
     this.countyChange.emit(value);
 
-    // Load cities for the new county (auto-selects first city)
+    // Load cities for the new county (auto-selects first city and emits change)
     this.citySearchOptions = [];
-    this.loadCitiesForCounty(value);
+    this.loadCitiesForCounty(value, false);
   }
 
   /**
