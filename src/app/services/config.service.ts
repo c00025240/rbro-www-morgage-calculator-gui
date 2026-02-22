@@ -8,6 +8,7 @@ export interface RuntimeConfig {
   environmentName: string;
   apiUrl: string;
   districtsUrl: string;
+  districtsSearchUrl: string;
   enableLogging: boolean;
   jentisWorkspace: string;
   location?: string;
@@ -30,6 +31,7 @@ export class ConfigService {
     environmentName: 'development',
     apiUrl: '/api',
     districtsUrl: '/districts',
+    districtsSearchUrl: '/districts/search',
     enableLogging: true,
     jentisWorkspace: 'preview',
     location: 'development'
@@ -80,6 +82,13 @@ export class ConfigService {
     return config?.districtsUrl || this.defaultConfig.districtsUrl;
   }
 
+  /**
+   * Get districts search URL from current config  
+   */
+  getDistrictsSearchUrl(): string {
+    const config = this.getConfig();
+    return config?.districtsSearchUrl || this.defaultConfig.districtsSearchUrl;
+  }
 
   /**
    * Check if logging is enabled

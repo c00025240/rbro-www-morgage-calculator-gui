@@ -16,5 +16,14 @@
     "pathRewrite": {
       "^/districts": "/app/loan-admin/v1/districts"
     }
+  },
+    "/districts/search": {
+    "target": "https://rbro-loan-calculation-admin-service-www.apps.ocp4-test.rbro.rbg.cc",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/districts/search": "/app/loan-admin/v1/districts/search"
+    }
   }
 }

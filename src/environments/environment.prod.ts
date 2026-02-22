@@ -4,6 +4,7 @@ export const environment = {
   environmentName: 'production',
   apiUrl: '/api',
   districtsUrl: '/districts',
+  districtsSearchUrl: '/districts/search',
   backendUrl: 'https://rbro-mortgage-calculator-backend.raiffeisen.ro',
   adminServiceUrl: 'https://rbro-loan-calculation-admin-service.raiffeisen.ro',
   enableLogging: false,

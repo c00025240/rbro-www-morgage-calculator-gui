@@ -53,6 +53,25 @@ app.use('/api', createProxyMiddleware({
   }
 }));
 
+// Districts search proxy (must be before /districts to match first)
+app.use('/districts/search', createProxyMiddleware({
+  target: serverConfig.adminService.url,
+  changeOrigin: true,
+  secure: !isDevelopment,
+  logLevel: serverConfig.server.logLevel as any,
+  pathRewrite: { '^/districts/search': '/app/loan-admin/v1/districts/search' },
+  timeout: serverConfig.adminService.timeout,
+  onError: (err, req, res) => {
+    console.error('❌ Admin service (districts search) proxy error:', err.message);
+    res.status(500).json({ error: 'Admin service unavailable' });
+  },
+  onProxyReq: (proxyReq, req, res) => {
+    if (serverConfig.server.logLevel === 'debug') {
+      // console.log(`→ Proxying: ${req.method} ${req.url} → ${serverConfig.adminService.url}/app/loan-admin/v1/districts/search`);
+    }
+  }
+}));
+
 // Districts/Admin service proxy
 app.use('/districts', createProxyMiddleware({
   target: serverConfig.adminService.url,

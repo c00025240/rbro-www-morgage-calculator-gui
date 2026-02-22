@@ -68,8 +68,8 @@ export interface LocationOption {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MsPropertyLocationSection implements OnChanges, OnInit, OnDestroy {
-  @Input() selectedCounty: string = 'București';
-  @Input() selectedCity: string = 'București';
+  @Input() selectedCounty: string = 'Bucuresti';
+  @Input() selectedCity: string = 'Bucuresti';
   @Input() countyOptions: LocationOption[] = []; // Legacy input - kept for backward compat
   @Input() cityOptions: LocationOption[] = []; // Legacy input - kept for backward compat
   @Input() disabled: boolean = false;

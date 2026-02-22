@@ -4,6 +4,7 @@ export const environment = {
   environmentName: 'prelive',
   apiUrl: '/api',
   districtsUrl: '/districts',
+  districtsSearchUrl: '/districts/search',
   backendUrl: 'https://rbro-mortgage-calculator-backend-prelive.apps.ocp4-prelive.rbro.rbg.cc',
   adminServiceUrl: 'https://rbro-loan-calculation-admin-service-www.apps.ocp4-prelive.rbro.rbg.cc',
   enableLogging: true,

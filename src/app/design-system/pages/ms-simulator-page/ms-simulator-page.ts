@@ -30,7 +30,6 @@ import { Area } from '../../../../model/Area';
 import { Income } from '../../../../model/Income';
 import { SpecialOfferRequirements } from '../../../../model/SpecialOfferRequirements';
 import { InstallmentType } from '../../../../model/InstallmentType';
-import { District } from '../../../../model/District';
 import { formatRoNumber } from '../../../shared/utils/format-number.util';
 
 // LocationOption kept for backward compatibility with other components
@@ -154,8 +153,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
   downPaymentErrorMessage?: string; // Error message for down payment validation
   
   // Property Location Section configuration
-  @Input() selectedCounty: string = 'București';
-  @Input() selectedCity: string = 'București';
+  @Input() selectedCounty: string = 'Bucuresti';
+  @Input() selectedCity: string = 'Bucuresti';
   
   // Districts data is now managed inside ms-property-location-section via combobox + API search
   
@@ -1190,8 +1189,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.monthlyInstallments = 0;
     this.hasGuaranteeProperty = false;
     this.downPaymentAmount = 0;
-    this.selectedCounty = 'București';
-    this.selectedCity = 'București';
+    this.selectedCounty = 'Bucuresti';
+    this.selectedCity = 'Bucuresti';
     this.rateType = 'egale';
     this.interestType = 'fixa_3';
     this.lifeInsurance = true;
@@ -1212,8 +1211,8 @@ export class MsSimulatorPage implements OnInit, OnDestroy {
     this.calculationResponseNoDiscounts = undefined;
 
     // Reset location to Bucuresti defaults (ms-property-location-section handles the rest)
-    this.selectedCounty = 'București';
-    this.selectedCity = 'București';
+    this.selectedCounty = 'Bucuresti';
+    this.selectedCity = 'Bucuresti';
 
     // Do not persist form or product type state when switching credit type
     // Clear any previously saved state to ensure defaults are used

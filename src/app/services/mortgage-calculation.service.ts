@@ -198,7 +198,7 @@ export class MortgageCalculationService {
    */
   searchDistricts(county?: string, city?: string): Observable<District[]> {
     const headers = this.getCustomHeaders();
-    const districtsUrl = this.configService.getDistrictsUrl();
+    const districtsUrl = this.configService.getDistrictsSearchUrl();
 
     let params = new HttpParams();
     if (county) {
