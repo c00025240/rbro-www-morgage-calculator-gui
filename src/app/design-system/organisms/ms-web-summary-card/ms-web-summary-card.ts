@@ -42,7 +42,7 @@ export class MsWebSummaryCard {
   @Input() bottomInfoText: string = '';
 
   // New: footnote text under the buttons
-  @Input() footnoteText: string = 'Apăsând butonul "Aplică" vei fi redirecționat către un formular de contact. Vei fi sunat în maxim 1 zi lucrătoare pentru a primi răspunsuri la orice întrebare ai.';
+  @Input() footnoteText: string = 'Apăsând butonul "Aplică in doar 2 minute" vei fi redirecționat către un formular de contact. Vei fi sunat în maxim 1 zi lucrătoare pentru a primi răspunsuri la orice întrebare ai.';
 
   // Error banner control from parent
   @Input() showErrorBanner: boolean = false;
